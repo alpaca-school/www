@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>やる気のヒミツ 🌟</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React and ReactDOM CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel for JSX Transpilation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        /* Custom styles if any, though Tailwind should cover most */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+        const { createRoot } = ReactDOM;
+
+        // Inline SVG icons to replace lucide-react
+        const ChevronRight = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m9 18 6-6-6-6"/></svg>
+        );
+        const ChevronLeft = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m15 18-6-6 6-6"/></svg>
+        );
+        const Star = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        );
+        const Heart = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+        );
+        const BookOpen = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        );
+        const Award = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17.18 22l-5.15-3.62L6.82 22l1.703-9.11"/></svg>
+        );
+        const Users = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87C18.5 11.5 20 8.3 20 7c0-2.76-2.24-5-5-5s-5 2.24-5 5c0 1.3.5 4.5 1 6.13A4 4 0 0 0 22 21Z"/></svg>
+        );
+        const Lightbulb = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/><path d="M11 17v5"/><path d="M13 17v5"/></svg>
+        );
+        const Download = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+        );
+
+
+        const MotivationWorkshopApp = () => {
+          const [currentSlide, setCurrentSlide] = useState(0);
+          const [motivationSwitches, setMotivationSwitches] = useState([]);
+          const [diaryEntries, setDiaryEntries] = useState([
+            { day: '月曜日', action: '', feeling: '' },
+            { day: '火曜日', action: '', feeling: '' },
+            { day: '水曜日', action: '', feeling: '' }
+          ]);
+
+          const downloadResults = () => {
+            const switchLabels = [
+              '先生や親にほめられた',
+              '友だちといっしょにやった',
+              'ごほうびがあった',
+              'やり方がわかっていた',
+              'じぶんで目標をきめてた',
+              'キャラみたいになりたいって思った'
+            ];
+
+            const selectedSwitches = motivationSwitches.map(index => switchLabels[index]);
+            
+            const text = `やる気のヒミツ - 学習結果\n\n==========================================\n\n【ワーク①】わたしのやる気スイッチ\n==========================================\n${selectedSwitches.length > 0 ? selectedSwitches.map(item => `✓ ${item}`).join('\n') : '（選択されていません）'}\n\n【ワーク②】やる気日記\n==========================================\n${diaryEntries.map(entry => `${entry.day}\nやったこと: ${entry.action || '（未入力）'}\n気持ち: ${entry.feeling || '（未入力）'}`).join('\n\n')}\n\n==========================================\n今日学んだこと:\n• やる気は「あとから」ついてくるもの\n• ちょっとでも動いたら、それでOK\n• 自分だけの「やる気スイッチ」を知っておこう！\n\nがんばったね！先生や家の人に見せてみよう♪`;
+
+            const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'やる気のヒミツ_学習結果.txt';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+          };
+
+          const slides = [
+            {
+              id: 'intro',
+              title: ' 🌟 はじめに',
+              content: (
+                <div className="text-center space-y-6">
+                  <div className="text-6xl mb-4">🏫</div>
+                  <h2 className="text-3xl font-bold text-blue-600">「やる気のヒミツ」ってなんだろう？</h2>
+                  <div className="bg-yellow-100 p-6 rounded-lg">
+                    <p className="text-lg mb-4">みんなは、こんなことないかな？</p>
+                    <div className="space-y-2">
+                      <p className="text-gray-700">💭 「今日はやる気が出ないなぁ〜」</p>
+                      <p className="text-gray-700">💭 「明日やるから、今はちょっとムリ…」</p>
+                    </div>
+                  </div>
+                  <p className="text-xl text-green-600 font-bold">実は、やる気ってじぶんで作れる力なんだよ！</p>
+                </div>
+              )
+            },
+            {
+              id: 'how-motivation-works',
+              title: '🧠 やる気ってどうやって出るの？',
+              content: (
+                <div className="space-y-6">
+                  <div className="text-center">
+                    <div className="text-5xl mb-4">🧠</div>
+                    <p className="text-xl mb-6">やる気は、空からふってくるものじゃないんだ。</p>
+                  </div>
+                  
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-red-100 p-4 rounded-lg border-2 border-red-300">
+                      <h3 className="font-bold text-red-600 mb-2">❌ ちがうよ</h3>
+                      <p>走るやる気が出る → だから走る</p>
+                    </div>
+                    <div className="bg-green-100 p-4 rounded-lg border-2 border-green-300">
+                      <h3 className="font-bold text-green-600 mb-2">✅ これが正解！</h3>
+                      <p>ちょっと走る → だんだん楽しくなってくる！</p>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-blue-100 p-6 rounded-lg text-center">
+                    <p className="text-2xl font-bold text-blue-600">「やる気」は、"やったあと"に出てくる！</p>
+                  </div>
+                </div>
+              )
+            },
+            {
+              id: 'three-hints',
+              title: '🔧  どうやったら、行動できる？',
+              content: (
+                <div className="space-y-6">
+                  <div className="text-center">
+                    <div className="text-5xl mb-4">🔧 </div>
+                    <p className="text-xl mb-6">次の３つのヒントを覚えてね。</p>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <div className="bg-purple-100 p-4 rounded-lg border-l-4 border-purple-500">
+                      <h3 className="font-bold text-purple-600 mb-2">✅ ヒント① ちょびっとだけ始める</h3>
+                      <p>1分だけ！1問だけ！ちょびっとでOK。</p>
+                    </div>
+                    
+                    <div className="bg-pink-100 p-4 rounded-lg border-l-4 border-pink-500">
+                      <h3 className="font-bold text-pink-600 mb-2">✅ ヒント② 「いい言葉」を思い出す</h3>
+                      <p>「できるよ」「やってみよう」って、自分に言ってみよう！</p>
+                    </div>
+                    
+                    <div className="bg-orange-100 p-4 rounded-lg border-l-4 border-orange-500">
+                      <h3 className="font-bold text-orange-600 mb-2">✅ ヒント③ 結果より"中身"に注目！</h3>
+                      <p>「できた・できない」じゃなくて、「どこが工夫できたかな？」</p>
+                    </div>
+                  </div>
+                </div>
+              )
+            },
+            {
+              id: 'workshop1',
+              title: '✏️ ワーク① やる気スイッチを見つけよう！',
+              content: (
+                <div className="space-y-6">
+                  <div className="text-center">
+                    <div className="text-5xl mb-4">⚡</div>
+                    <h2 className="text-2xl font-bold text-blue-600 mb-4">ぼく・わたしの「やる気スイッチ」って何かな？</h2>
+                    <p className="text-lg mb-6">「やってみよう」って思えたときって、どんなとき？</p>
+                  </div>
+                  
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {[                      { icon: <Star className="w-6 h-6" />, text: '先生や親にほめられた', color: 'yellow' },
+                      { icon: <Users className="w-6 h-6" />, text: '友だちといっしょにやった', color: 'blue' },
+                      { icon: <Award className="w-6 h-6" />, text: 'ごほうびがあった', color: 'purple' },
+                      { icon: <Lightbulb className="w-6 h-6" />, text: 'やり方がわかっていた', color: 'green' },
+                      { icon: <Heart className="w-6 h-6" />, text: 'じぶんで目標をきめてた', color: 'pink' },
+                      { icon: <BookOpen className="w-6 h-6" />, text: 'キャラみたいになりたいって思った', color: 'indigo' }
+                    ].map((item, index) => (
+                      <div
+                        key={index}
+                        className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                          motivationSwitches.includes(index)
+                            ? 'bg-blue-100 border-blue-400'
+                            : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
+                        }`}
+                        onClick={() => {
+                          setMotivationSwitches(prev => 
+                            prev.includes(index) 
+                              ? prev.filter(i => i !== index)
+                              : [...prev, index]
+                          );
+                        }}
+                      >
+                        <div className="flex items-center space-x-3">
+                          <div className="text-gray-600">
+                            {item.icon}
+                          </div>
+                          <span className="text-sm font-medium">{item.text}</span>
+                          {motivationSwitches.includes(index) && (
+                            <div className="ml-auto">
+                              <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                                <span className="text-white text-sm">✓</span>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {motivationSwitches.length > 0 && (
+                    <div className="bg-green-100 p-4 rounded-lg">
+                      <p className="text-green-600 font-bold">
+                         いいね！{motivationSwitches.length}個のやる気スイッチを見つけたよ！
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )
+            },
+            {
+              id: 'workshop2',
+              title: '📝  ワーク② やる気日記をつくろう！',
+              content: (
+                <div className="space-y-6">
+                  <div className="text-center">
+                    <div className="text-5xl mb-4">📝 </div>
+                    <h2 className="text-2xl font-bold text-blue-600 mb-4">「やる気日記」をつくろう！</h2>
+                    <p className="text-lg mb-6">今日から3日間、"ちょびっと行動"したことを書いていこう！</p>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    {diaryEntries.map((entry, index) => (
+                      <div key={index} className="bg-white p-4 rounded-lg border-2 border-blue-200">
+                        <div className="grid md:grid-cols-3 gap-4">
+                          <div className="flex items-center">
+                            <span className="font-bold text-blue-600 mr-2">{entry.day}</span>
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              やったこと（ちょびっと）
+                            </label>
+                            <input
+                              type="text"
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              placeholder="例: 計算ドリルを1問だけやった"
+                              value={entry.action}
+                              onChange={(e) => {
+                                const newEntries = [...diaryEntries];
+                                newEntries[index].action = e.target.value;
+                                setDiaryEntries(newEntries);
+                              }}
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              どんな気持ちになった？
+                            </label>
+                            <input
+                              type="text"
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              placeholder="例: なんかスッキリ！"
+                              value={entry.feeling}
+                              onChange={(e) => {
+                                const newEntries = [...diaryEntries];
+                                newEntries[index].feeling = e.target.value;
+                                setDiaryEntries(newEntries);
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div className="bg-gradient-to-r from-pink-100 to-purple-100 p-4 rounded-lg">
+                    <p className="text-center font-bold text-purple-600">
+                      🌟 がんばったね！先生や家の人に見せてみよう♪
+                    </p>
+                  </div>
+                </div>
+              )
+            },
+            {
+              id: 'summary',
+              title: '💬 おわりに',
+              content: (
+                <div className="text-center space-y-6">
+                  <div className="text-6xl mb-4">🎉</div>
+                  <h2 className="text-3xl font-bold text-green-600">今日のまとめ</h2>
+                  
+                  <div className="space-y-4">
+                    <div className="bg-blue-100 p-4 rounded-lg">
+                      <p className="text-lg font-bold text-blue-600">やる気は「あとから」ついてくるもの</p>
+                    </div>
+                    
+                    <div className="bg-green-100 p-4 rounded-lg">
+                      <p className="text-lg font-bold text-green-600">ちょっとでも動いたら、それでOK</p>
+                    </div>
+                    
+                    <div className="bg-purple-100 p-4 rounded-lg">
+                      <p className="text-lg font-bold text-purple-600">自分だけの「やる気スイッチ」を知っておこう！</p>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-gradient-to-r from-yellow-200 to-orange-200 p-6 rounded-lg">
+                    <p className="text-2xl font-bold text-orange-600">
+                      🌟 よくがんばったね！ 🌟
+                    </p>
+                    <p className="mt-2 text-lg text-orange-600">
+                      明日からも、ちょびっとずつやってみよう！
+                    </p>
+                  </div>
+                  
+                  <div className="mt-6">
+                    <button
+                      onClick={downloadResults}
+                      className="flex items-center justify-center mx-auto px-6 py-3 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600 transition-all"
+                    >
+                      <Download className="w-5 h-5 mr-2" />
+                      学習結果をダウンロード
+                    </button>
+                    <p className="text-center text-sm text-gray-600 mt-2">
+                      ワークの結果をテキストファイルで保存できます
+                    </p>
+                  </div>
+                </div>
+              )
+            }
+          ];
+
+          const nextSlide = () => {
+            setCurrentSlide((prev) => (prev + 1) % slides.length);
+          };
+
+          const prevSlide = () => {
+            setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+          };
+
+          return (
+            <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
+              <div className="container mx-auto px-4 py-8">
+                {/* Header */}
+                <div className="text-center mb-8">
+                  <h1 className="text-4xl font-bold text-blue-600 mb-2">
+                    やる気のヒミツ 🌟
+                  </h1>
+                </div>
+
+                {/* Progress Bar */}
+                <div className="mb-8">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm text-gray-600">進み具合</span>
+                    <span className="text-sm text-gray-600">
+                      {currentSlide + 1} / {slides.length}
+                    </span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                      style={{ width: `${((currentSlide + 1) / slides.length) * 100}%` }}
+                    ></div>
+                  </div>
+                </div>
+
+                {/* Main Content */}
+                <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
+                  <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
+                    {slides[currentSlide].title}
+                  </h2>
+                  <div className="min-h-96">
+                    {slides[currentSlide].content}
+                  </div>
+                </div>
+
+                {/* Navigation */}
+                <div className="flex justify-between items-center">
+                  <button
+                    onClick={prevSlide}
+                    disabled={currentSlide === 0}
+                    className={`flex items-center px-6 py-3 rounded-lg font-medium transition-all ${
+                      currentSlide === 0
+                        ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                        : 'bg-blue-500 text-white hover:bg-blue-600'
+                    }`}
+                  >
+                    <ChevronLeft className="w-5 h-5 mr-2" />
+                    まえへ
+                  </button>
+
+                  <div className="flex space-x-2">
+                    {slides.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentSlide(index)}
+                        className={`w-3 h-3 rounded-full transition-all ${
+                          index === currentSlide
+                            ? 'bg-blue-500'
+                            : 'bg-gray-300 hover:bg-gray-400'
+                        }`}
+                      />
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={nextSlide}
+                    disabled={currentSlide === slides.length - 1}
+                    className={`flex items-center px-6 py-3 rounded-lg font-medium transition-all ${
+                      currentSlide === slides.length - 1
+                        ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                        : 'bg-blue-500 text-white hover:bg-blue-600'
+                    }`}
+                  >
+                    つぎへ
+                    <ChevronRight className="w-5 h-5 ml-2" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        };
+
+        createRoot(document.getElementById('root')).render(<MotivationWorkshopApp />);
+    </script>
+</body>
+</html>
