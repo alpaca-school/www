@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>アルパカすく〜る地域ガイドプログラム</title>
+    <title>オンラインアルパカすく〜る🦙</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
@@ -224,7 +224,7 @@ const floorData = {
                         <div className="min-h-screen bg-gray-50">
                             <div className={`${currentFloorData.headerColor} p-4 shadow-md sticky top-0 z-10`}>
                                 <div className="max-w-4xl mx-auto">
-                                    <h1 className="text-3xl font-extrabold text-gray-800 mb-2">読谷村オンライン学習プログラム🦙</h1>
+                                    <h1 className="text-3xl font-extrabold text-gray-800 mb-2">オンライン学習プログラム🦙　ー読谷編ー</h1>
                                     <div className="flex items-center justify-between">
                                         <h2 className="text-2xl font-bold text-gray-700">{currentFloorData.title}</h2>
                                         <div className="flex gap-2">{floors.map(floor => (<button key={floor} onClick={() => setCurrentFloor(floor)} className={`px-4 py-2 rounded-lg font-bold transition-all duration-300 ${ currentFloor === floor ? 'bg-white text-gray-800 shadow-lg scale-105' : 'bg-white/50 text-gray-600 hover:bg-white/80' }`}>{floor}</button>))}</div>
