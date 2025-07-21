@@ -32,7 +32,8 @@
                 const MuseumFloorGuide = () => {
                     const [currentFloor, setCurrentFloor] = useState("歴史");
                     const [videoUrl, setVideoUrl] = useState(null);
-                    const [selectedLearningContent, setSelectedLearningContent] = useState(null); // New state
+                    const [selectedLearningContent, setSelectedLearningContent] = useState(null);
+                    const [modalContent, setModalContent] = useState(null); // 汎用モーダル用のState
 
 
 const floorData = {
@@ -144,7 +145,7 @@ const floorData = {
              },
              { id: "G7", title: "残波岬「オンライン絶景チャレンジ：最高の瞬間を共有せよ！」", description: "読谷村のシンボル、残波岬の絶景をオンラインで体験。視聴者参加型の「ベストショットコンテスト」や、ドローン映像でのバーチャル探検。平和のように一番目立つ写真や動画を撮影し、オンラインで共有します。", location: "5E",
              learningContent: {
-                 title: "残波岬「オンライン絶景チャレンジ：最高の瞬間を共有せよ！」",
+                 title: "残波岬「オンライン絶景チャレンジ：最高の瞬間を共有せいにょ！」",
                  text: "読谷村のシンボルである残波岬の雄大な絶景を、高画質映像やドローン映像でオンライン体験。平和のように「一番目立つ」ことを目指し、視聴者参加型の「ベストショットコンテスト」で、バーチャル探検中に見つけた最高の瞬間をオンラインで共有します。怖いもの知らずの精神で、自宅からでもスリルと達成感を味わえるコンテンツです。"
              }
          },
@@ -185,6 +186,14 @@ const floorData = {
                      title: "読谷村から学ぶ平和のメッセージ：オンライン証言と未来への対話",
                      text: "読谷村にあるチビチリガマやシムクガマといった戦跡を、バーチャルツアーで訪れ、沖縄戦の歴史と平和への願いを学びます。生存者の方々のオンライン証言や、平和活動家との対話セッションを通じて、平和の尊さ、戦争の悲劇、そして未来への貢献について深く考える機会を提供します。自宅にいながら、歴史の教訓を胸に刻み、平和な社会を築くための行動について考察できます。"
                  }
+             },
+             { 
+                id: "H5", 
+                title: "やる気のヒミツ 🌟", 
+                description: "「やる気」は、\"やったあと\"に出てくる！自分だけのやる気スイッチを見つけて、行動するヒントを学ぼう。", 
+                location: "特別展示", 
+                actionType: 'modal',
+                modalUrl: './www/heiwa/yaruki.html'
              }
          ]
      }
@@ -198,13 +207,13 @@ const floorData = {
 
                     useEffect(() => {
                         lucide.createIcons();
-                    }, [currentFloor, videoUrl, selectedLearningContent]);
+                    }, [currentFloor, videoUrl, selectedLearningContent, modalContent]);
 
                     return (
                         <div className="min-h-screen bg-gray-50">
                             <div className={`${currentFloorData.headerColor} p-4 shadow-md sticky top-0 z-10`}>
                                 <div className="max-w-4xl mx-auto">
-                                    <h1 className="text-3xl font-extrabold text-gray-800 mb-2">アルパカすく〜る 🦙</h1>
+                                    <h1 className="text-3xl font-extrabold text-gray-800 mb-2">読谷村オンライン学習プログラム🦙</h1>
                                     <div className="flex items-center justify-between">
                                         <h2 className="text-2xl font-bold text-gray-700">{currentFloorData.title}</h2>
                                         <div className="flex gap-2">{floors.map(floor => (<button key={floor} onClick={() => setCurrentFloor(floor)} className={`px-4 py-2 rounded-lg font-bold transition-all duration-300 ${ currentFloor === floor ? 'bg-white text-gray-800 shadow-lg scale-105' : 'bg-white/50 text-gray-600 hover:bg-white/80' }`}>{floor}</button>))}</div>
@@ -242,9 +251,10 @@ const floorData = {
                                             <h3 className="text-xl font-bold text-gray-800 mb-3">{section.title}</h3>
                                             <p className="text-gray-700 text-sm leading-relaxed mb-4 h-24">{section.description}</p>
                                             <div className="flex justify-between items-center">
-                                                {section.price && <div className="flex items-center gap-2 text-green-700 font-bold"><i data-lucide="dollar-sign" className="w-4 h-4"></i> {section.price}</div>}
                                                 {section.videoId && <button onClick={() => setVideoUrl(`https://www.youtube.com/embed/${section.videoId}?autoplay=1`)} className="bg-red-500 text-white px-3 py-2 rounded-lg text-sm font-bold hover:bg-red-600 transition-colors flex items-center gap-1 shadow-md hover:shadow-lg"><i data-lucide="video" className="w-4 h-4"></i> 動画を見る</button>}
-                                                {section.learningContent && <button onClick={() => setSelectedLearningContent(section.learningContent)} className="bg-blue-500 text-white px-3 py-2 rounded-lg text-sm font-bold hover:bg-blue-600 transition-colors flex items-center gap-1 shadow-md hover:shadow-lg"><i data-lucide="sticky-note" className="w-4 h-4"></i> 見る</button>}
+                                                {section.actionType === 'modal' && <button onClick={() => setModalContent(section)} className="bg-purple-500 text-white px-3 py-2 rounded-lg text-sm font-bold hover:bg-purple-600 transition-colors flex items-center gap-1 shadow-md hover:shadow-lg"><i data-lucide="zap" 
+     className="w-4 h-4"></i> {section.location === '特別展示' ? '学ぶ' :'見る'}</button>}
+                                                {section.learningContent && !section.actionType && <button onClick={() => setSelectedLearningContent(section.learningContent)} className="bg-blue-500 text-white px-3 py-2 rounded-lg text-sm font-bold hover:bg-blue-600 transition-colors flex items-center gap-1 shadow-md hover:shadow-lg"><i data-lucide="sticky-note" className="w-4 h-4"></i> 見る</button>}
                                             </div>
                                         </div>
                                     ))}
@@ -252,13 +262,13 @@ const floorData = {
                                 <div className="mt-8 bg-white rounded-xl p-6 shadow-lg">
                                     <h3 className="text-lg font-bold text-gray-800 mb-3">{currentFloor} テーマ情報</h3>
                                     <div className="grid md:grid-cols-2 gap-4 text-sm text-gray-600">
-                                        <div><strong>展示エリア数:</strong> {currentFloorData.sections.length}箇所</div>
-                                        <div><strong>推奨見学時間:</strong> {currentFloor === "歴史" && " 45-60分"}{currentFloor === "文化" && " 60-90分"}{currentFloor === "自然" && " 30-45分"}{currentFloor === "平和" && " 90-120分"}</div>
+                                        <div><strong>コンテンツ数:</strong> {currentFloorData.sections.length}箇所</div>
+                                        <div><strong>使用時間:</strong> {currentFloor === "歴史" && " 45-60分"}{currentFloor === "文化" && " 60-90分"}{currentFloor === "自然" && " 30-45分"}{currentFloor === "平和" && " 90-120分"}</div>
                                     </div>
                                 </div>
                             </div>
                             <footer className="bg-gray-800 text-white p-6 mt-12">
-                                <div className="max-w-4xl mx-auto text-center text-sm"><p>このコンテンツは、ご自宅から快適に学習できるよう設計されています。車椅子をご利用の方、高齢の方、外出が難しい方など、すべての方がアクセスしやすいよう配慮しています。</p></div>
+                                <div className="max-w-4xl mx-auto text-center text-sm"><p aligen="left">このコンテンツは、ご自宅から快適に学習できるよう設計されています。車椅子をご利用の方、高齢の方、外出が難しい方など、すべての方が楽しめるよう善処します。</p></div>
                             </footer>
 
                             {videoUrl && (
@@ -288,6 +298,18 @@ const floorData = {
                                     </div>
                                 </div>
                             )}
+
+                            {modalContent && (
+                                <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50" onClick={() => setModalContent(null)}>
+                                    <div className="bg-white p-2 rounded-xl shadow-2xl max-w-4xl w-11/12 h-5/6 flex flex-col" onClick={(e) => e.stopPropagation()}>
+                                        <div className="flex justify-between items-center p-2 border-b">
+                                            <h3 className="text-xl font-bold text-gray-800">{modalContent.title}</h3>
+                                            <button onClick={() => setModalContent(null)} className="text-gray-500 hover:text-gray-800"><i data-lucide="x" className="w-6 h-6"></i></button>
+                                        </div>
+                                        <iframe src={modalContent.modalUrl} className="w-full h-full border-0 rounded-b-lg" title={modalContent.title}></iframe>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     );
                 };
@@ -303,6 +325,3 @@ const floorData = {
                 console.error(error);
             }
         };
-    </script>
-</body>
-</html>
