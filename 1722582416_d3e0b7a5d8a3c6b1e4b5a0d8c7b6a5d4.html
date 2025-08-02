@@ -96,6 +96,33 @@
         .modal-content p { font-size: 1.1em; line-height: 1.8; }
         .modal-overlay.active { display: flex; }
 
+        /* ▼▼▼ フッターのスタイルを変更 ▼▼▼ */
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        footer p {
+            margin: 8px 0;
+        }
+        footer a {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #8d6e63;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        footer a:hover {
+            color: #d84315;
+            text-decoration: underline;
+        }
+        .copyright {
+            font-size: 1em;
+            color: #5d4037;
+            margin-top: 20px;
+        }
+        /* ▲▲▲ ここまで変更 ▲▲▲ */
+
         footer { text-align: center; margin-top: 40px; font-size: 0.8em; color: #aaa; }
         footer a { color: #888; }
     </style>
@@ -121,7 +148,7 @@
             <ul>
                 <li><span class="icon">⚠️</span><span>このルールは「学校を休んでいいよ」って意味ではありません。みんなが安心して楽しく通える学校を作ることが一番の目標です。</span></li>
                 <li><span class="icon">⚠️</span><span>ただのサボりや、親の考えだけで学校を休んでいる場合は、対象になりません。</span></li>
-                <li><span class="icon">⚠️</span><span>がんばっても、全部の教科で成績がつくとは限りません。その場合は、所見欄などに文章で学習の様子を記録されます。
+                <li><span class="icon">⚠️</span><span>がんばっても、全部の教科で成績がつくとは限らない。その場合は、所見欄などに文章で学習の様子を記録されます。
 </span></li>
             </ul>
         </section>
@@ -141,10 +168,16 @@
                 <div class="example-item-header"><div><span class="icon">🏫</span><span>フリースクールでのがんばりを先生に報告してもらう！</span></div><span class="arrow">▼</span></div>
                 <div class="example-item-content"><p><br>フリースクールのスタッフが学校の先生に連携して定期的に学習状況を報告します。<br>あなたがフリースクールでどんな勉強をして、どんなことができるようになったか、スタッフの人が先生に伝えることで、成績に反映します。</p></div>
             </div>
+            <p class="original-ref">参照元: <a href="https://www.mext.go.jp/a_menu/shotou/seitoshidou/1422155_00002.htm" target="_blank">「不登校児童生徒が欠席中に行った学習の成果に係る成績評価について（通知）」令和6年8月29日</a></p>
         </section>
         <!-- ▲▲▲ ここまで変更 ▲▲▲ -->
 
-        <footer> <p>参照元: <a href="https://www.mext.go.jp/a_menu/shotou/seitoshidou/1422155_00002.htm" target="_blank">「不登校児童生徒が欠席中に行った学習の成果に係る成績評価について（通知）」令和6年8月29日</a></p> </footer>
+        <!-- ▼▼▼ フッターの構造を変更 ▼▼▼ -->
+        <footer>
+        <p>&copy; 2024 <a href="https://ryukyu-tane.com" target="_blank">🌱 琉球のタネ</a> / <a href="https://www.alpaca-school.okinawa" target="_blank">🦙 アルパカすく〜る</a></p>
+    </footer>
+    <!-- ▲▲▲ ここまで変更 ▲▲▲ -->
+
     </div>
 
     <div id="modal-overlay" class="modal-overlay">
