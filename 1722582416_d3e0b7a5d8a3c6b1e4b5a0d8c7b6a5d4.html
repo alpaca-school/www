@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>家庭学習が成績になる！新しいルール♪</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            background-color: #fdf6f6;
+            color: #5d4037;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background-color: #fff;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(211, 151, 151, 0.3);
+            border: 3px solid #ffc1c1;
+        }
+        header h1 { font-size: 2.5em; font-weight: 800; text-align: center; color: #ff8a80; margin: 0 0 20px 0; line-height: 1.3; }
+        .main-point { background-color: #fff0f0; border: 2px dashed #ffab91; padding: 20px; border-radius: 15px; text-align: center; margin-bottom: 30px; }
+        .main-point p { font-size: 1.3em; font-weight: 700; margin: 0; color: #d84315; }
+        .section-title { font-size: 1.8em; font-weight: 700; text-align: center; margin: 40px 0 25px 0; color: #8d6e63; position: relative; }
+        .section-title::before, .section-title::after { content: '⭐'; color: #ffd54f; font-size: 0.7em; margin: 0 10px; }
+        
+        .cards-container { display: flex; justify-content: space-around; gap: 20px; flex-wrap: wrap; }
+        .card { background-color: #f1f8e9; border-radius: 20px; padding: 20px; width: 200px; text-align: center; box-shadow: 0 5px 15px rgba(174, 195, 174, 0.5); border-bottom: 5px solid #a5d6a7; transition: transform 0.2s ease-in-out; cursor: pointer; }
+        .card:hover { transform: translateY(-10px); }
+        .card .icon { font-size: 4em; }
+        .card h3 { font-size: 1.2em; color: #33691e; margin: 10px 0 5px 0; }
+        .card p { font-size: 0.9em; margin: 0; line-height: 1.5; text-align: left; }
+        .card.blue { background-color: #e3f2fd; border-bottom-color: #90caf9; }
+        .card.blue h3 { color: #0d47a1; }
+        .card.yellow { background-color: #fffde7; border-bottom-color: #fff59d; }
+        .card.yellow h3 { color: #f57f17; }
+
+        /* ▼▼▼ 汎用的な開閉パネルのスタイル ▼▼▼ */
+        .collapsible-header, .example-item-header {
+            cursor: pointer;
+            padding: 15px 20px;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .collapsible-header {
+            background-color: #fff8e1; border: 2px solid #ffecb3; margin-top: 40px;
+        }
+        .collapsible-header:hover { background-color: #fffde7; }
+        .collapsible-header h2 { font-size: 1.8em; font-weight: 700; color: #f57f17; margin: 0; }
+        
+        .collapsible-content, .example-item-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            background-color: #fff;
+            padding: 0 20px;
+            border-radius: 0 0 15px 15px;
+        }
+        .collapsible-content ul { list-style: '✨ '; padding-left: 20px; margin-top: 20px; margin-bottom: 20px; }
+        
+        .arrow {
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: transform 0.3s ease-out;
+        }
+        .active .arrow { transform: rotate(180deg); }
+        /* ▲▲▲ ここまで ▲▲▲ */
+
+        .attention ul { list-style: none; padding: 20px 20px 20px 30px; background-color: #fff9c4; border: 2px dashed #fbc02d; border-radius: 15px; }
+        .attention li { background-color: transparent; border: none; padding: 0; font-size: 1em; display: flex; align-items: flex-start; gap: 10px; }
+        .attention .icon { font-size: 1.5em; color: #fbc02d; }
+
+        /* ▼▼▼ 「たとえば」セクションのスタイル ▼▼▼ */
+        .example-item-header { background-color: #fafafa; border: 1px solid #eee; font-size: 1.1em; }
+        .example-item-header:hover { background-color: #f0f0f0; }
+        .example-item-header .icon { font-size: 2em; margin-right: 15px; }
+        .example-item-content { background-color: #fafafa; border: 1px solid #eee; border-top: none; padding-bottom: 15px; }
+        .example-item-content p { margin: 0; padding: 0 10px; font-size: 1em; line-height: 1.6; }
+        /* ▲▲▲ ここまで ▲▲▲ */
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 100; display: none; justify-content: center; align-items: center; }
+        .modal-content { background: #fff; padding: 30px 40px; border-radius: 20px; max-width: 500px; width: 90%; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.2); text-align: left; }
+        .modal-close-btn { position: absolute; top: 15px; right: 20px; font-size: 2em; font-weight: bold; color: #aaa; cursor: pointer; transition: color 0.2s; }
+        .modal-close-btn:hover { color: #333; }
+        .modal-content h2 { font-size: 1.6em; color: #ff8a80; text-align: center; margin-top: 0; }
+        .modal-content p { font-size: 1.1em; line-height: 1.8; }
+        .modal-overlay.active { display: flex; }
+
+        footer { text-align: center; margin-top: 40px; font-size: 0.8em; color: #aaa; }
+        footer a { color: #888; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header> <h1>家庭学習が<br>成績になる！新しいルール♪</h1> </header>
+        <section class="main-point"> <p>学校をお休みしても、お家やフリースクールでのがんばりが、<br>ちゃんと「通知表の成績」になるよ！</p> </section>
+        <div class="collapsible">
+            <div class="collapsible-header js-collapsible-trigger"> <h2>このルールができた理由</h2><span class="arrow">▼</span> </div>
+            <div class="collapsible-content"> <ul> <li>学校に行けない・行かない仲間が、今すごく増えているから。</li> <li>学校の外で一生懸命勉強している子どもたちの努力を、きちんと評価したいから。</li> <li>子どもの学習意欲を応援して、将来の夢をサポートするため。</li> </ul> </div>
+        </div>
+        <section>
+            <h2 class="section-title">成績にするための３つのやくそく</h2>
+            <div class="cards-container">
+                <div class="card green" data-modal-target="#modal-plan"> <div class="icon">📝</div> <h3>学習プラン</h3> <p>お家での勉強が、学校の授業と合っているか先生がチェック！</p> </div>
+                <div class="card blue" data-modal-target="#modal-team"> <div class="icon">🤝</div> <h3>みんなでチーム</h3> <p>先生・お家の人・サポーターがチームを組んで、君を応援！</p> </div>
+                <div class="card yellow" data-modal-target="#modal-connect"> <div class="icon">💬</div> <h3>先生とのつながり</h3> <p>先生と直接お話しして、勉強や気持ちを伝えよう！</p> </div>
+            </div>
+        </section>
+        <section class="attention">
+            <h2 class="section-title">大事な注意点</h2>
+            <ul>
+                <li><span class="icon">⚠️</span><span>このルールは「学校を休んでいいよ」って意味ではありません。みんなが安心して楽しく通える学校を作ることが一番の目標です。</span></li>
+                <li><span class="icon">⚠️</span><span>ただのサボりや、親の考えだけで学校を休んでいる場合は、対象になりません。</span></li>
+                <li><span class="icon">⚠️</span><span>がんばっても、全部の教科で成績がつくとは限りません。その場合は、所見欄などに文章で学習の様子を記録されます。
+</span></li>
+            </ul>
+        </section>
+
+        <!-- ▼▼▼ 「たとえば」セクションの構造を変更 ▼▼▼ -->
+        <section class="examples">
+            <h2 class="section-title">たとえばこんな感じでやります！</h2>
+            <div class="example-item js-collapsible-trigger">
+                <div class="example-item-header"><div><span class="icon">💻</span><span>タブレットで、お家から授業にオンライン参加！</span></div><span class="arrow">▼</span></div>
+                <div class="example-item-content"><p><br>学校の授業をリアルタイムで配信してもらったり、録画した授業のビデオを見たりすることで、お家や支援センターでみんなと一緒に勉強を進められます。</p></div>
+            </div>
+            <div class="example-item js-collapsible-trigger">
+                <div class="example-item-header"><div><span class="icon">📖</span><span>学校のプリントや課題に、自分のペースで取り組む！</span></div><span class="arrow">▼</span></div>
+                <div class="example-item-content"><p><br>先生が用意してくれたプリントやドリル、教科書の課題に、自分のペースでじっくり取り組みます。<br>わからないところは、後で先生に質問できるようにまとめておくとGood！</p></div>
+            </div>
+            <div class="example-item js-collapsible-trigger">
+                <div class="example-item-header"><div><span class="icon">🏫</span><span>フリースクールでのがんばりを先生に報告してもらう！</span></div><span class="arrow">▼</span></div>
+                <div class="example-item-content"><p><br>フリースクールのスタッフが学校の先生に連携して定期的に学習状況を報告します。<br>あなたがフリースクールでどんな勉強をして、どんなことができるようになったか、スタッフの人が先生に伝えることで、成績に反映します。</p></div>
+            </div>
+        </section>
+        <!-- ▲▲▲ ここまで変更 ▲▲▲ -->
+
+        <footer> <p>参照元: <a href="https://www.mext.go.jp/a_menu/shotou/seitoshidou/1422155_00002.htm" target="_blank">「不登校児童生徒が欠席中に行った学習の成果に係る成績評価について（通知）」令和6年8月29日</a></p> </footer>
+    </div>
+
+    <div id="modal-overlay" class="modal-overlay">
+        <div id="modal-plan" class="modal-content"> <span class="modal-close-btn">&times;</span> <h2>学習内容が適切であること</h2> <p>フリースクールや自宅での学習計画や内容が、その子が通う学校の教育課程（授業内容）に合っているか、学校が確認してOKを出す必要があります。</p> </div>
+        <div id="modal-team" class="modal-content"> <span class="modal-close-btn">&times;</span> <h2>学校・家庭・支援機関の連携が<br>十分であること</h2> <p>学校、保護者、フリースクールなどが、密に連絡を取り合える関係であることが必要です。<br>学校は、定期的にその子の学習状況を把握しなければなりません。</p> </div>
+        <div id="modal-connect" class="modal-content"> <span class="modal-close-btn">&times;</span> <h2>学校と本人の<br>直接的な関わりが続いていること</h2> <p>先生などが家庭訪問したり、オンラインで面談したりして、学校が子ども本人と直接、定期的・継続的に関わり続けることが重要です。</p> </div>
+    </div>
+
+    <script>
+        // ▼▼▼ 汎用的な開閉パネルのスクリプト ▼▼▼
+        document.querySelectorAll('.js-collapsible-trigger').forEach(trigger => {
+            const header = trigger.querySelector('.collapsible-header, .example-item-header') || trigger;
+            const content = trigger.querySelector('.collapsible-content, .example-item-content') || header.nextElementSibling;
+
+            header.addEventListener('click', function() {
+                header.parentElement.classList.toggle('active');
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                } else {
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                }
+            });
+        });
+
+        // ▼▼▼ モーダルのスクリプト ▼▼▼
+        const openModalButtons = document.querySelectorAll('[data-modal-target]');
+        const overlay = document.getElementById('modal-overlay');
+
+        openModalButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const modalId = button.dataset.modalTarget;
+                const modal = document.querySelector(modalId);
+                openModal(modal);
+            });
+        });
+
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) { closeAllModals(); }
+        });
+        
+        document.querySelectorAll('.modal-close-btn').forEach(btn => {
+            btn.addEventListener('click', () => { closeAllModals(); });
+        });
+
+        function openModal(modal) {
+            if (modal == null) return;
+            document.querySelectorAll('.modal-content').forEach(m => m.style.display = 'none');
+            modal.style.display = 'block';
+            overlay.classList.add('active');
+        }
+
+        function closeAllModals() {
+            overlay.classList.remove('active');
+        }
+    </script>
+</body>
+</html>
