@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COCOLOプランってなに？- 誰一人取り残されない学びのカタチ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'M PLUS Rounded 1c', sans-serif; background-color: #f0f8ff; color: #333; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .wrapper { max-width: 850px; margin: 20px auto; }
+        .container { background-color: #fff; padding: 30px 40px; border-radius: 25px; box-shadow: 0 10px 30px rgba(173, 216, 230, 0.4); position: relative; overflow: hidden; min-height: 600px; }
+        
+        /* ▼▼▼ スライドのスタイルを追加 ▼▼▼ */
+        .slide {
+            display: none; /* 基本は非表示 */
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .slide.active {
+            display: block; /* activeクラスで表示 */
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* ▲▲▲ ここまで追加 ▲▲▲ */
+
+        header h1 { font-size: 2.6em; font-weight: 800; text-align: center; color: #4682b4; margin: 0 0 10px 0; line-height: 1.3; }
+        header p { text-align: center; font-size: 1.1em; color: #555; margin-bottom: 30px; }
+
+        .section-title {
+            font-size: 2em;
+            font-weight: 700;
+            text-align: center;
+            margin: 40px 0 25px 0;
+            color: #4682b4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .section-title .icon { font-size: 1.5em; }
+
+        .intro-box { background-color: #e6f3ff; border: 2px dashed #add8e6; padding: 25px; border-radius: 15px; text-align: center; }
+        .intro-box h2 { font-size: 1.5em; color: #31708f; margin: 0 0 10px 0; }
+        .intro-box p { margin: 0; font-size: 1.1em; line-height: 1.6; text-align: left; }
+        .intro-box .cocolo-meaning { font-weight: 700; color: #31708f; margin-top: 15px; }
+
+        .background-box { text-align: center; background-color: #fffaf0; padding: 25px; border-radius: 15px; }
+        .background-box p { margin: 0 0 20px 0; font-size: 1.1em; line-height: 1.7; text-align: left; }
+        .background-box .highlight { font-size: 1.4em; font-weight: 800; color: #ff6347; }
+
+        .pillars-container { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 25px; margin-top: 25px; }
+        .pillar-card { background-color: #f0fff0; border-radius: 20px; padding: 25px; text-align: center; box-shadow: 0 5px 15px rgba(144, 238, 144, 0.4); border-bottom: 6px solid #98fb98; }
+        .pillar-card .icon { font-size: 4em; }
+        .pillar-card h3 { font-size: 1.3em; color: #2e8b57; margin: 15px 0 10px 0; }
+        .pillar-card p { font-size: 1em; margin: 0; line-height: 1.5; text-align: left; }
+
+        .challenges-box { background-color: #fff0f5; padding: 25px; border-radius: 15px; }
+        .challenges-box ul { list-style: '❗️ '; padding-left: 20px; }
+        .challenges-box li { font-size: 1.1em; margin-bottom: 10px; }
+
+        .section-image { width: 100%; max-width: 600px; margin: 10px auto; display: block; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+
+        /* ▼▼▼ ナビゲーションボタンのスタイルを追加 ▼▼▼ */
+        .navigation {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+        }
+        .nav-btn {
+            padding: 8px 15px; /* 小さくする */
+            border: none;
+            border-radius: 50px;
+            background-color: #4682b4;
+            color: white;
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            font-size: 0.9em; /* 小さくする */
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08); /* 控えめにする */
+        }
+        .nav-btn:hover { background-color: #5a9bd3; transform: translateY(-2px); }
+        .nav-btn:disabled { background-color: #b0c4de; cursor: not-allowed; }
+        #home-btn { background-color: #6b8e23; }
+        #home-btn:hover { background-color: #8fbc8f; }
+        /* ▲▲▲ ここまで追加 ▲▲▲ */
+
+        @media (max-width: 768px) {
+            .pillars-container { grid-template-columns: 1fr; }
+            header h1 { font-size: 2em; }
+            .section-title { font-size: 1.6em; }
+            .container { padding: 20px; }
+            .nav-btn { padding: 10px 15px; font-size: 1em; }
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <div class="container">
+        <!-- ▼▼▼ スライドの構造に変更 ▼▼▼ -->
+        <div class="slide active">
+            <header>
+                <h1>COCOLOプランってなに？</h1>
+                <p>誰一人取り残されない、新しい学びのカタチ</p>
+            </header>
+            <img src="https://soctama.jp/wp/wp-content/uploads/2024/10/e7d25097d8866e0f637bda1eef2e0e3e-1024x723.jpg" alt="COCOLOプランの3つの柱" class="section-image">
+        </div>
+
+        <div class="slide">
+            <div class="intro-box">
+                <h2 class="section-title"><span class="icon">💡</span> プランのなまえの意味</h2>
+                <p>名称「COCOLO」は、<br><br>”Comfortable, Customized and Optimized Locations of learning”<br><br>の略です。</p><br>
+                <p>「COCOLOプラン」は、学校に行けない・行かない方のための新しい不登校対策です。</p>
+                <p class="cocolo-meaning">COCOLO = 心地よくて、あなたにピッタリ合った、最高の学びの場所</p><br>
+                <p>教室だけじゃなく、あなたが安心して学べる色々な場所や方法を応援する、という国の約束です。</p>
+            </div>
+            <p style="font-size: 0.95em; line-height: 1.6; margin-top: 25px; text-align: left;">2016年に制定された教育機会確保法は、COCOLOプランの基盤となる考え方を示しています。<br>この法律の第13条では、不登校の子どもたちに「休養の必要性」を認めました。これは、多くの不登校児童生徒が精神的な困難を抱えており、学習に向かうのが難しい状況にあることを考慮したものです。</p>
+        </div>
+
+        <div class="slide">
+            <h2 class="section-title"><span class="icon">📈</span> なぜできたの？</h2>
+            <div class="background-box">
+                <p>実は今、学校をお休みしている小中学生は<span class="highlight">約30万人</span>もいて、過去最高になっています。<br>コロナ禍もあって、みんなの不安や悩みも複雑になっています。今までのやり方だけでは、みんなを支えきれなくなってきました。</p>
+                <img src="https://soctama.jp/wp/wp-content/uploads/2024/10/48fd423e9b0dade11d848e1105f44096-1024x722.jpg" alt="不登校の現状グラフ" class="section-image">
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2 class="section-title"><span class="icon">🎯</span> プランの３つの柱</h2>
+            <div class="pillars-container">
+                <div class="pillar-card"> <div class="icon">🏫</div> <h3>学びの場を確保！</h3> <p>あなたが「学びたい！」と思った時、いつでも学べる場所（特例校、サポートルーム、フリースクールなど）をたくさん作ります。</p> </div>
+                <div class="pillar-card"> <div class="icon">👂</div> <h3>心のSOSを<br>見逃さない！</h3> <p>タブレットなどを活用して、心の小さなサインに早く気づく。先生や専門家が「チーム」であなたと保護者を支えます。</p> </div>
+                <div class="pillar-card"> <div class="icon">💖</div> <h3>学校を安心な場所に！</h3> <p>みんなの意見を聞きながら、いじめや不安がなく、誰もが安心して過ごせる、あたたかい学校にしていきます。</p> </div>
+            </div>
+        </div>
+
+        <div class="slide">
+             <h2 class="section-title"><span class="icon">🤝</span> みんなで支えるイメージ</h2>
+             <img src="https://soctama.jp/wp/wp-content/uploads/2024/10/39cb328c5f64bdefcba54b284252fae7-1024x721.jpg" alt="つながりのイメージ" class="section-image">
+        </div>
+
+        <div class="slide">
+            <h2 class="section-title"><span class="icon">🤔</span> これからの課題</h2>
+            <div class="challenges-box">
+                <ul>
+                    <li>プランを進めるための、お金や人がまだ足りていない。</li>
+                    <li>オンライン学習だけでは、「授業がわからない」問題は解決しない。</li>
+                    <li>あなたに合った学び方ができる学校や場所は、まだ全国的に少ない。</li>
+                </ul>
+            </div>
+        </div>
+        <!-- ▲▲▲ ここまで変更 ▲▲▲ -->
+
+        <div class="navigation">
+            <button id="home-btn" class="nav-btn">はじめにもどる</button>
+            <button id="prev-btn" class="nav-btn">前へ</button>
+            <button id="next-btn" class="nav-btn">次へ</button>
+        </div>
+    </div>
+</div>
+
+<!-- ▼▼▼ スライドを制御するJavaScriptを追加 ▼▼▼ -->
+<script>
+    const slides = document.querySelectorAll('.slide');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const homeBtn = document.getElementById('home-btn');
+    let currentSlide = 0;
+
+    function showSlide(n) {
+        slides.forEach(slide => slide.classList.remove('active'));
+        slides[n].classList.add('active');
+        updateNavButtons();
+    }
+
+    function updateNavButtons() {
+        prevBtn.disabled = currentSlide === 0;
+        homeBtn.style.display = currentSlide === 0 ? 'none' : 'inline-block';
+        nextBtn.disabled = currentSlide === slides.length - 1;
+    }
+
+    nextBtn.addEventListener('click', () => {
+        if (currentSlide < slides.length - 1) {
+            currentSlide++;
+            showSlide(currentSlide);
+        }
+    });
+
+    prevBtn.addEventListener('click', () => {
+        if (currentSlide > 0) {
+            currentSlide--;
+            showSlide(currentSlide);
+        }
+    });
+
+    homeBtn.addEventListener('click', () => {
+        currentSlide = 0;
+        showSlide(currentSlide);
+    });
+
+    // 初期状態を設定
+    showSlide(0);
+</script>
+<!-- ▲▲▲ ここまで追加 ▲▲▲ -->
+
+</body>
+</html>
