@@ -63,11 +63,10 @@
 
         /* ▼▼▼ ナビゲーションボタンのスタイルを追加 ▼▼▼ */
         .navigation {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            text-align: center;
+            margin-top: 20px; /* 上の要素との余白 */
             display: flex;
+            justify-content: center; /* 中央揃え */
             gap: 15px;
         }
         .nav-btn {
@@ -155,13 +154,15 @@
         </div>
         <!-- ▲▲▲ ここまで変更 ▲▲▲ -->
 
-        <div class="navigation">
-            <button id="home-btn" class="nav-btn">はじめにもどる</button>
-            <button id="prev-btn" class="nav-btn">前へ</button>
-            <button id="next-btn" class="nav-btn">次へ</button>
         </div>
     </div>
+    <div class="navigation">
+        <button id="home-btn" class="nav-btn">はじめにもどる</button>
+        <button id="prev-btn" class="nav-btn">前へ</button>
+        <button id="next-btn" class="nav-btn">次へ</button>
+    </div>
 </div>
+
 
 <footer style="text-align: center; margin-top: 20px; font-size: 0.9em; color: #666;">
     <p>このページは、2025年8月2日に、子育て勉強会で「COCOLOプラン」の概要を学ぶために作成されました。<br>詳しい情報は、<a href="https://www.mext.go.jp/a_menu/shotou/seitoshidou/1397802_00005.htm" target="_blank    " rel="noopener noreferrer">文部科学省の公式サイト</a>をご覧ください。<br><br> &copy 琉球のタネ </p>
