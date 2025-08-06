@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>沖縄戦跡めぐり - 平和への道</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .app-container {
+            max-width: 420px;
+            margin: 0 auto;
+            background-color: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            position: relative;
+            padding-bottom: 70px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .search-container {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 25px;
+            padding: 10px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            background-color: white;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background-color: #2a5298;
+            color: white;
+            border-color: #2a5298;
+        }
+
+        .memorial-list {
+            padding: 15px;
+        }
+
+        .memorial-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .memorial-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .memorial-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 10px;
+        }
+
+        .memorial-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2a5298;
+            margin-bottom: 5px;
+        }
+
+        .memorial-distance {
+            font-size: 14px;
+            color: #666;
+            background-color: #f0f0f0;
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+
+        .memorial-type {
+            display: inline-block;
+            font-size: 12px;
+            color: #666;
+            background-color: #e8f0fe;
+            padding: 4px 10px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+        }
+
+        .memorial-description {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .memorial-info {
+            display: flex;
+            gap: 15px;
+            font-size: 13px;
+            color: #999;
+        }
+
+        /* Detail View */
+        .detail-view {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: white;
+            z-index: 1000;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .detail-view.active {
+            display: block;
+            transform: translateY(0);
+        }
+
+        .detail-header {
+            position: relative;
+            height: 250px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.5)), #ddd;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255,255,255,0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .detail-content {
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2a5298;
+            margin-bottom: 10px;
+        }
+
+        .section-content {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .map-container {
+            width: 100%;
+            height: 200px;
+            background-color: #e0e0e0;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #2a5298;
+            color: white;
+        }
+
+        .action-btn:hover {
+            background-color: #1e3c72;
+        }
+
+        /* Map View */
+        .map-view {
+            display: none;
+            padding: 20px;
+            height: calc(100vh - 140px);
+        }
+
+        .map-view h2 {
+            font-size: 24px;
+            color: #2a5298;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .map-placeholder {
+            width: 100%;
+            height: 500px;
+            background-color: #e8f4f8;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #666;
+        }
+
+        /* Guide View */
+        .guide-view {
+            display: none;
+            padding: 20px;
+        }
+
+        .guide-view h2 {
+            font-size: 24px;
+            color: #2a5298;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .audio-guide-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Info View */
+        .info-view {
+            display: none;
+            padding: 20px;
+        }
+
+        .info-view h2 {
+            font-size: 24px;
+            color: #2a5298;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .info-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .info-card h3 {
+            font-size: 18px;
+            color: #2a5298;
+            margin-bottom: 10px;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 5px 20px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .nav-item.active {
+            color: #2a5298;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+        }
+
+        .nav-label {
+            font-size: 12px;
+        }
+
+        /* Navigation Modal */
+        .nav-modal {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            border-radius: 20px 20px 0 0;
+            padding: 20px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            z-index: 1100;
+            display: none;
+        }
+
+        .nav-modal.active {
+            display: block;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>沖縄戦跡めぐり</h1>
+            <p>平和への道 - 歴史を学び、未来へ繋ぐ</p>
+        </header>
+
+        <!-- Home View -->
+        <div id="homeView" class="view">
+            <div class="search-container">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" placeholder="戦跡名やキーワードで検索" id="searchInput">
+                </div>
+            </div>
+
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">すべて</button>
+                <button class="filter-btn" data-filter="monument">慰霊碑</button>
+                <button class="filter-btn" data-filter="cave">ガマ・壕</button>
+                <button class="filter-btn" data-filter="museum">資料館</button>
+                <button class="filter-btn" data-filter="battlefield">戦跡</button>
+            </div>
+
+            <div class="memorial-list" id="memorialList"></div>
+        </div>
+
+        <!-- Map View -->
+        <div id="mapView" class="map-view">
+            <h2>戦跡マップ</h2>
+            <div class="map-placeholder">
+                🗺️ 地図を表示中...
+            </div>
+        </div>
+
+        <!-- Guide View -->
+        <div id="guideView" class="guide-view">
+            <h2>音声ガイド</h2>
+            <div class="audio-guide-card">
+                <h3>沖縄戦の概要</h3>
+                <p>再生時間: 15分</p>
+                <button class="action-btn">▶ 再生</button>
+            </div>
+            <div class="audio-guide-card">
+                <h3>平和の礎について</h3>
+                <p>再生時間: 10分</p>
+                <button class="action-btn">▶ 再生</button>
+            </div>
+        </div>
+
+        <!-- Info View -->
+        <div id="infoView" class="info-view">
+            <h2>アプリ情報</h2>
+            <div class="info-card">
+                <h3>アプリについて</h3>
+                <p>「沖縄戦跡めぐり」は、沖縄戦の歴史を学び、平和の大切さを考えるための観光アプリです。</p>
+            </div>
+            <div class="info-card">
+                <h3>使い方</h3>
+                <p>1. 戦跡一覧から訪問したい場所を選択<br>
+                2. 詳細情報を確認<br>
+                3. ナビゲーション機能で現地へ</p>
+            </div>
+        </div>
+
+        <!-- Detail View -->
+        <div id="detailView" class="detail-view">
+            <div class="detail-header">
+                <div class="close-btn" id="closeDetailBtn">✕</div>
+                <h2 class="detail-title" id="detailTitle">平和祈念公園</h2>
+                <div class="memorial-type" id="detailType">慰霊碑</div>
+            </div>
+            <div class="detail-content">
+                <h3 class="section-title">📍 概要</h3>
+                <p class="section-content" id="detailOverview"></p>
+                
+                <h3 class="section-title">📚 歴史的背景</h3>
+                <p class="section-content" id="detailHistory"></p>
+                
+                <h3 class="section-title">🗺️ アクセス</h3>
+                <div class="map-container">地図を表示</div>
+                <p class="section-content" id="detailAccess"></p>
+                
+                <div class="action-buttons">
+                    <button class="action-btn" id="navBtn">📍 ナビゲーション開始</button>
+                    <button class="action-btn" id="audioBtn">🎧 音声ガイド</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Modal -->
+        <div id="navModal" class="nav-modal">
+            <h3>ナビゲーションを開始しますか？</h3>
+            <p id="navInfo"></p>
+            <div class="action-buttons" style="margin-top: 20px;">
+                <button class="action-btn" id="startNavBtn">開始</button>
+                <button class="action-btn" id="cancelNavBtn" style="background-color: #ccc;">キャンセル</button>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-item active" data-view="home">
+                <div class="nav-icon">🏛️</div>
+                <span class="nav-label">戦跡</span>
+            </div>
+            <div class="nav-item" data-view="map">
+                <div class="nav-icon">🗺️</div>
+                <span class="nav-label">地図</span>
+            </div>
+            <div class="nav-item" data-view="guide">
+                <div class="nav-icon">🎧</div>
+                <span class="nav-label">ガイド</span>
+            </div>
+            <div class="nav-item" data-view="info">
+                <div class="nav-icon">ℹ️</div>
+                <span class="nav-label">情報</span>
+            </div>
+        </nav>
+    </div>
+
+    <script>
+        // データ
+        const memorials = [
+            {
+                id: 1,
+                name: "平和祈念公園",
+                type: "monument",
+                typeLabel: "慰霊碑",
+                distance: "0.5km",
+                description: "沖縄戦終焉の地に建立された、戦没者を追悼する県内最大の慰霊施設",
+                visitors: "年間100万人",
+                time: "2-3時間",
+                overview: "沖縄戦最後の激戦地となった摩文仁の丘に位置する平和祈念公園は、国籍を問わず、すべての戦没者を追悼する施設です。",
+                history: "1945年6月23日、沖縄戦が終結したこの地に、1972年の本土復帰を記念して建設されました。",
+                access: "那覇空港から車で約40分。"
+            },
+            {
+                id: 2,
+                name: "ひめゆりの塔",
+                type: "monument",
+                typeLabel: "慰霊碑",
+                distance: "2.3km",
+                description: "沖縄戦で看護要員として動員された女学生たちを追悼する慰霊碑",
+                visitors: "年間60万人",
+                time: "1-2時間",
+                overview: "沖縄師範学校女子部と沖縄県立第一高等女学校の生徒・教師で構成された「ひめゆり学徒隊」の慰霊碑です。",
+                history: "1945年3月、222名の女学生と18名の教師が看護要員として動員され、136名が犠牲となりました。",
+                access: "那覇空港から車で約30分。"
+            },
+            {
+                id: 3,
+                name: "旧海軍司令部壕",
+                type: "cave",
+                typeLabel: "ガマ・壕",
+                distance: "8.5km",
+                description: "日本海軍が掘った地下司令部壕。当時の様子が保存されている",
+                visitors: "年間20万人",
+                time: "1時間",
+                overview: "1944年に日本海軍によって掘られた地下司令部壕で、全長450mの地下トンネルです。",
+                history: "大田実少将以下4000名の将兵が壮絶な最期を遂げた場所。",
+                access: "那覇空港から車で約20分。"
+            }
+        ];
+
+        let currentFilter = 'all';
+        let currentMemorial = null;
+
+        // 初期化
+        window.addEventListener('DOMContentLoaded', function() {
+            renderMemorials();
+            setupEventListeners();
+        });
+
+        // イベントリスナーの設定
+        function setupEventListeners() {
+            // ナビゲーションボタン
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const view = this.getAttribute('data-view');
+                    showView(view);
+                });
+            });
+
+            // フィルターボタン
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.getAttribute('data-filter');
+                    renderMemorials();
+                });
+            });
+
+            // 検索機能
+            document.getElementById('searchInput').addEventListener('input', function(e) {
+                renderMemorials(e.target.value);
+            });
+
+            // 詳細画面を閉じる
+            document.getElementById('closeDetailBtn').addEventListener('click', function() {
+                document.getElementById('detailView').classList.remove('active');
+            });
+
+            // ナビゲーションボタン
+            document.getElementById('navBtn').addEventListener('click', function() {
+                document.getElementById('navModal').classList.add('active');
+                document.getElementById('navInfo').textContent = `${currentMemorial.name}まで${currentMemorial.distance}`;
+            });
+
+            // ナビゲーション開始
+            document.getElementById('startNavBtn').addEventListener('click', function() {
+                alert('ナビゲーションを開始しました');
+                document.getElementById('navModal').classList.remove('active');
+            });
+
+            // ナビゲーションキャンセル
+            document.getElementById('cancelNavBtn').addEventListener('click', function() {
+                document.getElementById('navModal').classList.remove('active');
+            });
+
+            // 音声ガイドボタン
+            document.getElementById('audioBtn').addEventListener('click', function() {
+                alert(`「${currentMemorial.name}」の音声ガイドを再生中`);
+            });
+        }
+
+        // ビューの切り替え
+        function showView(view) {
+            // すべてのビューを非表示
+            document.getElementById('homeView').style.display = 'none';
+            document.getElementById('mapView').style.display = 'none';
+            document.getElementById('guideView').style.display = 'none';
+            document.getElementById('infoView').style.display = 'none';
+
+            // ナビゲーションアイテムの状態を更新
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // 選択されたビューを表示
+            switch(view) {
+                case 'home':
+                    document.getElementById('homeView').style.display = 'block';
+                    break;
+                case 'map':
+                    document.getElementById('mapView').style.display = 'block';
+                    break;
+                case 'guide':
+                    document.getElementById('guideView').style.display = 'block';
+                    break;
+                case 'info':
+                    document.getElementById('infoView').style.display = 'block';
+                    break;
+            }
+
+            // 対応するナビゲーションアイテムをアクティブに
+            document.querySelector(`[data-view="${view}"]`).classList.add('active');
+        }
+
+        // 戦跡一覧の表示
+        function renderMemorials(searchTerm = '') {
+            const listElement = document.getElementById('memorialList');
+            listElement.innerHTML = '';
+
+            const filtered = memorials.filter(memorial => {
+                const matchesFilter = currentFilter === 'all' || memorial.type === currentFilter;
+                const matchesSearch = searchTerm === '' || 
+                    memorial.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    memorial.description.toLowerCase().includes(searchTerm.toLowerCase());
+                return matchesFilter && matchesSearch;
+            });
+
+            filtered.forEach(memorial => {
+                const card = document.createElement('div');
+                card.className = 'memorial-card';
+                card.innerHTML = `
+                    <div class="memorial-header">
+                        <div>
+                            <h3 class="memorial-title">${memorial.name}</h3>
+                            <span class="memorial-type">${memorial.typeLabel}</span>
+                        </div>
+                        <span class="memorial-distance">${memorial.distance}</span>
+                    </div>
+                    <p class="memorial-description">${memorial.description}</p>
+                    <div class="memorial-info">
+                        <span>👥 ${memorial.visitors}</span>
+                        <span>⏱️ 所要${memorial.time}</span>
+                    </div>
+                `;
+                
+                card.addEventListener('click', () => showDetail(memorial));
+                listElement.appendChild(card);
+            });
+        }
+
+        // 詳細画面の表示
+        function showDetail(memorial) {
+            currentMemorial = memorial;
+            document.getElementById('detailTitle').textContent = memorial.name;
+            document.getElementById('detailType').textContent = memorial.typeLabel;
+            document.getElementById('detailOverview').textContent = memorial.overview;
+            document.getElementById('detailHistory').textContent = memorial.history;
+            document.getElementById('detailAccess').textContent = memorial.access;
+            
+            document.getElementById('detailView').classList.add('active');
+        }
+    </script>
+</body>
+</html>
