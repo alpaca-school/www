@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>読谷版キャリア教育プロジェクト</title>
+    <style>
+        body {
+            font-family: 'Noto Sans JP', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(45deg, #2196F3, #9C27B0);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .title {
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 5px solid #2196F3;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1976D2;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .icon {
+            width: 28px;
+            height: 28px;
+            margin-right: 8px;
+            background: #2196F3;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .problem-area {
+            background: #ffebee;
+            border-left-color: #f44336;
+        }
+        
+        .problem-area .section-title {
+            color: #d32f2f;
+        }
+        
+        .problem-area .icon {
+            background: #f44336;
+        }
+        
+        .solution-area {
+            background: #e8f5e8;
+            border-left-color: #4caf50;
+        }
+        
+        .solution-area .section-title {
+            color: #388e3c;
+        }
+        
+        .solution-area .icon {
+            background: #4caf50;
+        }
+        
+        .booklet-info {
+            background: #fff3e0;
+            border-left-color: #ff9800;
+        }
+        
+        .booklet-info .section-title {
+            color: #f57c00;
+        }
+        
+        .booklet-info .icon {
+            background: #ff9800;
+        }
+        
+        .sponsor-info {
+            background: #f3e5f5;
+            border-left-color: #9c27b0;
+        }
+        
+        .sponsor-info .section-title {
+            color: #7b1fa2;
+        }
+        
+        .sponsor-info .icon {
+            background: #9c27b0;
+        }
+        
+        .flow-chart {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+        
+        .flow-item {
+            background: white;
+            border: 3px solid #2196F3;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            font-size: 16px;
+            width: 180px;
+            margin: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .flow-arrow {
+            font-size: 25px;
+            color: #2196F3;
+            margin: 0 5px;
+        }
+        
+        .highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #e3f2fd, #f8bbd9);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            font-size: 18px;
+        }
+        
+        .sponsor-plans {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .plan-card {
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .plan-basic {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            border: 3px solid #4caf50;
+        }
+        
+        .plan-standard {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border: 3px solid #2196f3;
+        }
+        
+        .plan-premium {
+            background: linear-gradient(135deg, #fff3e0, #ffcc02);
+            border: 3px solid #ff9800;
+        }
+        
+        .plan-special {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            border: 3px solid #9c27b0;
+        }
+        
+        .plan-price {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .plan-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .plan-features {
+            text-align: left;
+            font-size: 16px;
+            line-height: 1.3;
+        }
+        
+        .plan-features li {
+            margin: 5px 0;
+            padding-left: 5px;
+        }
+        
+        .contact-info {
+            background: linear-gradient(45deg, #2196F3, #21CBF3);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 25px;
+        }
+        
+        .benefits {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin: 15px 0;
+        }
+        
+        .benefit-item {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            font-size: 18px;
+        }
+        
+        .emphasis {
+            background: linear-gradient(45deg, #ffeb3b, #ffc107);
+            color: #333;
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 2px;
+            font-size: 20px;
+        }
+        
+        .booklet-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 15px 0;
+        }
+        
+        .detail-box {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .deadline-box {
+            background: linear-gradient(135deg, #ffcdd2, #f8bbd9);
+            border: 3px solid #f44336;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .deadline-text {
+            font-size: 18px;
+            font-weight: bold;
+            color: #c62828;
+        }
+        
+        @media (max-width: 768px) {
+            .flow-chart {
+                flex-direction: column;
+            }
+            
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+            
+            .title {
+                font-size: 20px;
+            }
+            
+            .subtitle {
+                font-size: 14px;
+            }
+            
+            .sponsor-plans {
+                grid-template-columns: 1fr;
+            }
+            
+            .booklet-details {
+                grid-template-columns: 1fr;
+            }
+        }
+        .apply-btn {
+    display: inline-block;
+    background: linear-gradient(90deg, #FFC107 0%, #FF9800 100%);
+    color: #fff;
+    font-weight: bold;
+    font-size: 17px;
+    padding: 12px 32px;
+    border: none;
+    border-radius: 30px;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(255, 193, 7, 0.15);
+    margin-top: 18px;
+    transition: background 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+.apply-btn:hover {
+    background: linear-gradient(90deg, #FFB300 0%, #F57C00 100%);
+    box-shadow: 0 4px 16px rgba(255, 152, 0, 0.25);
+    color: #fff;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="title">📘 読谷版キャリア教育プロジェクト</div>
+            <div class="subtitle">地域ぐるみで子どもたちの未来をサポート！</div>
+        </div>
+        
+        <div class="main-content">
+            <!-- 現状の課題 -->
+            <div class="section problem-area">
+                <div class="section-title">
+                    <div class="icon">⚠</div>
+                    読谷村の子どもたちが抱える課題
+                </div>
+                <div class="highlights">
+                    <div class="highlight-box">
+                        <strong>不登校</strong><br>
+                        学校に行けない状況
+                    </div>
+                    <div class="highlight-box">
+                        <strong>進路未決定</strong><br>
+                        将来の方向性が見えない
+                    </div>
+                    <div class="highlight-box">
+                        <strong>夜間徘徊・問題行動</strong><br>
+                        安心できる居場所がない
+                    </div>
+                </div>
+                <p style="text-align: center; font-size: 14px; margin-top: 15px;">
+                    家庭・学校だけでは対応しきれない<br>
+                    <span class="emphasis">「安心できる場」</span>と<span class="emphasis">「未来の展望」</span>が持てない状況
+                </p>
+            </div>
+
+            <!-- 解決策 -->
+            <div class="section solution-area">
+                <div class="section-title">
+                    <div class="icon">💡</div>
+                    琉球のタネ × 地域連携の解決アプローチ
+                </div>
+                <div class="flow-chart">
+                    <div class="flow-item">
+                        <strong>村内自治会・教育機関</strong><br>
+                        との連携体制
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-item">
+                        <strong>地元企業・大人</strong><br>
+                        "仕事"を通じた関わり
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-item">
+                        <strong>社会に生きる力</strong><br>
+                        関係性と成長機会づくり
+                    </div>
+                </div>
+                <p style="text-align: center; font-size: 16px; color: #388e3c; font-weight: bold;">
+                    学校復帰や学力向上がゴールではなく、社会に生きる力を育てる支援モデル
+                    <span class="emphasis">「社会とのご縁づくり」「自己肯定感の回復」「将来のキャリア形成支援」</span><br>
+                    を目指します
+                </p>
+            </div>
+
+            <!-- 冊子について -->
+            <div class="section booklet-info">
+                <div class="section-title">
+                    <div class="icon">📖</div>
+                    制作・活用予定の冊子について
+                </div>
+                <h3 style="text-align: center; color: #f57c00; font-size: 20px; margin: 10px 0;">
+                    『読谷版 地域ぐるみのキャリア教育<br>〜未来をひらく仕事のタネ〜』
+                </h3>
+                
+                <div class="booklet-details">
+                    <div class="detail-box">
+                        <strong>📍 配布対象</strong><br>
+                        • プログラム参加児童生徒<br>
+                        • 読谷村内の学校機関（喜名小学校、読谷小学校、渡慶次小学校、読谷中学校、古堅中学校、読谷高校）<br>
+                    </div>
+                    <div class="detail-box">
+                        <strong>📊 発行予定</strong><br>
+                        • <span class="emphasis">約200部</span><br>
+                        • 喜名自治会キャリア講話プログラムで活用<br>
+                        • 保護者説明会等で配布
+                    </div>
+                </div>
+                
+                <div class="highlights">
+                    <div class="highlight-box">事業紹介<br>（創業者の想い／仕事の魅力）</div>
+                    <div class="highlight-box">子どもたちの取り組む様子<br>（職場体験）</div>
+                    <div class="highlight-box">読谷村の教育・福祉・就労<br>の連携事例</div>
+                    <div class="highlight-box">冊子スポンサー企業<br>一覧・紹介ページ</div>
+                </div>
+            </div>
+
+            <!-- スポンサー募集 -->
+            <div class="section sponsor-info">
+                <div class="section-title">
+                    <div class="icon">🎁</div>
+                    協賛プラン・ご提供リターン一覧
+                </div>
+                <p style="text-align: center; font-size: 16px; margin-bottom: 20px;">
+                    地元の子どもたちと未来を育む「スポンサー共催」のかたち
+                </p>
+                
+                <div class="sponsor-plans">
+                    <div class="plan-card plan-basic">
+                        <div class="plan-price">5,000円</div>
+                        <div class="plan-name">🌱応援サポーター枠</div>
+                        <ul class="plan-features">
+                            <li>冊子協賛名簿に社名掲載</li>
+                            <!-- <li>SNSで一覧紹介</li> -->                        
+                        </ul>
+                    </div>
+                    
+                    <div class="plan-card plan-standard">
+                        <div class="plan-price">10,000円</div>
+                        <div class="plan-name">🌿地域つながり枠</div>
+                        <ul class="plan-features">
+                            <li>冊子協賛名簿に社名掲載</li>
+                            <li>冊子にロゴ掲載</li>
+                            <li>冊子1/2ページに社名＋PR文（500字）</li>
+                            <!-- <li>地域イベントでチラシ設置協力</li> -->
+                        </ul>
+                    </div>
+                    
+                    <div class="plan-card plan-premium">
+                        <div class="plan-price">20,000円</div>
+                        <div class="plan-name">🌺キャリア応援企業枠</div>
+                        <ul class="plan-features">
+                            <li>冊子協賛名簿に社名掲載</li>
+                            <li>冊子にロゴ掲載</li>
+                            <li>冊子1ページ カラー枠</li>
+                            <li>写真＋紹介＋子ども向けメッセージ</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="plan-card plan-special">
+                        <div class="plan-price">50,000円</div>
+                        <div class="plan-name">🌟地域共育パートナー枠</div>
+                        <ul class="plan-features">
+                            <li>冊子協賛名簿に社名掲載</li>
+                            <li>冊子にロゴ掲載</li>
+                            <li>冊子2ページ〜見開き特集</li>
+                            <li>理念・CSR紹介等</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <p style="font-size: 18px; text-align: center; margin-top: 15px; color: #666;">
+                    ※協賛金は冊子制作費、インタビュー費、教材印刷費、子ども向け活動記録冊子制作費などに使用
+                </p>
+            </div>
+
+            <!-- メリット -->
+            <div class="section">
+                <div class="section-title">
+                    <div class="icon">💡</div>
+                    事業主様への追加メリット
+                </div>
+                <div class="benefits">
+                    <div class="benefit-item">
+                        <strong>📢 地域認知向上</strong><br>
+                        保護者・教育関係者への露出
+                    </div>
+                    <div class="benefit-item">
+                        <strong>🤝 信頼関係構築</strong><br>
+                        地元若者との<br>関係づくり
+                    </div>
+                    <div class="benefit-item">
+                        <strong>👥 採用基盤形成</strong><br>
+                        将来の<br>地元雇用につながる
+                    </div>
+                    <div class="benefit-item">
+                        <strong>🎯 SDGs・CSR</strong><br>
+                        社会貢献活動<br>として可視化
+                    </div>
+                </div>
+            </div>
+
+            <!-- 締切・申込み -->
+            <div class="deadline-box">
+                <div class="deadline-text">📝 お申込締切：2025年12月31日</div>
+                <p style="margin: 10px 0; font-size: 14px;">
+                    以下の協賛企業情報のご記入用フォーフォームよりお申し込みください。
+                </p>
+                  <a href="https://docs.google.com/forms/d/e/1FAIpQLSdcGV0Osf_2bRBLBCEfySa5ljl4t4prolDsUNm4yi8D2vs03A/viewform?usp=dialog" class="apply-btn" target="_blank">協賛企業情報を申し込む</a>
+
+            </div>
+
+            <!-- 連絡先 -->
+            <div class="contact-info">
+                <h3 style="margin-top: 0;">📞 お問合せ・お申込先</h3>
+                <div style="font-size: 16px;">
+                    <strong>株式会社 琉球のタネ（担当：佐渡山）</strong><br>
+                    〒900-0024 沖縄県那覇市古波蔵2-30-12<br>
+                    📞 070-5692-4173<br>
+                    ✉️ info@ryukyu-tane.com<br>
+                    🌐 https://www.alpaca-school.okinawa
+                </div>
+            </div>
+
+            <!-- 最後のメッセージ -->
+            <div style="background: linear-gradient(135deg, #fff8e1, #f3e5f5); border-radius: 15px; padding: 25px; text-align: center; margin-top: 25px;">
+                <h3 style="color: #5d4037;font-size: 18px;">✨ さいごに</h3>
+                <p style="font-size: 15px; line-height: 1.6;">
+                    子どもたちが<span class="emphasis">「こんな仕事もあるんだ」</span>と出会い、<br>
+                    <span class="emphasis">「やってみたい」「会ってみたい」</span>と一歩踏み出せるきっかけを、<br>
+                    読谷村の地域の皆さまと一緒につくっていきたいと願っています。
+                </p>
+                <div style="margin-top: 15px; font-size: 18px; font-weight: bold; color: #2e7d32;">
+                    "<span class="emphasis">好き</span>"や"<span class="emphasis">得意</span>"が未来につながる<br>
+                    そんな「ご縁のタネまき」に、ぜひご参加ください。
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

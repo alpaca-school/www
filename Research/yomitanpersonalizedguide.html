@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>読谷村 - あなただけの旅</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Hiragino Sans', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .selection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .selector-card {
+            background: linear-gradient(145deg, #f0f4ff, #e8f2ff);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .selector-card:hover {
+            transform: scale(1.05);
+            border-color: #667eea;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .selector-card.active {
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: white;
+            border-color: #fff;
+        }
+
+        .selector-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .selector-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .option-btn {
+            padding: 10px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .option-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.05);
+        }
+
+        .option-btn.selected {
+            background: rgba(255,255,255,0.8);
+            color: #333;
+            font-weight: bold;
+        }
+
+        .results {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .recommendation {
+            background: linear-gradient(145deg, #fff, #f8f9ff);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+
+        .recommendation h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .recommendation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .spot-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .spot-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .spot-card h4 {
+            color: #764ba2;
+            margin-bottom: 8px;
+        }
+
+        .spot-card p {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #666;
+        }
+
+        .generate-btn {
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 20px auto;
+        }
+
+        .generate-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .ayurveda-types {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .zodiac-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .selector-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .zodiac-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .ayurveda-types {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌺 読谷村 パーソナル観光ガイド ✨</h1>
+            <p>あなたの星座とアーユルヴェーダタイプに合わせた、特別な旅をご提案</p>
+        </div>
+
+        <div class="selection-grid">
+            <div class="card">
+                <div class="selector-card" id="zodiac-selector">
+                    <div class="selector-title">🌟 あなたの星座を選択</div>
+                    <p>生まれ月に基づいて、エネルギーに合った観光スポットをご提案します</p>
+                    <div class="zodiac-grid">
+                        <button class="option-btn" data-zodiac="aries">牡羊座</button>
+                        <button class="option-btn" data-zodiac="taurus">牡牛座</button>
+                        <button class="option-btn" data-zodiac="gemini">双子座</button>
+                        <button class="option-btn" data-zodiac="cancer">蟹座</button>
+                        <button class="option-btn" data-zodiac="leo">獅子座</button>
+                        <button class="option-btn" data-zodiac="virgo">乙女座</button>
+                        <button class="option-btn" data-zodiac="libra">天秤座</button>
+                        <button class="option-btn" data-zodiac="scorpio">蠍座</button>
+                        <button class="option-btn" data-zodiac="sagittarius">射手座</button>
+                        <button class="option-btn" data-zodiac="capricorn">山羊座</button>
+                        <button class="option-btn" data-zodiac="aquarius">水瓶座</button>
+                        <button class="option-btn" data-zodiac="pisces">魚座</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="selector-card" id="ayurveda-selector">
+                    <div class="selector-title">🧘‍♀️ アーユルヴェーダタイプ診断</div>
+                    <p>体質に合った癒しとリフレッシュの方法をご提案します</p>
+                    <div class="ayurveda-types">
+                        <button class="option-btn" data-ayurveda="vata">ヴァータ<br><small>風・空</small></button>
+                        <button class="option-btn" data-ayurveda="pitta">ピッタ<br><small>火・水</small></button>
+                        <button class="option-btn" data-ayurveda="kapha">カパ<br><small>地・水</small></button>
+                    </div>
+                    <div style="margin-top: 15px; font-size: 0.9rem; color: #666;">
+                        <strong>簡易診断:</strong><br>
+                        ヴァータ: 活動的、創造的、変化を好む<br>
+                        ピッタ: 情熱的、集中力がある、リーダー気質<br>
+                        カパ: 穏やか、安定を好む、忍耐強い
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="generate-btn" onclick="generateRecommendations()">
+            🎯 あなただけの読谷村観光プランを生成
+        </button>
+
+        <div id="results" class="results">
+            <div class="card">
+                <h2 style="text-align: center; color: #667eea; margin-bottom: 20px;">
+                    ✨ あなたにピッタリの読谷村体験 ✨
+                </h2>
+                <div id="recommendations"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedZodiac = '';
+        let selectedAyurveda = '';
+
+        // 星座選択
+        document.querySelectorAll('[data-zodiac]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('[data-zodiac]').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedZodiac = this.dataset.zodiac;
+            });
+        });
+
+        // アーユルヴェーダタイプ選択
+        document.querySelectorAll('[data-ayurveda]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('[data-ayurveda]').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedAyurveda = this.dataset.ayurveda;
+            });
+        });
+
+        const recommendations = {
+            zodiac: {
+                aries: {
+                    title: "牡羊座のあなたへ - アクティブな冒険",
+                    spots: [
+                        { name: "残波岬", desc: "力強い波と断崖絶壁でエネルギーチャージ" },
+                        { name: "体験王国むら咲むら", desc: "32の工房で新しいことにチャレンジ" },
+                        { name: "ビーチサイクリング", desc: "海風を感じながらアクティブに移動" }
+                    ]
+                },
+                taurus: {
+                    title: "牡牛座のあなたへ - 美と味覚の楽しみ",
+                    spots: [
+                        { name: "座喜味城跡", desc: "美しい石積みと歴史の重みを感じる" },
+                        { name: "読谷山焼窯元", desc: "美しい陶器作りをゆっくり体験" },
+                        { name: "地元カフェ巡り", desc: "沖縄の美味しいコーヒーとスイーツ" }
+                    ]
+                },
+                gemini: {
+                    title: "双子座のあなたへ - 多彩な文化体験",
+                    spots: [
+                        { name: "読谷村文化センター", desc: "様々な文化イベントと学習機会" },
+                        { name: "やちむんの里", desc: "多くの窯元を巡って比較体験" },
+                        { name: "地域交流イベント", desc: "地元の人々との会話を楽しむ" }
+                    ]
+                },
+                cancer: {
+                    title: "蟹座のあなたへ - 家族的な温かさ",
+                    spots: [
+                        { name: "読谷海浜公園", desc: "家族でゆっくり過ごせる安心空間" },
+                        { name: "民宿体験", desc: "沖縄の家庭的なおもてなし" },
+                        { name: "伝統料理体験", desc: "おばあちゃんの味を学ぶ" }
+                    ]
+                },
+                leo: {
+                    title: "獅子座のあなたへ - 華やかな体験",
+                    spots: [
+                        { name: "残波ビーチリゾート", desc: "豪華なリゾート体験で自分を輝かせる" },
+                        { name: "紅型染め体験", desc: "鮮やかな沖縄の伝統染色" },
+                        { name: "サンセットディナー", desc: "美しい夕日を背景にした特別な食事" }
+                    ]
+                },
+                virgo: {
+                    title: "乙女座のあなたへ - 丁寧な学びと体験",
+                    spots: [
+                        { name: "読谷村史跡巡り", desc: "詳細な歴史解説付きの文化学習" },
+                        { name: "オーガニック農園", desc: "丁寧に育てられた野菜の収穫体験" },
+                        { name: "伝統工芸ワークショップ", desc: "技術を正確に学ぶ職人体験" }
+                    ]
+                },
+                libra: {
+                    title: "天秤座のあなたへ - 美とバランスの体験",
+                    spots: [
+                        { name: "美術館・ギャラリー", desc: "沖縄の美しいアート作品鑑賞" },
+                        { name: "バランス料理体験", desc: "沖縄の健康的な食文化" },
+                        { name: "庭園散策", desc: "調和のとれた美しい景観" }
+                    ]
+                },
+                scorpio: {
+                    title: "蠍座のあなたへ - 深い体験と神秘",
+                    spots: [
+                        { name: "洞窟探検", desc: "神秘的な地下世界の探索" },
+                        { name: "夜の星空観察", desc: "深い宇宙の神秘を感じる" },
+                        { name: "スピリチュアルスポット", desc: "パワーストーンと御嶽巡り" }
+                    ]
+                },
+                sagittarius: {
+                    title: "射手座のあなたへ - 自由な冒険旅行",
+                    spots: [
+                        { name: "トレッキングコース", desc: "自然の中を自由に歩く冒険" },
+                        { name: "異文化交流", desc: "世界各国の観光客との交流" },
+                        { name: "アドベンチャーツアー", desc: "予定にない発見の旅" }
+                    ]
+                },
+                capricorn: {
+                    title: "山羊座のあなたへ - 伝統と実績",
+                    spots: [
+                        { name: "伝統工芸継承", desc: "長い歴史を持つ技術の習得" },
+                        { name: "老舗店巡り", desc: "実績ある名店での本格体験" },
+                        { name: "建築見学", desc: "伝統的な沖縄建築の構造学習" }
+                    ]
+                },
+                aquarius: {
+                    title: "水瓶座のあなたへ - 革新的な体験",
+                    spots: [
+                        { name: "エコツアー", desc: "環境に優しい新しい観光スタイル" },
+                        { name: "デジタルアート体験", desc: "技術と芸術の融合" },
+                        { name: "未来型農業見学", desc: "革新的な農業技術の体験" }
+                    ]
+                },
+                pisces: {
+                    title: "魚座のあなたへ - 感性と癒し",
+                    spots: [
+                        { name: "海辺瞑想", desc: "波の音に包まれた静寂の時間" },
+                        { name: "アートセラピー", desc: "創作を通じた心の癒し" },
+                        { name: "音楽とダンス", desc: "沖縄の伝統音楽で感性を解放" }
+                    ]
+                }
+            },
+            ayurveda: {
+                vata: {
+                    title: "ヴァータタイプ - 安定とグラウンディング",
+                    spots: [
+                        { name: "温泉・スパ", desc: "温かいお湯で体を温め、神経を落ち着かせる" },
+                        { name: "ゆっくり散策", desc: "無理のないペースでの自然散歩" },
+                        { name: "瞑想・ヨガ", desc: "心を静めるマインドフルネス体験" }
+                    ]
+                },
+                pitta: {
+                    title: "ピッタタイプ - クールダウンとリラックス",
+                    spots: [
+                        { name: "涼しい森林浴", desc: "木陰での穏やかな自然体験" },
+                        { name: "水辺アクティビティ", desc: "海や川での冷却効果のある活動" },
+                        { name: "月光浴", desc: "夜の静かで涼しい時間を楽しむ" }
+                    ]
+                },
+                kapha: {
+                    title: "カパタイプ - 活性化と刺激",
+                    spots: [
+                        { name: "活発な運動", desc: "ハイキングやスポーツで体を動かす" },
+                        { name: "スパイス料理体験", desc: "刺激的な沖縄スパイス料理" },
+                        { name: "早朝アクティビティ", desc: "朝の新鮮なエネルギーを活用" }
+                    ]
+                }
+            }
+        };
+
+        function generateRecommendations() {
+            if (!selectedZodiac || !selectedAyurveda) {
+                alert('星座とアーユルヴェーダタイプの両方を選択してください！');
+                return;
+            }
+
+            const zodiacRec = recommendations.zodiac[selectedZodiac];
+            const ayurvedaRec = recommendations.ayurveda[selectedAyurveda];
+
+            const resultsHTML = `
+                <div class="recommendation">
+                    <h3>${zodiacRec.title}</h3>
+                    <div class="recommendation-grid">
+                        ${zodiacRec.spots.map(spot => `
+                            <div class="spot-card">
+                                <h4>${spot.name}</h4>
+                                <p>${spot.desc}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="recommendation">
+                    <h3>${ayurvedaRec.title}</h3>
+                    <div class="recommendation-grid">
+                        ${ayurvedaRec.spots.map(spot => `
+                            <div class="spot-card">
+                                <h4>${spot.name}</h4>
+                                <p>${spot.desc}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="recommendation">
+                    <h3>🌟 特別おすすめ組み合わせプラン</h3>
+                    <div style="background: linear-gradient(145deg, #fff, #f0f4ff); padding: 20px; border-radius: 10px; margin-top: 15px;">
+                        <p><strong>1日目:</strong> ${zodiacRec.spots[0].name}で${selectedZodiac === 'aries' ? 'エネルギッシュに' : selectedZodiac === 'taurus' ? 'ゆっくりと' : selectedZodiac === 'gemini' ? '興味深く' : selectedZodiac === 'cancer' ? '心穏やかに' : selectedZodiac === 'leo' ? '華やかに' : selectedZodiac === 'virgo' ? '丁寧に' : selectedZodiac === 'libra' ? '美しく' : selectedZodiac === 'scorpio' ? '深く' : selectedZodiac === 'sagittarius' ? '自由に' : selectedZodiac === 'capricorn' ? '着実に' : selectedZodiac === 'aquarius' ? '革新的に' : '感性豊かに'}スタート</p>
+                        <p><strong>2日目:</strong> ${ayurvedaRec.spots[0].name}で${selectedAyurveda === 'vata' ? '心を落ち着かせ' : selectedAyurveda === 'pitta' ? 'クールダウンし' : 'エネルギーを活性化し'}て体調を整える</p>
+                        <p><strong>3日目:</strong> 両方の要素を組み合わせた総合的な読谷村体験で、心身ともにリフレッシュ</p>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('recommendations').innerHTML = resultsHTML;
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

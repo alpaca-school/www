@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ムラ社会 vs 多民族社会を学ぼう</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .society-card {
+            background: linear-gradient(145deg, #f0f4f8, #e2e8f0);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .society-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .village-society {
+            border-left: 5px solid #e67e22;
+        }
+
+        .multicultural-society {
+            border-left: 5px solid #3498db;
+        }
+
+        .society-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .village-society .society-title {
+            color: #e67e22;
+        }
+
+        .multicultural-society .society-title {
+            color: #3498db;
+        }
+
+        .characteristics {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .characteristics li {
+            background: rgba(255, 255, 255, 0.8);
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .characteristics li:hover {
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .characteristics li::before {
+            content: "👥";
+            margin-right: 10px;
+        }
+
+        .multicultural-society .characteristics li::before {
+            content: "🌍";
+        }
+
+        .simulation-section {
+            background: linear-gradient(145deg, #ffffff, #f8f9fa);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .simulation-title {
+            font-size: 2em;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .scenario-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .scenario-btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .village-btn {
+            background: linear-gradient(145deg, #e67e22, #d35400);
+        }
+
+        .multicultural-btn {
+            background: linear-gradient(145deg, #3498db, #2980b9);
+        }
+
+        .scenario-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .simulation-display {
+            min-height: 300px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px dashed #bdc3c7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .business-scenario {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .customer-group {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .customer {
+            text-align: center;
+            margin: 10px;
+            padding: 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .customer:hover {
+            transform: scale(1.1);
+        }
+
+        .good-customer {
+            background: rgba(46, 204, 113, 0.2);
+            border: 2px solid #2ecc71;
+        }
+
+        .difficult-customer {
+            background: rgba(231, 76, 60, 0.2);
+            border: 2px solid #e74c3c;
+        }
+
+        .customer-emoji {
+            font-size: 3em;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .mechanic {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(241, 196, 15, 0.2);
+            border: 2px solid #f1c40f;
+            border-radius: 15px;
+        }
+
+        .key-insight {
+            background: linear-gradient(145deg, #ff6b6b, #ee5a52);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .quiz-section {
+            background: linear-gradient(145deg, #a8e6cf, #88d8a3);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz-question {
+            font-size: 1.3em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-option {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .quiz-option:hover {
+            border-color: #3498db;
+            transform: translateY(-2px);
+        }
+
+        .quiz-option.correct {
+            border-color: #27ae60;
+            background: rgba(39, 174, 96, 0.2);
+        }
+
+        .quiz-option.incorrect {
+            border-color: #e74c3c;
+            background: rgba(231, 76, 60, 0.2);
+        }
+
+        .quiz-result {
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .quiz-correct {
+            background: rgba(39, 174, 96, 0.2);
+            color: #27ae60;
+        }
+
+        .quiz-incorrect {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+
+        .reference-section {
+            background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .reference-title {
+            font-size: 2em;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .reference-item {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 5px solid #8e44ad;
+        }
+
+        .reference-item h3 {
+            color: #8e44ad;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+        }
+
+        .reference-item p {
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+
+        .reference-item a {
+            color: #3498db;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .reference-item a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .scenario-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .quiz-options {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏘️ ムラ社会 vs 🌍 多民族社会を学ぼう</h1>
+        
+        <div class="comparison-container">
+            <div class="society-card village-society">
+                <h2 class="society-title">🏘️ ムラ社会</h2>
+                <ul class="characteristics">
+                    <li><strong>血縁関係</strong>が最重要</li>
+                    <li><strong>家族・一族</strong>の絆が強い</li>
+                    <li><strong>同族の保護</strong>を受ける</li>
+                    <li><strong>集団の掟</strong>に従う</li>
+                    <li><strong>相互扶助</strong>の精神</li>
+                    <li><strong>同胞への甘え</strong>が許容される</li>
+                </ul>
+            </div>
+            
+            <div class="society-card multicultural-society">
+                <h2 class="society-title">🌍 多民族社会</h2>
+                <ul class="characteristics">
+                    <li><strong>信頼関係</strong>が最重要</li>
+                    <li><strong>個人の行動</strong>で判断される</li>
+                    <li><strong>公平な取引</strong>が期待される</li>
+                    <li><strong>相互利益</strong>の原則</li>
+                    <li><strong>契約の履行</strong>が重視される</li>
+                    <li><strong>出自より実績</strong>が評価される</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="simulation-section">
+            <h2 class="simulation-title">📈 シミュレーション体験</h2>
+            <div class="scenario-buttons">
+                <button class="scenario-btn village-btn" onclick="showVillageScenario()">
+                    🏘️ ムラ社会での商売
+                </button>
+                <button class="scenario-btn multicultural-btn" onclick="showMulticulturalScenario()">
+                    🌍 多民族社会での商売
+                </button>
+            </div>
+            
+            <div class="simulation-display" id="simulationDisplay">
+                <p style="font-size: 1.2em; color: #7f8c8d;">上のボタンをクリックしてシナリオを体験してみましょう！</p>
+            </div>
+        </div>
+
+        <div class="quiz-section">
+            <h2 class="quiz-question">🤔 理解度チェック</h2>
+            <p class="quiz-question">なぜオーストラリアでアラブ人がユダヤ人を好むようになるのでしょうか？</p>
+            
+            <div class="quiz-options">
+                <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                    文化的な違いを理解し合えるから
+                </div>
+                <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                    政治的な対立がなくなるから
+                </div>
+                <div class="quiz-option" onclick="selectQuizOption(this, true)">
+                    ビジネスでは信頼できる客だから
+                </div>
+                <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                    同じ移民として共感するから
+                </div>
+            </div>
+            
+            <div class="quiz-result" id="quizResult" style="display: none;"></div>
+        </div>
+
+        <div class="reference-section">
+            <h2 class="reference-title">📚 参考文献</h2>
+            <div class="reference-item">
+                <h3><a href="https://amzn.to/3TNVgiv" target="_blank" rel="noopener noreferrer">残酷な世界で生き延びるたったひとつの方法</a></h3>
+                <p><strong>著者:</strong> 橘玲</p>
+                <p><strong>出版社:</strong> 幻冬舎 (2010/9/28)</p>
+                <p><strong>発売日:</strong> 2010/9/28</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showVillageScenario() {
+            const display = document.getElementById('simulationDisplay');
+            display.innerHTML = `
+                <div class="business-scenario">
+                    <div class="mechanic">
+                        <span class="customer-emoji">👨‍🔧</span>
+                        <h3>あなたはイラクの自動車修理工</h3>
+                        <p>家族経営の修理工場で働いています</p>
+                    </div>
+                    
+                    <div class="customer-group">
+                        <div class="customer good-customer">
+                            <span class="customer-emoji">👨‍👩‍👧‍👦</span>
+                            <strong>一族の客</strong>
+                            <p>「家族だから安くして」</p>
+                            <p>「支払いは今度でいいよね」</p>
+                        </div>
+                        
+                        <div class="customer good-customer">
+                            <span class="customer-emoji">🏘️</span>
+                            <strong>近隣住民</strong>
+                            <p>「いつもお世話になってるし」</p>
+                            <p>「困った時はお互い様」</p>
+                        </div>
+                    </div>
+                    
+                    <div class="key-insight">
+                        🏘️ ムラ社会では血縁・地縁関係が最優先
+                        <br>相互扶助が当たり前で、厳格な取引は行われない
+                    </div>
+                </div>
+            `;
+        }
+
+        function showMulticulturalScenario() {
+            const display = document.getElementById('simulationDisplay');
+            display.innerHTML = `
+                <div class="business-scenario">
+                    <div class="mechanic">
+                        <span class="customer-emoji">👨‍🔧</span>
+                        <h3>あなたはオーストラリアのアラブ系修理工</h3>
+                        <p>多様な客が来る修理工場を経営しています</p>
+                    </div>
+                    
+                    <div class="customer-group">
+                        <div class="customer good-customer">
+                            <span class="customer-emoji">✡️</span>
+                            <strong>ユダヤ系の客</strong>
+                            <p>「良い仕事ですね、代金をお支払いします」</p>
+                            <p>「また利用させていただきます」</p>
+                        </div>
+                        
+                        <div class="customer good-customer">
+                            <span class="customer-emoji">👱‍♀️</span>
+                            <strong>アングロ系の客</strong>
+                            <p>「約束通りの仕上がりです」</p>
+                            <p>「友人にも紹介しますね」</p>
+                        </div>
+                        
+                        <div class="customer difficult-customer">
+                            <span class="customer-emoji">👨‍👩‍👧‍👦</span>
+                            <strong>同胞アラブ系</strong>
+                            <p>「同胞なんだから安くしてよ」</p>
+                            <p>「支払いは今度でいいよね」</p>
+                        </div>
+                    </div>
+                    
+                    <div class="key-insight">
+                        🌍 多民族社会では出自より信頼関係が重要
+                        <br>「同胞だから」は通用せず、公平な取引が求められる
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectQuizOption(element, isCorrect) {
+            // Reset all options
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+                option.style.pointerEvents = 'none';
+            });
+
+            // Mark selected option
+            if (isCorrect) {
+                element.classList.add('correct');
+                showQuizResult(true);
+            } else {
+                element.classList.add('incorrect');
+                // Show correct answer
+                options.forEach(option => {
+                    if (option.textContent.includes('ビジネスでは信頼できる客だから')) {
+                        option.classList.add('correct');
+                    }
+                });
+                showQuizResult(false);
+            }
+        }
+
+        function showQuizResult(isCorrect) {
+            const result = document.getElementById('quizResult');
+            result.style.display = 'block';
+            
+            if (isCorrect) {
+                result.className = 'quiz-result quiz-correct';
+                result.innerHTML = '🎉 正解！多民族社会では、血縁より信頼できるビジネス関係の方が価値を持つのです。';
+            } else {
+                result.className = 'quiz-result quiz-incorrect';
+                result.innerHTML = '❌ 不正解。多民族社会では、出自に関係なく約束を守る人が信頼され、ビジネスパートナーとして選ばれます。';
+            }
+
+            // Reset after 5 seconds
+            setTimeout(() => {
+                const options = document.querySelectorAll('.quiz-option');
+                options.forEach(option => {
+                    option.classList.remove('correct', 'incorrect');
+                    option.style.pointerEvents = 'auto';
+                });
+                result.style.display = 'none';
+            }, 5000);
+        }
+
+        // Initialize with multicultural scenario
+        window.onload = function() {
+            setTimeout(() => {
+                showMulticulturalScenario();
+            }, 1000);
+        };
+    </script>
+</body>
+</html>
