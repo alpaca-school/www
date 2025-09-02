@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>経営理論の変遷と現代の課題</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+        
+        .title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 120px;
+            left: 10%;
+            right: 10%;
+            height: 4px;
+            background: linear-gradient(90deg, #e74c3c, #f39c12, #27ae60, #3498db);
+            border-radius: 2px;
+            z-index: 1;
+        }
+        
+        .timeline::after {
+            content: '→';
+            position: absolute;
+            right: 5%;
+            top: 105px;
+            font-size: 24px;
+            color: #2c3e50;
+            z-index: 2;
+        }
+        
+        .era {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            width: 22%;
+            min-height: 250px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            z-index: 3;
+            border: 3px solid;
+        }
+        
+        .era:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .era1 { border-color: #e74c3c; }
+        .era2 { border-color: #27ae60; }
+        .era3 { border-color: #3498db; }
+        .era4 { border-color: #e74c3c; }
+        
+        .era-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .era1 .era-title { color: #e74c3c; }
+        .era2 .era-title { color: #27ae60; }
+        .era3 .era-title { color: #3498db; }
+        .era4 .era-title { color: #e74c3c; }
+        
+        .era-content {
+            font-size: 12px;
+            line-height: 1.5;
+            color: #2c3e50;
+            text-align: center;
+        }
+        
+        .factory {
+            width: 80px;
+            height: 40px;
+            background: #95a5a6;
+            margin: 10px auto;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+        
+        .money-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 15px 0;
+        }
+        
+        .money {
+            width: 30px;
+            height: 30px;
+            background: #f39c12;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .work {
+            width: 30px;
+            height: 20px;
+            background: #3498db;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 8px;
+        }
+        
+        .plus {
+            font-size: 24px;
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .heart {
+            width: 30px;
+            height: 30px;
+            background: #e91e63;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+        
+        .toyota-lines {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .l-line {
+            width: 30px;
+            height: 30px;
+            border: 3px solid #e67e22;
+            border-top: none;
+            border-right: none;
+        }
+        
+        .u-line {
+            width: 30px;
+            height: 30px;
+            border: 3px solid #e67e22;
+            border-top: none;
+            border-radius: 0 0 15px 15px;
+        }
+        
+        .multi-worker {
+            width: 40px;
+            height: 40px;
+            background: #9b59b6;
+            border-radius: 50%;
+            margin: 10px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 10px;
+        }
+        
+        .job-boxes {
+            display: flex;
+            justify-content: center;
+            gap: 3px;
+            margin: 15px 0;
+        }
+        
+        .job-box {
+            width: 20px;
+            height: 15px;
+            background: #95a5a6;
+            border-radius: 2px;
+        }
+        
+        .comparison {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 40px 0;
+            padding: 25px;
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            border-radius: 15px;
+            color: white;
+        }
+        
+        .comparison-item {
+            text-align: center;
+        }
+        
+        .f1-icon {
+            width: 60px;
+            height: 60px;
+            background: #f39c12;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            animation: spin 4s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .line-work {
+            width: 60px;
+            height: 40px;
+            background: #95a5a6;
+            margin: 0 auto 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+        }
+        
+        .vs {
+            font-size: 32px;
+            font-weight: bold;
+            color: #fff;
+        }
+        
+        .three-elements {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin: 40px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            border-radius: 20px;
+        }
+        
+        .element {
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .element:hover {
+            transform: scale(1.1);
+        }
+        
+        .element-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            animation: pulse 3s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .science { background: #3498db; }
+        .humanity { background: #e91e63; }
+        .society { background: #27ae60; }
+        
+        .warning {
+            background: linear-gradient(135deg, #ff7675, #fd79a8);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .solution {
+            background: linear-gradient(135deg, #00b894, #00cec9);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+        
+        .highlight {
+            background: #ffff00;
+            padding: 3px 6px;
+            border-radius: 4px;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+        
+        .center-text {
+            text-align: center;
+            margin: 25px 0;
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .problem-arrow {
+            text-align: center;
+            color: #e74c3c;
+            font-size: 14px;
+            margin: 10px 0;
+            animation: blink 1.5s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .details {
+            margin-top: 30px;
+            padding: 20px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .show { display: block; }
+        
+        ul {
+            text-align: left;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">🏭 経営理論の変遷と現代の課題 🏭</h1>
+        
+        <div class="timeline">
+            <div class="era era1" onclick="showDetails('era1')">
+                <div class="era-title">経済人仮説</div>
+                <div class="era-content">フォード大量生産時代</div>
+                <div class="factory">工場</div>
+                <div class="money-flow">
+                    <div class="money">¥</div>
+                    <span style="font-size: 16px;">→</span>
+                    <div class="work">労働</div>
+                </div>
+                <div style="font-size: 10px; margin-top: 10px; color: #7f8c8d;">
+                    お金 = 労働の対価
+                </div>
+            </div>
+            
+            <div class="era era2" onclick="showDetails('era2')">
+                <div class="era-title">人間関係論</div>
+                <div class="era-content">人間的要素の発見</div>
+                <div class="money-flow">
+                    <div class="money">¥</div>
+                    <div class="plus">+</div>
+                    <div class="heart">♡</div>
+                </div>
+                <div style="font-size: 11px; margin-top: 15px;">
+                    <span class="highlight">効率性 + 人間性</span>
+                </div>
+                <div style="font-size: 9px; margin-top: 8px; color: #27ae60;">
+                    労働フォーメーション変更
+                </div>
+            </div>
+            
+            <div class="era era3" onclick="showDetails('era3')">
+                <div class="era-title">行動科学・HRM</div>
+                <div class="era-content">モチベーション重視</div>
+                <div style="font-size: 12px; font-weight: bold; color: #3498db; margin: 10px 0;">
+                    トヨタ生産方式
+                </div>
+                <div class="toyota-lines">
+                    <div class="l-line"></div>
+                    <div class="u-line"></div>
+                </div>
+                <div style="font-size: 9px; margin: 5px 0;">L字・U字ライン</div>
+                <div class="multi-worker">多能工</div>
+            </div>
+            
+            <div class="era era4" onclick="showDetails('era4')">
+                <div class="era-title">ジョブ型回帰</div>
+                <div class="era-content" style="color: #e74c3c; font-weight: bold;">⚠️ 時代に逆行？</div>
+                <div class="job-boxes">
+                    <div class="job-box"></div>
+                    <div class="job-box"></div>
+                    <div class="job-box"></div>
+                    <div class="job-box"></div>
+                    <div class="job-box"></div>
+                </div>
+                <div style="font-size: 10px; margin: 10px 0;">
+                    仕事の細分化
+                </div>
+                <div style="font-size: 9px; color: #e74c3c;">
+                    <div>❌ 全体像が見えない</div>
+                    <div>❌ 面白みの喪失</div>
+                    <div>❌ ブルシットジョブ化</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="problem-arrow">
+            ⬇️ 経済人仮説の問題発生 ⬇️<br>
+            労働者が来ない・辞める
+        </div>
+        
+        <div class="comparison">
+            <div class="comparison-item">
+                <div class="f1-icon">🏎️</div>
+                <h3>F1タイヤ交換</h3>
+                <p style="color: #00ff7f;">✨ かっこいい！</p>
+                <p style="font-size: 12px;">全体への貢献が見える</p>
+                <p style="font-size: 12px;">社会的価値が明確</p>
+            </div>
+            <div class="vs">VS</div>
+            <div class="comparison-item">
+                <div class="line-work">工場</div>
+                <h3>ライン作業</h3>
+                <p style="color: #ff6b6b;">😞 つまらない...</p>
+                <p style="font-size: 12px;">全体が見えない</p>
+                <p style="font-size: 12px;">意味が分からない</p>
+            </div>
+            <div style="margin-left: 30px; text-align: left;">
+                <h3>💡 同じ作業でも...</h3>
+                <p><strong>意味</strong>と<strong>貢献度</strong>の見え方で</p>
+                <p style="background: rgba(255,255,255,0.2); padding: 8px; border-radius: 5px;">
+                    <strong>やりがいが大きく変わる！</strong>
+                </p>
+            </div>
+        </div>
+        
+        <div class="three-elements">
+            <div class="element">
+                <div class="element-circle science">科学性</div>
+                <h4 style="color: #2c3e50;">効率性</h4>
+                <p style="color: #2c3e50; font-size: 12px;">生産性・合理性</p>
+            </div>
+            <div class="element">
+                <div class="element-circle humanity">人間性</div>
+                <h4 style="color: #2c3e50;">やりがい</h4>
+                <p style="color: #2c3e50; font-size: 12px;">温かさ・成長</p>
+            </div>
+            <div class="element">
+                <div class="element-circle society">社会性</div>
+                <h4 style="color: #2c3e50;">社会貢献</h4>
+                <p style="color: #2c3e50; font-size: 12px;">意味・価値</p>
+            </div>
+        </div>
+        
+        <div class="center-text">
+            🔗 <span class="highlight">三要素すべてが揃って初めて成り立つ</span> 🔗
+        </div>
+        
+        <div class="warning">
+            <h3>⚠️ ジョブ型の危険性</h3>
+            <p style="font-size: 16px; margin: 15px 0;">
+                過度な細分化 → 全体像の喪失 → ブルシットジョブ化 → 従業員の離反
+            </p>
+            <p><strong>現代の例：学校現場</strong><br>
+            人的要素の欠如により教員が辞職（フォード工場化の再来）</p>
+        </div>
+        
+        <div class="solution">
+            <h3>💡 求められる解決策</h3>
+            <ul>
+                <li>✅ ジョブローテーション・職務充実（ジョブ・リッチメント）の推進</li>
+                <li>✅ 全体への意味・貢献度の明確化</li>
+                <li>✅ 人間的な触れ合いの維持</li>
+                <li>✅ 三要素（科学性・人間性・社会性）のバランス維持</li>
+                <li>✅ 高齢者支援などでの人間的な側面の重視</li>
+            </ul>
+        </div>
+        
+        <div id="details" class="details">
+            <h3 id="details-title"></h3>
+            <div id="details-content"></div>
+        </div>
+    </div>
+
+    <script>
+        const detailsData = {
+            era1: {
+                title: "📈 経済人仮説の時代（フォード大量生産方式）",
+                content: `
+                    <h4>特徴：</h4>
+                    <ul>
+                        <li>人間を「経済人」として捉える</li>
+                        <li>「お金を払えば労働の対価として働く」という単純な前提</li>
+                        <li>効率性・生産性を最優先</li>
+                        <li>大量生産・標準化の追求</li>
+                    </ul>
+                    <h4 style="color: #e74c3c;">問題点：</h4>
+                    <ul>
+                        <li>お金を払っても労働者が来ない</li>
+                        <li>高い離職率</li>
+                        <li>人間的な要素の完全な軽視</li>
+                        <li>労働者の不満とモチベーション低下</li>
+                    </ul>
+                `
+            },
+            era2: {
+                title: "🤝 人間関係論の台頭",
+                content: `
+                    <h4>重要な気づき：</h4>
+                    <ul>
+                        <li>賃金だけでは労働者のやる気を引き出せない</li>
+                        <li><strong>「人間的な要素」</strong>が決定的に欠けていた</li>
+                        <li>職場の人間関係が生産性に大きく影響</li>
+                    </ul>
+                    <h4 style="color: #27ae60;">変化：</h4>
+                    <ul>
+                        <li>効率性一辺倒から人間性への配慮へ</li>
+                        <li>労働フォーメーションの根本的見直し</li>
+                        <li>職場環境の改善</li>
+                        <li>コミュニケーションの重視</li>
+                    </ul>
+                `
+            },
+            era3: {
+                title: "🧠 行動科学・人的資源管理論（HRM）",
+                content: `
+                    <h4>核心概念：</h4>
+                    <ul>
+                        <li>人間は教育を通じて成長し、能力が向上する</li>
+                        <li><strong>モチベーション</strong>をどう引き出すかが重要課題</li>
+                        <li>「ダメなら替えればいい」から「人を育てる」への転換</li>
+                    </ul>
+                    <h4 style="color: #3498db;">トヨタ生産方式の革新：</h4>
+                    <ul>
+                        <li>L字型・U字型ラインの導入</li>
+                        <li>一人が複数工程を担当する「多能工」</li>
+                        <li><strong>「より面白い労働」</strong>の追求</li>
+                        <li>効率性と人間のやる気の両立</li>
+                    </ul>
+                `
+            },
+            era4: {
+                title: "⚠️ ジョブ型への回帰とその深刻な課題",
+                content: `
+                    <h4>現在の動向：</h4>
+                    <ul>
+                        <li>個人の役割を明確に定義</li>
+                        <li>専門性の重視</li>
+                        <li>責任範囲の限定</li>
+                    </ul>
+                    <h4 style="color: #e74c3c;">人事専門家からの懸念（時代に逆行）：</h4>
+                    <ul>
+                        <li>仕事の過度な細分化</li>
+                        <li><strong>全体の中での自身の役割が見えない</strong></li>
+                        <li>仕事の面白みの喪失</li>
+                        <li>「ブルシットジョブ（クソどうでもいい仕事）」化</li>
+                        <li>従業員のやる気喪失と組織からの離反</li>
+                    </ul>
+                    <h4 style="color: #f39c12;">具体例：</h4>
+                    <ul>
+                        <li><strong>学校現場</strong>：かつてのフォード工場のように「人的なものがない」</li>
+                        <li>その結果、教員が続々と辞職</li>
+                        <li>高齢者支援分野での人間的触れ合いの希薄化</li>
+                    </ul>
+                `
+            }
+        };
+        
+        function showDetails(eraId) {
+            const details = document.getElementById('details');
+            const title = document.getElementById('details-title');
+            const content = document.getElementById('details-content');
+            
+            const data = detailsData[eraId];
+            title.innerHTML = data.title;
+            content.innerHTML = data.content;
+            
+            details.classList.add('show');
+            details.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

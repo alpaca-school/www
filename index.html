@@ -146,10 +146,27 @@ const floorData = {
                 modalUrl: 'https://alpaca-school.okinawa/250802cocolo.html'            
             }
          ]
+     },
+     "労働": {
+         title: "労働",
+         floorDescription: " ",
+         color: "bg-cyan-100 border-cyan-300",
+         headerColor: "bg-cyan-200",
+         sections: [
+             { 
+                id: "経済", 
+                title: "経営理論の変遷と現代の課題", 
+                description: "仕事には、効率性だけでなく、人間的な側面と社会的な意味の両方が重要です。「職場を楽しむ」ヒントを見つけましょうฅˆ•ﻌ•ˆฅ♬*゜", 
+                location: "職場", 
+                actionType: 'modal',
+                modalUrl: './Research/keiriron-hensei.html'            
+                 
+             }
+         ]
      }
  };
 
- const floors = ["歴史","文化","自然","平和", "生活"];
+ const floors = ["歴史","文化","自然","平和", "生活", "労働"];
                     const currentFloorData = floorData[currentFloor];
 
                     const nextFloor = () => { const currentIndex = floors.indexOf(currentFloor); if (currentIndex < floors.length - 1) { setCurrentFloor(floors[currentIndex + 1]); } };
