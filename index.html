@@ -147,8 +147,8 @@ const floorData = {
             }
          ]
      },
-     "労働": {
-         title: "労働",
+     "仕事": {
+         title: "仕事",
          floorDescription: " ",
          color: "bg-cyan-100 border-cyan-300",
          headerColor: "bg-cyan-200",
@@ -166,7 +166,7 @@ const floorData = {
      }
  };
 
- const floors = ["歴史","文化","自然","平和", "生活", "労働"];
+ const floors = ["歴史","文化","自然","平和", "生活", "仕事"];
                     const currentFloorData = floorData[currentFloor];
 
                     const nextFloor = () => { const currentIndex = floors.indexOf(currentFloor); if (currentIndex < floors.length - 1) { setCurrentFloor(floors[currentIndex + 1]); } };

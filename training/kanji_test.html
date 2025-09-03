@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>漢字テスト</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', 'Arial', 'Hiragino Sans', 'Meiryo', sans-serif;
+            line-height: 1.8;
+            margin: 20px;
+        }
+        h1, h2 {
+            border-bottom: 2px solid #4a90e2;
+            padding-bottom: 10px;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .answer {
+            color: #e91e63;
+            visibility: hidden; /* Initially hidden */
+            font-weight: bold;
+        }
+        .question-number {
+            font-weight: bold;
+            width: 40px;
+        }
+        button {
+            font-size: 16px;
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        button:hover {
+            background-color: #357abd;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>漢字テスト</h1>
+    <button id="toggleAnswersBtn">答えを表示/非表示</button>
+
+    <h2>読みテスト (音読み・訓読み)</h2>
+    <table id="reading-test">
+        <tr>
+            <th>番号</th>
+            <th>漢字</th>
+            <th>音読み</th>
+            <th>訓読み</th>
+        </tr>
+    </table>
+
+    <h2>書きテスト</h2>
+    <table id="writing-test">
+        <tr>
+            <th>番号</th>
+            <th>読み・意味</th>
+            <th>漢字</th>
+        </tr>
+    </table>
+
+    <script>
+        const kanjiData = [
+            { kanji: '水', onyomi: ['スイ'], kunyomi: ['みず'], meaning: '水' },
+            { kanji: '火', onyomi: ['カ'], kunyomi: ['ひ'], meaning: '火' },
+            { kanji: '木', onyomi: ['モク', 'ボク'], kunyomi: ['き'], meaning: '木' },
+            { kanji: '金', onyomi: ['キン'], kunyomi: ['かね'], meaning: '金' },
+            { kanji: '土', onyomi: ['ド', 'ト'], kunyomi: ['つち'], meaning: '土' },
+            { kanji: '日', onyomi: ['ニチ', 'ジツ'], kunyomi: ['ひ', 'か'], meaning: '日' },
+            { kanji: '月', onyomi: ['ゲツ', 'ガツ'], kunyomi: ['つき'], meaning: '月' },
+            { kanji: '年', onyomi: ['ネン'], kunyomi: ['とし'], meaning: '年' },
+            { kanji: '時', onyomi: ['ジ'], kunyomi: ['とき'], meaning: '時間' },
+            { kanji: '間', onyomi: ['カン', 'ケン'], kunyomi: ['あいだ', 'ま'], meaning: '間' },
+            { kanji: '分', onyomi: ['ブン', 'フン'], kunyomi: ['わ-ける'], meaning: '分ける' },
+            { kanji: '半', onyomi: ['ハン'], kunyomi: ['なか-ば'], meaning: '半分' },
+            { kanji: '方', onyomi: ['ホウ'], kunyomi: ['かた'], meaning: '方向' },
+            { kanji: '北', onyomi: ['ホク'], kunyomi: ['きた'], meaning: '北' },
+            { kanji: '南', onyomi: ['ナン'], kunyomi: ['みなみ'], meaning: '南' },
+            { kanji: '東', onyomi: ['トウ'], kunyomi: ['ひがし'], meaning: '東' },
+            { kanji: '西', onyomi: ['セイ', 'サイ'], kunyomi: ['にし'], meaning: '西' },
+            { kanji: '長', onyomi: ['チョウ'], kunyomi: ['なが-い'], meaning: '長い' },
+            { kanji: '高', onyomi: ['コウ'], kunyomi: ['たか-い'], meaning: '高い' },
+            { kanji: '新', onyomi: ['シン'], kunyomi: ['あたら-しい'], meaning: '新しい' }
+        ];
+
+        const readingTestBody = document.getElementById('reading-test');
+        const writingTestBody = document.getElementById('writing-test');
+
+        kanjiData.forEach((item, index) => {
+            // Reading Test Population
+            let readingRow = document.createElement('tr');
+            readingRow.innerHTML = `
+                <td class="question-number">${index + 1}</td>
+                <td>${item.kanji}</td>
+                <td><span class="answer">${item.onyomi.join(', ')}</span></td>
+                <td><span class="answer">${item.kunyomi.join(', ')}</span></td>
+            `;
+            readingTestBody.appendChild(readingRow);
+
+            // Writing Test Population
+            let writingRow = document.createElement('tr');
+            // Use kunyomi as the primary hint for writing
+            let hint = item.kunyomi[0];
+            writingRow.innerHTML = `
+                <td class="question-number">${index + 1}</td>
+                <td>${hint}</td>
+                <td><span class="answer">${item.kanji}</span></td>
+            `;
+            writingTestBody.appendChild(writingRow);
+        });
+
+        const toggleAnswersBtn = document.getElementById('toggleAnswersBtn');
+        let answersVisible = false;
+        toggleAnswersBtn.addEventListener('click', () => {
+            answersVisible = !answersVisible;
+            const answers = document.querySelectorAll('.answer');
+            answers.forEach(answer => {
+                answer.style.visibility = answersVisible ? 'visible' : 'hidden';
+            });
+        });
+    </script>
+
+</body>
+</html>
