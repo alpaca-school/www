@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>モリータウン祭り 全体像インフォグラフィック（Refactored）</title>
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
@@ -36,7 +35,7 @@
       /* Typography */
       --h1: clamp(1.8rem, 2.5vw, 2.5rem);
       --h2: clamp(1.4rem, 2vw, 1.8rem);
-      --h3: 1.2rem;
+      --h3: clamp(1.2rem, 1.8vw, 1.4rem);
       --p: 1rem;
     }
 
@@ -49,7 +48,7 @@
       background: var(--bg);
       color: var(--text);
       margin: 0;
-      padding: var(--space-4);
+      padding: var(--space-3) var(--space-2);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -76,8 +75,8 @@
       font-size: var(--h2); font-weight: 700;
     }
 
-    .sub-title { 
-      display: flex; align-items: center; gap: .6rem; margin: var(--space-3) 0 var(--space-2); 
+    .sub-title {
+      display: flex; align-items: center; gap: .6rem; margin: var(--space-3) 0 var(--space-2);
       border-bottom: 2px solid var(--brand-2); padding-bottom: .5rem; font-weight: 700; color: var(--text);
     }
 
@@ -138,7 +137,16 @@
     .summary-card h3 { color: var(--brand); margin: 0 0 .4rem; }
 
     /* ---------- Tables ---------- */
-    table.table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: .95rem; }
+    table.table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-size: .95rem;
+    }
+    .table-container {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
     .table th, .table td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; vertical-align: middle; }
     .table th { background: #f2f2f2; font-weight: 700; }
     .table tr:nth-child(even) { background: #f9f9f9; }
@@ -152,8 +160,19 @@
     .modal { position: fixed; inset: 0; display: none; align-items: flex-start; justify-content: center; background: rgba(0,0,0,.6); z-index: 1000; padding-top: 60px; }
     .modal[aria-hidden="false"] { display: flex; }
 
-    .modal__content { position: relative; width: min(700px, 92vw); background: #fff; border: 1px solid #888; border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 30px; animation: fadeIn .25s ease; }
-    .modal__title { margin: 0 0 1rem; font-size: 1.6rem; font-weight: 700; color: var(--brand); }
+    .modal__content {
+      position: relative;
+      width: min(700px, 92vw);
+      max-height: 85vh;
+      overflow-y: auto;
+      background: #fff;
+      border: 1px solid #888;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      padding: 30px;
+      animation: fadeIn .25s ease;
+    }
+    .modal__title { margin: 0 0 1rem; font-size: clamp(1.4rem, 4vw, 1.6rem); font-weight: 700; color: var(--brand); }
 
     .modal__close { position: absolute; top: 10px; right: 14px; font-size: 32px; line-height: 1; background: transparent; border: 0; color: #666; cursor: pointer; }
     .modal__close:hover { color: #000; }
@@ -165,9 +184,23 @@
 
     /* ---------- Responsive ---------- */
     @media (max-width: 960px) {
-      .timeline { grid-template-columns: 1fr; }
+      .timeline {
+        grid-template-columns: 1fr;
+        padding-top: var(--space-2);
+        gap: var(--space-4);
+      }
       .timeline::before { display: none; }
       .timeline__item::after { display: none; }
+      .timeline__item { text-align: left; }
+      .timeline__content { margin-top: 0; padding-left: var(--space-2); }
+    }
+
+    @media (max-width: 600px) {
+        body { padding: var(--space-2); }
+        .card { padding: var(--space-3); }
+        .grid { grid-template-columns: 1fr; }
+        .btn { width: 100%; box-sizing: border-box; }
+        .cluster { flex-direction: column; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -176,7 +209,6 @@
   </style>
 </head>
 <body>
-  <!-- SVG Sprite: reuse icons without repeating markup -->
   <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
     <symbol id="ic-check" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></symbol>
     <symbol id="ic-info" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M11,7h2v2h-2V7z M11,11h2v6h-2V11z"/></symbol>
@@ -187,20 +219,17 @@
     <symbol id="ic-users" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M16.5 12c1.38 0 2.5-1.12 2.5-2.5S17.88 7 16.5 7s-2.5 1.12-2.5 2.5 1.12 2.5 2.5 2.5zM9 11c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm7.5 3c-1.83 0-5.5.92-5.5 2.75V19h11v-2.25c0-1.83-3.67-2.75-5.5-2.75zM9 13c-2.33 0-7 1.17-7 3.5V19h7v-2.25c0-.85.33-2.34 2.37-3.47C10.5 13.1 9.66 13 9 13z"/></symbol>
     <symbol id="ic-screen" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H4V4h16v12zM18 6h-5c-1.1 0-2 .9-2 2v2.28c-.6.35-1 .98-1 1.72 0 1.1.9 2 2 2s2-.9 2-2c0-.74-.4-1.38-1-1.72V8h3v8H8V8h2V6H4v12h16V6z"/></symbol>
   </svg>
-
   <div class="container">
     <header class="header">
       <h1>モリータウン祭り 全体像 (9月〜12月)</h1>
       <p class="muted">子どもが主体的に企画・運営し、多世代で成長を支えるプロジェクト</p>
     </header>
 
-    <!-- 目的 -->
     <section class="card" aria-labelledby="purpose-title">
       <h2 id="purpose-title" class="title"><svg class="icon"><use href="#ic-check"/></svg>目的</h2>
       <p>子どもが主体的にイベントを企画・運営する経験を通して、社会人基礎力（目標設定・役割分担・行動力・発信力・チームワーク等）を育みます。また、地域・家庭・学校・児童センターが「応援団」として関わり、子どもの成長を多世代で支えるコミュニティを形成します。</p>
     </section>
 
-    <!-- イベント概要 -->
     <section class="card" aria-labelledby="outline-title">
       <h2 id="outline-title" class="title"><svg class="icon"><use href="#ic-info"/></svg>イベント概要</h2>
       <ul class="overview-list">
@@ -208,7 +237,6 @@
         <li><strong>場所:</strong> 各児童センターで同時開催、バスで回遊</li>
         <li><strong>協力団体:</strong> 去年参加した団体を今年も誘致</li>
       </ul>
-
       <h3 class="sub-title"><svg class="icon"><use href="#ic-users"/></svg>アシビナーについて</h3>
       <ul class="overview-list">
         <li><strong>位置づけ:</strong> 児童センター内の体験活動重点居場所 / クラブ活動の一環 / モリータウンイベントの核</li>
@@ -219,7 +247,6 @@
       </ul>
     </section>
 
-    <!-- 主体と役割分担 -->
     <section class="card" aria-labelledby="roles-title">
       <h2 id="roles-title" class="title"><svg class="icon"><use href="#ic-people"/></svg>主体と役割分担</h2>
       <div class="grid">
@@ -230,11 +257,9 @@
       </div>
     </section>
 
-    <!-- 年間の流れと主要イベント -->
     <section class="card" aria-labelledby="timeline-title">
       <h2 id="timeline-title" class="title" style="justify-content:center"><svg class="icon"><use href="#ic-calendar"/></svg>年間の流れと主要イベント</h2>
       <div class="timeline" role="list">
-        <!-- 9月 -->
         <article class="timeline__item" role="listitem">
           <div class="timeline__content">
             <h3 class="timeline__month">9月：企画と提案</h3>
@@ -254,7 +279,6 @@
           </div>
         </article>
 
-        <!-- 10月 -->
         <article class="timeline__item is-highlight" role="listitem">
           <div class="timeline__content">
             <h3 class="timeline__month">10月：制作と勉強会</h3>
@@ -277,7 +301,6 @@
           </div>
         </article>
 
-        <!-- 11月 -->
         <article class="timeline__item" role="listitem">
           <div class="timeline__content">
             <h3 class="timeline__month">11月：最終準備と本番</h3>
@@ -294,7 +317,6 @@
           </div>
         </article>
 
-        <!-- 12月 -->
         <article class="timeline__item is-highlight" role="listitem">
           <div class="timeline__content">
             <h3 class="timeline__month">12月：振り返りと成果発表</h3>
@@ -313,7 +335,6 @@
       </div>
     </section>
 
-    <!-- 成果の可視化 -->
     <section class="card" aria-labelledby="viz-title">
       <h2 id="viz-title" class="title"><svg class="icon"><use href="#ic-chart"/></svg>成果の可視化</h2>
       <div class="summary-grid">
@@ -332,7 +353,6 @@
       </div>
     </section>
 
-    <!-- 子どもの成長ケア戦略 -->
     <section class="card" aria-labelledby="care-title">
       <h2 id="care-title" class="title"><svg class="icon"><use href="#ic-heart"/></svg>子どもの成長ケア戦略</h2>
 
@@ -345,7 +365,6 @@
         <li><strong>関わり:</strong> 変化への気づきと言葉がけを重視</li>
         <li><strong>可視化:</strong> 玄関に顔写真付きの目標シートを掲示</li>
       </ul>
-
       <h3 class="sub-title"><svg class="icon"><use href="#ic-screen"/></svg>評価制度の検討</h3>
       <ul class="overview-list">
         <li><strong>MVP制度:</strong> 言葉のシャワーによる名誉的な評価</li>
@@ -355,7 +374,6 @@
       </ul>
     </section>
 
-    <!-- 大人の関わり -->
     <section class="card" aria-labelledby="adults-title">
       <h2 id="adults-title" class="title"><svg class="icon"><use href="#ic-heart"/></svg>大人(実行委員・地域関係者)の関わり</h2>
       <ul class="overview-list">
@@ -367,86 +385,84 @@
       </ul>
     </section>
 
-
-  <!-- ファッション企業に学ぶ接客知見 -->
-<section class="card" aria-labelledby="dfs-title">
-  <h2 id="dfs-title" class="title">
-    <svg class="icon"><use href="#ic-screen"/></svg>
-    ファッション企業に学ぶ接客知見
-  </h2>
-  <ul class="overview-list">
-    <li><strong>接客スキル:</strong> 第一印象、感情での判断</li>
-    <li><strong>MVP制度の経験:</strong> 目標設定と評価</li>
-    <li><strong>インセンティブのバランス:</strong> チームインセンティブと個人インセンティブのバランス</li>
-    <li><strong>販売戦略:</strong> 効果的な売り方、売れないものの売り方</li>
-    <li><strong>外国人マネジメントの違い:</strong> フランス、アメリカ、韓国、イギリス、中国</li>
-  </ul>
-</section>
-
+  <section class="card" aria-labelledby="dfs-title">
+    <h2 id="dfs-title" class="title">
+      <svg class="icon"><use href="#ic-screen"/></svg>
+      ファッション企業に学ぶ接客知見
+    </h2>
+    <ul class="overview-list">
+      <li><strong>接客スキル:</strong> 第一印象、感情での判断</li>
+      <li><strong>MVP制度の経験:</strong> 目標設定と評価</li>
+      <li><strong>インセンティブのバランス:</strong> チームインセンティブと個人インセンティブのバランス</li>
+      <li><strong>販売戦略:</strong> 効果的な売り方、売れないものの売り方</li>
+      <li><strong>外国人マネジメントの違い:</strong> フランス、アメリカ、韓国、イギリス、中国</li>
+    </ul>
+  </section>
   </div>
-  
 
-  <!-- ===== Modals ===== -->
   <div class="modal" id="modal-sep" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-sep-title">
     <div class="modal__content">
       <button class="modal__close" aria-label="閉じる">&times;</button>
       <h4 id="modal-sep-title" class="modal__title">9月：子ども向け 第1回作戦会議（9/26予定）</h4>
       <p><strong>目的：</strong>イベント全体を理解し、目標設定と役割分担を行う。</p>
       <p><strong>対象：</strong>小4以上の実行委員（＋小3サポートメンバー）。</p>
-      <table class="table">
-        <thead><tr><th class="cell-center">済</th><th>時間</th><th>内容</th><th>進め方</th></tr></thead>
-        <tbody>
-          <tr><td class="cell-center"><input type="checkbox"/></td><td>15:30–15:40</td><td>オープニング・自己紹介</td><td>子ども司会＋大人ファシリサポート</td></tr>
-          <tr><td class="cell-center"><input type="checkbox"/></td><td>15:40–16:00</td><td>モリータウン祭りの全体像説明</td><td>大人実行委員がわかりやすく説明</td></tr>
-          <tr><td class="cell-center"><input type="checkbox"/></td><td>16:00–16:20</td><td>社会人基礎力15項目から目標選び</td><td>ワークシート記入＋シェア</td></tr>
-          <tr><td class="cell-center"><input type="checkbox"/></td><td>16:20–16:40</td><td>役割分担の決定（動画・広報・運営など）</td><td>小グループで話し合い</td></tr>
-          <tr><td class="cell-center"><input type="checkbox"/></td><td>16:40–16:50</td><td>目標シートに顔写真＋掲示準備</td><td>視覚化でモチベUP</td></tr>
-          <tr><td class="cell-center"><input type="checkbox"/></td><td>16:50–17:00</td><td>まとめ・次回に向けた宿題</td><td>「協力団体に提案しよう！」の予告</td></tr>
-        </tbody>
-      </table>
+      <div class="table-container">
+        <table class="table">
+          <thead><tr><th class="cell-center">済</th><th>時間</th><th>内容</th><th>進め方</th></tr></thead>
+          <tbody>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>15:30–15:40</td><td>オープニング・自己紹介</td><td>子ども司会＋大人ファシリサポート</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>15:40–16:00</td><td>モリータウン祭りの全体像説明</td><td>大人実行委員がわかりやすく説明</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>16:00–16:20</td><td>社会人基礎力15項目から目標選び</td><td>ワークシート記入＋シェア</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>16:20–16:40</td><td>役割分担の決定（動画・広報・運営など）</td><td>小グループで話し合い</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>16:40–16:50</td><td>目標シートに顔写真＋掲示準備</td><td>視覚化でモチベUP</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>16:50–17:00</td><td>まとめ・次回に向けた宿題</td><td>「協力団体に提案しよう！」の予告</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
-
   <div class="modal" id="modal-oct" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-oct-title">
     <div class="modal__content">
       <button class="modal__close" aria-label="閉じる">&times;</button>
       <h4 id="modal-oct-title" class="modal__title">10月：大人向け「森の子勉強会」</h4>
       <p><strong>目的：</strong>地域・保護者・学童の先生など大人が「応援団」として意識を合わせる。</p>
       <p><strong>対象：</strong>保護者・学童職員・地域住民・自治会・商店会など。</p>
-      <table class="table">
-        <thead><tr><th class="cell-center">済</th><th>時間</th><th>内容</th><th>進め方</th></tr></thead>
-        <tbody>
-          <tr><td class="cell-center"><input type="checkbox"/></td><td>18:30–18:40</td><td>開会・趣旨説明</td><td>児童センターから挨拶</td></tr>
-          <tr><td class="cell-center"><input type="checkbox"/></td><td>18:40–19:00</td><td>子どもたちの挑戦紹介（動画や写真）</td><td>子ども発表＋補足説明</td></tr>
-          <tr><td class="cell-center"><input type="checkbox"/></td><td>19:00–19:20</td><td>ミニ講座：子どもの主体性を育てる関わり方</td><td>講師＋ファシリ</td></tr>
-          <tr><td class="cell-center"><input type="checkbox"/></td><td>19:20–19:40</td><td>グループワーク：「私にできる応援は？」</td><td>付箋や模造紙を活用</td></tr>
-          <tr><td class="cell-center"><input type="checkbox"/></td><td>19:40–19:50</td><td>発表・共有</td><td>各グループから1分報告</td></tr>
-          <tr><td class="cell-center"><input type="checkbox"/></td><td>19:50–20:00</td><td>まとめ・次回本番に向けた行動宣言</td><td>「応援団カード」に記入</td></tr>
-        </tbody>
-      </table>
+      <div class="table-container">
+        <table class="table">
+          <thead><tr><th class="cell-center">済</th><th>時間</th><th>内容</th><th>進め方</th></tr></thead>
+          <tbody>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>18:30–18:40</td><td>開会・趣旨説明</td><td>児童センターから挨拶</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>18:40–19:00</td><td>子どもたちの挑戦紹介（動画や写真）</td><td>子ども発表＋補足説明</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>19:00–19:20</td><td>ミニ講座：子どもの主体性を育てる関わり方</td><td>講師＋ファシリ</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>19:20–19:40</td><td>グループワーク：「私にできる応援は？」</td><td>付箋や模造紙を活用</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>19:40–19:50</td><td>発表・共有</td><td>各グループから1分報告</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>19:50–20:00</td><td>まとめ・次回本番に向けた行動宣言</td><td>「応援団カード」に記入</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
-
   <div class="modal" id="modal-dec" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-dec-title">
     <div class="modal__content">
       <button class="modal__close" aria-label="閉じる">&times;</button>
       <h4 id="modal-dec-title" class="modal__title">12月：子ども向け「振り返り勉強会」</h4>
       <p><strong>目的：</strong>自己評価＋他者評価を通じて成長を実感し、次の挑戦に繋げる。</p>
       <p><strong>対象：</strong>参加した子ども全員、大人実行委員もオブザーバー参加。</p>
-      <table class="table">
-        <thead><tr><th class="cell-center">済</th><th>時間</th><th>内容</th><th>進め方</th></tr></thead>
-        <tbody>
-          <tr><td class="cell-center"><input type="checkbox"/></td><td>15:30–15:40</td><td>オープニング・祭りをふり返る</td><td>写真スライド子ども司会＋動画上映</td></tr>
-          <tr><td class="cell-center"><input type="checkbox"/></td><td>15:40–16:00</td><td>個人ふり返り：目標シート記入</td><td>社会人基礎力シートを活用</td></tr>
-          <tr><td class="cell-center"><input type="checkbox"/></td><td>16:00–16:20</td><td>仲間評価：「良かったねカード」を交換</td><td>子ども同士でメッセージ記入</td></tr>
-          <tr><td class="cell-center"><input type="checkbox"/></td><td>16:20–16:40</td><td>大人からのフィードバック</td><td>学童の先生・保護者が言葉のシャワー</td></tr>
-          <tr><td class="cell-center"><input type="checkbox"/></td><td>16:40–16:50</td><td>MVP発表・花マーク集計</td><td>「名誉的評価」として発表</td></tr>
-          <tr><td class="cell-center"><input type="checkbox"/></td><td>16:50–17:00</td><td>まとめ・来年への期待コメント</td><td>子ども全員から一言発表</td></tr>
-        </tbody>
-      </table>
+      <div class="table-container">
+        <table class="table">
+          <thead><tr><th class="cell-center">済</th><th>時間</th><th>内容</th><th>進め方</th></tr></thead>
+          <tbody>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>15:30–15:40</td><td>オープニング・祭りをふり返る</td><td>写真スライド子ども司会＋動画上映</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>15:40–16:00</td><td>個人ふり返り：目標シート記入</td><td>社会人基礎力シートを活用</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>16:00–16:20</td><td>仲間評価：「良かったねカード」を交換</td><td>子ども同士でメッセージ記入</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>16:20–16:40</td><td>大人からのフィードバック</td><td>学童の先生・保護者が言葉のシャワー</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>16:40–16:50</td><td>MVP発表・花マーク集計</td><td>「名誉的評価」として発表</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>16:50–17:00</td><td>まとめ・来年への期待コメント</td><td>子ども全員から一言発表</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
-
   <div class="modal" id="modal-goal-sheet" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-goal-title">
     <div class="modal__content">
       <button class="modal__close" aria-label="閉じる">&times;</button>
@@ -473,7 +489,6 @@
       </div>
     </div>
   </div>
-
   <div class="modal" id="modal-support-card" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-support-title">
     <div class="modal__content">
       <button class="modal__close" aria-label="閉じる">&times;</button>
@@ -483,7 +498,6 @@
         <p>イベントの準備、おつかれさま！</p>
         <p>あなたが一生懸命＿＿＿＿＿＿＿＿＿している姿を見て、すごいなと思いました。</p>
         <p>特に、＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿が素敵でした。</p>
-        <p>これからも応援しています！</p>
         <br/>
         <p><strong>From: </strong>＿＿＿＿＿＿＿＿＿ より</p>
       </div>
