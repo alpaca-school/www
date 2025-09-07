@@ -19,13 +19,11 @@
         .aspect-h-9 { height: 0; }
         .aspect-w-16 > iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
-        /* ========= 追加：レスポンシブな文字サイズのためのカスタムクラス ========= */
         .text-fluid-4xl { font-size: clamp(2rem, 6vw, 3rem); }
         .text-fluid-3xl { font-size: clamp(1.5rem, 5vw, 2.25rem); }
         .text-fluid-2xl { font-size: clamp(1.25rem, 4vw, 1.875rem); }
         .text-fluid-xl { font-size: clamp(1.1rem, 3vw, 1.5rem); }
 
-        /* ========= 追加：スマホでのナビゲーションボタン用スクロールバーの非表示 ========= */
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -40,7 +38,6 @@
     <div id="error-container" style="color: red; background: #ffeeee; padding: 1em; display: none;"></div>
 
     <script type="text/babel">
-        // コンポーネントの外にデータを移動し、再レンダリング時の再生成を防ぐ
         const floorData = {
             "歴史": {
                 title: "歴史",
@@ -110,12 +107,9 @@
                         <div className="min-h-screen bg-gray-50">
                             <div className={`${currentFloorData.headerColor} p-4 shadow-md sticky top-0 z-10`}>
                                 <div className="max-w-4xl mx-auto">
-                                    {/* 変更：レスポンシブな文字サイズ（fluid）を適用 */}
                                     <h1 className="text-fluid-2xl font-extrabold text-gray-800 mb-2">アルパカすく〜るオンライン🦙 in OKinawa</h1>
-                                    {/* 変更：スマホでは縦並び、sm以上で横並びに */}
                                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                                         <h2 className="text-fluid-xl font-bold text-gray-700 mb-2 sm:mb-0">{currentFloorData.title}</h2>
-                                        {/* 変更：スマホでボタンが溢れないように横スクロールコンテナを追加 */}
                                         <div className="overflow-x-auto no-scrollbar pb-2">
                                             <div className="flex gap-2 whitespace-nowrap">
                                                 {floors.map(floor => (
@@ -132,22 +126,30 @@
                                 </div>
                             </div>
                             <div className="max-w-4xl mx-auto p-4">
-                                {/* 変更：スマホでは縦並び、sm以上で横並びのナビゲーションに */}
-                                <div className="flex flex-col sm:flex-row justify-between items-center my-6 gap-4">
-                                    <button onClick={prevFloor}  disabled={currentFloor === floors[0]} className={`w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-bold transition-all ${currentFloor === floors[0] ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-gray-100 shadow-md hover:shadow-lg'}`}>
+                                {/* ========= ▼▼▼ ここからリファクタリング ▼▼▼ ========= */}
+                                <div className="flex flex-row justify-between items-center my-6 gap-4">
+                                    {/* --- 前のテーマボタン --- */}
+                                    <button onClick={prevFloor}  disabled={currentFloor === floors[0]} className={`flex items-center justify-center rounded-lg font-bold transition-all p-3 sm:py-2 sm:px-4 ${currentFloor === floors[0] ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-gray-100 shadow-md hover:shadow-lg'}`}>
                                         <i data-lucide="chevron-left" className="w-5 h-5"></i>
-                                        前のテーマ
+                                        {/* 小さい画面ではhidden(非表示)、sm以上でinline(表示) */}
+                                        <span className="hidden sm:inline sm:ml-2">前のテーマ</span>
                                     </button>
-                                    <div className="text-center order-first sm:order-none">
+
+                                    {/* --- 中央のテーマ表示 --- */}
+                                    <div className="text-center">
                                         <div className="text-sm text-gray-600">現在のテーマ</div>
                                         <div className="text-fluid-3xl font-extrabold text-gray-800 leading-tight">{currentFloor}</div>
                                     </div>
-                                    <button onClick={nextFloor} disabled={currentFloor === floors[floors.length - 1]} className={`w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-bold transition-all ${currentFloor === floors[floors.length - 1] ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-gray-100 shadow-md hover:shadow-lg'}`}>
-                                        次のテーマ
+
+                                    {/* --- 次のテーマボタン --- */}
+                                    <button onClick={nextFloor} disabled={currentFloor === floors[floors.length - 1]} className={`flex items-center justify-center rounded-lg font-bold transition-all p-3 sm:py-2 sm:px-4 ${currentFloor === floors[floors.length - 1] ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-gray-100 shadow-md hover:shadow-lg'}`}>
+                                        {/* 小さい画面ではhidden(非表示)、sm以上でinline(表示) */}
+                                        <span className="hidden sm:inline sm:mr-2">次のテーマ</span>
                                         <i data-lucide="chevron-right" className="w-5 h-5"></i>
                                     </button>
                                 </div>
-                                {/* 変更：グリッドのgapを調整 */}
+                                {/* ========= ▲▲▲ ここまでリファクタリング ▲▲▲ ========= */}
+
                                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                                     {currentFloorData.sections.map((section) => (
                                         <div key={section.id} className={`${currentFloorData.color} rounded-xl p-4 sm:p-6 border-2 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col`}>
@@ -159,9 +161,7 @@
                                                 </div>
                                                 <i data-lucide="map-pin" className="w-5 h-5 text-gray-600 flex-shrink-0"></i>
                                             </div>
-                                            {/* 変更：レスポンシブな文字サイズ */}
                                             <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-3">{section.title}</h3>
-                                            {/* 変更：固定の高さをmin-heightに変更し、flex-growで高さを揃える */}
                                             <p className="text-sm text-gray-700 leading-relaxed mb-4 flex-grow min-h-[9rem]">{section.description}</p>
                                             <div className="flex justify-between items-center mt-auto">
                                                 {section.videoId && <button onClick={() => setVideoUrl(`https://www.youtube.com/embed/${section.videoId}?autoplay=1`)} className="bg-red-500 text-white px-3 py-2 rounded-lg text-sm font-bold hover:bg-red-600 transition-colors flex items-center gap-1 shadow-md hover:shadow-lg"><i data-lucide="video" className="w-4 h-4"></i> 動画を見る</button>}
@@ -234,4 +234,4 @@
         };
     </script>
 </body>
-</html>     
+</html>
