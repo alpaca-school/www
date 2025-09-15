@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>沖縄文芸フリマ スタッフミーティング資料</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Yu Gothic', 'Hiragino Sans', sans-serif;
+            line-height: 1.7;
+            color: #333;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header::before {
+            content: '🌸';
+            font-size: 3rem;
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            opacity: 0.3;
+        }
+        
+        .header::after {
+            content: '🌸';
+            font-size: 2rem;
+            position: absolute;
+            bottom: 10px;
+            right: 30px;
+            opacity: 0.4;
+        }
+        
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .date {
+            background: rgba(255, 255, 255, 0.2);
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 35px;
+            background: #fff;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #667eea;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section h3 {
+            color: #764ba2;
+            font-size: 1.1rem;
+            margin: 20px 0 10px 0;
+            font-weight: 600;
+        }
+        
+        .task-item {
+            background: #f8f9ff;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 3px solid #ffa726;
+        }
+        
+        .checkbox-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .checkbox-item {
+            margin: 8px 0;
+            padding: 10px;
+            background: #f5f7ff;
+            border-radius: 6px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            margin-top: 4px;
+            transform: scale(1.2);
+            accent-color: #667eea;
+        }
+        
+        .checkbox-item label {
+            flex: 1;
+            cursor: pointer;
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #ffb74d 0%, #ff8a65 100%);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+        .assignment-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .assignee-input {
+            padding: 6px 12px;
+            border: 2px solid #e3f2fd;
+            border-radius: 15px;
+            background: #e3f2fd;
+            color: #1976d2;
+            font-size: 0.9rem;
+            min-width: 120px;
+        }
+        
+        .assignee-input:focus {
+            outline: none;
+            border-color: #1976d2;
+            box-shadow: 0 0 5px rgba(25, 118, 210, 0.3);
+        }
+        
+        .deadline {
+            background: #fff3e0;
+            color: #f57c00;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .memo-section {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f0f8ff;
+            border-radius: 8px;
+            border: 1px solid #e0f0ff;
+        }
+        
+        .memo-label {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .memo-textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+        
+        .memo-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        }
+        
+        .role-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .role-item {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #e1ecff;
+            text-align: center;
+        }
+        
+        .role-emoji {
+            font-size: 1.5rem;
+            margin-right: 8px;
+        }
+        
+        .role-input {
+            margin-top: 10px;
+            padding: 8px 12px;
+            border: 2px solid #e1ecff;
+            border-radius: 15px;
+            background: #fff;
+            color: #667eea;
+            font-size: 0.9rem;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .role-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        }
+        
+        .schedule-item {
+            background: linear-gradient(90deg, #e8f5e8 0%, #f0f8f0 100%);
+            padding: 12px 18px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .discussion {
+            background: #fff8e1;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .discussion ul {
+            margin-top: 10px;
+            list-style: none;
+        }
+        
+        .discussion li {
+            margin: 8px 0;
+            padding: 8px;
+            background: white;
+            border-radius: 5px;
+            border-left: 3px solid #ffc107;
+        }
+        
+        .export-section {
+            position: sticky;
+            bottom: 20px;
+            margin-top: 30px;
+            text-align: center;
+            z-index: 100;
+        }
+        
+        .export-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .export-btn:active {
+            transform: translateY(0);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.6rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .role-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .assignment-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .assignee-input {
+                min-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌸 沖縄文芸フリマ スタッフミーティング資料</h1>
+            <div class="date">9月14日夕方予定／予備日 9月16日</div>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <h2>1️⃣ ミーティングの目的</h2>
+                <ul>
+                    <li>9月20日イベント実施前に、<span class="highlight">事後発信や広報の準備</span>を整える</li>
+                    <li>役割分担を確認し、当日・事後にスムーズに動けるようにする</li>
+                </ul>
+                <div class="memo-section">
+                    <label class="memo-label">📝 メモ・補足事項</label>
+                    <textarea class="memo-textarea" placeholder="ディスカッション内容や決定事項をメモしてください..."></textarea>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>2️⃣ 事前準備タスク（9/19まで）</h2>
+                
+                <div class="task-item">
+                    <h3>① 公式ページ更新準備</h3>
+                    <ul class="checkbox-list">
+                        <li class="checkbox-item">
+                            <input type="checkbox" id="task1-1">
+                            <label for="task1-1">「参加者の声」「作品紹介ギャラリー」用のHTML枠を仮設置（ダミー文章・画像）</label>
+                        </li>
+                        <li class="checkbox-item">
+                            <input type="checkbox" id="task1-2">
+                            <label for="task1-2">推薦参加枠の文言を「こんな作品が集まります」に追記</label>
+                        </li>
+                        <li class="checkbox-item">
+                            <input type="checkbox" id="task1-3">
+                            <label for="task1-3">QRコードを配置（文芸フリマ情報ページへの導線）</label>
+                        </li>
+                    </ul>
+                    <div class="assignment-row">
+                        <span>👉 担当：</span>
+                        <input type="text" class="assignee-input" placeholder="担当者名を入力" data-field="assignee1">
+                        <div class="deadline">期限：9/15</div>
+                    </div>
+                    <div class="memo-section">
+                        <label class="memo-label">📝 メモ・補足事項</label>
+                        <textarea class="memo-textarea" placeholder="進捗や注意点をメモしてください..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="task-item">
+                    <h3>② SNS・note 発信準備</h3>
+                    <ul class="checkbox-list">
+                        <li class="checkbox-item">
+                            <input type="checkbox" id="task2-1">
+                            <label for="task2-1">Instagram用投稿文・ハッシュタグ例を作成</label>
+                        </li>
+                        <li class="checkbox-item">
+                            <input type="checkbox" id="task2-2">
+                            <label for="task2-2">note記事のひな型を作成（開催概要／写真予定地／参加者の声／次回案内）</label>
+                        </li>
+                        <li class="checkbox-item">
+                            <input type="checkbox" id="task2-3">
+                            <label for="task2-3">撮影ポイントをリスト化（受付・展示・作品アップ・交流風景）</label>
+                        </li>
+                    </ul>
+                    <div class="assignment-row">
+                        <span>👉 担当：</span>
+                        <input type="text" class="assignee-input" placeholder="担当者名を入力" data-field="assignee2">
+                        <div class="deadline">期限：9/17</div>
+                    </div>
+                    <div class="memo-section">
+                        <label class="memo-label">📝 メモ・補足事項</label>
+                        <textarea class="memo-textarea" placeholder="進捗や注意点をメモしてください..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="task-item">
+                    <h3>③ 推薦参加枠アピール</h3>
+                    <ul class="checkbox-list">
+                        <li class="checkbox-item">
+                            <input type="checkbox" id="task3-1">
+                            <label for="task3-1">チラシ・会場掲示物に「推薦参加歓迎」を明記</label>
+                        </li>
+                        <li class="checkbox-item">
+                            <input type="checkbox" id="task3-2">
+                            <label for="task3-2">次回（12/13予定）のチラシ原案に推薦枠の文言を追加</label>
+                        </li>
+                    </ul>
+                    <div class="assignment-row">
+                        <span>👉 担当：</span>
+                        <input type="text" class="assignee-input" placeholder="担当者名を入力" data-field="assignee3">
+                        <div class="deadline">期限：9/18</div>
+                    </div>
+                    <div class="memo-section">
+                        <label class="memo-label">📝 メモ・補足事項</label>
+                        <textarea class="memo-textarea" placeholder="進捗や注意点をメモしてください..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="task-item">
+                    <h3>④ アンケート準備</h3>
+                    <ul class="checkbox-list">
+                        <li class="checkbox-item">
+                            <input type="checkbox" id="task4-1">
+                            <label for="task4-1">感想コメントを集めるGoogleフォーム or 紙アンケートを用意</label>
+                        </li>
+                        <li class="checkbox-item">
+                            <input type="checkbox" id="task4-2">
+                            <label for="task4-2">掲載許可のチェック欄を設置</label>
+                        </li>
+                    </ul>
+                    <div class="assignment-row">
+                        <span>👉 担当：</span>
+                        <input type="text" class="assignee-input" placeholder="担当者名を入力" data-field="assignee4">
+                        <div class="deadline">期限：9/18</div>
+                    </div>
+                    <div class="memo-section">
+                        <label class="memo-label">📝 メモ・補足事項</label>
+                        <textarea class="memo-textarea" placeholder="進捗や注意点をメモしてください..."></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>3️⃣ 当日の役割分担（9/20）</h2>
+                <div class="role-grid">
+                    <div class="role-item">
+                        <div><span class="role-emoji">📸</span>写真／動画撮影</div>
+                        <input type="text" class="role-input" placeholder="担当者名" data-field="role1">
+                    </div>
+                    <div class="role-item">
+                        <div><span class="role-emoji">💬</span>アンケート回収</div>
+                        <input type="text" class="role-input" placeholder="担当者名" data-field="role2">
+                    </div>
+                    <div class="role-item">
+                        <div><span class="role-emoji">📝</span>SNS速報投稿</div>
+                        <input type="text" class="role-input" placeholder="担当者名" data-field="role3">
+                    </div>
+                    <div class="role-item">
+                        <div><span class="role-emoji">🎤</span>会場運営補助</div>
+                        <input type="text" class="role-input" placeholder="担当者名" data-field="role4">
+                    </div>
+                </div>
+                <div class="memo-section">
+                    <label class="memo-label">📝 メモ・補足事項</label>
+                    <textarea class="memo-textarea" placeholder="役割分担の詳細や注意点をメモしてください..."></textarea>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>4️⃣ 事後スケジュール</h2>
+                <div class="schedule-item">
+                    <strong>9/21〜23</strong>：Instagram・note で速報発信
+                </div>
+                <div class="schedule-item">
+                    <strong>9/24〜30</strong>：公式ページ更新（参加者の声・ギャラリー追加）
+                </div>
+                <div class="schedule-item">
+                    <strong>12/13前</strong>：次回チラシに推薦枠を反映
+                </div>
+                <div class="memo-section">
+                    <label class="memo-label">📝 メモ・補足事項</label>
+                    <textarea class="memo-textarea" placeholder="スケジュールの調整や追加事項をメモしてください..."></textarea>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>5️⃣ 確認したいこと（ディスカッション）</h2>
+                <div class="discussion">
+                    <ul>
+                        <li>写真／動画撮影を誰がメインで行うか</li>
+                        <li>SNS／note発信の文責は誰が担うか</li>
+                        <li>アンケートはオンライン（Googleフォーム）と紙、どちらを併用するか</li>
+                    </ul>
+                </div>
+                <div class="memo-section">
+                    <label class="memo-label">📝 ディスカッション結果・決定事項</label>
+                    <textarea class="memo-textarea" placeholder="話し合いの結果や決定した内容をメモしてください..."></textarea>
+                </div>
+            </div>
+            
+            <div class="export-section">
+                <button class="export-btn" onclick="exportToText()">📄 テキスト形式で出力</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function exportToText() {
+            let output = "🌸 沖縄文芸フリマ スタッフミーティング資料\n";
+            output += "（9月14日夕方予定／予備日 9月16日）\n\n";
+            
+            // セクション1
+            output += "1. ミーティングの目的\n";
+            output += "* 9月20日イベント実施前に、事後発信や広報の準備を整える\n";
+            output += "* 役割分担を確認し、当日・事後にスムーズに動けるようにする\n";
+            const memo1 = document.querySelector('.section:nth-child(1) .memo-textarea').value;
+            if (memo1) output += `📝 メモ: ${memo1}\n`;
+            output += "\n";
+            
+            // セクション2
+            output += "2. 事前準備タスク（9/19まで）\n";
+            
+            // タスク1
+            output += "① 公式ページ更新準備\n";
+            const task1Checks = ['task1-1', 'task1-2', 'task1-3'];
+            const task1Labels = [
+                '「参加者の声」「作品紹介ギャラリー」用のHTML枠を仮設置（ダミー文章・画像）',
+                '推薦参加枠の文言を「こんな作品が集まります」に追記',
+                'QRコードを配置（文芸フリマ情報ページへの導線）'
+            ];
+            task1Checks.forEach((id, index) => {
+                const checked = document.getElementById(id).checked ? '✅' : '☐';
+                output += `${checked} ${task1Labels[index]}\n`;
+            });
+            const assignee1 = document.querySelector('[data-field="assignee1"]').value || '＿＿＿';
+            output += `👉 担当：${assignee1}　期限：9/15\n`;
+            const memo2_1 = document.querySelector('.task-item:nth-of-type(1) .memo-textarea').value;
+            if (memo2_1) output += `📝 メモ: ${memo2_1}\n`;
+            output += "\n";
+            
+            // タスク2
+            output += "② SNS・note 発信準備\n";
+            const task2Checks = ['task2-1', 'task2-2', 'task2-3'];
+            const task2Labels = [
+                'Instagram用投稿文・ハッシュタグ例を作成',
+                'note記事のひな型を作成（開催概要／写真予定地／参加者の声／次回案内）',
+                '撮影ポイントをリスト化（受付・展示・作品アップ・交流風景）'
+            ];
+            task2Checks.forEach((id, index) => {
+                const checked = document.getElementById(id).checked ? '✅' : '☐';
+                output += `${checked} ${task2Labels[index]}\n`;
+            });
+            const assignee2 = document.querySelector('[data-field="assignee2"]').value || '＿＿＿';
+            output += `👉 担当：${assignee2}　期限：9/17\n`;
+            const memo2_2 = document.querySelector('.task-item:nth-of-type(2) .memo-textarea').value;
+            if (memo2_2) output += `📝 メモ: ${memo2_2}\n`;
+            output += "\n";
+            
+            // タスク3
+            output += "③ 推薦参加枠アピール\n";
+            const task3Checks = ['task3-1', 'task3-2'];
+            const task3Labels = [
+                'チラシ・会場掲示物に「推薦参加歓迎」を明記',
+                '次回（12/13予定）のチラシ原案に推薦枠の文言を追加'
+            ];
+            task3Checks.forEach((id, index) => {
+                const checked = document.getElementById(id).checked ? '✅' : '☐';
+                output += `${checked} ${task3Labels[index]}\n`;
+            });
+            const assignee3 = document.querySelector('[data-field="assignee3"]').value || '＿＿＿';
+            output += `👉 担当：${assignee3}　期限：9/18\n`;
+            const memo2_3 = document.querySelector('.task-item:nth-of-type(3) .memo-textarea').value;
+            if (memo2_3) output += `📝 メモ: ${memo2_3}\n`;
+            output += "\n";
+            
+            // タスク4
+            output += "④ アンケート準備\n";
+            const task4Checks = ['task4-1', 'task4-2'];
+            const task4Labels = [
+                '感想コメントを集めるGoogleフォーム or 紙アンケートを用意',
+                '掲載許可のチェック欄を設置'
+            ];
+            task4Checks.forEach((id, index) => {
+                const checked = document.getElementById(id).checked ? '✅' : '☐';
+                output += `${checked} ${task4Labels[index]}\n`;
+            });
+            const assignee4 = document.querySelector('[data-field="assignee4"]').value || '＿＿＿';
+            output += `👉 担当：${assignee4}　期限：9/18\n`;
+            const memo2_4 = document.querySelector('.task-item:nth-of-type(4) .memo-textarea').value;
+            if (memo2_4) output += `📝 メモ: ${memo2_4}\n`;
+            output += "\n";
+            
+            // セクション3
+            output += "3. 当日の役割分担（9/20）\n";
+            const roles = [
+                { emoji: '📸', name: '写真／動画撮影', field: 'role1' },
+                { emoji: '💬', name: 'アンケート回収', field: 'role2' },
+                { emoji: '📝', name: 'SNS速報投稿（ストーリーズ等）', field: 'role3' },
+                { emoji: '🎤', name: '会場運営補助', field: 'role4' }
+            ];
+            roles.forEach(role => {
+                const assignee = document.querySelector(`[data-field="${role.field}"]`).value || '＿＿＿';
+                output += `${role.emoji} ${role.name}：${assignee}\n`;
+            });
+            const memo3 = document.querySelector('.section:nth-child(3) .memo-textarea').value;
+            if (memo3) output += `📝 メモ: ${memo3}\n`;
+            output += "\n";
+            
+            // セクション4
+            output += "4. 事後スケジュール\n";
+            output += "☐ 9/21〜23：Instagram・note で速報発信\n";
+            output += "☐ 9/24〜30：公式ページ更新（参加者の声・ギャラリー追加）\n";
+            output += "☐ 12/13前：次回チラシに推薦枠を反映\n";
+            const memo4 = document.querySelector('.section:nth-child(4) .memo-textarea').value;
+            if (memo4) output += `📝 メモ: ${memo4}\n`;
+            output += "\n";
+            
+            // セクション5
+            output += "5. 確認したいこと（ディスカッション）\n";
+            output += "* 写真／動画撮影を誰がメインで行うか\n";
+            output += "* SNS／note発信の文責は誰が担うか\n";
+            output += "* アンケートはオンライン（Googleフォーム）と紙、どちらを併用するか\n";
+            const memo5 = document.querySelector('.section:nth-child(5) .memo-textarea').value;
+            if (memo5) output += `📝 ディスカッション結果: ${memo5}\n`;
+            
+            // テキストファイルとしてダウンロード
+            const blob = new Blob([output], { type: 'text/plain; charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `沖縄文芸フリマ_ミーティング資料_${new Date().toLocaleDateString('ja-JP').replace(/\//g, '')}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
