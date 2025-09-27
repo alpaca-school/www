@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プラスチックと燃焼ガス</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .comparison {
+            display: flex;
+            min-height: 600px;
+        }
+        
+        .plastic-card {
+            flex: 1;
+            padding: 30px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .safe {
+            background: linear-gradient(135deg, #E8F5E8, #C8E6C9);
+            border-right: 3px solid #4CAF50;
+        }
+        
+        .danger {
+            background: linear-gradient(135deg, #FFEBEE, #FFCDD2);
+        }
+        
+        .plastic-icon {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .safe-icon {
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            color: white;
+        }
+        
+        .danger-icon {
+            background: linear-gradient(135deg, #F44336, #EF5350);
+            color: white;
+        }
+        
+        .plastic-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .safe-name {
+            color: #2E7D32;
+        }
+        
+        .danger-name {
+            color: #C62828;
+        }
+        
+        .halogen-status {
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        
+        .no-halogen {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .has-halogen {
+            background: #F44336;
+            color: white;
+        }
+        
+        .burning-section {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .fire-icon {
+            font-size: 2.5rem;
+            margin: 20px 0;
+            animation: flicker 1s infinite alternate;
+        }
+        
+        @keyframes flicker {
+            0% { opacity: 0.8; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.1); }
+        }
+        
+        .gas-result {
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            font-weight: bold;
+            margin-top: 20px;
+            width: 100%;
+        }
+        
+        .safe-gas {
+            background: #E8F5E8;
+            border: 2px solid #4CAF50;
+            color: #2E7D32;
+        }
+        
+        .danger-gas {
+            background: #FFEBEE;
+            border: 2px solid #F44336;
+            color: #C62828;
+        }
+        
+        .examples {
+            background: #F5F5F5;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+        }
+        
+        .examples h4 {
+            color: #555;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        
+        .examples ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .examples li {
+            background: white;
+            padding: 8px 15px;
+            margin: 5px 0;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        
+        .conclusion {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .conclusion h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        .key-point {
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            font-size: 1.1rem;
+        }
+        
+        .arrow {
+            font-size: 2rem;
+            color: #666;
+            margin: 10px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .comparison {
+                flex-direction: column;
+            }
+            
+            .plastic-card {
+                border-right: none !important;
+                border-bottom: 3px solid #4CAF50;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .plastic-name {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏭 プラスチックを燃やすと何が起こる？</h1>
+            <p>ハロゲン系 vs 非ハロゲン系の違い</p>
+        </div>
+        
+        <div class="comparison">
+            <div class="plastic-card safe">
+                <div class="plastic-icon safe-icon">
+                    ✓
+                </div>
+                <h2 class="plastic-name safe-name">ポリエチレン</h2>
+                <div class="halogen-status no-halogen">
+                    非ハロゲン系材料
+                </div>
+                
+                <div class="examples">
+                    <h4>よく使われるもの</h4>
+                    <ul>
+                        <li>レジ袋</li>
+                        <li>ペットボトル</li>
+                        <li>食品容器</li>
+                        <li>ラップフィルム</li>
+                    </ul>
+                </div>
+                
+                <div class="burning-section">
+                    <div class="arrow">↓</div>
+                    <div class="fire-icon">🔥</div>
+                    <p style="font-weight: bold; color: #2E7D32;">燃焼</p>
+                    <div class="arrow">↓</div>
+                    
+                    <div class="gas-result safe-gas">
+                        <p><strong>✅ 安全！</strong></p>
+                        <p>有害ガスは発生しない</p>
+                        <p style="font-size: 0.9rem; margin-top: 10px;">
+                            主に水(H₂O)と二酸化炭素(CO₂)になる
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="plastic-card danger">
+                <div class="plastic-icon danger-icon">
+                    ⚠️
+                </div>
+                <h2 class="plastic-name danger-name">塩化ビニル (PVC)</h2>
+                <div class="halogen-status has-halogen">
+                    ハロゲン系材料<br>
+                    <small>（塩素を含む）</small>
+                </div>
+                
+                <div class="examples">
+                    <h4>よく使われるもの</h4>
+                    <ul>
+                        <li>水道管</li>
+                        <li>レコード</li>
+                        <li>消しゴム</li>
+                        <li>電線カバー</li>
+                    </ul>
+                </div>
+                
+                <div class="burning-section">
+                    <div class="arrow">↓</div>
+                    <div class="fire-icon">🔥</div>
+                    <p style="font-weight: bold; color: #C62828;">燃焼</p>
+                    <div class="arrow">↓</div>
+                    
+                    <div class="gas-result danger-gas">
+                        <p><strong>⚠️ 危険！</strong></p>
+                        <p>有害ガスが発生</p>
+                        <p style="font-size: 0.9rem; margin-top: 10px;">
+                            塩化水素・ダイオキシンなど
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="conclusion">
+            <h2>🌱 まとめ</h2>
+            
+            <div class="key-point">
+                <strong>ハロゲン（塩素など）を含まない材料</strong>は、燃やしても有害なガスを出さない
+            </div>
+            
+            <div class="key-point">
+                <strong>ハロゲンを含む材料</strong>を燃やすと、そのハロゲンが有害ガスに変化してしまう
+            </div>
+            
+            <p style="font-size: 1.2rem; margin-top: 20px;">
+                だから環境を守るために、できるだけ<br>
+                <strong>「非ハロゲン系材料」</strong>を選ぶことが大切なんだね！
+            </p>
+        </div>
+    </div>
+</body>
+</html>

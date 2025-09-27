@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第18回スターリングテクノラリー沖縄県大会</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #87CEEB 0%, #E0F6FF 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .trip-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .day-section {
+            border: 3px solid #4ECDC4;
+            border-radius: 15px;
+            padding: 20px;
+            background: #F8FDFF;
+            position: relative;
+        }
+        
+        .day-header {
+            background: #4ECDC4;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin: -30px -30px 20px -30px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            position: relative;
+            padding-left: 100px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, #4ECDC4, #FF6B6B);
+            border-radius: 2px;
+        }
+        
+        .time-item {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-left: 3px solid #4ECDC4;
+            position: relative;
+        }
+        
+        .time {
+            position: absolute;
+            left: -90px;
+            background: #FF6B6B;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            min-width: 60px;
+            text-align: center;
+            font-size: 14px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        
+        .time::after {
+            content: '';
+            position: absolute;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            background: #4ECDC4;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .activity {
+            flex: 1;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+        
+        .icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+        
+        .flight-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .cost-info {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            border: 2px solid #ff9a56;
+        }
+        
+        .items-box {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #4ECDC4;
+        }
+        
+        .items-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .item {
+            background: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-size: 14px;
+        }
+        
+        .arrow {
+            text-align: center;
+            font-size: 30px;
+            color: #4ECDC4;
+            margin: 10px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                padding: 15px;
+            }
+            
+            .timeline {
+                padding-left: 80px;
+            }
+            
+            .time {
+                left: -75px;
+                font-size: 12px;
+                padding: 6px 8px;
+                min-width: 50px;
+            }
+            
+            .activity {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏆 第18回スターリングテクノラリー沖縄県大会 🏆</h1>
+        </div>
+        
+        <div class="content">
+            <div class="flight-info">
+                <h3>概要</h3>
+                <p>✈️ 航空券情報：JTA601便/JTA626便</p>
+            </div>
+            
+            <div class="trip-flow">
+                <div class="day-section">
+                    <div class="day-header">📅 10月2日（木）- 出発・移動日</div>
+                    <div class="timeline">
+                        <div class="time-item">
+                            <div class="time">06:10</div>
+                            <div class="activity">
+                                <span class="icon">🛫</span>
+                                <strong>那覇空港集合</strong>
+                            </div>
+                        </div>
+                        <div class="time-item">
+                            <div class="time">07:15</div>
+                            <div class="activity">
+                                <span class="icon">✈️</span>
+                                <strong>JTA601便 出発</strong> 那覇 → 石垣
+                            </div>
+                        </div>
+                        <div class="time-item">
+                            <div class="time">08:15</div>
+                            <div class="activity">
+                                <span class="icon">🏝️</span>
+                                <strong>石垣島到着</strong>
+                            </div>
+                        </div>
+                        <div class="time-item">
+                            <div class="time">08:30</div>
+                            <div class="activity">
+                                <span class="icon">🚌</span>
+                                <strong>ホテル移動・競技会場へ</strong>
+                            </div>
+                        </div>
+                        <div class="time-item">
+                            <div class="time">17:00</div>
+                            <div class="activity">
+                                <span class="icon">🏨</span>
+                                <strong>片付け・アパホテル石垣島宿泊</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                                
+                <div class="day-section">
+                    <div class="day-header">📅 10月3日（金）- 競技大会・帰路</div>
+                    <div class="timeline">
+                        <div class="time-item">
+                            <div class="time">08:30</div>
+                            <div class="activity">
+                                <span class="icon">🔧</span>
+                                <strong>車検・受付</strong>
+                            </div>
+                        </div>
+                        <div class="time-item">
+                            <div class="time">09:15</div>
+                            <div class="activity">
+                                <span class="icon">🎌</span>
+                                <strong>開会式</strong>
+                            </div>
+                        </div>
+                        <div class="time-item">
+                            <div class="time">09:30</div>
+                            <div class="activity">
+                                <span class="icon">🏁</span>
+                                <strong>競技開始</strong> @ 県立八重山商工高等学校
+                            </div>
+                        </div>
+                        <div class="time-item">
+                            <div class="time">15:30</div>
+                            <div class="activity">
+                                <span class="icon">🏆</span>
+                                <strong>表彰・閉会式 → 空港へ移動</strong>
+                            </div>
+                        </div>
+                        <div class="time-item">
+                            <div class="time">19:00</div>
+                            <div class="activity">
+                                <span class="icon">✈️</span>
+                                <strong>JTA626便 出発</strong> 石垣 → 那覇
+                            </div>
+                        </div>
+                        <div class="time-item">
+                            <div class="time">20:05</div>
+                            <div class="activity">
+                                <span class="icon">🏠</span>
+                                <strong>那覇到着・帰宅</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                        
+            <div class="items-box">
+                <h3>🎒 持参物チェックリスト</h3>
+                <div class="items-list">
+                    <div class="item">👕 着替え</div>
+                    <div class="item">🏥 保健証写し</div>
+                    <div class="item">🔧 競技用道具</div>
+                    <div class="item">💊 常備薬</div>
+                </div>
+                <p style="text-align: center; margin-top: 15px; color: #636e72;">※競技会場で作業服に着替えます</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
