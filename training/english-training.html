@@ -20,7 +20,7 @@
     // --- Robust Audio Playback using Web Audio API ---
     let audioContext;
     let audioBuffer = null; // Reset buffer to force re-decoding of the new sound
-    const popSoundUri = "data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjMyLjEwNAAAAAAAAAAAAAAA//tAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAAAAAACAAAARGF2aWQtQmxvb3AgbXAzAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//tAwRAAAAFoAAABoAAABpAAAABsAAABuAAAACAAAAFIAAAQAAAAgAAAEgAAACEAAAD4AAAAnAAAAHAAAADAAAAAIAAAAMgAAADQAAABAAAAASAAAASgAAAEwAAABQAAAAVgAAAFgAAABcAAAAZAAAAGYAAABqAAAAcAAAAHYAAAB+AAAACgAAAkAAAAMAAAADAAAA//tAwQoAAAEAAAEnAAAAmAAAAMgAAABAAAAA0gAAANwAAABAAAAA4AAAAOwAAAPQAAAEAAAAA//tAwQ4AAAEAAAFAAAABgAAAcgAAAH4AAACgAAAC4AAADKAAAA4gAAAOwAAAD4AAABCAAAAkAAAALgAAANQAAADsAAABAAAAA8AAAAQAAAAEAAAADgAAABIAAAAUAAAAFwAAABgAAAAZAAAAGgAAABsAAABwAAAAcQAAAHIAAABzAAAB1AAAAdQAAAHYAAAB3AAAB4AAAAeQAAAHoAAAB7AAAAfgAAAH8AAACAAAAAgQAAAIQAAACIAAAAkAAAAJQAAACWAAAAmAAAAJwAAACeAAAAqAAAAKwAAACwAAAAtAAAALgAAAC8AAADAAAAAxAAAAMYAAADIAAAAyQAAAMoAAADLAAAAzAAAAM0AAADOAAAAzwAAAOAAAAA=";
+    const popSoundUri = "data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjMyLjEwNAAAAAAAAAAAAAAA//tAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAAAAAACAAAARGF2aWQtQmxvb3AgbXAzAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//tAwRAAAAFoAAABoAAABpAAAABsAAABuAAAACAAAAFIAAAQAAAAgAAAEgAAACEAAAD4AAAAnAAAAHAAAADAAAAAIAAAAMgAAADQAAABAAAAASAAAASgAAAEwAAABQAAAAVgAAAFgAAABcAAAAZAAAAGYAAABqAAAAcAAAAHYAAAB+AAAACgAAAkAAAAMAAAADAAAA//tAwQoAAAEAAAEnAAAAmAAAAMgAAABAAAAA0gAAANwAAABAAAAA4AAAAOwAAAPQAAAEAAAAA//tAwQ4AAAEAAAFAAAABgAAAcgAAAH4AAACgAAAC4AAADKAAAA4gAAAOwAAAD4AAABCAAAAkAAAALgAAANQAAADsAAABAAAAA8AAAAQAAAAEAAAADgAAABIAAAAUAAAAFwAAABgAAAAZAAAAGgAAABsAAABwAAAAcQAAAHIAAABzAAAB1AAAAdQAAAHYAAAB3AAAB4AAAAeQAAAHoAAAB7AAAAfgAAAH8AAACAAAAAgQAAAIQAAACIAAAAkAAAAJQAAACWAAAAmAAAAJwAAACeAAAAqAAAAKwAAACwAAAAtAAAALgAAAC8AAADAAAAAxAAAAMYAAADIAAAAyQAAAMoAAADLAAAAzAAAAM0AAADOAAAAzwAAAOAAAA=";
 
     const playSound = async () => {
         try {
@@ -43,6 +43,31 @@
             console.error("Audio playback failed:", e);
         }
     };
+
+    let audioBufferCorrect = null;
+    const correctSoundUri = "data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjMyLjEwNAAAAAAAAAAAAAAA//tAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAAAAAACAAAAR2FtZSBDb3JyZWN0IFNvdW5kIG1wMwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//tAwRAAAAFoAAABoAAABpAAAABsAAABuAAAACAAAAFIAAAQAAAAgAAAEgAAACEAAAD4AAAAnAAAAHAAAADAAAAAIAAAAMgAAADQAAABAAAAASAAAASgAAAEwAAABQAAAAVgAAAFgAAABcAAAAZAAAAGYAAABqAAAAcAAAAHYAAAB+AAAACgAAAkAAAAMAAAADAAAA//tAwQoAAAEAAAEnAAAAmAAAAMgAAABAAAAA0gAAANwAAABAAAAA4AAAAOwAAAPQAAAEAAAAA//tAwQ4AAAEAAAFAAAABgAAAcgAAAH4AAACgAAAC4AAADKAAAA4gAAAOwAAAD4AAABCAAAAkAAAALgAAANQAAADsAAABAAAAA8AAAAQAAAAEAAAADgAAABIAAAAUAAAAFwAAABgAAAAZAAAAGgAAABsAAABwAAAAcQAAAHIAAABzAAAB1AAAAdQAAAHYAAAB3AAAB4AAAAeQAAAHoAAAB7AAAAfgAAAH8AAACAAAAAgQAAAIQAAACIAAAAkAAAAJQAAACWAAAAmAAAAJwAAACeAAAAqAAAAKwAAACwAAAAtAAAALgAAAC8AAADAAAAAxAAAAMYAAADIAAAAyQAAAMoAAADLAAAAzAAAAM0AAADOAAAAzwAAAOAAAA=";
+
+    const playCorrectSound = async () => {
+        try {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioContext.state === 'suspended') {
+                await audioContext.resume();
+            }
+            if (!audioBufferCorrect) {
+                const response = await fetch(correctSoundUri);
+                const arrayBuffer = await response.arrayBuffer();
+                audioBufferCorrect = await audioContext.decodeAudioData(arrayBuffer);
+            }
+            const source = audioContext.createBufferSource();
+            source.buffer = audioBufferCorrect;
+            source.connect(audioContext.destination);
+            source.start(0);
+        } catch (e) {
+            console.error("Correct sound playback failed:", e);
+        }
+    };
     // --- End of Audio Playback Logic ---
 
     const EnglishSentenceBuilder = () => {
@@ -61,6 +86,7 @@
       const [isQuizActive, setIsQuizActive] = useState(false);
       const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
       const [quizFeedback, setQuizFeedback] = useState("");
+      const [showIncorrectAnswerOptions, setShowIncorrectAnswerOptions] = useState(false);
 
       const quizQuestions = [
         {
@@ -591,6 +617,7 @@
         setIsQuizActive(true);
         setCurrentQuestionIndex(0);
         setQuizFeedback("");
+        setShowIncorrectAnswerOptions(false);
       };
 
       const handleCheckAnswer = () => {
@@ -606,14 +633,18 @@
         
         if (isCorrect) {
             setQuizFeedback("正解！🎉");
+            playCorrectSound();
+            setShowIncorrectAnswerOptions(false);
         } else {
-            setQuizFeedback("不正解です。もう一度試してみて！");
+            setQuizFeedback("不正解です。");
+            setShowIncorrectAnswerOptions(true);
         }
       };
 
       const handleNextQuestion = () => {
         handleReset();
         setQuizFeedback("");
+        setShowIncorrectAnswerOptions(false);
         if (currentQuestionIndex < quizQuestions.length - 1) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
         } else {
@@ -625,6 +656,32 @@
       const quitQuiz = () => {
         handleReset();
         setIsQuizActive(false);
+        setShowIncorrectAnswerOptions(false);
+      };
+
+      const handleTryAgain = () => {
+        setQuizFeedback("");
+        setShowIncorrectAnswerOptions(false);
+      };
+
+      const handleShowAnswer = () => {
+        const correctAnswer = quizQuestions[currentQuestionIndex].answer;
+        setSentenceType(sentenceTypes.find(st => st.value === correctAnswer.sentenceType));
+        setSubject(subjects.find(s => s.value === correctAnswer.subject));
+        setTense(tenses.find(t => t.value === correctAnswer.tense));
+        setVerb(correctAnswer.verb);
+        if (correctAnswer.object) {
+            setObject(getObjectOptions(correctAnswer.verb).find(o => o.value === correctAnswer.object));
+        } else {
+            setObject(null);
+        }
+        // You might want to reset other parts like place and time if they are not in the answer
+        setPlace(null);
+        setTime(null);
+        setQuestionWord(null);
+
+        setShowIncorrectAnswerOptions(false);
+        setQuizFeedback("これが正解です！");
       };
 
       // Cell styles for vertical layout
@@ -658,19 +715,19 @@
                         <div>
                             <h3 className="text-lg font-semibold mb-2 text-orange-500">🚀 かんたんな使い方</h3>
                             <ol className="list-none mt-2 space-y-2">
-                                <li><span className="mr-2">1️⃣</span>**文の種類をえらぼう！**：「○」（ふつうの文）、「×」（「〜しない」の文）、「？」（質問する文）からえらんでね。</li>
-                                <li><span className="mr-2">2️⃣</span>**パーツをえらんで文を作ろう！**：左から順番に「主語」「時制」「動詞」...のように、好きなボタンをタップしていくだけ。</li>
-                                <li><span className="mr-2">3️⃣</span>**完成！**：画面の真ん中に、できあがった英語と日本語訳が表示されるよ。</li>
-                                <li><span className="mr-2">4️⃣</span>**発音を聞いてみよう！**：「読み上げ」ボタンをおすと、英語の音声が流れるよ。マネして言ってみると、スピーキング力アップ！</li>
-                                <li><span className="mr-2">5️⃣</span>**リセット**：「リセット」ボタンで、ぜんぶ最初の状態にもどせるよ。</li>
+                                <li><span className="mr-2">1️⃣</span><strong className="font-bold">文の種類をえらぼう！</strong>：「○」（ふつうの文）、「×」（「〜しない」の文）、「？」（質問する文）からえらんでね。</li>
+                                <li><span className="mr-2">2️⃣</span><strong className="font-bold">パーツをえらんで文を作ろう！</strong>：左から順番に「主語」「時制」「動詞」...のように、好きなボタンをタップしていくだけ。</li>
+                                <li><span className="mr-2">3️⃣</span><strong className="font-bold">完成！</strong>：画面の真ん中に、できあがった英語と日本語訳が表示されるよ。</li>
+                                <li><span className="mr-2">4️⃣</span><strong className="font-bold">発音を聞いてみよう！</strong>：「読み上げ」ボタンをおすと、英語の音声が流れるよ。マネして言ってみると、スピーキング力アップ！</li>
+                                <li><span className="mr-2">5️⃣</span><strong className="font-bold">リセット</strong>：「リセット」ボタンで、ぜんぶ最初の状態にもどせるよ。</li>
                             </ol>
                         </div>
                         <div>
                             <h3 className="text-lg font-semibold mb-2 text-orange-500">📚 おすすめの勉強法</h3>
                             <ul className="list-none mt-2 space-y-2">
-                                <li>✅**授業の復習に！** 学校で習った文法（過去形、未来形など）を、このアプリで実際に作ってみよう。</li>
-                                <li>✅**単語の練習に！** 新しく習った動詞を使って、どんな文が作れるか試してみよう。</li>
-                                <li>✅**テスト対策に！** 「疑問詞（what, whoなど）」を使った文を作る練習をして、テストに備えよう！</li>
+                                <li>✅<strong className="font-bold">授業の復習に！</strong> 学校で習った文法（過去形、未来形など）を、このアプリで実際に作ってみよう。</li>
+                                <li>✅<strong className="font-bold">単語の練習に！</strong> 新しく習った動詞を使って、どんな文が作れるか試してみよう。</li>
+                                <li>✅<strong className="font-bold">テスト対策に！</strong> 「疑問詞（what, whoなど）」を使った文を作る練習をして、テストに備えよう！</li>
                             </ul>
                         </div>
                     </div>
@@ -743,13 +800,13 @@
               </div>
             </div>
             <div className="flex gap-2">
-                <button onClick={() => setModalContent('students')} className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium shadow hover:shadow-md transition-all">中学生へ</button>
-                <button onClick={() => setModalContent('parents')} className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg text-sm font-medium shadow hover:shadow-md transition-all">保護者へ</button>
+                <button onClick={() => setModalContent('students')} className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium shadow hover:shadow-md transition-all">🧑‍🎓 中学生へ</button>
+                <button onClick={() => setModalContent('parents')} className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg text-sm font-medium shadow hover:shadow-md transition-all">👨‍👩‍👧‍👦 保護者へ</button>
                 <button
                   onClick={startQuiz}
                   className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium shadow hover:shadow-md transition-all"
                 >
-                  クイズに挑戦！
+                  🧠 クイズに挑戦！
                 </button>
             </div>
           </div>
@@ -846,7 +903,7 @@
             {/* 動詞 */}
             <div className="text-center">
               <h3 className="text-sm font-bold text-gray-700 mb-3 bg-red-100 py-2 rounded-md">動詞</h3>
-              <div className="space-y-1 max-h-64 overflow-y-auto">
+              <div className="space-y-1">
                 {verbs.map((v) => (
                   <div
                     key={v}
@@ -944,7 +1001,17 @@
                     <button onClick={quitQuiz} className="bg-gray-500 hover:bg-gray-600 text-white px-8 py-3 rounded-lg transition-colors font-medium shadow-md hover:shadow-lg">
                         クイズをやめる
                     </button>
-                    {!quizFeedback ? (
+                    
+                    {showIncorrectAnswerOptions ? (
+                        <>
+                            <button onClick={handleTryAgain} className="bg-yellow-500 hover:bg-yellow-600 text-white px-8 py-3 rounded-lg transition-colors font-medium shadow-md hover:shadow-lg">
+                                もう一度回答する
+                            </button>
+                            <button onClick={handleShowAnswer} className="bg-purple-500 hover:bg-purple-600 text-white px-8 py-3 rounded-lg transition-colors font-medium shadow-md hover:shadow-lg">
+                                正解を見る
+                            </button>
+                        </>
+                    ) : !quizFeedback ? (
                         <button onClick={handleCheckAnswer} className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg transition-colors font-medium shadow-md hover:shadow-lg">
                             答え合わせ
                         </button>
