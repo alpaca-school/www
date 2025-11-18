@@ -17,6 +17,34 @@
 
     const { useState, useEffect } = React;
 
+    // --- Robust Audio Playback using Web Audio API ---
+    let audioContext;
+    let audioBuffer = null; // Reset buffer to force re-decoding of the new sound
+    const popSoundUri = "data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjMyLjEwNAAAAAAAAAAAAAAA//tAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAAAAAACAAAARGF2aWQtQmxvb3AgbXAzAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//tAwRAAAAFoAAABoAAABpAAAABsAAABuAAAACAAAAFIAAAQAAAAgAAAEgAAACEAAAD4AAAAnAAAAHAAAADAAAAAIAAAAMgAAADQAAABAAAAASAAAASgAAAEwAAABQAAAAVgAAAFgAAABcAAAAZAAAAGYAAABqAAAAcAAAAHYAAAB+AAAACgAAAkAAAAMAAAADAAAA//tAwQoAAAEAAAEnAAAAmAAAAMgAAABAAAAA0gAAANwAAABAAAAA4AAAAOwAAAPQAAAEAAAAA//tAwQ4AAAEAAAFAAAABgAAAcgAAAH4AAACgAAAC4AAADKAAAA4gAAAOwAAAD4AAABCAAAAkAAAALgAAANQAAADsAAABAAAAA8AAAAQAAAAEAAAADgAAABIAAAAUAAAAFwAAABgAAAAZAAAAGgAAABsAAABwAAAAcQAAAHIAAABzAAAB1AAAAdQAAAHYAAAB3AAAB4AAAAeQAAAHoAAAB7AAAAfgAAAH8AAACAAAAAgQAAAIQAAACIAAAAkAAAAJQAAACWAAAAmAAAAJwAAACeAAAAqAAAAKwAAACwAAAAtAAAALgAAAC8AAADAAAAAxAAAAMYAAADIAAAAyQAAAMoAAADLAAAAzAAAAM0AAADOAAAAzwAAAOAAAAA=";
+
+    const playSound = async () => {
+        try {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioContext.state === 'suspended') {
+                await audioContext.resume();
+            }
+            if (!audioBuffer) {
+                const response = await fetch(popSoundUri);
+                const arrayBuffer = await response.arrayBuffer();
+                audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+            }
+            const source = audioContext.createBufferSource();
+            source.buffer = audioBuffer;
+            source.connect(audioContext.destination);
+            source.start(0);
+        } catch (e) {
+            console.error("Audio playback failed:", e);
+        }
+    };
+    // --- End of Audio Playback Logic ---
+
     const EnglishSentenceBuilder = () => {
       // State for tracking selected elements
       const [sentenceType, setSentenceType] = useState(null);
@@ -29,6 +57,25 @@
       const [place, setPlace] = useState(null);
       const [time, setTime] = useState(null);
       const [questionWord, setQuestionWord] = useState(null);
+      const [modalContent, setModalContent] = useState(null); // State for modal
+      const [isQuizActive, setIsQuizActive] = useState(false);
+      const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+      const [quizFeedback, setQuizFeedback] = useState("");
+
+      const quizQuestions = [
+        {
+            japanese: "彼は犬を飼っています。", // He has a dog.
+            answer: { subject: 'third', tense: 'present', verb: 'have', object: 'dog', sentenceType: 'affirmative' }
+        },
+        {
+            japanese: "私はその本を買いました。", // I bought a book.
+            answer: { subject: 'first', tense: 'past', verb: 'buy', object: 'book', sentenceType: 'affirmative' }
+        },
+        {
+            japanese: "あなたは朝食を食べます。", // You eat breakfast.
+            answer: { subject: 'second', tense: 'present', verb: 'eat', object: 'breakfast', sentenceType: 'affirmative' }
+        }
+      ];
 
       // 疑問詞が選択されているかどうかを判定
       const hasQuestionWord = questionWord !== null;
@@ -52,7 +99,7 @@
         { value: "future", symbol: "未来", label: "未来形" },
       ];
 
-      const verbs = ["do", "be", "go", "have", "get", "give", "take", "buy"];
+      const verbs = ["do", "be", "go", "have", "get", "give", "take", "buy", "eat", "read"];
 
       // 疑問詞の選択肢
       const questionWords = [
@@ -97,6 +144,12 @@
               { value: "food", label: "food", japanese: "食べ物" },
               { value: "clothes", label: "clothes", japanese: "服" },
             ];
+          case "read":
+            return [
+              { value: "book", label: "a book", japanese: "本" },
+              { value: "magazine", label: "a magazine", japanese: "雑誌" },
+              { value: "newspaper", label: "a newspaper", japanese: "新聞" },
+            ];
           default:
             return commonObjects;
         }
@@ -138,7 +191,7 @@
       }, []);
 
       // 疑問詞が選択されたときの処理
-      const handleQuestionWordSelect = (qw) => {
+      const handleQuestionWordSelect = async (qw) => {
         setQuestionWord(qw);
         setSentenceType({ value: "question", symbol: "?", label: "疑問文" }); // 自動的に疑問文に設定
 
@@ -150,6 +203,7 @@
         } else if (qw.type === "time") {
           setTime(null);
         }
+        await playSound();
       };
 
       // Verb conjugation helpers
@@ -444,12 +498,47 @@
         return { english: sentence, japanese: japaneseSentence };
       };
 
-      // 選択肢が変わるたびに sentence を計算し state に保存
+      // 選択肢が変わるたびに sentence を計算し、自動で読み上げる
       useEffect(() => {
-        const result = generateSentence();
-        setGeneratedSentence(result.english);
+        const { english, japanese } = generateSentence();
+        setGeneratedSentence(english);
+
+        if (english && japanese) {
+            // A short delay to prevent jarring audio on rapid clicks
+            const timer = setTimeout(() => {
+                speakBothLanguages(english, japanese);
+            }, 300);
+            return () => clearTimeout(timer); // Cleanup timer on re-render
+        } else {
+            window.speechSynthesis.cancel(); // Stop speech if selections are cleared
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
       }, [sentenceType, subject, tense, verb, object, place, time, questionWord]);
+
+      const speakBothLanguages = (english, japanese) => {
+        if (!english || !japanese || typeof window === "undefined" || !window.speechSynthesis) return;
+
+        try {
+            window.speechSynthesis.cancel(); // Cancel any previous speech
+
+            const englishUtterance = new SpeechSynthesisUtterance(english);
+            englishUtterance.lang = "en-US";
+            englishUtterance.rate = 0.9;
+
+            const japaneseUtterance = new SpeechSynthesisUtterance(japanese);
+            japaneseUtterance.lang = "ja-JP";
+            japaneseUtterance.rate = 0.9;
+
+            // Speak Japanese after English ends
+            englishUtterance.onend = () => {
+                window.speechSynthesis.speak(japaneseUtterance);
+            };
+
+            window.speechSynthesis.speak(englishUtterance);
+        } catch (error) {
+            console.error("Speech synthesis error:", error);
+        }
+      };
 
       // Speech synthesis function with safer implementation
       const speakSentence = () => {
@@ -497,20 +586,173 @@
         stopSpeech();
       };
 
+      const startQuiz = () => {
+        handleReset();
+        setIsQuizActive(true);
+        setCurrentQuestionIndex(0);
+        setQuizFeedback("");
+      };
+
+      const handleCheckAnswer = () => {
+        const currentAnswer = quizQuestions[currentQuestionIndex].answer;
+        let isCorrect = true;
+        // Check each part of the answer
+        if (sentenceType?.value !== currentAnswer.sentenceType) isCorrect = false;
+        if (subject?.value !== currentAnswer.subject) isCorrect = false;
+        if (tense?.value !== currentAnswer.tense) isCorrect = false;
+        if (verb !== currentAnswer.verb) isCorrect = false;
+        // Object might be null, so handle that case
+        if (currentAnswer.object && object?.value !== currentAnswer.object) isCorrect = false;
+        
+        if (isCorrect) {
+            setQuizFeedback("正解！🎉");
+        } else {
+            setQuizFeedback("不正解です。もう一度試してみて！");
+        }
+      };
+
+      const handleNextQuestion = () => {
+        handleReset();
+        setQuizFeedback("");
+        if (currentQuestionIndex < quizQuestions.length - 1) {
+            setCurrentQuestionIndex(currentQuestionIndex + 1);
+        } else {
+            // Last question, end the quiz
+            setIsQuizActive(false);
+        }
+      };
+
+      const quitQuiz = () => {
+        handleReset();
+        setIsQuizActive(false);
+      };
+
       // Cell styles for vertical layout
-      const getItemStyle = (item, selectedItem, isSelected) => {
+      const getItemStyle = (item, selectedItem, isSelected, baseColor) => {
         const baseStyle =
           "w-full py-3 px-2 text-center rounded-md cursor-pointer transition-all duration-200 hover:scale-105 font-medium border";
 
         if (isSelected) {
-          return `${baseStyle} bg-blue-500 text-white border-blue-600 shadow-lg`;
+          return `${baseStyle} bg-${baseColor}-500 text-white border-${baseColor}-600 shadow-lg`;
         }
-        return `${baseStyle} bg-blue-50 hover:bg-blue-100 border-blue-200 text-blue-800`;
+        return `${baseStyle} bg-${baseColor}-50 hover:bg-${baseColor}-100 border-${baseColor}-200 text-${baseColor}-800`;
       };
+
+      const ExplanationModal = ({ contentKey, onClose }) => {
+        const explanations = {
+            students: {
+                title: "中学生のみなさんへ",
+                content: (
+                    <div className="space-y-6 text-gray-700">
+                        <div>
+                            <h3 className="text-lg font-semibold mb-2 text-orange-500">💡 このアプリでできること</h3>
+                            <p className="mb-3">
+                                英語の文章がどうやって作られているのか、パズルみたいに楽しく学べるツールだよ！むずかしい文法も、これを使えばスッキリわかるかも✨
+                            </p>
+                            <ul className="list-none mt-2 space-y-2">
+                                <li>✨「だれが」「いつ」「何をする」といったパーツをえらぶだけで、正しい英語の文章が作れる！</li>
+                                <li>✨作った文章の日本語訳もすぐに見れるから、意味もバッチリわかるよ。</li>
+                                <li>✨「読み上げ」ボタンで、ネイティブみたいな発音を聞ける！リスニングやスピーキングの練習にピッタリだよ。</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-semibold mb-2 text-orange-500">🚀 かんたんな使い方</h3>
+                            <ol className="list-none mt-2 space-y-2">
+                                <li><span className="mr-2">1️⃣</span>**文の種類をえらぼう！**：「○」（ふつうの文）、「×」（「〜しない」の文）、「？」（質問する文）からえらんでね。</li>
+                                <li><span className="mr-2">2️⃣</span>**パーツをえらんで文を作ろう！**：左から順番に「主語」「時制」「動詞」...のように、好きなボタンをタップしていくだけ。</li>
+                                <li><span className="mr-2">3️⃣</span>**完成！**：画面の真ん中に、できあがった英語と日本語訳が表示されるよ。</li>
+                                <li><span className="mr-2">4️⃣</span>**発音を聞いてみよう！**：「読み上げ」ボタンをおすと、英語の音声が流れるよ。マネして言ってみると、スピーキング力アップ！</li>
+                                <li><span className="mr-2">5️⃣</span>**リセット**：「リセット」ボタンで、ぜんぶ最初の状態にもどせるよ。</li>
+                            </ol>
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-semibold mb-2 text-orange-500">📚 おすすめの勉強法</h3>
+                            <ul className="list-none mt-2 space-y-2">
+                                <li>✅**授業の復習に！** 学校で習った文法（過去形、未来形など）を、このアプリで実際に作ってみよう。</li>
+                                <li>✅**単語の練習に！** 新しく習った動詞を使って、どんな文が作れるか試してみよう。</li>
+                                <li>✅**テスト対策に！** 「疑問詞（what, whoなど）」を使った文を作る練習をして、テストに備えよう！</li>
+                            </ul>
+                        </div>
+                    </div>
+                )
+            },
+            parents: {
+                title: "保護者の皆様へ",
+                content: (
+                    <div className="space-y-6">
+                        <div>
+                            <h3 className="text-lg font-semibold mb-2 text-yellow-500">本アプリケーションの目的</h3>
+                            <p className="text-gray-700">
+                                中学校で学習する英語の基礎「文の組み立て」は、多くの生徒様がつまずきやすいポイントです。本アプリは、「主語」「動詞」「時制」といった文の要素を一つひとつ選択することで、どのように英単語が並び文が完成するのかをゲーム感覚で体験できるように設計されています。文法への苦手意識を減らし、英語学習への意欲を高めることを目指します。
+                            </p>
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-semibold mb-2 text-yellow-500">主な機能と期待される学習効果</h3>
+                            <ul className="list-disc list-inside mt-2 space-y-1 text-gray-700">
+                                <li><strong>文法要素の可視化：</strong>肯定文・否定文・疑問文、時制、主語と動詞の関係など、複雑な文法ルールをパーツとして視覚的に選択することで、知識の整理と定着を促します。</li>
+                                <li><strong>即時フィードバック：</strong>選択したパーツから自動で正しい英文と日本語訳を生成します。試行錯誤しながら正しい文の構造を効率的に学べます。</li>
+                                <li><strong>音声による発音学習：</strong>完成した英文をネイティブに近い音声で再生します。正しい発音やイントネーションに触れることで、リスニング力やスピーキング力の基礎を養います。</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-semibold mb-2 text-yellow-500">ご家庭でのご活用提案</h3>
+                            <p className="text-gray-700">
+                                特別な操作は不要で、クリック（タップ）のみで簡単にご利用いただけます。例えば、「昨日の夕食について英語で言ってみようか」といった身近なテーマで、アプリを使いながら一緒に文章作りを試していただくことも、お子様の学習意欲を刺激する一助となります。
+                            </p>
+                        </div>
+                    </div>
+                )
+            }
+        };
+
+        const explanation = explanations[contentKey];
+        if (!explanation) return null;
+
+        const handleContentClick = (e) => e.stopPropagation();
+
+        return (
+            <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4" onClick={onClose}>
+                <div className="bg-white p-8 rounded-xl shadow-2xl max-w-3xl w-full max-h-full overflow-y-auto" onClick={handleContentClick}>
+                    <div className="flex justify-between items-start mb-6">
+                        <h3 className={`text-2xl font-bold ${contentKey === 'students' ? 'text-orange-500' : 'text-yellow-500'}`}>{explanation.title}</h3>
+                        <button onClick={onClose} className="text-gray-400 hover:text-gray-800 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    {explanation.content}
+                </div>
+            </div>
+        );
+      };
+
 
       return (
         <div className="bg-white p-6 rounded-xl shadow-lg max-w-7xl mx-auto border border-gray-200">
-          <h2 className="text-2xl font-bold mb-8 text-center text-gray-800">英語文作成アプリ</h2>
+          <div className="flex justify-between items-start mb-8">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-800">英語文作成アプリ</h2>
+              <div className="mt-2 text-gray-600">
+                <p className="font-semibold">かんたんな使い方:</p>
+                <ol className="list-none text-sm space-y-1">
+                  <li><span className="mr-2">1️⃣</span>左の列から順に、文のパーツを選んでください。</li>
+                  <li><span className="mr-2">2️⃣</span>中央に英文と和訳が自動で作成されます。</li>
+                  <li><span className="mr-2">3️⃣</span>「読み上げ」ボタンで発音を確認できます。</li>
+                </ol>
+              </div>
+            </div>
+            <div className="flex gap-2">
+                <button onClick={() => setModalContent('students')} className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium shadow hover:shadow-md transition-all">中学生へ</button>
+                <button onClick={() => setModalContent('parents')} className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg text-sm font-medium shadow hover:shadow-md transition-all">保護者へ</button>
+                <button
+                  onClick={startQuiz}
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium shadow hover:shadow-md transition-all"
+                >
+                  クイズに挑戦！
+                </button>
+            </div>
+          </div>
 
           {/* 横並びの選択エリア - 疑問詞の有無で列の順序を変更 */}
           <div className={`grid gap-4 mb-8 ${hasQuestionWord ? "grid-cols-6" : "grid-cols-7"}`}>
@@ -522,7 +764,7 @@
                   {questionWords.map((qw) => (
                     <div
                       key={qw.value}
-                      className={getItemStyle(qw, questionWord, questionWord?.value === qw.value)}
+                      className={getItemStyle(qw, questionWord, questionWord?.value === qw.value, "cyan")}
                       onClick={() => handleQuestionWordSelect(qw)}
                     >
                       <div className="text-sm font-bold">{qw.label}</div>
@@ -550,8 +792,8 @@
                   {sentenceTypes.map((type) => (
                     <div
                       key={type.value}
-                      className={getItemStyle(type, sentenceType, sentenceType?.value === type.value)}
-                      onClick={() => setSentenceType(type)}
+                      className={getItemStyle(type, sentenceType, sentenceType?.value === type.value, "yellow")}
+                      onClick={async () => { setSentenceType(type); await playSound(); }}
                     >
                       <div className="text-lg font-bold">{type.symbol}</div>
                       <div className="text-xs">{type.label}</div>
@@ -574,8 +816,8 @@
                 {subjects.map((subj) => (
                   <div
                     key={subj.value}
-                    className={getItemStyle(subj, subject, subject?.value === subj.value)}
-                    onClick={() => setSubject(subj)}
+                    className={getItemStyle(subj, subject, subject?.value === subj.value, "green")}
+                    onClick={async () => { setSubject(subj); await playSound(); }}
                   >
                     <div className="text-lg font-bold">{subj.symbol}</div>
                     <div className="text-xs">{subj.label}</div>
@@ -591,8 +833,8 @@
                 {tenses.map((t) => (
                   <div
                     key={t.value}
-                    className={getItemStyle(t, tense, tense?.value === t.value)}
-                    onClick={() => setTense(t)}
+                    className={getItemStyle(t, tense, tense?.value === t.value, "purple")}
+                    onClick={async () => { setTense(t); await playSound(); }}
                   >
                     <div className="text-lg font-bold">{t.symbol}</div>
                     <div className="text-xs">{t.label}</div>
@@ -608,8 +850,8 @@
                 {verbs.map((v) => (
                   <div
                     key={v}
-                    className={getItemStyle({ value: v }, { value: verb }, verb === v)}
-                    onClick={() => setVerb(v)}
+                    className={getItemStyle({ value: v }, { value: verb }, verb === v, "red")}
+                    onClick={async () => { setVerb(v); await playSound(); }}
                   >
                     <div className="text-sm font-bold">{v}</div>
                   </div>
@@ -625,8 +867,8 @@
                   {getObjectOptions(verb).map((obj) => (
                     <div
                       key={obj.value}
-                      className={getItemStyle(obj, object, object?.value === obj.value)}
-                      onClick={() => setObject(obj)}
+                      className={getItemStyle(obj, object, object?.value === obj.value, "orange")}
+                      onClick={async () => { setObject(obj); await playSound(); }}
                     >
                       <div className="text-sm font-bold">{obj.japanese}</div>
                       <div className="text-xs text-gray-600">{obj.label}</div>
@@ -644,8 +886,8 @@
                   {getPlaceOptions(verb).map((p) => (
                     <div
                       key={p.value}
-                      className={getItemStyle(p, place, place?.value === p.value)}
-                      onClick={() => setPlace(p)}
+                      className={getItemStyle(p, place, place?.value === p.value, "pink")}
+                      onClick={async () => { setPlace(p); await playSound(); }}
                     >
                       <div className="text-sm font-bold">{p.japanese}</div>
                       <div className="text-xs text-gray-600">{p.label}</div>
@@ -663,8 +905,8 @@
                   {times.map((t) => (
                     <div
                       key={t.value}
-                      className={getItemStyle(t, time, time?.value === t.value)}
-                      onClick={() => setTime(t)}
+                      className={getItemStyle(t, time, time?.value === t.value, "indigo")}
+                      onClick={async () => { setTime(t); await playSound(); }}
                     >
                       <div className="text-sm font-bold">{t.japanese}</div>
                       <div className="text-xs text-gray-600">{t.label}</div>
@@ -676,60 +918,72 @@
           </div>
 
           {/* 生成された文章表示エリア */}
-          <div className="bg-gray-50 p-6 rounded-lg min-h-24 mb-6 text-center flex flex-col items-center justify-center border-2 border-dashed border-gray-300">
-            <p className="text-2xl font-bold text-gray-800 mb-2">{generatedSentence || "選択してください"}</p>
-            {generatedSentence && <p className="text-xl text-blue-600 font-medium">{generateSentence().japanese}</p>}
-          </div>
+          {isQuizActive ? (
+            <div className="bg-blue-50 p-6 rounded-lg min-h-24 mb-6 text-center border-2 border-dashed border-blue-300">
+                <p className="text-lg text-gray-700 mb-2">【クイズ】下の文に合うように、英文を作ってみよう！</p>
+                <p className="text-2xl font-bold text-blue-800 mb-4">
+                    {quizQuestions[currentQuestionIndex].japanese}
+                </p>
+                <div className="min-h-[3rem] flex items-center justify-center">
+                    {quizFeedback && (
+                        <p className={`text-2xl font-bold ${quizFeedback.includes("正解") ? "text-green-500" : "text-red-500"}`}>{quizFeedback}</p>
+                    )}
+                </div>
+            </div>
+          ) : (
+            <div className="bg-gray-50 p-6 rounded-lg min-h-24 mb-6 text-center flex flex-col items-center justify-center border-2 border-dashed border-gray-300">
+                <p className="text-2xl font-bold text-gray-800 mb-2">{generatedSentence || "選択してください"}</p>
+                {generatedSentence && <p className="text-xl text-blue-600 font-medium">{generateSentence().japanese}</p>}
+            </div>
+          )}
 
           {/* ボタンエリア */}
           <div className="flex justify-center gap-4">
-            <button
-              onClick={handleReset}
-              className="bg-gray-500 hover:bg-gray-600 text-white px-8 py-3 rounded-lg transition-colors font-medium shadow-md hover:shadow-lg"
-            >
-              リセット
-            </button>
-
-            {isSpeaking ? (
-              <button
-                onClick={stopSpeech}
-                className="bg-red-500 hover:bg-red-600 text-white flex items-center gap-2 px-8 py-3 rounded-lg transition-colors font-medium shadow-md hover:shadow-lg"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-                停止
-              </button>
+            {isQuizActive ? (
+                <>
+                    <button onClick={quitQuiz} className="bg-gray-500 hover:bg-gray-600 text-white px-8 py-3 rounded-lg transition-colors font-medium shadow-md hover:shadow-lg">
+                        クイズをやめる
+                    </button>
+                    {!quizFeedback ? (
+                        <button onClick={handleCheckAnswer} className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg transition-colors font-medium shadow-md hover:shadow-lg">
+                            答え合わせ
+                        </button>
+                    ) : (
+                        <button onClick={handleNextQuestion} className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-lg transition-colors font-medium shadow-md hover:shadow-lg">
+                            {currentQuestionIndex === quizQuestions.length - 1 ? "クイズを終了" : "次の問題へ"}
+                        </button>
+                    )}
+                </>
             ) : (
-              <button
-                onClick={speakSentence}
-                disabled={!generatedSentence}
-                className={`${generatedSentence ? "bg-green-500 hover:bg-green-600" : "bg-gray-400 cursor-not-allowed"} text-white flex items-center gap-2 px-8 py-3 rounded-lg transition-colors font-medium shadow-md hover:shadow-lg disabled:hover:shadow-md`}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
-                  />
-                </svg>
-                読み上げ
-              </button>
+                <>
+                    <button
+                      onClick={handleReset}
+                      className="bg-gray-500 hover:bg-gray-600 text-white px-8 py-3 rounded-lg transition-colors font-medium shadow-md hover:shadow-lg"
+                    >
+                      リセット
+                    </button>
+                    {isSpeaking ? (
+                      <button
+                        onClick={stopSpeech}
+                        className="bg-red-500 hover:bg-red-600 text-white flex items-center gap-2 px-8 py-3 rounded-lg transition-colors font-medium shadow-md hover:shadow-lg"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                        停止
+                      </button>
+                    ) : (
+                      <button
+                        onClick={speakSentence}
+                        disabled={!generatedSentence}
+                        className={`${generatedSentence ? "bg-green-500 hover:bg-green-600" : "bg-gray-400 cursor-not-allowed"} text-white flex items-center gap-2 px-8 py-3 rounded-lg transition-colors font-medium shadow-md hover:shadow-lg disabled:hover:shadow-md`}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
+                        読み上げ
+                      </button>
+                    )}
+                </>
             )}
           </div>
+          {modalContent && <ExplanationModal contentKey={modalContent} onClose={() => setModalContent(null)} />}
         </div>
       );
     };
