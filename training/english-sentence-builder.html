@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>English Sentence Builder</title>
+  <!-- React and Babel CDNs for in-browser transpilation -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Tailwind CSS CDN for styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    // "use client"; // This is a Next.js directive. This file is a simple HTML setup for demonstration.
+
+    const { useState, useEffect } = React;
+
+    const EnglishSentenceBuilder = () => {
+      // State for tracking selected elements
+      const [sentenceType, setSentenceType] = useState(null);
+      const [subject, setSubject] = useState(null);
+      const [tense, setTense] = useState(null);
+      const [verb, setVerb] = useState("do");
+      const [generatedSentence, setGeneratedSentence] = useState("");
+      const [isSpeaking, setIsSpeaking] = useState(false);
+      const [object, setObject] = useState(null);
+      const [place, setPlace] = useState(null);
+      const [time, setTime] = useState(null);
+      const [questionWord, setQuestionWord] = useState(null);
+
+      // 疑問詞が選択されているかどうかを判定
+      const hasQuestionWord = questionWord !== null;
+
+      // Define grid elements
+      const sentenceTypes = [
+        { value: "affirmative", symbol: "○", label: "肯定文" },
+        { value: "negative", symbol: "×", label: "否定文" },
+        { value: "question", symbol: "?", label: "疑問文" },
+      ];
+
+      const subjects = [
+        { value: "first", symbol: "I", label: "一人称" },
+        { value: "second", symbol: "you", label: "二人称" },
+        { value: "third", symbol: "he", label: "三人称" },
+      ];
+
+      const tenses = [
+        { value: "present", symbol: "現在", label: "現在形" },
+        { value: "past", symbol: "過去", label: "過去形" },
+        { value: "future", symbol: "未来", label: "未来形" },
+      ];
+
+      const verbs = ["do", "be", "go", "have", "get", "give", "take", "buy"];
+
+      // 疑問詞の選択肢
+      const questionWords = [
+        { value: "what", label: "what", japanese: "何を/何が", type: "object" },
+        { value: "who", label: "who", japanese: "誰が/誰を", type: "object" },
+        { value: "where", label: "where", japanese: "どこで/どこに", type: "place" },
+        { value: "when", label: "when", japanese: "いつ", type: "time" },
+        { value: "why", label: "why", japanese: "なぜ", type: "reason" },
+        { value: "how", label: "how", japanese: "どのように", type: "manner" },
+      ];
+
+      // 物・人の選択肢（動詞に応じて変わる）
+      const getObjectOptions = (verbBase) => {
+        const commonObjects = [
+          { value: "book", label: "a book", japanese: "本" },
+          { value: "food", label: "food", japanese: "食べ物" },
+          { value: "friend", label: "a friend", japanese: "友達" },
+        ];
+
+        switch (verbBase) {
+          case "have":
+            return [
+              { value: "book", label: "a book", japanese: "本" },
+              { value: "car", label: "a car", japanese: "車" },
+              { value: "dog", label: "a dog", japanese: "犬" },
+            ];
+          case "go":
+            return [
+              { value: "nothing", label: "", japanese: "なし" },
+              { value: "nothing2", label: "", japanese: "なし" },
+              { value: "nothing3", label: "", japanese: "なし" },
+            ];
+          case "eat":
+            return [
+              { value: "breakfast", label: "breakfast", japanese: "朝食" },
+              { value: "lunch", label: "lunch", japanese: "昼食" },
+              { value: "dinner", label: "dinner", japanese: "夕食" },
+            ];
+          case "buy":
+            return [
+              { value: "book", label: "a book", japanese: "本" },
+              { value: "food", label: "food", japanese: "食べ物" },
+              { value: "clothes", label: "clothes", japanese: "服" },
+            ];
+          default:
+            return commonObjects;
+        }
+      };
+
+      // 場所の選択肢（動詞に応じて変わる）
+      const getPlaceOptions = (verbBase) => {
+        const commonPlaces = [
+          { value: "home", label: "at home", japanese: "家で" },
+          { value: "school", label: "at school", japanese: "学校で" },
+          { value: "park", label: "in the park", japanese: "公園で" },
+        ];
+
+        switch (verbBase) {
+          case "go":
+            return [
+              { value: "home", label: "home", japanese: "家に" },
+              { value: "school", label: "to school", japanese: "学校に" },
+              { value: "work", label: "to work", japanese: "仕事に" },
+            ];
+          default:
+            return commonPlaces;
+        }
+      };
+
+      const times = [
+        { value: "morning", label: "in the morning", japanese: "朝に" },
+        { value: "afternoon", label: "in the afternoon", japanese: "午後に" },
+        { value: "evening", label: "in the evening", japanese: "夕方に" },
+      ];
+
+      // Cleanup speech synthesis on unmount
+      useEffect(() => {
+        return () => {
+          if (typeof window !== "undefined" && window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+          }
+        };
+      }, []);
+
+      // 疑問詞が選択されたときの処理
+      const handleQuestionWordSelect = (qw) => {
+        setQuestionWord(qw);
+        setSentenceType({ value: "question", symbol: "?", label: "疑問文" }); // 自動的に疑問文に設定
+
+        // 疑問詞のタイプに応じて他の選択をクリア
+        if (qw.type === "object") {
+          setObject(null);
+        } else if (qw.type === "place") {
+          setPlace(null);
+        } else if (qw.type === "time") {
+          setTime(null);
+        }
+      };
+
+      // Verb conjugation helpers
+      const getVerbForm = (verbBase, tenseValue, subjectValue) => {
+        const isThirdPerson = subjectValue === "third" && tenseValue === "present";
+
+        switch (verbBase) {
+          case "be":
+            if (tenseValue === "past") {
+              return subjectValue === "first" || subjectValue === "third" ? "was" : "were";
+            } else if (tenseValue === "present") {
+              if (subjectValue === "first") return "am";
+              else if (subjectValue === "third") return "is";
+              else return "are";
+            } else {
+              return "will be";
+            }
+          case "do":
+            return tenseValue === "past" ? "did" : isThirdPerson ? "does" : "do";
+          case "go":
+            return tenseValue === "past" ? "went" : isThirdPerson ? "goes" : "go";
+          case "have":
+            return tenseValue === "past" ? "had" : isThirdPerson ? "has" : "have";
+          case "get":
+            return tenseValue === "past" ? "got" : isThirdPerson ? "gets" : "get";
+          case "give":
+            return tenseValue === "past" ? "gave" : isThirdPerson ? "gives" : "give";
+          case "take":
+            return tenseValue === "past" ? "took" : isThirdPerson ? "takes" : "take";
+          case "buy":
+            return tenseValue === "past" ? "bought" : isThirdPerson ? "buys" : "buy";
+          default:
+            return verbBase;
+        }
+      };
+
+      // Auxiliary verb helpers
+      const getAuxiliary = (verbBase, tenseValue, subjectValue, sentenceTypeValue) => {
+        if (verbBase === "be") {
+          if (sentenceTypeValue === "question") {
+            return "";
+          } else if (sentenceTypeValue === "negative") {
+            if (tenseValue === "present") {
+              if (subjectValue === "first") return "am not";
+              else if (subjectValue === "third") return "is not";
+              else return "are not";
+            } else if (tenseValue === "past") {
+              if (subjectValue === "first" || subjectValue === "third") return "was not";
+              else return "were not";
+            } else {
+              return "will not be";
+            }
+          }
+        } else {
+          if (sentenceTypeValue === "question") {
+            if (tenseValue === "present") {
+              return subjectValue === "third" ? "does" : "do";
+            } else if (tenseValue === "past") {
+              return "did";
+            } else {
+              return "will";
+            }
+          } else if (sentenceTypeValue === "negative") {
+            if (tenseValue === "present") {
+              return subjectValue === "third" ? "doesn't" : "don't";
+            } else if (tenseValue === "past") {
+              return "didn't";
+            } else {
+              return "won't";
+            }
+          } else if (tenseValue === "future") {
+            return "will";
+          }
+        }
+        return "";
+      };
+
+      // Generate sentence based on selections
+      const generateSentence = () => {
+        if (!subject || !tense) return { english: "", japanese: "" };
+
+        let pronoun = "";
+        let japanesePronoun = "";
+        switch (subject.value) {
+          case "first":
+            pronoun = "I";
+            japanesePronoun = "私";
+            break;
+          case "second":
+            pronoun = "you";
+            japanesePronoun = "あなた";
+            break;
+          case "third":
+            pronoun = "he";
+            japanesePronoun = "彼";
+            break;
+          default:
+            pronoun = "";
+            japanesePronoun = "";
+        }
+
+        const verbBase = verb;
+        const tenseValue = tense.value;
+        const subjectValue = subject.value;
+
+        let sentence = "";
+        let japaneseSentence = "";
+
+        // 疑問詞が選択されている場合の処理
+        if (hasQuestionWord) {
+          const qw = questionWord;
+
+          if (verbBase === "be") {
+            const beForm = getVerbForm(verbBase, tenseValue, subjectValue);
+
+            if (qw.value === "who") {
+              sentence = `${qw.label.charAt(0).toUpperCase() + qw.label.slice(1)} ${beForm} ${pronoun}?`;
+              japaneseSentence = `${japanesePronoun}は${qw.japanese}ですか？`;
+            } else if (qw.value === "what") {
+              sentence = `${qw.label.charAt(0).toUpperCase() + qw.label.slice(1)} ${beForm} ${pronoun}?`;
+              japaneseSentence = `${japanesePronoun}は${qw.japanese}ですか？`;
+            } else if (qw.value === "where") {
+              sentence = `${qw.label.charAt(0).toUpperCase() + qw.label.slice(1)} ${beForm} ${pronoun}?`;
+              japaneseSentence = `${japanesePronoun}は${qw.japanese}いますか？`;
+            } else {
+              const objectPart = object && object.label ? ` ${object.label}` : "";
+              const placePart = place ? ` ${place.label}` : "";
+              const timePart = time ? ` ${time.label}` : "";
+              sentence = `${qw.label.charAt(0).toUpperCase() + qw.label.slice(1)} ${beForm} ${pronoun}${objectPart}${placePart}${timePart}?`;
+              japaneseSentence = `${japanesePronoun}は${qw.japanese}いますか？`;
+            }
+          } else {
+            const aux = getAuxiliary(verbBase, tenseValue, subjectValue, "question");
+            const baseVerb = tenseValue === "future" ? verbBase : verbBase;
+
+            const objectPart = object && object.label && qw.type !== "object" ? ` ${object.label}` : "";
+            const placePart = place && place.label && qw.type !== "place" ? ` ${place.label}` : "";
+            const timePart = time && time.label && qw.type !== "time" ? ` ${time.label}` : "";
+
+            if (tenseValue === "future") {
+              sentence = `${qw.label.charAt(0).toUpperCase() + qw.label.slice(1)} ${aux} ${pronoun} ${baseVerb}${objectPart}${placePart}${timePart}?`;
+            } else {
+              sentence = `${qw.label.charAt(0).toUpperCase() + qw.label.slice(1)} ${aux} ${pronoun} ${baseVerb}${objectPart}${placePart}${timePart}?`;
+            }
+
+            // 日本語の疑問文を生成
+            const getJapaneseQuestionVerb = (verbBase, tenseValue) => {
+              const verbMap = {
+                do: { present: "します", past: "しました", future: "します" },
+                be: { present: "です", past: "でした", future: "です" },
+                go: { present: "行きます", past: "行きました", future: "行きます" },
+                have: { present: "持っています", past: "持っていました", future: "持ちます" },
+                get: { present: "得ます", past: "得ました", future: "得ます" },
+                give: { present: "与えます", past: "与えました", future: "与えます" },
+                take: { present: "取ります", past: "取りました", future: "取ります" },
+                buy: { present: "買います", past: "買いました", future: "買います" },
+              };
+
+              const verbInfo = verbMap[verbBase] || { present: verbBase, past: verbBase, future: verbBase };
+              return verbInfo[tenseValue] || verbInfo.present;
+            };
+
+            // 疑問詞に応じた日本語生成
+            const japaneseObjectPart = object && object.japanese !== "なし" ? object.japanese + "を" : "";
+            const japanesePlacePart = place ? place.japanese : "";
+            const japaneseTimePart = time ? time.japanese : "";
+
+            if (qw.value === "what") {
+              japaneseSentence = `${japanesePronoun}は${japaneseTimePart ? japaneseTimePart : ""}${japanesePlacePart ? japanesePlacePart : ""}何を${getJapaneseQuestionVerb(verbBase, tenseValue)}か？`;
+            } else if (qw.value === "who") {
+              japaneseSentence = `${japanesePronoun}は${japaneseTimePart ? japaneseTimePart : ""}${japanesePlacePart ? japanesePlacePart : ""}誰に${getJapaneseQuestionVerb(verbBase, tenseValue)}か？`;
+            } else if (qw.value === "where") {
+              japaneseSentence = `${japanesePronoun}は${japaneseTimePart ? japaneseTimePart : ""}${japaneseObjectPart ? japaneseObjectPart : ""}どこで${getJapaneseQuestionVerb(verbBase, tenseValue)}か？`;
+            } else if (qw.value === "when") {
+              japaneseSentence = `${japanesePronoun}は${japanesePlacePart ? japanesePlacePart : ""}${japaneseObjectPart ? japaneseObjectPart : ""}いつ${getJapaneseQuestionVerb(verbBase, tenseValue)}か？`;
+            } else if (qw.value === "why") {
+              japaneseSentence = `${japanesePronoun}は${japaneseTimePart ? japaneseTimePart : ""}${japanesePlacePart ? japanesePlacePart : ""}${japaneseObjectPart ? japaneseObjectPart : ""}なぜ${getJapaneseQuestionVerb(verbBase, tenseValue)}か？`;
+            } else if (qw.value === "how") {
+              japaneseSentence = `${japanesePronoun}は${japaneseTimePart ? japaneseTimePart : ""}${japanesePlacePart ? japanesePlacePart : ""}${japaneseObjectPart ? japaneseObjectPart : ""}どのように${getJapaneseQuestionVerb(verbBase, tenseValue)}か？`;
+            }
+          }
+        } else {
+          // 通常の文章生成（疑問詞なし）
+          if (!sentenceType) return { english: "", japanese: "" };
+
+          const sentenceTypeValue = sentenceType.value;
+          const objectPart = object && object.label ? ` ${object.label}` : "";
+          const placePart = place ? ` ${place.label}` : "";
+          const timePart = time ? ` ${time.label}` : "";
+
+          // 通常の文章生成ロジック（既存のコード）
+          if (verbBase === "be") {
+            if (sentenceTypeValue === "affirmative") {
+              sentence = `${pronoun.charAt(0).toUpperCase() + pronoun.slice(1)} ${getVerbForm(verbBase, tenseValue, subjectValue)}${objectPart}${placePart}${timePart}.`;
+            } else if (sentenceTypeValue === "negative") {
+              const negForm = getAuxiliary(verbBase, tenseValue, subjectValue, sentenceTypeValue);
+              sentence = `${pronoun.charAt(0).toUpperCase() + pronoun.slice(1)} ${negForm}${objectPart}${placePart}${timePart}.`;
+            } else if (sentenceTypeValue === "question") {
+              const beForm = getVerbForm(verbBase, tenseValue, subjectValue);
+              sentence = `${beForm.charAt(0).toUpperCase() + beForm.slice(1)} ${pronoun}${objectPart}${placePart}${timePart}?`;
+            }
+          } else {
+            const aux = getAuxiliary(verbBase, tenseValue, subjectValue, sentenceTypeValue);
+
+            if (sentenceTypeValue === "affirmative") {
+              if (tenseValue === "future") {
+                sentence = `${pronoun.charAt(0).toUpperCase() + pronoun.slice(1)} ${aux} ${verbBase}${objectPart}${placePart}${timePart}.`;
+              } else {
+                sentence = `${pronoun.charAt(0).toUpperCase() + pronoun.slice(1)} ${getVerbForm(verbBase, tenseValue, subjectValue)}${objectPart}${placePart}${timePart}.`;
+              }
+            } else if (sentenceTypeValue === "negative") {
+              sentence = `${pronoun.charAt(0).toUpperCase() + pronoun.slice(1)} ${aux} ${verbBase}${objectPart}${placePart}${timePart}.`;
+            } else if (sentenceTypeValue === "question") {
+              sentence = `${aux.charAt(0).toUpperCase() + aux.slice(1)} ${pronoun} ${verbBase}${objectPart}${placePart}${timePart}?`;
+            }
+          }
+
+          // 日本語文章の生成（簡略化）
+          // 日本語文章の生成を詳細に実装
+          const getJapaneseVerb = (verbBase, tenseValue, sentenceTypeValue) => {
+            const verbMap = {
+              do: {
+                affirmative: { present: "します", past: "しました", future: "します" },
+                negative: { present: "しません", past: "しませんでした", future: "しません" },
+                question: { present: "しますか", past: "しましたか", future: "しますか" },
+              },
+              be: {
+                affirmative: { present: "です", past: "でした", future: "です" },
+                negative: { present: "ではありません", past: "ではありませんでした", future: "ではありません" },
+                question: { present: "ですか", past: "でしたか", future: "ですか" },
+              },
+              go: {
+                affirmative: { present: "行きます", past: "行きました", future: "行きます" },
+                negative: { present: "行きません", past: "行きませんでした", future: "行きません" },
+                question: { present: "行きますか", past: "行きましたか", future: "行きますか" },
+              },
+              have: {
+                affirmative: { present: "持っています", past: "持っていました", future: "持ちます" },
+                negative: { present: "持っていません", past: "持っていませんでした", future: "持ちません" },
+                question: { present: "持っていますか", past: "持っていましたか", future: "持ちますか" },
+              },
+              get: {
+                affirmative: { present: "得ます", past: "得ました", future: "得ます" },
+                negative: { present: "得ません", past: "得ませんでした", future: "得ません" },
+                question: { present: "得ますか", past: "得ましたか", future: "得ますか" },
+              },
+              give: {
+                affirmative: { present: "与えます", past: "与えました", future: "与えます" },
+                negative: { present: "与えません", past: "与えませんでした", future: "与えます" },
+                question: { present: "与えますか", past: "与えましたか", future: "与えますか" },
+              },
+              take: {
+                affirmative: { present: "取ります", past: "取りました", future: "取ります" },
+                negative: { present: "取りません", past: "取りませんでした", future: "取りますか" },
+                question: { present: "取りますか", past: "取りましたか", future: "取りますか" },
+              },
+              buy: {
+                affirmative: { present: "買います", past: "買いました", future: "買います" },
+                negative: { present: "買いません", past: "買いませんでした", future: "買いません" },
+                question: { present: "買いますか", past: "買いましたか", future: "買いますか" },
+              },
+            };
+
+            const verbInfo = verbMap[verbBase] || {
+              affirmative: { present: verbBase, past: verbBase, future: verbBase },
+              negative: { present: verbBase, past: verbBase, future: verbBase },
+              question: { present: verbBase, past: verbBase, future: verbBase },
+            };
+
+            return verbInfo[sentenceTypeValue]?.[tenseValue] || verbBase;
+          };
+
+          // 日本語の部分を構成
+          const japaneseObjectPart = object && object.japanese !== "なし" ? object.japanese + "を" : "";
+          const japanesePlacePart = place ? place.japanese : "";
+          const japaneseTimePart = time ? time.japanese : "";
+
+          const japaneseVerb = getJapaneseVerb(verbBase, tenseValue, sentenceTypeValue);
+
+          // 日本語文章を組み立て
+          const japaneseParts = [japanesePronoun + "は"];
+
+          if (japaneseTimePart) japaneseParts.push(japaneseTimePart);
+          if (japanesePlacePart) japaneseParts.push(japanesePlacePart);
+          if (japaneseObjectPart && verbBase !== "go") japaneseParts.push(japaneseObjectPart);
+
+          japaneseParts.push(japaneseVerb);
+
+          japaneseSentence = japaneseParts.join("") + (sentenceTypeValue === "question" ? "？" : "。");
+        }
+
+        return { english: sentence, japanese: japaneseSentence };
+      };
+
+      // 選択肢が変わるたびに sentence を計算し state に保存
+      useEffect(() => {
+        const result = generateSentence();
+        setGeneratedSentence(result.english);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [sentenceType, subject, tense, verb, object, place, time, questionWord]);
+
+      // Speech synthesis function with safer implementation
+      const speakSentence = () => {
+        if (!generatedSentence || typeof window === "undefined" || !window.speechSynthesis) return;
+
+        try {
+          // Cancel any ongoing speech
+          window.speechSynthesis.cancel();
+
+          const utterance = new SpeechSynthesisUtterance(generatedSentence);
+          utterance.lang = "en-US";
+          utterance.rate = 0.9; // Slightly slower for learning purposes
+
+          // Handle speech events properly
+          utterance.onstart = () => setIsSpeaking(true);
+          utterance.onend = () => setIsSpeaking(false);
+          utterance.onerror = () => setIsSpeaking(false);
+
+          window.speechSynthesis.speak(utterance);
+        } catch (error) {
+          console.error("Speech synthesis error:", error);
+          setIsSpeaking(false);
+        }
+      };
+
+      // Stop speech
+      const stopSpeech = () => {
+        if (typeof window !== "undefined" && window.speechSynthesis) {
+          window.speechSynthesis.cancel();
+          setIsSpeaking(false);
+        }
+      };
+
+      // Reset all selections
+      const handleReset = () => {
+        setSentenceType(null);
+        setSubject(null);
+        setTense(null);
+        setVerb("do");
+        setObject(null);
+        setPlace(null);
+        setTime(null);
+        setQuestionWord(null);
+        setGeneratedSentence("");
+        stopSpeech();
+      };
+
+      // Cell styles for vertical layout
+      const getItemStyle = (item, selectedItem, isSelected) => {
+        const baseStyle =
+          "w-full py-3 px-2 text-center rounded-md cursor-pointer transition-all duration-200 hover:scale-105 font-medium border";
+
+        if (isSelected) {
+          return `${baseStyle} bg-blue-500 text-white border-blue-600 shadow-lg`;
+        }
+        return `${baseStyle} bg-blue-50 hover:bg-blue-100 border-blue-200 text-blue-800`;
+      };
+
+      return (
+        <div className="bg-white p-6 rounded-xl shadow-lg max-w-7xl mx-auto border border-gray-200">
+          <h2 className="text-2xl font-bold mb-8 text-center text-gray-800">英語文作成アプリ</h2>
+
+          {/* 横並びの選択エリア - 疑問詞の有無で列の順序を変更 */}
+          <div className={`grid gap-4 mb-8 ${hasQuestionWord ? "grid-cols-6" : "grid-cols-7"}`}>
+            {/* 疑問詞が選択されている場合、疑問詞列を最初に表示 */}
+            {hasQuestionWord && (
+              <div className="text-center">
+                <h3 className="text-sm font-bold text-gray-700 mb-3 bg-cyan-100 py-2 rounded-md">疑問詞</h3>
+                <div className="space-y-2">
+                  {questionWords.map((qw) => (
+                    <div
+                      key={qw.value}
+                      className={getItemStyle(qw, questionWord, questionWord?.value === qw.value)}
+                      onClick={() => handleQuestionWordSelect(qw)}
+                    >
+                      <div className="text-sm font-bold">{qw.label}</div>
+                      <div className="text-xs text-gray-600">{qw.japanese}</div>
+                    </div>
+                  ))}
+                  <button
+                    onClick={() => {
+                      setQuestionWord(null);
+                      setSentenceType(null);
+                    }}
+                    className="w-full py-2 px-2 text-xs bg-gray-200 hover:bg-gray-300 rounded-md transition-colors"
+                  >
+                    疑問詞解除
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* 疑問詞が選択されていない場合のみ文の種類を表示 */}
+            {!hasQuestionWord && (
+              <div className="text-center">
+                <h3 className="text-sm font-bold text-gray-700 mb-3 bg-yellow-100 py-2 rounded-md">文の種類</h3>
+                <div className="space-y-2">
+                  {sentenceTypes.map((type) => (
+                    <div
+                      key={type.value}
+                      className={getItemStyle(type, sentenceType, sentenceType?.value === type.value)}
+                      onClick={() => setSentenceType(type)}
+                    >
+                      <div className="text-lg font-bold">{type.symbol}</div>
+                      <div className="text-xs">{type.label}</div>
+                    </div>
+                  ))}
+                  <button
+                    onClick={() => handleQuestionWordSelect(questionWords[0])}
+                    className="w-full py-2 px-2 text-xs bg-cyan-200 hover:bg-cyan-300 rounded-md transition-colors"
+                  >
+                    疑問詞を使う
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* 主語 */}
+            <div className="text-center">
+              <h3 className="text-sm font-bold text-gray-700 mb-3 bg-green-100 py-2 rounded-md">主語</h3>
+              <div className="space-y-2">
+                {subjects.map((subj) => (
+                  <div
+                    key={subj.value}
+                    className={getItemStyle(subj, subject, subject?.value === subj.value)}
+                    onClick={() => setSubject(subj)}
+                  >
+                    <div className="text-lg font-bold">{subj.symbol}</div>
+                    <div className="text-xs">{subj.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 時制 */}
+            <div className="text-center">
+              <h3 className="text-sm font-bold text-gray-700 mb-3 bg-purple-100 py-2 rounded-md">時制</h3>
+              <div className="space-y-2">
+                {tenses.map((t) => (
+                  <div
+                    key={t.value}
+                    className={getItemStyle(t, tense, tense?.value === t.value)}
+                    onClick={() => setTense(t)}
+                  >
+                    <div className="text-lg font-bold">{t.symbol}</div>
+                    <div className="text-xs">{t.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 動詞 */}
+            <div className="text-center">
+              <h3 className="text-sm font-bold text-gray-700 mb-3 bg-red-100 py-2 rounded-md">動詞</h3>
+              <div className="space-y-1 max-h-64 overflow-y-auto">
+                {verbs.map((v) => (
+                  <div
+                    key={v}
+                    className={getItemStyle({ value: v }, { value: verb }, verb === v)}
+                    onClick={() => setVerb(v)}
+                  >
+                    <div className="text-sm font-bold">{v}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 物・人（疑問詞でobjectタイプが選択されていない場合のみ表示） */}
+            {(!hasQuestionWord || questionWord?.type !== "object") && (
+              <div className="text-center">
+                <h3 className="text-sm font-bold text-gray-700 mb-3 bg-orange-100 py-2 rounded-md">物・人</h3>
+                <div className="space-y-2">
+                  {getObjectOptions(verb).map((obj) => (
+                    <div
+                      key={obj.value}
+                      className={getItemStyle(obj, object, object?.value === obj.value)}
+                      onClick={() => setObject(obj)}
+                    >
+                      <div className="text-sm font-bold">{obj.japanese}</div>
+                      <div className="text-xs text-gray-600">{obj.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* 場所（疑問詞でplaceタイプが選択されていない場合のみ表示） */}
+            {(!hasQuestionWord || questionWord?.type !== "place") && (
+              <div className="text-center">
+                <h3 className="text-sm font-bold text-gray-700 mb-3 bg-pink-100 py-2 rounded-md">場所</h3>
+                <div className="space-y-2">
+                  {getPlaceOptions(verb).map((p) => (
+                    <div
+                      key={p.value}
+                      className={getItemStyle(p, place, place?.value === p.value)}
+                      onClick={() => setPlace(p)}
+                    >
+                      <div className="text-sm font-bold">{p.japanese}</div>
+                      <div className="text-xs text-gray-600">{p.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* 時間（疑問詞でtimeタイプが選択されていない場合のみ表示） */}
+            {(!hasQuestionWord || questionWord?.type !== "time") && (
+              <div className="text-center">
+                <h3 className="text-sm font-bold text-gray-700 mb-3 bg-indigo-100 py-2 rounded-md">時間</h3>
+                <div className="space-y-2">
+                  {times.map((t) => (
+                    <div
+                      key={t.value}
+                      className={getItemStyle(t, time, time?.value === t.value)}
+                      onClick={() => setTime(t)}
+                    >
+                      <div className="text-sm font-bold">{t.japanese}</div>
+                      <div className="text-xs text-gray-600">{t.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* 生成された文章表示エリア */}
+          <div className="bg-gray-50 p-6 rounded-lg min-h-24 mb-6 text-center flex flex-col items-center justify-center border-2 border-dashed border-gray-300">
+            <p className="text-2xl font-bold text-gray-800 mb-2">{generatedSentence || "選択してください"}</p>
+            {generatedSentence && <p className="text-xl text-blue-600 font-medium">{generateSentence().japanese}</p>}
+          </div>
+
+          {/* ボタンエリア */}
+          <div className="flex justify-center gap-4">
+            <button
+              onClick={handleReset}
+              className="bg-gray-500 hover:bg-gray-600 text-white px-8 py-3 rounded-lg transition-colors font-medium shadow-md hover:shadow-lg"
+            >
+              リセット
+            </button>
+
+            {isSpeaking ? (
+              <button
+                onClick={stopSpeech}
+                className="bg-red-500 hover:bg-red-600 text-white flex items-center gap-2 px-8 py-3 rounded-lg transition-colors font-medium shadow-md hover:shadow-lg"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                停止
+              </button>
+            ) : (
+              <button
+                onClick={speakSentence}
+                disabled={!generatedSentence}
+                className={`${generatedSentence ? "bg-green-500 hover:bg-green-600" : "bg-gray-400 cursor-not-allowed"} text-white flex items-center gap-2 px-8 py-3 rounded-lg transition-colors font-medium shadow-md hover:shadow-lg disabled:hover:shadow-md`}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
+                  />
+                </svg>
+                読み上げ
+              </button>
+            )}
+          </div>
+        </div>
+      );
+    };
+
+    const container = document.getElementById('root');
+    const root = ReactDOM.createRoot(container);
+    root.render(<EnglishSentenceBuilder />);
+  </script>
+</body>
+</html>
