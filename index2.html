@@ -75,9 +75,72 @@
         sections: [{ id: "H5", title: "やる気のヒミツ", description: "行動のあとに生まれるやる気", location: "特別展示", actionType: "modal", modalUrl: "./heiwa/yaruki.html" }]
       },
       生活: {
-        title: "生活", color: "bg-yellow-100 border-yellow-300", headerColor: "bg-yellow-200",
-        sections: [{ id: "L1", title: "クレジットカードとの付き合い方", description: "お金の基本を学ぶ", location: "お金", actionType: "modal", modalUrl: "./seikatsu/credit.html" }]
+        title: "生活",
+        color: "bg-yellow-100 border-yellow-300",
+        headerColor: "bg-yellow-200",
+        sections: [
+          {
+            id: "L-money-0",
+            title: "クレジットカードとの付き合い方",
+            description: "リボ払いの危険性、金利、クーリングオフなど",
+            location: "お金",
+            learningContent: {
+              title: "クレジットカードとの付き合い方",
+              html: `
+          <h3>🦙 アルパカ先生のクレカ講座</h3>
+          <div><strong>⚠️ リボ払いは絶対NG！</strong></div>
+          <ul>
+            <li>一括・2回払いを基本に</li>
+            <li>利用額は収入の1/3以内</li>
+            <li>「借金」ではなく「後払い」だと理解する</li>
+          </ul>
+        `
+            }
+          },
+          {
+            id: "L-money-1",
+            title: "詐欺から身を守ろう！",
+            description: "悪徳商法・詐欺の典型パターンと対処法",
+            location: "お金",
+            learningContent: {
+              title: "悪徳商法の見分け方",
+              html: `
+          <ul>
+            <li>「必ず儲かる」は嘘</li>
+            <li>友人経由の勧誘に注意</li>
+            <li>高額な初期費用を要求される</li>
+          </ul>
+          <p>困ったら <strong>消費生活センター（188）</strong> へ。</p>
+        `
+            }
+          },
+          {
+            id: "L-money-3",
+            title: "家庭学習が成績になる！新しいルール♪",
+            description: "家庭・フリースクールでの学びが出席扱いになる仕組み",
+            location: "特別展示",
+            actionType: "modal",
+            modalUrl: "https://alpaca-school.okinawa/1722582416_d3e0b7a5d8a3c6b1e4b5a0d8c7b6a5d4.html"
+          },
+          {
+            id: "L-money-4",
+            title: "誰一人取り残されない、新しい学びのカタチ",
+            description: "COCOLOプランとは何かを学ぶ",
+            location: "特別展示",
+            actionType: "modal",
+            modalUrl: "https://alpaca-school.okinawa/250802cocolo.html"
+          },
+          {
+            id: "L-money-5",
+            title: "楽しく英語学習ができる♪",
+            description: "英語文法トレーニングで基礎を体験",
+            location: "特別展示",
+            actionType: "modal",
+            modalUrl: "https://alpaca-school.okinawa/training/english-training.html"
+          }
+        ]
       },
+
       仕事: {
         title: "仕事", color: "bg-cyan-100 border-cyan-300", headerColor: "bg-cyan-200",
         sections: [{ id: "W1", title: "経営理論の変遷", description: "仕事と社会の関係を考える", location: "特別展示", actionType: "modal", modalUrl: "./Research/keiriron-hensei.html" }]
