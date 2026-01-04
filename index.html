@@ -68,6 +68,20 @@
             location: "特別展示",
             actionType: "modal",
             modalUrl: "./rekishi/sweet_potato_history.html"
+          },
+          {
+            id: "H-oldhouse",
+            title: "沖縄の古い家探検❗️",
+            description: "沖縄の伝統的な家屋の工夫を見てみよう",
+            location: "郷土",
+            videoId: "QpI0t9jXbwU"
+          },
+          {
+            id: "H-imo",
+            title: "お芋のチカラ",
+            description: "飢饉から人々を救ったお芋の歴史と効果",
+            location: "歴史",
+            isComingSoon: true
           }
         ]
       },
@@ -81,6 +95,34 @@
             location: "4C",
             actionType: "modal",
             modalUrl: "./bunka/yachimun.html"
+          },
+          {
+            id: "C-shisa",
+            title: "シーサーを作ろう❗️",
+            description: "守り神シーサーを粘土で作ってみよう",
+            location: "工房",
+            videoId: "Nb7Nfb0embU"
+          },
+          {
+            id: "C-sanshin",
+            title: "楽器を演奏しよう❗️",
+            description: "沖縄の伝統楽器「三線」の音色",
+            location: "舞台",
+            videoId: "Zm8X3FACbF0"
+          },
+          {
+            id: "C-obon",
+            title: "1分でわかる❗️沖縄のお盆❗️",
+            description: "ご先祖さまをお迎えする大切な行事",
+            location: "行事",
+            videoId: "PZ4YPyx3B9I"
+          },
+          {
+            id: "C-mimigusuri",
+            title: "歌や耳ぐすり",
+            description: "工工四と三線でみんなを楽しませよう",
+            location: "舞台",
+            isComingSoon: true
           }
         ]
       },
@@ -93,6 +135,27 @@
             description: "世界に2つだけの塩水が湧き出る川",
             location: "本部町",
             videoId: "UbKtWt6jrDw"
+          },
+          {
+            id: "N-goya",
+            title: "夏野菜料理〜ゴーヤー編〜",
+            description: "旬の野菜をおいしく食べる知恵",
+            location: "キッチン",
+            videoId: "y7E5pd6Z1_4"
+          },
+          {
+            id: "N-haruser",
+            title: "畑（ハルサー）",
+            description: "ハルサーしながら土と触れ合おう",
+            location: "畑",
+            isComingSoon: true
+          },
+          {
+            id: "N-chaganju",
+            title: "茶願寿（Chaganju）",
+            description: "ミッション達成をしながら沖縄中を綺麗にしよう！",
+            location: "ボランティア",
+            isComingSoon: true
           }
         ]
       },
@@ -172,6 +235,41 @@
             location: "特別展示",
             actionType: "modal",
             modalUrl: "https://alpaca-school.okinawa/training/english-training.html"
+          },
+          {
+            id: "L-bug",
+            title: "虫除けスプレーを作ろう",
+            description: "月桃の葉っぱで自然な虫除け",
+            location: "生活の知恵",
+            isComingSoon: true
+          },
+          {
+            id: "L-snack",
+            title: "おやつづくり",
+            description: "ちんびんとポーポーを作ろう",
+            location: "キッチン",
+            isComingSoon: true
+          },
+          {
+            id: "L-cooking",
+            title: "沖縄料理を作ってみよう",
+            description: "苦味を楽しむゴーヤーチャンプルー",
+            location: "キッチン",
+            isComingSoon: true
+          },
+          {
+            id: "L-curry",
+            title: "カレーの学校",
+            description: "スパイスから作る沖縄アーユルヴェーダ",
+            location: "キッチン",
+            isComingSoon: true
+          },
+          {
+            id: "L-miso",
+            title: "味噌作り",
+            description: "腸活に！大豆やおからで手作り味噌",
+            location: "キッチン",
+            isComingSoon: true
           }
         ]
       },
@@ -185,6 +283,25 @@
             location: "特別展示",
             actionType: "modal",
             modalUrl: "./Research/keiriron-hensei.html"
+          },
+          {
+            id: "W-goen",
+            title: "仕事は「ご縁」",
+            description: "仕事と人との関係性について学ぶ",
+            location: "キャリア",
+            learningContent: {
+              title: "仕事は誰かとの「ご縁」",
+              html: `
+                <div class="space-y-4 text-center">
+                  <p>誰かに仕事をお願いする<br>誰かから仕事をいただく</p>
+                  <p class="font-bold text-cyan-700">仕事を通して人とつながり<br>これまでのご縁に感謝する</p>
+                  <p>たくさんのご縁から仕事があり、<br>そのご縁が<br><strong>「未来の仕事」</strong>と<strong>「成長」</strong>と<strong>「人」</strong>との<br>新たなご縁となります。</p>
+                  <div class="mt-6 pt-6 border-t border-cyan-100">
+                    <p class="text-sm text-gray-600">アルパカツアーをとおして<br>見えなかった素敵な仕事を感じて<br>ご縁あった人から "自分にもできそうなこと" に気づく</p>
+                  </div>
+                </div>
+              `
+            }
           }
         ]
       }
@@ -263,6 +380,12 @@
                     学ぶ
                   </button>
                 )}
+                {s.isComingSoon && (
+                  <button disabled
+                    className="bg-gray-300 text-gray-500 px-3 py-2 rounded font-bold ml-2 cursor-not-allowed">
+                    Coming Soon
+                  </button>
+                )}
               </div>
             ))}
           </main>
@@ -329,10 +452,13 @@
                     ✕ 閉じる (ESC)
                   </button>
                   <iframe
-                    src={videoUrl}
+                    key={videoUrl}
+                    src={`${videoUrl}?rel=0&modestbranding=1&playsinline=1`}
+                    title="YouTube video player"
                     className="w-full aspect-video rounded-lg"
                     onClick={(e) => e.stopPropagation()}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerPolicy="strict-origin-when-cross-origin"
                     allowFullScreen
                   />
                 </div>
