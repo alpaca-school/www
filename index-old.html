@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アルパカすく〜るオンライン🦙</title>
+    <link rel="icon" href="https://lh6.googleusercontent.com/HUVxVFqoa_HrqwbO5sJ2JLzW8zY1A2HWxKXhjxrLsOG__vg47Yqrj85Vc1kSb9FxaFmxYM2tp2IBQ5r8mq0dh36txvYtg3hFfBowEr6rJiBaoG5bSmRmqYHmOA=w16383">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap');
+        body {
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+        }
+        .aspect-w-16 { position: relative; padding-bottom: 56.25%; }
+        .aspect-h-9 { height: 0; }
+        .aspect-w-16 > iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+        .text-fluid-4xl { font-size: clamp(2rem, 6vw, 3rem); }
+        .text-fluid-3xl { font-size: clamp(1.5rem, 5vw, 2.25rem); }
+        .text-fluid-2xl { font-size: clamp(1.25rem, 4vw, 1.875rem); }
+        .text-fluid-xl { font-size: clamp(1.1rem, 3vw, 1.5rem); }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"><p style="padding: 1em;">コンポーネントを読み込んでいます...</p></div>
+    <div id="error-container" style="color: red; background: #ffeeee; padding: 1em; display: none;"></div>
+
+    <script type="text/babel">
+        const floorData = {
+            "歴史": {
+                title: "歴史",
+                floorDescription: " ",
+                color: "bg-pink-100 border-pink-300",
+                headerColor: "bg-pink-200",
+                sections: [ { id: "K4", title: "🍠 サツマイモ物語 🍠", description: "原産地から日本へ - 食べ物の世界旅行", location: "特別展示", actionType: 'modal', modalUrl: './rekishi/sweet_potato_history.html' } ]
+            },
+            "文化": {
+                title: "文化",
+                floorDescription: " ",
+                color: "bg-green-100 border-green-300",
+                headerColor: "bg-green-200",
+                sections: [ { id: "S1", title: "読谷やちむんの里「オンライン陶芸鑑賞会：心安らぐ器の美」", description: "読谷やちむんの歴史や特徴を解説するオンライン講座。職人の手仕事の映像や、美しい器のギャラリーを鑑賞。自宅でゆっくりと器の美しさに触れ、心安らぐ時間を過ごします。", location: "4C", learningContent: { title: "読谷やちむんの里「オンライン陶芸鑑賞会：心安らぐ器の美」", text: "読谷やちむんの歴史や特徴を解説するオンライン講座を提供します。読谷やちむんの職人の繊細な手仕事の映像や、完成した美しい器のオンラインギャラリーを鑑賞できます。人見知りな自然でも、自宅でゆっくりと器の美しさに触れ、その背景にある文化や歴史を学ぶことで、心安らぐ時間を過ごし、沖縄の伝統工芸の奥深さを感じることができます。" } } ]
+            },
+            "自然": {
+                title: "自然",
+                floorDescription: " ",
+                color: "bg-orange-100 border-orange-300",
+                headerColor: "bg-orange-200",
+                sections: [ { id: "G2", title: "世界に2つだけの奇跡の川「塩川」🌿", description: "沖縄・本部町にある塩川は、塩水が湧き出る世界でも珍しい川。国の天然記念物にも指定されています。「自然を楽しみながら守る」ヒントを見つけましょうฅˆ•ﻌ•ˆฅ♬*゜", location: "本部町", videoId: "UbKtWt6jrDw" } ]
+            },
+            "平和": {
+                title: "平和",
+                floorDescription: " ",
+                color: "bg-blue-100 border-blue-300",
+                headerColor: "bg-blue-200",
+                sections: [ { id: "H5", title: "やる気のヒミツ 🌟", description: "「やる気」は、\"やったあと\"に出てくる！自分だけのやる気スイッチを見つけて、行動するヒントを学ぼう。", location: "特別展示", actionType: 'modal', modalUrl: './heiwa/yaruki.html' }, { id: "H6", title: "🏘️ ムラ社会 vs 🌍 多民族社会を学ぼう", description: "家族や親戚のつながりが強い「ムラ社会」は、みんなで助け合い、身内には少し甘えも許される。いろんな人が集まる「多民族社会」は、血縁よりも「信頼」が一番大事。一人ひとりの行動が評価され、公平な関係が求められる。", location: "特別展示", actionType: 'modal', modalUrl: './heiwa/ansin_sinrai.html' }, ]
+            },
+            "生活": {
+                title: "生活",
+                floorDescription: "「生活」では、人生でこんなこと知ってたかった、という知識を学びます。",
+                color: "bg-yellow-100 border-yellow-300",
+                headerColor: "bg-yellow-200",
+                sections: [ { id: "L-money-0", title: "クレジットカードとの付き合い方", description: "リボ払いの危険性、金利、クーリングオフなど", location: "お金", learningContent: { title: "クレジットカードとの付き合い方", html: "<h3> アルパカ先生のクレカ講座</h3>\n <div class=\"warning\">\n <strong>⚠️ リボ払いは絶対NG！</strong><br>\n リボ払いは年利15-18%の高金利です。毎月一定額しか返済しないため、元本が減りにくく、長期間にわたって利息を支払うことになります。\n </div>\n <h4>クレジットカードの基本ルール</h4>\n <ul>\n <li>必ず一括払いまたは2回払い（手数料無料）を選ぶ</li>\n <li>利用限度額は収入の1/3以下に設定</li>\n <li>毎月の利用額を記録し、支払い能力内に収める</li>\n <li>年会費無料のカードを選ぶ（初心者の場合）</li>\n </ul>\n <div class=\"info\">\n <strong> アルパカのアドバイス</strong><br>\n クレジットカードは「便利な道具」ですが、「魔法のカード」ではありません。使った分は必ず支払いが来ることを忘れずに！\n </div>" } }, { id: "L-money-1", title: "詐欺から身を守ろう！", description: "いつ、誰が、どうやって行うのか。悪徳商法から身を守る方法", location: "お金", learningContent: { title: "悪徳商法の見分け方", html: "<ul><li>「簡単に稼げる」「必ず儲かる」という誘い文句。</li><li>友人からの紹介で始まることが多い。</li><li>高額な商品購入や登録料が必要</li></ul>⚠️ 騙されてしまったら。消費生活センター（188）に即座に相談。クーリングオフが可能な場合もあります。" } }, { id: "L-money-3", title: "家庭学習が成績になる！新しいルール♪", description: "学校をお休みしても、お家やフリースクールでのがんばりが、ちゃんと「通知表の成績」になるよ！", location: "特別展示", actionType: 'modal', modalUrl: 'https://alpaca-school.okinawa/1722582416_d3e0b7a5d8a3c6b1e4b5a0d8c7b6a5d4.html' }, { id: "L-money-4", title: "誰一人取り残されない、新しい学びのカタチ", description: "COCOLOプランってなに？誰一人取り残されない、新しい学びのカタチ", location: "特別展示", actionType: 'modal', modalUrl: 'https://alpaca-school.okinawa/250802cocolo.html' } , { id: "L-money-5", title: "楽しく英語学習ができる♪", description: "英語文法トレーニングで、英語を学んでみましょう！", location: "特別展示", actionType: 'modal', modalUrl: 'https://alpaca-school.okinawa/training/english-training.html' } ]
+            },
+            "仕事": {
+                title: "仕事",
+                floorDescription: " ",
+                color: "bg-cyan-100 border-cyan-300",
+                headerColor: "bg-cyan-200",
+                sections: [ { id: "特別展示", title: "経営理論の変遷と現代の課題", description: "仕事には、効率性だけでなく、人間的な側面と社会的な意味の両方が重要です。「職場を楽しむ」ヒントを見つけましょうฅˆ•ﻌ•ˆฅ♬*゜", location: "特別展示", actionType: 'modal', modalUrl: './Research/keiriron-hensei.html' } ]
+            }
+        };
+        const floors = ["歴史","文化","自然","平和", "生活", "仕事"];
+
+        window.onload = () => {
+            try {
+                const { useState, useEffect, createElement } = React;
+
+                const MuseumFloorGuide = () => {
+                    const [currentFloor, setCurrentFloor] = useState("歴史");
+                    const [videoUrl, setVideoUrl] = useState(null);
+                    const [selectedLearningContent, setSelectedLearningContent] = useState(null);
+                    const [modalContent, setModalContent] = useState(null);
+
+                    const currentFloorData = floorData[currentFloor];
+
+                    const nextFloor = () => { const currentIndex = floors.indexOf(currentFloor); if (currentIndex < floors.length - 1) { setCurrentFloor(floors[currentIndex + 1]); } };
+                    const prevFloor = () => { const currentIndex = floors.indexOf(currentFloor); if (currentIndex > 0) { setCurrentFloor(floors[currentIndex - 1]); } };
+
+                    useEffect(() => {
+                        lucide.createIcons();
+                    }, [currentFloor, videoUrl, selectedLearningContent, modalContent]);
+
+                    return (
+                        <div className="min-h-screen bg-gray-50">
+                            <div className={`${currentFloorData.headerColor} p-4 shadow-md sticky top-0 z-10`}>
+                                <div className="max-w-4xl mx-auto">
+                                    <h1 className="text-fluid-2xl font-extrabold text-gray-800 mb-2">アルパカすく〜るオンライン🦙 in OKinawa</h1>
+                                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                                        <h2 className="text-fluid-xl font-bold text-gray-700 mb-2 sm:mb-0">{currentFloorData.title}</h2>
+                                        <div className="overflow-x-auto no-scrollbar pb-2">
+                                            <div className="flex gap-2 whitespace-nowrap">
+                                                {floors.map(floor => (
+                                                    <button key={floor} onClick={() => setCurrentFloor(floor)} className={`px-4 py-2 rounded-lg font-bold transition-all duration-300 text-sm sm:text-base ${ currentFloor === floor ? 'bg-white text-gray-800 shadow-lg scale-105' : 'bg-white/50 text-gray-600 hover:bg-white/80' }`}>{floor}</button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {currentFloorData.floorDescription && (
+                                        <p className="text-gray-600 text-xs sm:text-sm mt-2 leading-relaxed">
+                                            {currentFloorData.floorDescription}
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="max-w-4xl mx-auto p-4">
+                                {/* ========= ▼▼▼ ここからリファクタリング ▼▼▼ ========= */}
+                                <div className="flex flex-row justify-between items-center my-6 gap-4">
+                                    {/* --- 前のテーマボタン --- */}
+                                    <button onClick={prevFloor}  disabled={currentFloor === floors[0]} className={`flex items-center justify-center rounded-lg font-bold transition-all p-3 sm:py-2 sm:px-4 ${currentFloor === floors[0] ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-gray-100 shadow-md hover:shadow-lg'}`}>
+                                        <i data-lucide="chevron-left" className="w-5 h-5"></i>
+                                        {/* 小さい画面ではhidden(非表示)、sm以上でinline(表示) */}
+                                        <span className="hidden sm:inline sm:ml-2">前のテーマ</span>
+                                    </button>
+
+                                    {/* --- 中央のテーマ表示 --- */}
+                                    <div className="text-center">
+                                        <div className="text-sm text-gray-600">現在のテーマ</div>
+                                        <div className="text-fluid-3xl font-extrabold text-gray-800 leading-tight">{currentFloor}</div>
+                                    </div>
+
+                                    {/* --- 次のテーマボタン --- */}
+                                    <button onClick={nextFloor} disabled={currentFloor === floors[floors.length - 1]} className={`flex items-center justify-center rounded-lg font-bold transition-all p-3 sm:py-2 sm:px-4 ${currentFloor === floors[floors.length - 1] ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-gray-100 shadow-md hover:shadow-lg'}`}>
+                                        {/* 小さい画面ではhidden(非表示)、sm以上でinline(表示) */}
+                                        <span className="hidden sm:inline sm:mr-2">次のテーマ</span>
+                                        <i data-lucide="chevron-right" className="w-5 h-5"></i>
+                                    </button>
+                                </div>
+                                {/* ========= ▲▲▲ ここまでリファクタリング ▲▲▲ ========= */}
+
+                                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                                    {currentFloorData.sections.map((section) => (
+                                        <div key={section.id} className={`${currentFloorData.color} rounded-xl p-4 sm:p-6 border-2 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col`}>
+                                            <div className="flex items-start justify-between mb-3">
+                                                <div className="flex items-center gap-2 flex-wrap">
+                                                    <div className="bg-white px-3 py-1 rounded-full text-xs sm:text-sm font-bold text-gray-700">{section.location}</div>
+                                                    {section.isNew && <div className="bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold animate-pulse">NEW</div>}
+                                                    {section.isForest && <div className="bg-green-600 text-white px-2 py-1 rounded-full text-xs font-bold">FOREST</div>}
+                                                </div>
+                                                <i data-lucide="map-pin" className="w-5 h-5 text-gray-600 flex-shrink-0"></i>
+                                            </div>
+                                            <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-3">{section.title}</h3>
+                                            <p className="text-sm text-gray-700 leading-relaxed mb-4 flex-grow min-h-[9rem]">{section.description}</p>
+                                            <div className="flex justify-between items-center mt-auto">
+                                                {section.videoId && <button onClick={() => setVideoUrl(`https://www.youtube.com/embed/${section.videoId}?autoplay=1`)} className="bg-red-500 text-white px-3 py-2 rounded-lg text-sm font-bold hover:bg-red-600 transition-colors flex items-center gap-1 shadow-md hover:shadow-lg"><i data-lucide="video" className="w-4 h-4"></i> 動画を見る</button>}
+                                                {section.actionType === 'modal' && <button onClick={() => setModalContent(section)} className="bg-purple-500 text-white px-3 py-2 rounded-lg text-sm font-bold hover:bg-purple-600 transition-colors flex items-center gap-1 shadow-md hover:shadow-lg"><i data-lucide="zap" className="w-4 h-4"></i> {section.location === '特別展示' ? '学ぶ' :'見る'}</button>}
+                                                {section.learningContent && !section.actionType && <button onClick={() => setSelectedLearningContent(section.learningContent)} className="bg-blue-500 text-white px-3 py-2 rounded-lg text-sm font-bold hover:bg-blue-600 transition-colors flex items-center gap-1 shadow-md hover:shadow-lg"><i data-lucide="sticky-note" className="w-4 h-4"></i> 見る</button>}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="mt-8 bg-white rounded-xl p-6 shadow-lg">
+                                    <h3 className="text-lg font-bold text-gray-800 mb-3">{currentFloor} テーマ情報</h3>
+                                    <div className="grid md:grid-cols-2 gap-4 text-sm text-gray-600">
+                                        <div><strong>コンテンツ数:</strong> {currentFloorData.sections.length}箇所</div>
+                                        <div><strong>使用時間:</strong> {currentFloor === "歴史" && " 45-60分"}{currentFloor === "文化" && " 60-90分"}{currentFloor === "自然" && " 30-45分"}{currentFloor === "平和" && " 90-120分"}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <footer className="bg-gray-800 text-white p-6 mt-12">
+                                <div className="max-w-4xl mx-auto text-center text-sm">
+                                    <p className="text-left">このコンテンツは、ご自宅から快適に学習できるよう設計されています。車椅子をご利用の方、高齢の方、外出が難しい方など、すべての方が楽しめるよう善処します。</p>
+                                </div>
+                            </footer>
+
+                            {videoUrl && (
+                                <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 transition-opacity duration-300" onClick={() => setVideoUrl(null)}>
+                                    <div className="bg-white p-2 rounded-xl shadow-2xl max-w-4xl w-11/12 transform transition-transform duration-300" onClick={(e) => e.stopPropagation()}>
+                                        <div className="aspect-w-16 aspect-h-9">
+                                            <iframe src={videoUrl} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen className="rounded-lg"></iframe>
+                                        </div>
+                                        <button onClick={() => setVideoUrl(null)} className="mt-4 w-full bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 font-bold transition-colors">閉じる</button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {selectedLearningContent && (
+                                <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 transition-opacity duration-300" onClick={() => setSelectedLearningContent(null)}>
+                                    <div className="bg-white p-6 rounded-xl shadow-2xl max-w-2xl w-11/12 max-h-[85vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
+                                        <h3 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 flex-shrink-0">{selectedLearningContent.title}</h3>
+                                        <div className="text-gray-700 whitespace-pre-wrap leading-relaxed mb-6 overflow-y-auto" dangerouslySetInnerHTML={{ __html: selectedLearningContent.html || selectedLearningContent.text }}></div>
+                                        <button onClick={() => setSelectedLearningContent(null)} className="mt-auto w-full bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 font-bold transition-colors flex-shrink-0">閉じる</button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {modalContent && (
+                                <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50" onClick={() => setModalContent(null)}>
+                                    <div className="bg-white p-2 rounded-xl shadow-2xl max-w-4xl w-11/12 h-5/6 flex flex-col" onClick={(e) => e.stopPropagation()}>
+                                        <div className="flex justify-between items-center p-2 border-b">
+                                            <h3 className="text-base sm:text-xl font-bold text-gray-800 truncate pr-2">{modalContent.title}</h3>
+                                            <button onClick={() => setModalContent(null)} className="text-gray-500 hover:text-gray-800 flex-shrink-0"><i data-lucide="x" className="w-6 h-6"></i></button>
+                                        </div>
+                                        <iframe src={modalContent.modalUrl} className="w-full h-full border-0 rounded-b-lg" title={modalContent.title}></iframe>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    );
+                };
+
+                const container = document.getElementById('root');
+                const root = ReactDOM.createRoot(container);
+                root.render(createElement(MuseumFloorGuide));
+
+            } catch (error) {
+                const errorContainer = document.getElementById('error-container');
+                errorContainer.textContent = "エラー: " + error.message;
+                errorContainer.style.display = 'block';
+                console.error(error);
+            }
+        };
+    </script>
+</body>
+</html>
