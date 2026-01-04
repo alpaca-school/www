@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>コマンドラインからLINEへメッセージを送る方法</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f7f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.07);
+        }
+        h1 {
+            text-align: center;
+            color: #00c300;
+            border-bottom: 3px solid #00c300;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        .step {
+            margin-bottom: 30px;
+            padding: 25px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .step-icon {
+            font-size: 3em;
+            margin-right: 25px;
+            padding-top: 10px;
+        }
+        .step-content h2 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 1.8em;
+        }
+        .step-content p, .step-content ol {
+            font-size: 1.1em;
+        }
+        .step-content ol {
+            padding-left: 25px;
+        }
+        .step-content li {
+            margin-bottom: 8px;
+        }
+        .arrow {
+            text-align: center;
+            font-size: 2.5em;
+            color: #bdc3c7;
+            margin: -10px 0;
+        }
+        pre {
+            background-color: #2d3748;
+            color: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
+            font-size: 1em;
+        }
+        code {
+            font-family: inherit;
+        }
+        .warning-box {
+            background-color: #fffbe6;
+            border: 1px solid #ffe58f;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 5px;
+        }
+        .warning-box strong {
+            color: #d97706;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>コマンドラインからLINEへメッセージを送る方法</h1>
+
+        <div class="step">
+            <div class="step-icon">🔑</div>
+            <div class="step-content">
+                <h2>Step 1: アクセストークンを取得</h2>
+                <p>LINE Notify公式サイトで、LINEに通知を送るための「合言葉」を取得します。</p>
+                <ol>
+                    <li>LINE Notify公式サイトにログインします。</li>
+                    <li>マイページから「トークンを発行する」をクリックします。</li>
+                    <li>通知先（「1-on-1」を選ぶと自分だけに届きます）を選択します。</li>
+                    <li>発行されたトークンをコピーします。</li>
+                </ol>
+                <div class="warning-box">
+                    <strong>【超重要！】</strong> このトークンはパスワードと同じです。他人に教えず、安全な場所に保管してください。この画面を閉じると二度と表示されません。
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">⬇️</div>
+
+        <div class="step">
+            <div class="step-icon">💻</div>
+            <div class="step-content">
+                <h2>Step 2: コマンドとメッセージを準備</h2>
+                <p>ターミナルで、送信したいメッセージとコマンドを用意します。</p>
+<pre><code>
+# 1. トークンを変数にセット（安全な方法）
+export LINE_TOKEN="ここに取得したトークンを貼り付け"
+
+# 2. 送信したいメッセージを変数に入れる
+MESSAGE="送りたいメッセージをここに書きます"
+</code></pre>
+            </div>
+        </div>
+
+        <div class="arrow">⬇️</div>
+
+        <div class="step">
+            <div class="step-icon">🚀</div>
+            <div class="step-content">
+                <h2>Step 3: 実行してLINEに送信！</h2>
+                <p>準備ができたら、以下のコマンドを実行します。あなたのLINEに通知が届けば成功です！</p>
+<pre><code>
+curl -X POST -H "Authorization: Bearer $LINE_TOKEN" -F "message=$MESSAGE" https://notify-api.line.me/api/notify
+</code></pre>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
