@@ -32,6 +32,10 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        section {
+            margin-bottom: 3rem;
+        }
+
         .container {
             max-width: 900px;
             margin: 0 auto;
@@ -90,7 +94,6 @@
             border-radius: var(--radius);
             box-shadow: var(--card-shadow);
             padding: 2rem;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
             height: 100%;
             box-sizing: border-box;
             display: flex;
@@ -204,26 +207,13 @@
             <p class="subtitle">学び・実践・創作の記録を、必要な人へ届ける場所。</p>
         </header>
 
-        <section class="intro">
-            <p>
-                てぃあんだぁクラブ universe は、<br>
-                学びや実践、創作の中で生まれたものを、<br>
-                あとから静かに振り返れる形で集めている場所です。
-            </p>
-            <p>
-                ここで何かを決める必要はありません。<br>
-                読むだけ、眺めるだけでも大丈夫です。<br>
-                必要なときに、必要な棚を、そっと開いてください。
-            </p>
-        </section>
-
         <section class="shelves-grid">
             <!-- 教材の棚 -->
             <article class="shelf-card">
                 <h2>📚 教材の棚</h2>
                 <div class="card-description">
-                    家庭での学びを、あとから振り返りたいときに。<br>
-                    アルパカすく〜るや子育て勉強会から生まれた、家庭で使える形に整えたオンライン教材・読みものです。
+                    家庭での学びを、あとから振り返りたいときに。学びの途中で残ったもの。<br>
+
                 </div>
                 <ul class="shelf-list">
                     <li>HTML教材（家庭学習・社会学習）</li>
@@ -238,7 +228,6 @@
                 <h2>🌱 実践の棚</h2>
                 <div class="card-description">
                     子どもを支える中で、立ち止まった人たちの記録。<br>
-                    子育て勉強会やMIKATA研究会で共有された実践の記録や考察です。似た場面に出会ったときのために。
                 </div>
                 <ul class="shelf-list">
                     <li>声かけ・関わり方のメモ</li>
@@ -252,8 +241,7 @@
             <article class="shelf-card">
                 <h2>🎨 創作の棚</h2>
                 <div class="card-description">
-                    気持ちや経験を、言葉や形にして外に出したあとに。<br>
-                    文芸フリマや日常の中で生まれた、親子の創作・個人の表現を集めています。
+                    気持ちや経験を、言葉や形にして外に出した表現の跡。<br>
                 </div>
                 <ul class="shelf-list">
                     <li>詩・エッセイ・ポエム</li>
@@ -267,15 +255,34 @@
             <article class="shelf-card">
                 <h2>🤝 ご縁の棚</h2>
                 <div class="card-description">
-                    人や社会とつながった、その途中経過。<br>
-                    社会とつながった記録を、成果ではなく履歴として残しています。
+                    人や社会とつながった、その記録。<br>
                 </div>
                 <ul class="shelf-list">
                     <li>文芸フリマ出展の記録</li>
                     <li>参加者の声</li>
                     <li>つながった人・場</li>
                 </ul>
-                <p class="note">※ 次に進むためではなく、ここまで来た証として。</p>
+                <div style="margin-top: 1rem; border-top: 1px dashed #e1e8ef; padding-top: 0.75rem;">
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+                        メディア掲載・インタビュー
+                    </p>
+
+                    <a href="https://drive.google.com/file/d/0BxHVWALbJxS0eTlzcjZwQ0w3Wms/view?usp=sharing&resourcekey=0-81PZ6esNEMQTRik0J6xv-A"
+                        target="_blank" style="display: block; font-size: 0.85rem; margin-bottom: 0.3rem;">
+                        📰 日経新聞「ワンコインの居場所 心育む」（2014年4月13日）
+                    </a>
+
+                    <a href="https://www.okinawatimes.co.jp/articles/-/17792" target="_blank"
+                        style="display: block; font-size: 0.85rem; margin-bottom: 0.3rem;">
+                        📰 沖縄タイムス「ワンコインで自習室」（2015年8月18日）
+                    </a>
+
+                    <a href="https://www.tsuushinsei-navi.com/real/expert/354/" target="_blank"
+                        style="display: block; font-size: 0.85rem;">
+                        🎤 通信制高校ナビ インタビュー（2016年9月19日）
+                    </a>
+                </div>
+
             </article>
         </section>
     </div>
