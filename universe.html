@@ -5,7 +5,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>てぃあんだぁクラブ universe</title>
-    <!-- Google Fonts: 柔らかい印象のZen Maru Gothicを採用 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@300;400;700&display=swap"
@@ -33,7 +32,7 @@
         }
 
         section {
-            margin-bottom: 3rem;
+            margin-bottom: 4rem;
         }
 
         .container {
@@ -62,24 +61,11 @@
             font-weight: 400;
         }
 
-        /* Introduction */
-        .intro {
-            text-align: center;
-            margin-bottom: 4rem;
-            margin-top: 2rem;
-            padding: 0 1rem;
-        }
-
-        .intro p {
-            margin-bottom: 1.5rem;
-        }
-
         /* Grid Layout for Shelves */
         .shelves-grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 2rem;
-            margin-bottom: 4rem;
         }
 
         @media (min-width: 768px) {
@@ -98,11 +84,11 @@
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
+            transition: box-shadow 0.2s;
         }
 
         .shelf-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.08);
         }
 
         h2 {
@@ -149,12 +135,53 @@
             margin-bottom: 0;
         }
 
+        /* Media Section in Card */
+        .media-box {
+            margin-top: 1rem;
+            border-top: 1px dashed #e1e8ef;
+            padding-top: 0.75rem;
+        }
+
+        .media-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .media-item {
+            display: block;
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .media-item:hover {
+            text-decoration: underline;
+            color: var(--text-main);
+        }
+
         .note {
             font-size: 0.85rem;
             color: var(--text-muted);
             margin: 0;
             margin-top: auto;
         }
+
+        /* Page Sections */
+        .section-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            margin-top: 0;
+        }
+
+        .section-title {
+            margin-bottom: 1rem;
+        }
+
+
 
         /* Footer */
         footer {
@@ -167,34 +194,54 @@
             font-size: 0.9rem;
         }
 
-        .footer-links {
-            margin: 2rem 0;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .footer-link-item {
-            display: inline-block;
-        }
-
         a {
             color: var(--accent-color);
             text-decoration: none;
-            font-weight: bold;
             transition: color 0.2s;
         }
 
-        a:hover {
-            color: var(--text-main);
-            text-decoration: underline;
-        }
+
 
         .copyright {
             margin-top: 2rem;
             font-size: 0.8rem;
             opacity: 0.7;
+        }
+
+        .mini-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .mini-tag {
+            font-size: 0.75rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 999px;
+            background: #f1f5f9;
+            color: var(--text-muted);
+            text-decoration: none;
+            border: 1px solid #e1e8ef;
+        }
+
+        .mini-tag:hover {
+            background: #e9eff5;
+            color: var(--text-main);
+        }
+
+        .timeline-link {
+            margin-left: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .timeline-link::before {
+            content: "→";
+            margin-right: 0.2rem;
+            color: var(--text-muted);
         }
     </style>
 </head>
@@ -213,7 +260,6 @@
                 <h2>📚 教材の棚</h2>
                 <div class="card-description">
                     家庭での学びを、あとから振り返りたいときに。学びの途中で残ったもの。<br>
-
                 </div>
                 <ul class="shelf-list">
                     <li>HTML教材（家庭学習・社会学習）</li>
@@ -262,51 +308,62 @@
                     <li>参加者の声</li>
                     <li>つながった人・場</li>
                 </ul>
-                <div style="margin-top: 1rem; border-top: 1px dashed #e1e8ef; padding-top: 0.75rem;">
-                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+                <div class="media-box">
+                    <p class="media-label">
                         メディア掲載・インタビュー
                     </p>
 
                     <a href="https://drive.google.com/file/d/0BxHVWALbJxS0eTlzcjZwQ0w3Wms/view?usp=sharing&resourcekey=0-81PZ6esNEMQTRik0J6xv-A"
-                        target="_blank" style="display: block; font-size: 0.85rem; margin-bottom: 0.3rem;">
+                        target="_blank" class="media-item">
                         📰 日経新聞「ワンコインの居場所 心育む」（2014年4月13日）
                     </a>
 
-                    <a href="https://www.okinawatimes.co.jp/articles/-/17792" target="_blank"
-                        style="display: block; font-size: 0.85rem; margin-bottom: 0.3rem;">
+                    <a href="https://www.okinawatimes.co.jp/articles/-/17792" target="_blank" class="media-item">
                         📰 沖縄タイムス「ワンコインで自習室」（2015年8月18日）
                     </a>
 
-                    <a href="https://www.tsuushinsei-navi.com/real/expert/354/" target="_blank"
-                        style="display: block; font-size: 0.85rem;">
+                    <a href="https://www.tsuushinsei-navi.com/real/expert/354/" target="_blank" class="media-item">
                         🎤 通信制高校ナビ インタビュー（2016年9月19日）
                     </a>
                 </div>
 
             </article>
         </section>
+
+        <section>
+            <h2 class="section-title">📅 時間の棚</h2>
+
+            <p class="section-desc">
+                これまでの取り組みを、成果ではなく「積み重なり」として残しています。
+            </p>
+
+            <ul class="shelf-list">
+                <li><strong>2013</strong>｜てぃあんだぁクラブ・ワンコイン勉強会・子育て勉強会 開始</li>
+                <li><strong>2014</strong>｜日経新聞 掲載</li>
+                <li><strong>2015</strong>｜沖縄タイムス 掲載</li>
+                <li><strong>2019</strong>｜アルパカすく〜る 開始</li>
+                <li><strong>2024</strong>｜子どものMIKATA研究会 発足</li>
+                <li><strong>2025</strong>｜親子の創作活動が文芸フリマへ
+                    <a href="https://furima.ryukyu-tane.com" class="timeline-link">沖縄文芸フリマ</a>
+                </li>
+
+            </ul>
+        </section>
     </div>
 
     <footer>
         <div class="container">
             <p>
-                てぃあんだぁクラブ universe は、一部の教材・ZINEは有料です。<br>
-                必要なものを、必要なタイミングで選べるようにしています。
+                てぃあんだぁクラブ universe には、<br>
+                無料のものも、有料として残している記録もあります。<br>
+                必要になったとき、思い出せる場所であることを大切にしています。
             </p>
 
-            <div class="footer-links">
-                <div class="footer-link-item">
-                    現実で学ぶ場：
-                    <a href="https://alpaca-school.okinawa" target="_blank">アルパカすく〜る</a>
-                </div>
-                <div class="footer-link-item">
-                    表現が社会と出会う場：
-                    <a href="https://furima.ryukyu-tane.com" target="_blank">沖縄文芸フリマ</a>
-                </div>
-                <div class="footer-link-item">
-                    自分と出会う場：
-                    <a href="https://yumetsumugi.ainoie1962.com/" target="_blank" rel="noopener noreferrer">わたしの夢つむぎ</a>
-                </div>
+            <div class="mini-tags">
+                <a href="https://alpaca-school.okinawa/tea-under.html" class="mini-tag">お母さんの安心づくり：てぃあんだぁクラブ</a>
+                <a href="https://alpaca-school.okinawa" target="_blank" class="mini-tag">社会勉強の場：アルパカすく〜る</a>
+                <a href="https://furima.ryukyu-tane.com" target="_blank" class="mini-tag">社会への橋：沖縄文芸フリマ</a>
+                <a href="https://yumetsumugi.ainoie1962.com/" target="_blank" class="mini-tag">自分を整える：わたしの夢つむぎ</a>
             </div>
 
             <p class="copyright">
