@@ -92,6 +92,35 @@
             font-weight: bold;
         }
 
+        /* アクションボタンのスタイル */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin: 40px 0;
+        }
+
+        .action-btn {
+            display: block;
+            padding: 20px;
+            background: #ffffff;
+            border: 2px solid #e0e6ed;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #444;
+            font-weight: bold;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: #f0f8ff;
+            border-color: #0066cc;
+            color: #0066cc;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
         footer {
             margin-top: 4em;
             font-size: 0.85rem;
@@ -105,6 +134,33 @@
 
         <h1>universe</h1>
         <p>― 立ち止まってもいい場所 ―</p>
+
+        <section class="bg-amber-50 border border-amber-200 rounded-xl p-6 mb-8">
+            <p class="mb-3">
+                ここは、家庭での学びや気持ちの整理を、
+                無理なく続けるための場所です。
+            </p>
+
+            <p class="mb-3">
+                うまくいかない日があっても、<br>
+                学校や勉強のことを考えたくない時があっても、
+                それで問題ありません。
+            </p>
+
+            <p class="mb-3">
+                何かを決める必要も、<br>
+                前向きになる必要もありません。
+            </p>
+
+            <p class="mb-4">
+                ここでは、<strong>続けられる形</strong>を一緒に探します。
+            </p>
+
+            <p class="text-sm text-gray-600">
+                今日は、読んでみるだけでも大丈夫です。
+            </p>
+        </section>
+
 
         <div class="lead">
             <p>
@@ -167,38 +223,23 @@
             </div>
         </div>
 
-        <h2>今日の気分に近いかもしれない例</h2>
+        <div class="action-buttons">
+            <a href="talk.html" class="action-btn">
+                ☎️ まず話してみる（無料電話相談）
+            </a>
 
-        <div class="choices">
-            <div class="choice">
-                <h3>ハーリー</h3>
-                <p>
-                    なんか強がってる日。<br>
-                    平気なふりをして動き回っている。
-                </p>
-            </div>
+            <a href="onecoin.html" class="action-btn">
+                ✏️ 小さく始める（ワンコイン勉強会）
+            </a>
 
-            <div class="choice">
-                <h3>ガンジュー</h3>
-                <p>
-                    休みたい日。<br>
-                    人と話すのも少ししんどい。
-                </p>
-            </div>
+            <a href="private.html" class="action-btn">
+                🏠 じっくり整える（個別授業）
+            </a>
 
-            <div class="choice">
-                <h3>カーギー</h3>
-                <p>
-                    失敗したくない日。<br>
-                    ちゃんとした選択をしたいと思っている。
-                </p>
-            </div>
+            <a href="parenting.html" class="action-btn">
+                🌼 親もひと息（子育て勉強会）
+            </a>
         </div>
-
-        <p class="note">
-            今日はどれでもなくても大丈夫です。<br>
-            明日、変わってもかまいません。
-        </p>
 
 
         <h2>肩が軽くなったヒトコト集</h2>
