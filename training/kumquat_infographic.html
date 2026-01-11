@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>金柑とアーユルヴェーダ・五行</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #ff9a56 0%, #ff6b35 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+        
+        .toggle-container {
+            text-align: center;
+            padding: 30px;
+            background: #fff8f0;
+        }
+        
+        .toggle-btn {
+            background: linear-gradient(135deg, #ff9a56 0%, #ff6b35 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            font-weight: bold;
+        }
+        
+        .toggle-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.3);
+        }
+        
+        .toggle-btn:active {
+            transform: translateY(0);
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .view {
+            display: none;
+        }
+        
+        .view.active {
+            display: block;
+        }
+        
+        /* ポンチ絵スタイル */
+        .ponchi {
+            text-align: center;
+        }
+        
+        .ponchi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .ponchi-card {
+            background: #fff;
+            border: 3px solid #ff9a56;
+            border-radius: 15px;
+            padding: 25px;
+            position: relative;
+            transition: transform 0.3s;
+        }
+        
+        .ponchi-card:hover {
+            transform: scale(1.05);
+        }
+        
+        .ponchi-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+        
+        .ponchi-title {
+            font-size: 1.5em;
+            color: #ff6b35;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .ponchi-text {
+            font-size: 1em;
+            line-height: 1.8;
+            color: #333;
+        }
+        
+        .arrow {
+            font-size: 3em;
+            color: #ff9a56;
+            margin: 20px 0;
+        }
+        
+        /* インフォグラフィックスタイル */
+        .infographic {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .info-section {
+            margin-bottom: 50px;
+            padding: 30px;
+            background: linear-gradient(to right, #fff8f0, #ffffff);
+            border-left: 5px solid #ff9a56;
+            border-radius: 10px;
+        }
+        
+        .info-title {
+            font-size: 1.8em;
+            color: #ff6b35;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .info-icon {
+            font-size: 1.5em;
+        }
+        
+        .info-content {
+            font-size: 1.05em;
+            line-height: 1.9;
+            color: #444;
+        }
+        
+        .info-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .info-list li {
+            padding: 12px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .info-list li:before {
+            content: "🍊";
+            position: absolute;
+            left: 0;
+        }
+        
+        .highlight-box {
+            background: #fff;
+            border: 2px dashed #ff9a56;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        
+        .five-elements {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .element-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid;
+            transition: transform 0.3s;
+        }
+        
+        .element-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .element-wood {
+            border-color: #4CAF50;
+            background: linear-gradient(135deg, #e8f5e9, #ffffff);
+        }
+        
+        .element-fire {
+            border-color: #FF5722;
+            background: linear-gradient(135deg, #ffebee, #ffffff);
+        }
+        
+        .element-earth {
+            border-color: #FF9800;
+            background: linear-gradient(135deg, #fff3e0, #ffffff);
+        }
+        
+        .element-name {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .element-desc {
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        footer {
+            background: #f5f5f5;
+            padding: 30px;
+            margin-top: 40px;
+            border-top: 3px solid #ff9a56;
+        }
+        
+        .notice {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .notice-title {
+            font-weight: bold;
+            color: #856404;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .notice-text {
+            font-size: 0.95em;
+            line-height: 1.7;
+            color: #856404;
+        }
+        
+        .credits {
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 15px;
+        }
+        
+        .link {
+            color: #ff6b35;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .link:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 1.5em;
+            }
+            
+            .subtitle {
+                font-size: 0.95em;
+            }
+            
+            header {
+                padding: 25px 15px;
+            }
+            
+            .toggle-container {
+                padding: 20px 15px;
+            }
+            
+            .toggle-btn {
+                padding: 12px 30px;
+                font-size: 1em;
+            }
+            
+            .ponchi-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .ponchi-card {
+                padding: 20px;
+            }
+            
+            .ponchi-icon {
+                font-size: 3em;
+            }
+            
+            .ponchi-title {
+                font-size: 1.3em;
+            }
+            
+            .ponchi-text {
+                font-size: 0.95em;
+            }
+            
+            .arrow {
+                font-size: 2em;
+                margin: 15px 0;
+            }
+            
+            .five-elements {
+                grid-template-columns: 1fr;
+            }
+            
+            .content {
+                padding: 15px;
+            }
+            
+            .info-section {
+                padding: 20px 15px;
+                margin-bottom: 30px;
+            }
+            
+            .info-title {
+                font-size: 1.4em;
+            }
+            
+            .info-content {
+                font-size: 0.95em;
+            }
+            
+            .element-name {
+                font-size: 1.5em;
+            }
+            
+            .element-desc {
+                font-size: 0.9em;
+            }
+            
+            footer {
+                padding: 20px 15px;
+            }
+            
+            .notice {
+                padding: 15px;
+            }
+            
+            .notice-title {
+                font-size: 1em;
+            }
+            
+            .notice-text {
+                font-size: 0.85em;
+            }
+            
+            .credits {
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🍊 金柑とアーユルヴェーダ・五行 🍊</h1>
+            <p class="subtitle">冬の養生に役立つ小さな宝物</p>
+        </header>
+        
+        <div class="toggle-container">
+            <button class="toggle-btn" onclick="toggleView()">
+                <span id="toggleText">インフォグラフィックで見る</span>
+            </button>
+        </div>
+        
+        <div class="content">
+            <!-- ポンチ絵ビュー -->
+            <div id="ponchiView" class="view active">
+                <div class="ponchi">
+                    <div class="ponchi-grid">
+                        <div class="ponchi-card">
+                            <div class="ponchi-icon">🍊</div>
+                            <div class="ponchi-title">金柑の性質</div>
+                            <div class="ponchi-text">
+                                甘味・酸味・わずかな苦味<br>
+                                冬の冷えや重だるさを和らげる<br>
+                                栄養の宝庫
+                            </div>
+                        </div>
+                        
+                        <div class="ponchi-card">
+                            <div class="ponchi-icon">💪</div>
+                            <div class="ponchi-title">期待される効果</div>
+                            <div class="ponchi-text">
+                                風邪予防・喉の痛み・咳<br>
+                                免疫力アップ<br>
+                                疲労回復・循環改善
+                            </div>
+                        </div>
+                        
+                        <div class="ponchi-card">
+                            <div class="ponchi-icon">🍯</div>
+                            <div class="ponchi-title">おすすめの食べ方</div>
+                            <div class="ponchi-text">
+                                スパイス煮・マリネ<br>
+                                はちみつ漬け<br>
+                                発酵ドリンク
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="arrow">⬇️</div>
+                    
+                    <div class="ponchi-grid">
+                        <div class="ponchi-card" style="border-color: #4CAF50;">
+                            <div class="ponchi-icon">🌳</div>
+                            <div class="ponchi-title" style="color: #4CAF50;">木の要素</div>
+                            <div class="ponchi-text">
+                                肝（ストレスケア）<br>
+                                気の滞りを発散<br>
+                                イライラを緩める
+                            </div>
+                        </div>
+                        
+                        <div class="ponchi-card" style="border-color: #FF5722;">
+                            <div class="ponchi-icon">🔥</div>
+                            <div class="ponchi-title" style="color: #FF5722;">火の要素</div>
+                            <div class="ponchi-text">
+                                心身の冷えを和らげる<br>
+                                気持ちを明るくする<br>
+                                喉のケア
+                            </div>
+                        </div>
+                        
+                        <div class="ponchi-card" style="border-color: #FF9800;">
+                            <div class="ponchi-icon">🌾</div>
+                            <div class="ponchi-title" style="color: #FF9800;">土の要素</div>
+                            <div class="ponchi-text">
+                                脾胃（消化器）を養う<br>
+                                滋養・補気<br>
+                                疲労回復
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="arrow">⬇️</div>
+                    
+                    <div class="ponchi-card" style="max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, #fff8f0, #ffffff);">
+                        <div class="ponchi-icon">✨</div>
+                        <div class="ponchi-title">冬〜春先のケアに最適</div>
+                        <div class="ponchi-text">
+                            少量を温かく調理して食べることで<br>
+                            五行のバランス調整に活かせます<br><br>
+                            <strong>ポイント：皮ごと丸ごと使う</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- インフォグラフィックビュー -->
+            <div id="infoView" class="view">
+                <div class="infographic">
+                    <div class="info-section">
+                        <h2 class="info-title">
+                            <span class="info-icon">🍊</span>
+                            アーユルヴェーダ的な性質
+                        </h2>
+                        <div class="info-content">
+                            <p>金柑は甘味と酸味が中心で、皮のほろ苦さもあるため、冬の冷えや重だるさを和らげるのに向く果物です。小さい実にビタミンや抗酸化成分が豊富な「栄養の宝庫」とされ、風邪予防や喉・免疫サポートに良いとされています。</p>
+                            
+                            <div class="highlight-box">
+                                <strong>キッチンファーマシー（台所の薬）として活用</strong>
+                                <ul class="info-list">
+                                    <li>風邪予防、喉の痛み、咳の緩和</li>
+                                    <li>免疫力アップ</li>
+                                    <li>疲労回復や肩こり・腰痛など循環を整える</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-section">
+                        <h2 class="info-title">
+                            <span class="info-icon">🍯</span>
+                            よく使われる食べ方
+                        </h2>
+                        <div class="info-content">
+                            <ul class="info-list">
+                                <li><strong>金柑のスパイス煮・スパイスマリネ：</strong>シナモンやクローブなどと一緒に煮て、喉ケア・冬の養生レシピとして</li>
+                                <li><strong>はちみつ漬け：</strong>消化を助けつつビタミンを摂る常備菜として</li>
+                                <li><strong>ジャガリーと漬ける発酵ドリンク：</strong>消化サポートと栄養補給に</li>
+                            </ul>
+                            
+                            <div class="highlight-box">
+                                <strong>💡 取り入れるポイント</strong><br>
+                                皮ごと食べられる利点を活かし、よく洗って丸ごと使うレシピが効果的。冬〜早春の旬に、温かい料理やハーブティーと組み合わせて少量ずつ取り入れると、季節の変わり目の体調管理に役立ちます。
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-section">
+                        <h2 class="info-title">
+                            <span class="info-icon">🌀</span>
+                            ドーシャとの関係
+                        </h2>
+                        <div class="info-content">
+                            <p><strong>ヴァータ：</strong>甘味と酸味はヴァータを落ち着かせやすく、冷えて乾燥しやすい冬のヴァータ悪化のケアに向きます。</p>
+                            <p><strong>ピッタ・カパ：</strong>酸味と甘味はピッタやカパを増やしやすい側面もあるため、胃酸過多や重だるさが強いときは量と調理法（温める・スパイスを加えるなど）を調整します。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-section">
+                        <h2 class="info-title">
+                            <span class="info-icon">☯️</span>
+                            金柑と五行
+                        </h2>
+                        <div class="info-content">
+                            <p>東洋医学や陰陽五行では、金柑は主に「木・火・土」の要素で捉えることが多く、「酸味のある柑橘」「色・季節・効能」から総合的に判断されます。</p>
+                            
+                            <div class="five-elements">
+                                <div class="element-card element-wood">
+                                    <div class="element-name">🌳 木</div>
+                                    <div class="element-desc">
+                                        酸味＝肝<br>
+                                        ストレスや気の滞りを発散<br>
+                                        イライラを緩める
+                                    </div>
+                                </div>
+                                
+                                <div class="element-card element-fire">
+                                    <div class="element-name">🔥 火</div>
+                                    <div class="element-desc">
+                                        オレンジ色＝心<br>
+                                        体を温める<br>
+                                        気持ちを明るく
+                                    </div>
+                                </div>
+                                
+                                <div class="element-card element-earth">
+                                    <div class="element-name">🌾 土</div>
+                                    <div class="element-desc">
+                                        甘味＝脾胃<br>
+                                        滋養・補気<br>
+                                        疲労回復
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="highlight-box">
+                                <strong>実践するときの捉え方</strong><br>
+                                「肝（木）のストレスケア」＋「脾胃（土）の滋養」＋「寒さを和らげる火」という3つの要素をあわせ持つ果物として、冬〜春先のケアに使いやすいと考えると五行的にイメージしやすくなります。<br><br>
+                                自分の弱いところ（肝のイライラ、脾の疲れ、肺の乾燥した咳など）を意識しながら、「少量を温かく調理して食べる」ことで、五行のバランス調整に活かせます。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <div class="notice">
+                <div class="notice-title">⚠️ ご利用上の注意</div>
+                <div class="notice-text">
+                    本ページの内容は、Perplexityによって作成された原稿を元に構成されています。レシピや調理方法については一般的な情報として提供しており、個々の健康状態やアレルギー、食材の鮮度などは考慮されておりません。<br>
+                    実際に調理・食用される際は、食材の状態を十分に確認し、ご自身の判断と責任において行ってください。本情報の利用により生じた損害等について、作成者は一切の責任を負いかねます。
+                </div>
+            </div>
+            
+            <div class="credits">
+                原稿作成: <a href="https://www.perplexity.ai/search/jin-gan-toayuruueta-2wyIa4b3ROqZfbvpJGCvXw#1" class="link" target="_blank">Perplexity</a> | ページデザイン: Claude
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        let currentView = 'ponchi';
+        
+        function toggleView() {
+            const ponchiView = document.getElementById('ponchiView');
+            const infoView = document.getElementById('infoView');
+            const toggleText = document.getElementById('toggleText');
+            
+            if (currentView === 'ponchi') {
+                ponchiView.classList.remove('active');
+                infoView.classList.add('active');
+                toggleText.textContent = 'ポンチ絵で見る';
+                currentView = 'info';
+            } else {
+                infoView.classList.remove('active');
+                ponchiView.classList.add('active');
+                toggleText.textContent = 'インフォグラフィックで見る';
+                currentView = 'ponchi';
+            }
+        }
+    </script>
+</body>
+</html>
