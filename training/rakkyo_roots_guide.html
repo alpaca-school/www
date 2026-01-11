@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ラッキョウの根の食べ方ガイド</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8f5e9 100%);
+            min-height: 100vh;
+            padding: 15px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #2e7d32;
+            font-size: clamp(1.5em, 5vw, 2.5em);
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+        
+        .subtitle {
+            color: #558b2f;
+            font-size: clamp(1em, 3vw, 1.2em);
+        }
+        
+        .toggle-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .toggle-btn {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: clamp(1em, 3vw, 1.1em);
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        
+        .toggle-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .toggle-btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+        
+        .content {
+            display: none;
+        }
+        
+        .content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* ポンチ絵スタイル */
+        .sketch-view {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        
+        .sketch-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #fffef7;
+            border: 3px dashed #8bc34a;
+            border-radius: 15px;
+            position: relative;
+        }
+        
+        .sketch-section h2 {
+            color: #2e7d32;
+            font-size: clamp(1.3em, 4vw, 2em);
+            margin-bottom: 15px;
+            border-bottom: 3px solid #4caf50;
+            padding-bottom: 10px;
+        }
+        
+        .sketch-step {
+            margin: 15px 0;
+            padding-left: 35px;
+            position: relative;
+        }
+        
+        .sketch-step::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 25px;
+            height: 25px;
+            background: #4caf50;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .sketch-step h3 {
+            font-size: clamp(1em, 3vw, 1.2em);
+            margin-bottom: 8px;
+        }
+        
+        .sketch-step p {
+            font-size: clamp(0.9em, 2.5vw, 1em);
+            line-height: 1.6;
+        }
+        
+        .recipe-box {
+            background: white;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 5px solid #8bc34a;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .recipe-box h3 {
+            color: #558b2f;
+            font-size: clamp(1.1em, 3.5vw, 1.5em);
+            margin-bottom: 10px;
+        }
+        
+        .recipe-box p {
+            font-size: clamp(0.9em, 2.5vw, 1em);
+            line-height: 1.6;
+        }
+        
+        .point {
+            background: #fff9c4;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 10px;
+            border-left: 4px solid #fbc02d;
+            font-size: clamp(0.85em, 2.3vw, 0.95em);
+            line-height: 1.6;
+        }
+        
+        /* インフォグラフィックスタイル */
+        .infographic-view {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .info-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .info-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .info-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #4caf50, #8bc34a);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            color: white;
+        }
+        
+        .info-title {
+            font-size: 1.8em;
+            color: #2e7d32;
+            font-weight: bold;
+        }
+        
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .process-step {
+            background: linear-gradient(135deg, #f1f8e9, #dcedc8);
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .process-step h4 {
+            font-size: clamp(1em, 3vw, 1.2em);
+            margin-bottom: 8px;
+        }
+        
+        .process-step p {
+            font-size: clamp(0.85em, 2.5vw, 0.95em);
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: #4caf50;
+            color: white;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+        
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 600px) {
+            .recipe-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .recipe-card {
+            background: linear-gradient(135deg, #ffffff, #f1f8e9);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #8bc34a;
+        }
+        
+        .recipe-title {
+            font-size: clamp(1.1em, 3.5vw, 1.5em);
+            color: #2e7d32;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+        
+        .ingredients {
+            background: white;
+            padding: 12px;
+            border-radius: 10px;
+            margin: 12px 0;
+            font-size: clamp(0.85em, 2.5vw, 0.95em);
+        }
+        
+        .ingredients ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .ingredients li::before {
+            content: '• ';
+            color: #4caf50;
+            font-weight: bold;
+        }
+        
+        .ingredients li {
+            margin: 5px 0;
+            line-height: 1.5;
+        }
+        
+        .tip {
+            background: #fff9c4;
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 12px;
+            border-left: 4px solid #fbc02d;
+            font-size: clamp(0.85em, 2.3vw, 0.95em);
+            line-height: 1.5;
+        }
+        
+        .warning {
+            background: #ffebee;
+            padding: 15px;
+            border-radius: 15px;
+            border-left: 5px solid #f44336;
+            margin-top: 20px;
+        }
+        
+        .warning h3 {
+            color: #c62828;
+            margin-bottom: 10px;
+            font-size: clamp(1.1em, 3vw, 1.3em);
+        }
+        
+        .warning p {
+            font-size: clamp(0.9em, 2.5vw, 1em);
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 15px;
+            border-top: 3px solid #9e9e9e;
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: clamp(0.75em, 2vw, 0.85em);
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        .footer-title {
+            font-weight: bold;
+            color: #424242;
+            margin-bottom: 10px;
+            font-size: clamp(0.85em, 2.3vw, 0.95em);
+        }
+        
+        .footer-note {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #ddd;
+            font-size: clamp(0.7em, 1.8vw, 0.8em);
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌱 ラッキョウの根の食べ方ガイド</h1>
+            <p class="subtitle">捨てないで！美味しく活用できます</p>
+        </div>
+        
+        <div class="toggle-container">
+            <button class="toggle-btn" onclick="toggleView()">
+                <span id="toggle-text">インフォグラフィックで見る</span>
+            </button>
+        </div>
+        
+        <!-- ポンチ絵ビュー -->
+        <div id="sketch-view" class="content active">
+            <div class="sketch-view">
+                <div class="sketch-section">
+                    <h2>📝 下処理（ここ大事！）</h2>
+                    <div class="sketch-step">
+                        <h3>1. 泥をよく落とす</h3>
+                        <p>流水でゴシゴシ。ザルに入れて振り洗いが楽です。</p>
+                    </div>
+                    <div class="sketch-step">
+                        <h3>2. 黒ずんだ部分・傷んだ根はカット</h3>
+                        <p>白くて細い部分を残します。</p>
+                    </div>
+                    <div class="sketch-step">
+                        <h3>3. 軽く下茹で（30秒〜1分）</h3>
+                        <p>臭みとえぐみが取れて食べやすくなります。</p>
+                        <p>→ すぐ冷水に取って水気を切る。</p>
+                    </div>
+                </div>
+                
+                <div class="sketch-section">
+                    <h2>🍳 おすすめの食べ方</h2>
+                    
+                    <div class="recipe-box">
+                        <h3>① かき揚げ（いちばん人気）</h3>
+                        <p>細かく刻んで、小麦粉（または米粉）+ 塩ひとつまみでまとめて揚げるだけ。</p>
+                        <div class="point">
+                            <strong>👉 ポイント</strong><br>
+                            ・ごまや桜えびを少し混ぜると香ばしさUP<br>
+                            ・サクサクで、ビールにもごはんにも合います✨
+                        </div>
+                    </div>
+                    
+                    <div class="recipe-box">
+                        <h3>② きんぴら風</h3>
+                        <p>刻んだ根をごま油で炒めて、醤油・みりん・砂糖少々。仕上げに白ごま。</p>
+                        <div class="point">
+                            <strong>👉 ポイント</strong><br>
+                            シャキシャキ感が残って、ご飯が進みます。
+                        </div>
+                    </div>
+                    
+                    <div class="recipe-box">
+                        <h3>③ 酢の物・甘酢漬け</h3>
+                        <p>下茹でした根を、酢：砂糖：塩（お好み）で和えるだけ。</p>
+                        <div class="point">
+                            <strong>👉 ポイント</strong><br>
+                            さっぱりして、箸休めに最高。ラッキョウ本体よりやさしい辛みです。
+                        </div>
+                    </div>
+                    
+                    <div class="recipe-box">
+                        <h3>④ 味噌炒め（沖縄風にも合う）</h3>
+                        <p>油で炒めて、味噌・みりん・少し砂糖を加える。</p>
+                        <div class="point">
+                            <strong>👉 ポイント</strong><br>
+                            ご飯にも、おにぎりの具にも◎
+                        </div>
+                    </div>
+                    
+                    <div class="recipe-box">
+                        <h3>⑤ 佃煮風（保存したいとき）</h3>
+                        <p>醤油・砂糖・みりんで水分が飛ぶまでコトコト。冷蔵で数日もちます。</p>
+                    </div>
+                </div>
+                
+                <div class="sketch-section">
+                    <h2>⚠️ ちょっとした注意</h2>
+                    <div class="sketch-step">
+                        <p><strong>量は控えめに</strong>（香りが強いので食べすぎ注意）</p>
+                    </div>
+                    <div class="sketch-step">
+                        <p><strong>生は辛味が強い</strong> → 必ず火を通すか下茹でがおすすめ</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- インフォグラフィックビュー -->
+        <div id="infographic-view" class="content">
+            <div class="infographic-view">
+                <div class="info-card">
+                    <div class="info-header">
+                        <div class="icon">🧹</div>
+                        <div class="info-title">下処理の3ステップ</div>
+                    </div>
+                    <div class="process-grid">
+                        <div class="process-step">
+                            <div class="step-number">1</div>
+                            <h4>泥を落とす</h4>
+                            <p>ザルに入れて振り洗い</p>
+                        </div>
+                        <div class="process-step">
+                            <div class="step-number">2</div>
+                            <h4>カット</h4>
+                            <p>白くて細い部分を残す</p>
+                        </div>
+                        <div class="process-step">
+                            <div class="step-number">3</div>
+                            <h4>下茹で</h4>
+                            <p>30秒〜1分→冷水へ</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-header">
+                        <div class="icon">🍳</div>
+                        <div class="info-title">5つのレシピ</div>
+                    </div>
+                    <div class="recipe-grid">
+                        <div class="recipe-card">
+                            <div class="recipe-number">1</div>
+                            <div class="recipe-title">かき揚げ</div>
+                            <div class="ingredients">
+                                <ul>
+                                    <li>小麦粉/米粉</li>
+                                    <li>塩ひとつまみ</li>
+                                    <li>ごま・桜えび（お好みで）</li>
+                                </ul>
+                            </div>
+                            <div class="tip">
+                                <strong>👉 Tip</strong><br>
+                                サクサクでビールに最高！
+                            </div>
+                        </div>
+                        
+                        <div class="recipe-card">
+                            <div class="recipe-number">2</div>
+                            <div class="recipe-title">きんぴら風</div>
+                            <div class="ingredients">
+                                <ul>
+                                    <li>ごま油</li>
+                                    <li>醤油・みりん</li>
+                                    <li>砂糖少々</li>
+                                    <li>白ごま</li>
+                                </ul>
+                            </div>
+                            <div class="tip">
+                                <strong>👉 Tip</strong><br>
+                                シャキシャキご飯が進む！
+                            </div>
+                        </div>
+                        
+                        <div class="recipe-card">
+                            <div class="recipe-number">3</div>
+                            <div class="recipe-title">酢の物・甘酢漬け</div>
+                            <div class="ingredients">
+                                <ul>
+                                    <li>酢</li>
+                                    <li>砂糖</li>
+                                    <li>塩</li>
+                                </ul>
+                            </div>
+                            <div class="tip">
+                                <strong>👉 Tip</strong><br>
+                                さっぱり箸休めに◎
+                            </div>
+                        </div>
+                        
+                        <div class="recipe-card">
+                            <div class="recipe-number">4</div>
+                            <div class="recipe-title">味噌炒め</div>
+                            <div class="ingredients">
+                                <ul>
+                                    <li>油</li>
+                                    <li>味噌</li>
+                                    <li>みりん</li>
+                                    <li>砂糖少々</li>
+                                </ul>
+                            </div>
+                            <div class="tip">
+                                <strong>👉 Tip</strong><br>
+                                おにぎりの具にも！
+                            </div>
+                        </div>
+                        
+                        <div class="recipe-card">
+                            <div class="recipe-number">5</div>
+                            <div class="recipe-title">佃煮風</div>
+                            <div class="ingredients">
+                                <ul>
+                                    <li>醤油</li>
+                                    <li>砂糖</li>
+                                    <li>みりん</li>
+                                </ul>
+                            </div>
+                            <div class="tip">
+                                <strong>👉 Tip</strong><br>
+                                冷蔵で数日保存可能
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="warning">
+                        <h3>⚠️ 注意事項</h3>
+                        <p>✓ 香りが強いので量は控えめに</p>
+                        <p>✓ 生は辛味が強い → 必ず火を通すか下茹でを</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- フッター -->
+        <div class="footer">
+            <div class="footer-content">
+                <div class="footer-title">⚠️ ご利用上の注意</div>
+                <p>
+                    本ページの内容は、ChatGPTによって作成された原稿を元に構成されています。レシピや調理方法については一般的な情報として提供しており、個々の健康状態やアレルギー、食材の鮮度などは考慮されておりません。
+                </p>
+                <p>
+                    実際に調理・食用される際は、食材の状態を十分に確認し、ご自身の判断と責任において行ってください。本情報の利用により生じた損害等について、作成者は一切の責任を負いかねます。
+                </p>
+                <div class="footer-note">
+                    原稿作成: ChatGPT | ページデザイン: Claude
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let isSketchView = true;
+        
+        function toggleView() {
+            const sketchView = document.getElementById('sketch-view');
+            const infographicView = document.getElementById('infographic-view');
+            const toggleText = document.getElementById('toggle-text');
+            
+            if (isSketchView) {
+                sketchView.classList.remove('active');
+                infographicView.classList.add('active');
+                toggleText.textContent = 'ポンチ絵で見る';
+            } else {
+                infographicView.classList.remove('active');
+                sketchView.classList.add('active');
+                toggleText.textContent = 'インフォグラフィックで見る';
+            }
+            
+            isSketchView = !isSketchView;
+        }
+    </script>
+</body>
+</html>
