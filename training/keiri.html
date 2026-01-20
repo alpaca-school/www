@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【究極版】年末調整・法定調書 業務統合管理システム 2026</title>
+    <style>
+        /* ========================================
+           CORE STYLES & THEME
+           ======================================== */
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #3b82f6;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        /* ========================================
+           HEADER & NAVIGATION
+           ======================================== */
+        .header {
+            background: #ffffff;
+            padding: 40px 30px;
+            text-align: center;
+            border-bottom: 4px solid var(--secondary);
+        }
+
+        .header h1 {
+            font-size: 32px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            border: 2px solid var(--secondary);
+            background: transparent;
+            color: var(--secondary);
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: var(--secondary);
+            color: #ffffff;
+            box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
+        }
+
+        /* ========================================
+           QUICK LINKS
+           ======================================== */
+        .link-bar {
+            background: #f1f5f9;
+            padding: 20px 40px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .external-link {
+            font-size: 14px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .external-link:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+
+        /* ========================================
+           VIEW 1: PONCHI-E (FLOW)
+           ======================================== */
+        .content {
+            padding: 40px;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .sketch-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+
+        .flow-step::after {
+            content: '⬇️';
+            position: absolute;
+            bottom: -20px;
+            left: 40px;
+            font-size: 18px;
+        }
+
+        .flow-step:last-child::after {
+            display: none;
+        }
+
+        .step-circle {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        /* ========================================
+           VIEW 2: INFOGRAPHIC (TIMELINE)
+           ======================================== */
+        .timeline {
+            padding-left: 30px;
+            border-left: 4px solid var(--secondary);
+            margin-left: 20px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+            padding-left: 20px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -39px;
+            top: 0;
+            width: 14px;
+            height: 14px;
+            background: var(--accent);
+            border: 3px solid white;
+            border-radius: 50%;
+        }
+
+        .time-badge {
+            background: var(--accent);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        /* ========================================
+           VIEW 3: CHECKLIST + MEMO
+           ======================================== */
+        .control-panel {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+        }
+
+        .progress-box {
+            margin-bottom: 20px;
+        }
+
+        .progress-bar-bg {
+            background: #e2e8f0;
+            height: 28px;
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #10b981, #34d399);
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: 0.2s;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--text-muted);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+            margin-left: auto;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 30px 0 15px 0;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 5px;
+        }
+
+        .task-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            transition: 0.2s;
+        }
+
+        .task-card:hover {
+            border-color: var(--secondary);
+            box-shadow: var(--shadow);
+        }
+
+        .task-main {
+            display: flex;
+            align-items: flex-start;
+            padding: 18px;
+            cursor: pointer;
+        }
+
+        .task-card.completed {
+            background: #f0fdf4;
+            border-color: var(--success);
+        }
+
+        .custom-check {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #cbd5e1;
+            border-radius: 4px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .task-card.completed .custom-check {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .custom-check::after {
+            content: '✓';
+            color: white;
+            display: none;
+        }
+
+        .task-card.completed .custom-check::after {
+            display: block;
+        }
+
+        .task-text h4 {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .task-text p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* メモ入力エリア */
+        .memo-area {
+            padding: 0 18px 18px 55px;
+        }
+
+        .memo-input {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 13px;
+            background: #fcfcfc;
+            resize: vertical;
+            min-height: 45px;
+            transition: 0.3s;
+        }
+
+        .memo-input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>年末調整・法定調書 業務統合管理 2026</h1>
+            <p>全てのステップと改善メモを一元管理</p>
+
+            <div class="nav-tabs">
+                <button id="btn-sketch" class="tab-btn active" onclick="switchView('sketch')">📝 ポンチ絵フロー</button>
+                <button id="btn-info" class="tab-btn" onclick="switchView('info')">📊 インフォグラフ</button>
+                <button id="btn-check" class="tab-btn" onclick="switchView('check')">✅ 作業チェック & メモ</button>
+            </div>
+        </div>
+
+        <div class="link-bar">
+            <a href="https://kyuuyo.freeway-japan.com/" target="_blank" class="external-link">🔗 フリーウェイ給与計算 ログイン</a>
+            <a href="https://www.eltax.lta.go.jp/" target="_blank" class="external-link">🔗 eLTAX 地方税ポータル</a>
+            <a href="https://www.e-tax.nta.go.jp/" target="_blank" class="external-link">🔗 e-Tax 国税電子申告</a>
+        </div>
+
+        <div class="content">
+            <div id="sketch" class="view active">
+                <div class="sketch-flow">
+                    <div class="flow-step">
+                        <div class="step-circle">1</div>
+                        <div><strong>給与データの確定</strong><br>1月〜12月の全給与・賞与をフリーウェイで計算完了させます。</div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-circle">2</div>
+                        <div><strong>年調精算・書類作成</strong><br>申告書入力、給与支払報告書、法定調書合計表の集計を行います。</div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-circle">3</div>
+                        <div><strong>電子データ出力</strong><br>eLTAX(CSV)とe-Tax用ファイルをローカルへ書き出します。</div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-circle">4</div>
+                        <div><strong>電子申告完了</strong><br>各自治体と税務署へ送信し、受領通知を保存します。</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="info" class="view">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <span class="time-badge">DECEMBER</span>
+                        <h3>年末調整の計算と精算</h3>
+                        <p>従業員の申告書内容をフリーウェイに入力し、過不足額を12月給与または賞与で精算。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="time-badge">JANUARY</span>
+                        <h3>源泉徴収票発行・報告書作成</h3>
+                        <p>全員分の源泉徴収票を交付し、市区町村別の給与支払報告書、税務署用の合計表を確定させる。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="time-badge" style="background:var(--danger)">FEB 2nd DEADLINE</span>
+                        <h3>電子申告送信の完遂</h3>
+                        <p>読谷村・宜野湾市・豊見城市、および所轄税務署へのデータ送信を終える。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="check" class="view">
+                <div class="control-panel">
+                    <div class="progress-box">
+                        <div style="display:flex; justify-content:space-between; margin-bottom: 8px;">
+                            <span style="font-weight:bold">全体進捗率</span>
+                            <span id="progress-text">0 / 18 完了 (0%)</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div id="progress-bar" class="progress-bar-fill">0%</div>
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="exportData()">📤 進捗とメモをtxt保存</button>
+                        <button class="btn btn-secondary" onclick="document.getElementById('fileIn').click()">📥
+                            txtから復元</button>
+                        <input type="file" id="fileIn" accept=".txt" onchange="importData(event)">
+                        <button class="btn btn-danger" onclick="resetAll()">🔄 リセット</button>
+                    </div>
+                </div>
+
+                <div class="section-title">1. 給与計算・年末調整の確定</div>
+                <div id="task-group-1" class="task-list">
+                    <div class="task-card" id="card-t1-1">
+                        <div class="task-main" onclick="toggleTask('t1-1')">
+                            <div class="custom-check"></div>
+                            <div class="task-text">
+                                <h4>1月〜11月の給与計算確定</h4>
+                                <p>月次のデータがすべて承認済みか確認</p>
+                            </div>
+                        </div>
+                        <div class="memo-area"><textarea class="memo-input" id="memo-t1-1"
+                                placeholder="気づいたこと・改善点・メモを入力..."></textarea></div>
+                    </div>
+                    <div class="task-card" id="card-t1-2">
+                        <div class="task-main" onclick="toggleTask('t1-2')">
+                            <div class="custom-check"></div>
+                            <div class="task-text">
+                                <h4>12月給与計算の完了</h4>
+                                <p>年調精算反映前の通常給与分を確定</p>
+                            </div>
+                        </div>
+                        <div class="memo-area"><textarea class="memo-input" id="memo-t1-2"
+                                placeholder="メモを入力..."></textarea></div>
+                    </div>
+                    <div class="task-card" id="card-t1-3">
+                        <div class="task-main" onclick="toggleTask('t1-3')">
+                            <div class="custom-check"></div>
+                            <div class="task-text">
+                                <h4>申告書の回収・入力</h4>
+                                <p>扶養・保険料・住宅ローン等の情報を入力</p>
+                            </div>
+                        </div>
+                        <div class="memo-area"><textarea class="memo-input" id="memo-t1-3"
+                                placeholder="メモを入力..."></textarea></div>
+                    </div>
+                    <div class="task-card" id="card-t1-4">
+                        <div class="task-main" onclick="toggleTask('t1-4')">
+                            <div class="custom-check"></div>
+                            <div class="task-text">
+                                <h4>年調計算の実行・確定</h4>
+                                <p>過不足精算額の確定とロック</p>
+                            </div>
+                        </div>
+                        <div class="memo-area"><textarea class="memo-input" id="memo-t1-4"
+                                placeholder="メモを入力..."></textarea></div>
+                    </div>
+                    <div class="task-card" id="card-t1-5">
+                        <div class="task-main" onclick="toggleTask('t1-5')">
+                            <div class="custom-check"></div>
+                            <div class="task-text">
+                                <h4>源泉徴収票の交付</h4>
+                                <p>従業員へのPDF提供または原本交付</p>
+                            </div>
+                        </div>
+                        <div class="memo-area"><textarea class="memo-input" id="memo-t1-5"
+                                placeholder="メモを入力..."></textarea></div>
+                    </div>
+                </div>
+
+                <div class="section-title">2. 報告書・合計表の作成 (フリーウェイ)</div>
+                <div id="task-group-2" class="task-list">
+                    <div class="task-card" id="card-t2-1">
+                        <div class="task-main" onclick="toggleTask('t2-1')">
+                            <div class="custom-check"></div>
+                            <div class="task-text">
+                                <h4>給与支払報告書の作成</h4>
+                                <p>メニュー「給与支払報告書」での集計</p>
+                            </div>
+                        </div>
+                        <div class="memo-area"><textarea class="memo-input" id="memo-t2-1"
+                                placeholder="メモを入力..."></textarea></div>
+                    </div>
+                    <div class="task-card" id="card-t2-2">
+                        <div class="task-main" onclick="toggleTask('t2-2')">
+                            <div class="custom-check"></div>
+                            <div class="task-text">
+                                <h4>法定調書合計表の集計</h4>
+                                <p>所得税徴収高計算書との金額照合</p>
+                            </div>
+                        </div>
+                        <div class="memo-area"><textarea class="memo-input" id="memo-t2-2"
+                                placeholder="メモを入力..."></textarea></div>
+                    </div>
+                    <div class="task-card" id="card-t2-3">
+                        <div class="task-main" onclick="toggleTask('t2-3')">
+                            <div class="custom-check"></div>
+                            <div class="task-text">
+                                <h4>eLTAX用CSVの出力</h4>
+                                <p>地方税ポータル提出用のデータ書き出し</p>
+                            </div>
+                        </div>
+                        <div class="memo-area"><textarea class="memo-input" id="memo-t2-3"
+                                placeholder="メモを入力..."></textarea></div>
+                    </div>
+                    <div class="task-card" id="card-t2-4">
+                        <div class="task-main" onclick="toggleTask('t2-4')">
+                            <div class="custom-check"></div>
+                            <div class="task-text">
+                                <h4>e-Tax用データの出力</h4>
+                                <p>税務署提出用の合計表データ書き出し</p>
+                            </div>
+                        </div>
+                        <div class="memo-area"><textarea class="memo-input" id="memo-t2-4"
+                                placeholder="メモを入力..."></textarea></div>
+                    </div>
+                </div>
+
+                <div class="section-title">3. 各自治体・税務署への提出</div>
+                <div id="task-group-3" class="task-list">
+                    <div class="task-card" id="card-t3-1">
+                        <div class="task-main" onclick="toggleTask('t3-1')">
+                            <div class="custom-check"></div>
+                            <div class="task-text">
+                                <h4>読谷村：送信完了</h4>
+                                <p>受領通知の確認とPDF保存</p>
+                            </div>
+                        </div>
+                        <div class="memo-area"><textarea class="memo-input" id="memo-t3-1"
+                                placeholder="メモを入力..."></textarea></div>
+                    </div>
+                    <div class="task-card" id="card-t3-2">
+                        <div class="task-main" onclick="toggleTask('t3-2')">
+                            <div class="custom-check"></div>
+                            <div class="task-text">
+                                <h4>宜野湾市：送信完了</h4>
+                                <p>受領通知の確認とPDF保存</p>
+                            </div>
+                        </div>
+                        <div class="memo-area"><textarea class="memo-input" id="memo-t3-2"
+                                placeholder="メモを入力..."></textarea></div>
+                    </div>
+                    <div class="task-card" id="card-t3-3">
+                        <div class="task-main" onclick="toggleTask('t3-3')">
+                            <div class="custom-check"></div>
+                            <div class="task-text">
+                                <h4>豊見城市：送信完了</h4>
+                                <p>受領通知の確認とPDF保存</p>
+                            </div>
+                        </div>
+                        <div class="memo-area"><textarea class="memo-input" id="memo-t3-3"
+                                placeholder="メモを入力..."></textarea></div>
+                    </div>
+                    <div class="task-card" id="card-t3-4">
+                        <div class="task-main" onclick="toggleTask('t3-4')">
+                            <div class="custom-check"></div>
+                            <div class="task-text">
+                                <h4>税務署：送信完了</h4>
+                                <p>法定調書合計表のe-Tax送信完了</p>
+                            </div>
+                        </div>
+                        <div class="memo-area"><textarea class="memo-input" id="memo-t3-4"
+                                placeholder="メモを入力..."></textarea></div>
+                    </div>
+                    <div class="task-card" id="card-t3-5">
+                        <div class="task-main" onclick="toggleTask('t3-5')">
+                            <div class="custom-check"></div>
+                            <div class="task-text">
+                                <h4>最終エビデンスの保存</h4>
+                                <p>全ての送信控えをサーバーの指定フォルダへ</p>
+                            </div>
+                        </div>
+                        <div class="memo-area"><textarea class="memo-input" id="memo-t3-5"
+                                placeholder="メモを入力..."></textarea></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* 全てのタスクIDリスト */
+        const taskIds = [
+            't1-1', 't1-2', 't1-3', 't1-4', 't1-5',
+            't2-1', 't2-2', 't2-3', 't2-4',
+            't3-1', 't3-2', 't3-3', 't3-4', 't3-5'
+        ];
+
+        /* 各カードの状態管理 */
+        let statusMap = {};
+        taskIds.forEach(id => statusMap[id] = false);
+
+        /** ビュー切り替え **/
+        function switchView(id) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.getElementById('btn-' + id).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /** タスク完了切り替え **/
+        function toggleTask(id) {
+            statusMap[id] = !statusMap[id];
+            const card = document.getElementById('card-' + id);
+            if (statusMap[id]) {
+                card.classList.add('completed');
+            } else {
+                card.classList.remove('completed');
+            }
+            updateProgress();
+        }
+
+        /** 進捗バーの更新 **/
+        function updateProgress() {
+            const total = taskIds.length;
+            const checked = Object.values(statusMap).filter(v => v).length;
+            const percent = Math.round((checked / total) * 100);
+
+            document.getElementById('progress-bar').style.width = percent + '%';
+            document.getElementById('progress-bar').innerText = percent + '%';
+            document.getElementById('progress-text').innerText = `${checked} / ${total} 完了 (${percent}%)`;
+        }
+
+        /** データ保存 (チェック状態 + メモ内容) **/
+        function exportData() {
+            const exportObj = {
+                checks: statusMap,
+                memos: {}
+            };
+            taskIds.forEach(id => {
+                exportObj.memos[id] = document.getElementById('memo-' + id).value;
+            });
+
+            const json = JSON.stringify(exportObj, null, 2);
+            const blob = new Blob([json], { type: 'text/plain' });
+            const now = new Date();
+            const stamp = now.getFullYear() + ('0' + (now.getMonth() + 1)).slice(-2) + ('0' + now.getDate()).slice(-2) + "_" + ('0' + now.getHours()).slice(-2) + ('0' + now.getMinutes()).slice(-2);
+
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `年調業務管理_進捗メモ_${stamp}.txt`;
+            a.click();
+        }
+
+        /** データ復元 **/
+        function importData(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (evt) {
+                try {
+                    const data = JSON.parse(evt.target.result);
+                    // チェック状態の復元
+                    statusMap = data.checks;
+                    taskIds.forEach(id => {
+                        const card = document.getElementById('card-' + id);
+                        if (statusMap[id]) card.classList.add('completed');
+                        else card.classList.remove('completed');
+                        // メモの復元
+                        if (data.memos && data.memos[id]) {
+                            document.getElementById('memo-' + id).value = data.memos[id];
+                        }
+                    });
+                    updateProgress();
+                    alert('データとメモを完全に復元しました。');
+                } catch (err) {
+                    alert('読み込みに失敗しました。ファイル形式を確認してください。');
+                }
+            };
+            reader.readAsText(file);
+            e.target.value = '';
+        }
+
+        /** リセット **/
+        function resetAll() {
+            if (confirm('全ての進捗とメモをリセットしますか？')) {
+                taskIds.forEach(id => {
+                    statusMap[id] = false;
+                    document.getElementById('card-' + id).classList.remove('completed');
+                    document.getElementById('memo-' + id).value = '';
+                });
+                updateProgress();
+            }
+        }
+
+        // 初期化
+        document.addEventListener('DOMContentLoaded', () => {
+            updateProgress();
+        });
+    </script>
+
+</body>
+
+</html>
