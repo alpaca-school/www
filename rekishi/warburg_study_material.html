@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>オットー・ワールブルク - 仮説実験授業</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+            background: linear-gradient(to bottom, #e3f2fd, #fff);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .progress-bar {
+            background: white;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .progress-track {
+            background: #e0e0e0;
+            height: 12px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #1976d2, #42a5f5);
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-text {
+            text-align: center;
+            margin-top: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .page {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1976d2;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #1976d2;
+        }
+        
+        .story-box {
+            background: linear-gradient(135deg, #f5f5f5, #e8eaf6);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #1976d2;
+            line-height: 1.9;
+            font-size: 16px;
+        }
+        
+        .question-box {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border: 3px solid #ff9800;
+        }
+        
+        .question-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #e65100;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .question-title::before {
+            content: '🤔';
+            font-size: 28px;
+            margin-right: 10px;
+        }
+        
+        .choices {
+            margin: 20px 0;
+        }
+        
+        .choice {
+            background: white;
+            padding: 15px 20px;
+            margin: 12px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            font-size: 16px;
+        }
+        
+        .choice:hover {
+            border-color: #1976d2;
+            transform: translateX(5px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .choice.selected {
+            background: #e3f2fd;
+            border-color: #1976d2;
+        }
+        
+        .choice.correct {
+            background: #c8e6c9;
+            border-color: #4caf50;
+        }
+        
+        .choice.wrong {
+            background: #ffcdd2;
+            border-color: #f44336;
+        }
+        
+        .feedback {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+        
+        .feedback.show {
+            display: block;
+            animation: slideDown 0.5s;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 500px;
+            }
+        }
+        
+        .feedback.correct {
+            background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
+            border: 2px solid #4caf50;
+        }
+        
+        .feedback.wrong {
+            background: linear-gradient(135deg, #ffcdd2, #ef9a9a);
+            border: 2px solid #f44336;
+        }
+        
+        .feedback-title {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #1976d2, #42a5f5);
+            color: white;
+        }
+        
+        .btn-next {
+            background: linear-gradient(135deg, #4caf50, #66bb6a);
+            color: white;
+        }
+        
+        .btn-back {
+            background: linear-gradient(135deg, #757575, #9e9e9e);
+            color: white;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .highlight {
+            background: linear-gradient(transparent 60%, #ffeb3b 60%);
+            font-weight: bold;
+            padding: 0 3px;
+        }
+        
+        .intro-hero {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .intro-hero h1 {
+            font-size: 32px;
+            color: #1976d2;
+            margin-bottom: 15px;
+        }
+        
+        .intro-hero p {
+            font-size: 18px;
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        .summary-box {
+            background: linear-gradient(135deg, #e1f5fe, #b3e5fc);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 3px solid #0288d1;
+        }
+        
+        .summary-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #01579b;
+            margin-bottom: 15px;
+        }
+        
+        .score-display {
+            text-align: center;
+            font-size: 48px;
+            font-weight: bold;
+            color: #1976d2;
+            margin: 30px 0;
+        }
+        
+        .achievement {
+            background: linear-gradient(135deg, #fff9c4, #fff59d);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+            border: 2px solid #f57f17;
+        }
+        
+        .achievement-icon {
+            font-size: 60px;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .card-title {
+                font-size: 20px;
+            }
+            
+            .story-box, .question-box {
+                padding: 18px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="progress-bar">
+            <div class="progress-track">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">ステップ 1 / 12</div>
+        </div>
+        
+        <!-- ページ1: イントロ -->
+        <div class="page active" id="page1">
+            <div class="card">
+                <div class="intro-hero">
+                    <h1>🔬 オットー・ワールブルクの物語</h1>
+                    <p>生命のエネルギーのひみつを<br>解き明かした科学者の冒険</p>
+                </div>
+                <div class="story-box">
+                    <p>今から約100年前、ドイツに一人の科学者がいました。</p>
+                    <p style="margin-top: 15px;">彼の名前は<span class="highlight">オットー・ワールブルク</span>。</p>
+                    <p style="margin-top: 15px;">彼は、人間を含むすべての生き物にとって最も大切な謎に挑みました。それは...</p>
+                    <p style="margin-top: 15px; font-size: 20px; font-weight: bold; color: #1976d2;">「私たちの体は、どうやって酸素からエネルギーを作り出しているのか？」</p>
+                </div>
+                <div class="buttons">
+                    <button class="btn btn-primary" onclick="nextPage()">物語を始める →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ページ2: 問題提起 -->
+        <div class="page" id="page2">
+            <div class="card">
+                <div class="card-title">第1章：生命の謎</div>
+                <div class="story-box">
+                    <p>私たちは毎日、呼吸をしています。息を吸って、酸素を体に取り込みます。</p>
+                    <p style="margin-top: 15px;">でも、その酸素は体の中でどうなっているのでしょうか？</p>
+                    <p style="margin-top: 15px;">ワールブルクが研究を始めた1900年代初頭、これは科学の大きな謎でした。</p>
+                </div>
+                
+                <div class="question-box">
+                    <div class="question-title">問題1</div>
+                    <p style="margin-bottom: 15px;">私たちが呼吸で取り込んだ酸素は、体の中でどうなると思いますか？</p>
+                    <div class="choices">
+                        <div class="choice" onclick="selectChoice(this, 'a', 1)">A. 血液の中にそのまま溶けて全身に運ばれる</div>
+                        <div class="choice" onclick="selectChoice(this, 'b', 1)">B. 細胞の中でエネルギーを作るために使われる</div>
+                        <div class="choice" onclick="selectChoice(this, 'c', 1)">C. すぐに二酸化炭素に変わって吐き出される</div>
+                    </div>
+                    <div class="feedback" id="feedback1"></div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-back" onclick="prevPage()">← 戻る</button>
+                    <button class="btn btn-next" id="next1" onclick="nextPage()" disabled>次へ →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ページ3: ワールブルクの発見 -->
+        <div class="page" id="page3">
+            <div class="card">
+                <div class="card-title">第2章：鉄の秘密</div>
+                <div class="story-box">
+                    <p>正解は<strong>B</strong>でした！酸素は細胞の中でエネルギーを作るために使われます。</p>
+                    <p style="margin-top: 15px;">ワールブルクは何年もかけて、この「細胞呼吸」のしくみを研究しました。</p>
+                    <p style="margin-top: 15px;">そして、驚くべき発見をしたのです。細胞の中で酸素を使ってエネルギーを作る反応には、<span class="highlight">「鉄」を含む特別な酵素</span>が必要だということを！</p>
+                </div>
+                
+                <div class="question-box">
+                    <div class="question-title">問題2</div>
+                    <p style="margin-bottom: 15px;">鉄が体に必要な理由として、正しいものはどれでしょう？</p>
+                    <div class="choices">
+                        <div class="choice" onclick="selectChoice(this, 'a', 2)">A. 骨を強くするため</div>
+                        <div class="choice" onclick="selectChoice(this, 'b', 2)">B. 酸素を運び、エネルギーを作るため</div>
+                        <div class="choice" onclick="selectChoice(this, 'c', 2)">C. 体温を保つため</div>
+                    </div>
+                    <div class="feedback" id="feedback2"></div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-back" onclick="prevPage()">← 戻る</button>
+                    <button class="btn btn-next" id="next2" onclick="nextPage()" disabled>次へ →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ページ4: 測定装置の発明 -->
+        <div class="page" id="page4">
+            <div class="card">
+                <div class="card-title">第3章：革命的な発明</div>
+                <div class="story-box">
+                    <p>その通り！鉄は酸素を運び、エネルギーを作るために欠かせません。</p>
+                    <p style="margin-top: 15px;">しかし、ワールブルクには大きな問題がありました。</p>
+                    <p style="margin-top: 15px;">「生きている細胞が、どれだけ酸素を使っているかを正確に測る方法がない！」</p>
+                    <p style="margin-top: 15px;">そこで彼は、<span class="highlight">自分で測定装置を作ってしまった</span>のです。これが「ワールブルク検圧計」です。</p>
+                </div>
+                
+                <div class="question-box">
+                    <div class="question-title">問題3</div>
+                    <p style="margin-bottom: 15px;">科学者が新しい発見をするために、測定装置を作ることは重要だと思いますか？</p>
+                    <div class="choices">
+                        <div class="choice" onclick="selectChoice(this, 'a', 3)">A. とても重要。測れないと証明できない</div>
+                        <div class="choice" onclick="selectChoice(this, 'b', 3)">B. それほど重要ではない。考えることが大事</div>
+                        <div class="choice" onclick="selectChoice(this, 'c', 3)">C. 他の人が作った装置を使えばいい</div>
+                    </div>
+                    <div class="feedback" id="feedback3"></div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-back" onclick="prevPage()">← 戻る</button>
+                    <button class="btn btn-next" id="next3" onclick="nextPage()" disabled>次へ →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ページ5: ノーベル賞 -->
+        <div class="page" id="page5">
+            <div class="card">
+                <div class="card-title">第4章：世界が認めた功績</div>
+                <div class="story-box">
+                    <p>正解は<strong>A</strong>！測定できなければ、発見を証明できません。</p>
+                    <p style="margin-top: 15px;">ワールブルクの発明した装置のおかげで、細胞呼吸の研究は大きく進みました。</p>
+                    <p style="margin-top: 15px;">そして1931年、彼の功績が認められ、<span class="highlight">ノーベル生理学・医学賞</span>を受賞したのです！</p>
+                    <p style="margin-top: 15px;">受賞理由は「呼吸酵素の性質および作用機構の発見」でした。</p>
+                </div>
+                
+                <div class="question-box">
+                    <div class="question-title">問題4</div>
+                    <p style="margin-bottom: 15px;">ワールブルクがノーベル賞を受賞した年は？</p>
+                    <div class="choices">
+                        <div class="choice" onclick="selectChoice(this, 'a', 4)">A. 1921年</div>
+                        <div class="choice" onclick="selectChoice(this, 'b', 4)">B. 1931年</div>
+                        <div class="choice" onclick="selectChoice(this, 'c', 4)">C. 1941年</div>
+                    </div>
+                    <div class="feedback" id="feedback4"></div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-back" onclick="prevPage()">← 戻る</button>
+                    <button class="btn btn-next" id="next4" onclick="nextPage()" disabled>次へ →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ページ6: がん研究の始まり -->
+        <div class="page" id="page6">
+            <div class="card">
+                <div class="card-title">第5章：新たな挑戦</div>
+                <div class="story-box">
+                    <p>正解！1931年にノーベル賞を受賞しました。</p>
+                    <p style="margin-top: 15px;">しかし、ワールブルクはここで研究をやめませんでした。</p>
+                    <p style="margin-top: 15px;">次に彼が挑んだのは、<span class="highlight">がん細胞の謎</span>でした。</p>
+                    <p style="margin-top: 15px;">「がん細胞は、普通の細胞とどう違うのだろう？」</p>
+                </div>
+                
+                <div class="question-box">
+                    <div class="question-title">問題5</div>
+                    <p style="margin-bottom: 15px;">がん細胞について、あなたが知っていることはありますか？</p>
+                    <div class="choices">
+                        <div class="choice" onclick="selectChoice(this, 'a', 5)">A. 普通の細胞より速く増える</div>
+                        <div class="choice" onclick="selectChoice(this, 'b', 5)">B. 普通の細胞と全く同じ</div>
+                        <div class="choice" onclick="selectChoice(this, 'c', 5)">C. 増えることができない</div>
+                    </div>
+                    <div class="feedback" id="feedback5"></div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-back" onclick="prevPage()">← 戻る</button>
+                    <button class="btn btn-next" id="next5" onclick="nextPage()" disabled>次へ →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ページ7: ワールブルク効果 -->
+        <div class="page" id="page7">
+            <div class="card">
+                <div class="card-title">第6章：ワールブルク効果の発見</div>
+                <div class="story-box">
+                    <p>正解！がん細胞は異常に速く増える性質があります。</p>
+                    <p style="margin-top: 15px;">ワールブルクは、がん細胞のエネルギーの作り方を調べました。</p>
+                    <p style="margin-top: 15px;">すると、驚くべきことがわかったのです！</p>
+                    <p style="margin-top: 15px;"><span class="highlight">がん細胞は、酸素がたくさんあっても、酸素を使わずに糖を分解してエネルギーを作っていた</span>のです。</p>
+                </div>
+                
+                <div class="question-box">
+                    <div class="question-title">問題6</div>
+                    <p style="margin-bottom: 15px;">普通の細胞とがん細胞の違いは？</p>
+                    <div class="choices">
+                        <div class="choice" onclick="selectChoice(this, 'a', 6)">A. がん細胞は酸素を使わずにエネルギーを作る</div>
+                        <div class="choice" onclick="selectChoice(this, 'b', 6)">B. がん細胞は酸素をより多く使う</div>
+                        <div class="choice" onclick="selectChoice(this, 'c', 6)">C. 違いはない</div>
+                    </div>
+                    <div class="feedback" id="feedback6"></div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-back" onclick="prevPage()">← 戻る</button>
+                    <button class="btn btn-next" id="next6" onclick="nextPage()" disabled>次へ →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ページ8: ワールブルク効果の重要性 -->
+        <div class="page" id="page8">
+            <div class="card">
+                <div class="card-title">第7章：発見の意味</div>
+                <div class="story-box">
+                    <p>その通り！この発見は「<span class="highlight">ワールブルク効果</span>」と呼ばれています。</p>
+                    <p style="margin-top: 15px;">なぜがん細胞はこんな特別なエネルギーの作り方をするのでしょうか？</p>
+                    <p style="margin-top: 15px;">実は、酸素を使わない方法は効率が悪いのですが、<strong>細胞が速く増えるのに必要な材料を作りやすい</strong>のです。</p>
+                    <p style="margin-top: 15px;">この発見は、今でもがん治療の研究に役立っています。</p>
+                </div>
+                
+                <div class="question-box">
+                    <div class="question-title">問題7</div>
+                    <p style="margin-bottom: 15px;">ワールブルク効果の発見は、どう役立つと思いますか？</p>
+                    <div class="choices">
+                        <div class="choice" onclick="selectChoice(this, 'a', 7)">A. がん細胞の特徴を利用した治療法の開発</div>
+                        <div class="choice" onclick="selectChoice(this, 'b', 7)">B. 特に役立たない</div>
+                        <div class="choice" onclick="selectChoice(this, 'c', 7)">C. 呼吸の研究だけに役立つ</div>
+                    </div>
+                    <div class="feedback" id="feedback7"></div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-back" onclick="prevPage()">← 戻る</button>
+                    <button class="btn btn-next" id="next7" onclick="nextPage()" disabled>次へ →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ページ9: 2度目のノーベル賞候補 -->
+        <div class="page" id="page9">
+            <div class="card">
+                <div class="card-title">第8章：幻の2度目の受賞</div>
+                <div class="story-box">
+                    <p>正解！がん細胞の特徴を利用した治療法の開発に役立っています。</p>
+                    <p style="margin-top: 15px;">この素晴らしい発見により、1944年、ワールブルクは<span class="highlight">2度目のノーベル賞候補</span>になりました。</p>
+                    <p style="margin-top: 15px;">しかし、悲しいことに彼は受賞できませんでした。</p>
+                    <p style="margin-top: 15px;">当時のドイツを支配していた<strong>ナチス政権</strong>が、ドイツ人がノーベル賞を受け取ることを禁止していたのです。</p>
+                </div>
+                
+                <div class="question-box">
+                    <div class="question-title">問題8</div>
+                    <p style="margin-bottom: 15px;">政治が科学の発展を妨げることについて、どう思いますか？</p>
+                    <div class="choices">
+                        <div class="choice" onclick="selectChoice(this, 'a', 8)">A. 科学は政治から独立すべき</div>
+                        <div class="choice" onclick="selectChoice(this, 'b', 8)">B. 政治が科学を管理すべき</div>
+                        <div class="choice" onclick="selectChoice(this, 'c', 8)">C. どちらでもよい</div>
+                    </div>
+                    <div class="feedback" id="feedback8"></div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-back" onclick="prevPage()">← 戻る</button>
+                    <button class="btn btn-next" id="next8" onclick="nextPage()" disabled>次へ →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ページ10: 研究者としての人生 -->
+        <div class="page" id="page10">
+            <div class="card">
+                <div class="card-title">第9章：研究に捧げた人生</div>
+                <div class="story-box">
+                    <p>科学は自由であるべきですね。</p>
+                    <p style="margin-top: 15px;">ワールブルクは、研究に人生を捧げた人でした。</p>
+                    <p style="margin-top: 15px;">・研究に集中するため、<span class="highlight">生涯結婚しませんでした</span></p>
+                    <p style="margin-top: 15px;">・非常にストイック（厳しく自分を律する）な性格でした</p>
+                    <p style="margin-top: 15px;">・<span class="highlight">90歳近くまで現役</span>の研究者として活動しました</p>
+                </div>
+                
+                <div class="question-box">
+                    <div class="question-title">問題9</div>
+                    <p style="margin-bottom: 15px;">ワールブルクの生き方から学べることは何でしょう？</p>
+                    <div class="choices">
+                        <div class="choice" onclick="selectChoice(this, 'a', 9)">A. 情熱を持ち続けることの大切さ</div>
+                        <div class="choice" onclick="selectChoice(this, 'b', 9)">B. 結婚しないことが大事</div>
+                        <div class="choice" onclick="selectChoice(this, 'c', 9)">C. 特に学ぶことはない</div>
+                    </div>
+                    <div class="feedback" id="feedback9"></div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-back" onclick="prevPage()">← 戻る</button>
+                    <button class="btn btn-next" id="next9" onclick="nextPage()" disabled>次へ →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ページ11: 現代への影響 -->
+        <div class="page" id="page11">
+            <div class="card">
+                <div class="card-title">第10章：現代に生きる遺産</div>
+                <div class="story-box">
+                    <p>素晴らしい！情熱を持ち続けることはとても大切ですね。</p>
+                    <p style="margin-top: 15px;">ワールブルクの発見は、今でも様々な分野で活用されています：</p>
+                    <p style="margin-top: 15px;">・<strong>がん治療</strong>：がん細胞の代謝を標的にした薬の開発</p>
+                    <p style="margin-top: 15px;">・<strong>スポーツ医学</strong>：筋肉のエネルギー代謝の理解</p>
+                    <p style="margin-top: 15px;">・<strong>栄養学</strong>：細胞がどう栄養を使うかの研究</p>
+                </div>
+                
+                <div class="question-box">
+                    <div class="question-title">問題10</div>
+                    <p style="margin-bottom: 15px;">基礎研究（すぐには役立たないように見える研究）の重要性について、どう思いますか？</p>
+                    <div class="choices">
+                        <div class="choice" onclick="selectChoice(this, 'a', 10)">A. 長い目で見れば必ず役に立つので重要</div>
+                        <div class="choice" onclick="selectChoice(this, 'b', 10)">B. すぐ役立つ研究だけやればいい</div>
+                        <div class="choice" onclick="selectChoice(this, 'c', 10)">C. あまり重要ではない</div>
+                    </div>
+                    <div class="feedback" id="feedback10"></div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-back" onclick="prevPage()">← 戻る</button>
+                    <button class="btn btn-next" id="next10" onclick="nextPage()" disabled>次へ →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ページ12: まとめと成績 -->
+        <div class="page" id="page12">
+            <div class="card">
+                <div class="card-title">🎉 学習完了！</div>
+                
+                <div class="achievement">
+                    <div class="achievement-icon">🏆</div>
+                    <h3>よくがんばりました！</h3>
+                </div>
+                
+                <div class="score-display">
+                    <span id="finalScore">0</span> / 10 問正解
+                </div>
+                
+                <div class="summary-box">
+                    <div class="summary-title">📝 ワールブルクから学んだこと</div>
+                    <p><strong>1. 細胞呼吸の発見</strong><br>
+                    鉄を含む酵素が、酸素からエネルギーを作る鍵だった</p>
+                    
+                    <p style="margin-top: 15px;"><strong>2. 革新的な測定装置</strong><br>
+                    ワールブルク検圧計で研究が飛躍的に進んだ</p>
+                    
+                    <p style="margin-top: 15px;"><strong>3. ワールブルク効果</strong><br>
+                    がん細胞の特別な代謝を発見し、現代医学の基礎に</p>
+                    
+                    <p style="margin-top: 15px;"><strong>4. 研究への情熱</strong><br>
+                    90歳近くまで研究を続けた献身的な姿勢</p>
+                </div>
+                
+                <div class="story-box">
+                    <p style="font-size: 18px; font-weight: bold; color: #1976d2; text-align: center;">
+                        「生命がどうやって呼吸し、エネルギーを生み出すか」
+                    </p>
+                    <p style="margin-top: 15px; text-align: center;">
+                        ワールブルクは、この生命の根本原理を解き明かした偉大な科学者でした。<br>
+                        彼の発見は、今も私たちの健康と医療を支えています。
+                    </p>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-primary" onclick="restartQuiz()">最初からやり直す</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentPage = 1;
+        const totalPages = 12;
+        let score = 0;
+        
+        const answers = {
+            1: 'b',
+            2: 'b',
+            3: 'a',
+            4: 'b',
+            5: 'a',
+            6: 'a',
+            7: 'a',
+            8: 'a',
+            9: 'a',
+            10: 'a'
+        };
+        
+        const feedbacks = {
+            1: {
+                correct: '✅ 正解！酸素は細胞の中でエネルギーを作るために使われます。このプロセスを「細胞呼吸」といいます。',
+                wrong: '❌ 惜しい！実は、酸素は細胞の中でエネルギーを作るために使われるんです。このプロセスを「細胞呼吸」といいます。'
+            },
+            2: {
+                correct: '✅ その通り！鉄は赤血球で酸素を運び、細胞の中でエネルギーを作る反応に必要です。だから貧血になると疲れやすくなるんですね。',
+                wrong: '❌ 実は違います。鉄は酸素を運び、エネルギーを作るために必要なんです。だから貧血（鉄不足）になると疲れやすくなります。'
+            },
+            3: {
+                correct: '✅ 正解！「測定できないものは証明できない」というのは科学の基本です。ワールブルクは測定装置を作ることで、細胞呼吸を科学的に証明できました。',
+                wrong: '❌ 実は、測定はとても重要です。「測定できないものは証明できない」というのが科学の基本。ワールブルクの装置があったからこそ、発見が証明できたのです。'
+            },
+            4: {
+                correct: '✅ 正解！1931年にノーベル生理学・医学賞を受賞しました。',
+                wrong: '❌ 残念！正しくは1931年です。「呼吸酵素の性質および作用機構の発見」でノーベル生理学・医学賞を受賞しました。'
+            },
+            5: {
+                correct: '✅ その通り！がん細胞は制御を失って異常に速く増殖します。だからこそ、どうやってエネルギーを作っているのかを知ることが重要なのです。',
+                wrong: '❌ 実は、がん細胞の特徴は異常に速く増えることです。だからこそ、どうやってエネルギーを作っているのかを知ることが重要なのです。'
+            },
+            6: {
+                correct: '✅ 正解！これが「ワールブルク効果」です。がん細胞は酸素があっても、酸素を使わない方法でエネルギーを作ります。効率は悪いですが、速く増えるのに必要な材料を作りやすいのです。',
+                wrong: '❌ 実は、がん細胞は酸素を使わずにエネルギーを作るんです。これを「ワールブルク効果」といいます。効率は悪いですが、速く増えるのに必要な材料を作りやすいのです。'
+            },
+            7: {
+                correct: '✅ 正解！がん細胞だけが持つ特別な代謝を標的にすれば、がん細胞だけを攻撃する治療法が作れます。ワールブルクの発見は、今でもがん治療研究の基礎になっています。',
+                wrong: '❌ いいえ、とても役立っています！がん細胞だけが持つ特別な代謝を標的にすれば、がん細胞だけを攻撃する治療法が作れます。今でもがん治療研究の基礎になっています。'
+            },
+            8: {
+                correct: '✅ その通りです。科学は人類全体の知識であり、政治から独立していることが大切です。ワールブルクの2度目の受賞が妨げられたのは、本当に残念なことでした。',
+                wrong: '❌ 科学は人類全体の知識であり、政治から独立していることが大切です。ワールブルクの2度目の受賞が妨げられたのは、本当に残念なことでした。'
+            },
+            9: {
+                correct: '✅ 素晴らしい！ワールブルクは生涯を通じて研究への情熱を持ち続けました。好きなことに一生懸命取り組むことの大切さを教えてくれます。',
+                wrong: '❌ 実は、ワールブルクの生き方から学べるのは「情熱を持ち続けることの大切さ」です。結婚するかどうかは人それぞれですが、好きなことに一生懸命取り組むことは誰にでもできますね。'
+            },
+            10: {
+                correct: '✅ その通り！ワールブルクの細胞呼吸の研究も、当時はすぐには役立たないように見えました。でも100年たった今、がん治療やスポーツ医学など、様々な分野で役立っています。基礎研究は未来への投資なのです。',
+                wrong: '❌ 実は基礎研究はとても重要です！ワールブルクの研究も、当時はすぐには役立たないように見えました。でも100年たった今、がん治療など様々な分野で役立っています。基礎研究は未来への投資なのです。'
+            }
+        };
+        
+        function updateProgress() {
+            const progress = (currentPage / totalPages) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `ステップ ${currentPage} / ${totalPages}`;
+        }
+        
+        function nextPage() {
+            if (currentPage < totalPages) {
+                document.getElementById('page' + currentPage).classList.remove('active');
+                currentPage++;
+                document.getElementById('page' + currentPage).classList.add('active');
+                updateProgress();
+                window.scrollTo(0, 0);
+                
+                if (currentPage === totalPages) {
+                    document.getElementById('finalScore').textContent = score;
+                }
+            }
+        }
+        
+        function prevPage() {
+            if (currentPage > 1) {
+                document.getElementById('page' + currentPage).classList.remove('active');
+                currentPage--;
+                document.getElementById('page' + currentPage).classList.add('active');
+                updateProgress();
+                window.scrollTo(0, 0);
+            }
+        }
+        
+        function selectChoice(element, choice, questionNum) {
+            const choices = element.parentElement.getElementsByClassName('choice');
+            for (let c of choices) {
+                c.classList.remove('selected', 'correct', 'wrong');
+            }
+            
+            element.classList.add('selected');
+            
+            const isCorrect = choice === answers[questionNum];
+            const feedbackDiv = document.getElementById('feedback' + questionNum);
+            const nextBtn = document.getElementById('next' + questionNum);
+            
+            if (isCorrect) {
+                element.classList.add('correct');
+                feedbackDiv.className = 'feedback correct show';
+                feedbackDiv.innerHTML = '<div class="feedback-title">✨ 正解！</div>' + feedbacks[questionNum].correct;
+                score++;
+            } else {
+                element.classList.add('wrong');
+                feedbackDiv.className = 'feedback wrong show';
+                feedbackDiv.innerHTML = '<div class="feedback-title">💡 もう一度考えてみよう</div>' + feedbacks[questionNum].wrong;
+            }
+            
+            nextBtn.disabled = false;
+        }
+        
+        function restartQuiz() {
+            currentPage = 1;
+            score = 0;
+            
+            for (let i = 1; i <= totalPages; i++) {
+                document.getElementById('page' + i).classList.remove('active');
+                if (i <= 10) {
+                    const feedback = document.getElementById('feedback' + i);
+                    if (feedback) {
+                        feedback.className = 'feedback';
+                        feedback.innerHTML = '';
+                    }
+                    const nextBtn = document.getElementById('next' + i);
+                    if (nextBtn) {
+                        nextBtn.disabled = true;
+                    }
+                    const choices = document.querySelectorAll('#page' + i + ' .choice');
+                    choices.forEach(c => c.classList.remove('selected', 'correct', 'wrong'));
+                }
+            }
+            
+            document.getElementById('page1').classList.add('active');
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+        
+        updateProgress();
+    </script>
+</body>
+</html>

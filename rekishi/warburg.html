@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>オットー・ワールブルク</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 15px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .toggle-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .toggle-btn {
+            background: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            color: #667eea;
+        }
+        
+        .toggle-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        .toggle-btn:active {
+            transform: translateY(0);
+        }
+        
+        .content {
+            display: none;
+        }
+        
+        .content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* ポンチ絵スタイル */
+        .sketch {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        .sketch-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .sketch-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 5px solid #764ba2;
+            border-radius: 8px;
+        }
+        
+        .sketch-section h3 {
+            color: #764ba2;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .sketch-section p {
+            line-height: 1.8;
+            font-size: 15px;
+        }
+        
+        .sketch-box {
+            background: white;
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .highlight {
+            background: #ffe66d;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        
+        /* インフォグラフィックスタイル */
+        .infographic {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        .info-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .info-title {
+            font-size: 26px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .info-subtitle {
+            font-size: 16px;
+            color: #666;
+        }
+        
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, #667eea, #764ba2);
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 70px;
+            margin-bottom: 30px;
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            left: 20px;
+            width: 24px;
+            height: 24px;
+            background: #667eea;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        .timeline-content {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .timeline-year {
+            font-size: 18px;
+            font-weight: bold;
+            color: #764ba2;
+            margin-bottom: 8px;
+        }
+        
+        .timeline-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        
+        .key-points {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .key-points h3 {
+            color: #667eea;
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .point-item {
+            display: flex;
+            align-items: flex-start;
+            margin: 12px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+        }
+        
+        .point-icon {
+            background: #667eea;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            margin-right: 12px;
+            font-size: 14px;
+        }
+        
+        .point-text {
+            flex: 1;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .sketch, .infographic {
+                padding: 15px;
+            }
+            
+            .sketch-title, .info-title {
+                font-size: 20px;
+            }
+            
+            .timeline::before {
+                left: 20px;
+            }
+            
+            .timeline-dot {
+                left: 10px;
+            }
+            
+            .timeline-item {
+                padding-left: 50px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .stat-number {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="toggle-container">
+            <button class="toggle-btn" onclick="toggleView()">
+                <span id="btnText">インフォグラフィックで見る</span>
+            </button>
+        </div>
+        
+        <!-- ポンチ絵 -->
+        <div id="sketch" class="content active">
+            <div class="sketch">
+                <h1 class="sketch-title">🔬 オットー・ワールブルク<br>生命のエネルギーを解き明かした巨人</h1>
+                
+                <div class="sketch-section">
+                    <h3>🏆 1931年ノーベル生理学・医学賞受賞</h3>
+                    <p><span class="highlight">「呼吸酵素の性質および作用機構の発見」</span>により受賞</p>
+                    <p>生物がどのように酸素を使ってエネルギーを作るのか、その謎を解明しました。</p>
+                </div>
+                
+                <div class="sketch-box">
+                    <h3 style="color: #667eea; margin-bottom: 10px;">💡 主な功績</h3>
+                    <p><strong>🔸 鉄の重要性を解明</strong><br>
+                    酸素と結合して酸化反応を促す触媒が、細胞内の<span class="highlight">鉄原子</span>であることを発見</p>
+                    <p style="margin-top: 10px;"><strong>🔸 ワールブルク検圧計の開発</strong><br>
+                    生きた細胞の酸素消費量を精密に測定する革命的な装置を発明</p>
+                </div>
+                
+                <div class="sketch-section">
+                    <h3>🧬 ワールブルク効果（がん研究）</h3>
+                    <p>がん細胞の特異な性質を発見：</p>
+                    <p>酸素が十分にある環境でも、酸素を使わずに<span class="highlight">糖を分解してエネルギーを得る</span>（乳酸を作る）</p>
+                    <p style="margin-top: 10px; font-size: 14px; color: #666;">→ この発見は現代のがん治療研究の基礎となっています</p>
+                </div>
+                
+                <div class="sketch-box">
+                    <h3 style="color: #764ba2; margin-bottom: 10px;">📖 幻の2度目の受賞</h3>
+                    <p><strong>1944年</strong> - がん研究で2度目のノーベル賞候補に</p>
+                    <p style="margin-top: 8px;">しかし、<span style="color: #d63031;">ナチス・ドイツ政権がドイツ人のノーベル賞受領を禁止</span>していたため受賞を逃す</p>
+                </div>
+                
+                <div class="sketch-section">
+                    <h3>👤 人物像</h3>
+                    <p>✓ 非常にストイックな性格</p>
+                    <p>✓ 研究に没頭するため生涯独身を貫く</p>
+                    <p>✓ 90歳近くまで現役研究者として活動</p>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin-top: 20px; text-align: center;">
+                    <p style="font-size: 16px; font-weight: bold; line-height: 1.8;">
+                        「生命がどうやって呼吸し、<br>エネルギーを生み出すか」<br>
+                        生命の根本原理を解き明かした巨人
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- インフォグラフィック -->
+        <div id="infographic" class="content">
+            <div class="infographic">
+                <div class="info-header">
+                    <h1 class="info-title">オットー・ワールブルク</h1>
+                    <p class="info-subtitle">20世紀を代表する生理学者・生化学者</p>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">1931</div>
+                        <div class="stat-label">ノーベル賞受賞</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">90歳</div>
+                        <div class="stat-label">現役研究者</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">2回</div>
+                        <div class="stat-label">ノーベル賞候補</div>
+                    </div>
+                </div>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-year">1931年</div>
+                            <div class="timeline-text">
+                                <strong>ノーベル生理学・医学賞受賞</strong><br>
+                                「呼吸酵素の性質および作用機構の発見」により受賞。細胞内の鉄原子が酸素との反応で重要な役割を果たすことを解明。
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-year">ワールブルク検圧計</div>
+                            <div class="timeline-text">
+                                生きた細胞の酸素消費量を精密に測定する装置を開発。当時の生化学研究における革命的なツールとなった。
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-year">ワールブルク効果</div>
+                            <div class="timeline-text">
+                                がん細胞が酸素を使わずに糖を分解してエネルギーを得る特異な代謝を発見。現代のがん治療研究の基礎となる。
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-year">1944年</div>
+                            <div class="timeline-text">
+                                がん研究で2度目のノーベル賞候補となるも、ナチス政権の禁止により受賞を逃す。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="key-points">
+                    <h3>🔑 重要なポイント</h3>
+                    <div class="point-item">
+                        <div class="point-icon">1</div>
+                        <div class="point-text">
+                            <strong>鉄の発見</strong> - 細胞呼吸における鉄原子の決定的な役割を解明
+                        </div>
+                    </div>
+                    <div class="point-item">
+                        <div class="point-icon">2</div>
+                        <div class="point-text">
+                            <strong>測定技術</strong> - 革新的な測定装置を開発し、生化学研究を加速
+                        </div>
+                    </div>
+                    <div class="point-item">
+                        <div class="point-icon">3</div>
+                        <div class="point-text">
+                            <strong>がん代謝</strong> - ワールブルク効果の発見が現代医学の基礎に
+                        </div>
+                    </div>
+                    <div class="point-item">
+                        <div class="point-icon">4</div>
+                        <div class="point-text">
+                            <strong>研究姿勢</strong> - 生涯独身、90歳近くまで現役で研究を続けた献身
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 20px; border-radius: 15px; margin-top: 20px;">
+                    <p style="font-size: 15px; line-height: 1.8; text-align: center; color: #333;">
+                        <strong style="color: #667eea; font-size: 17px;">彼の遺産</strong><br>
+                        生命の根本原理である呼吸とエネルギー代謝を解明。<br>
+                        その発見は今も医学・生化学研究の土台として生き続けています。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentView = 'sketch';
+        
+        function toggleView() {
+            const sketch = document.getElementById('sketch');
+            const infographic = document.getElementById('infographic');
+            const btnText = document.getElementById('btnText');
+            
+            if (currentView === 'sketch') {
+                sketch.classList.remove('active');
+                infographic.classList.add('active');
+                btnText.textContent = 'ポンチ絵で見る';
+                currentView = 'infographic';
+            } else {
+                infographic.classList.remove('active');
+                sketch.classList.add('active');
+                btnText.textContent = 'インフォグラフィックで見る';
+                currentView = 'sketch';
+            }
+        }
+    </script>
+</body>
+</html>
