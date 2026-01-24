@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>大豆栽培ガイド</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {
+      background-color: #f3f4f6;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // アイコンコンポーネント（LucideをReactで簡易的に使うためのラッパー）
+    const Icon = ({ name, className }) => {
+      useEffect(() => {
+        lucide.createIcons();
+      }, [name]);
+      return <i data-lucide={name} className={className}></i>;
+    };
+
+    const SoybeanCultivationApp = () => {
+      const [currentStep, setCurrentStep] = useState(0);
+      const [completedSteps, setCompletedSteps] = useState([]);
+
+      const steps = [
+        {
+          id: 1,
+          title: "種まき",
+          icon: "sprout",
+          description: "日当たりと水捌けのいい畑に10〜15センチほどの間隔で少し穴をほり、二、三粒大豆を植える。優しく土をかける",
+          tips: ["穴の深さは2-3cm程度", "種同士の間隔を均等に", "土は軽く押さえる程度に"],
+          duration: "1日",
+          color: "bg-green-100 border-green-300"
+        },
+        {
+          id: 2,
+          title: "発芽まで水やり",
+          icon: "droplets",
+          description: "発芽するまで毎日朝、夕水をたっぷりかける",
+          tips: ["朝と夕方の2回", "土が乾かないように注意", "水のやりすぎも禁物"],
+          duration: "7-10日",
+          color: "bg-blue-100 border-blue-300"
+        },
+        {
+          id: 3,
+          title: "鳥よけネット設置",
+          icon: "shield",
+          description: "発芽したら鳥に食べられないように鳥よけネットをかける",
+          tips: ["ネットは地面にしっかり固定", "芽が傷つかないよう注意", "風で飛ばされないように"],
+          duration: "発芽後すぐ",
+          color: "bg-yellow-100 border-yellow-300"
+        },
+        {
+          id: 4,
+          title: "ネット除去",
+          icon: "calendar",
+          description: "種まき後12日頃を目安にネットをはずす",
+          tips: ["植物が十分成長してから", "天気の良い日に作業", "根元を傷つけないよう注意"],
+          duration: "種まき後12日頃",
+          color: "bg-purple-100 border-purple-300"
+        },
+        {
+          id: 5,
+          title: "成長期の水やり",
+          icon: "sun",
+          description: "さやの中の豆がふくらんできたら水かけ1回で大丈夫",
+          tips: ["水やりを控えめに", "土の表面が乾いたら水やり", "過湿は根腐れの原因"],
+          duration: "成長期間中",
+          color: "bg-orange-100 border-orange-300"
+        },
+        {
+          id: 6,
+          title: "収穫",
+          icon: "package",
+          description: "2〜3ヶ月したら収穫です！",
+          tips: ["さやが茶色くなったら収穫適期", "朝の涼しい時間に収穫", "乾燥した日を選ぶ"],
+          duration: "2-3ヶ月後",
+          color: "bg-red-100 border-red-300"
+        }
+      ];
+
+      const toggleStepCompletion = (stepId) => {
+        if (completedSteps.includes(stepId)) {
+          setCompletedSteps(completedSteps.filter(id => id !== stepId));
+        } else {
+          setCompletedSteps([...completedSteps, stepId]);
+        }
+      };
+
+      const nextStep = () => {
+        if (currentStep < steps.length - 1) {
+          setCurrentStep(currentStep + 1);
+        }
+      };
+
+      const prevStep = () => {
+        if (currentStep > 0) {
+          setCurrentStep(currentStep - 1);
+        }
+      };
+
+      const currentStepData = steps[currentStep];
+      const progressPercentage = ((currentStep + 1) / steps.length) * 100;
+
+      return (
+        <div className="max-w-md mx-auto bg-white min-h-screen shadow-lg">
+          {/* Header */}
+          <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-6 text-center">
+            <h1 className="text-2xl font-bold mb-2">🌱 大豆栽培ガイド</h1>
+            <p className="text-green-100">Step by Step で大豆を育てよう</p>
+          </div>
+
+          {/* Progress Bar */}
+          <div className="p-4 bg-gray-50 border-b">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-medium text-gray-600">進捗状況</span>
+              <span className="text-sm font-medium text-gray-600">{currentStep + 1}/{steps.length}</span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div
+                className="bg-green-600 h-2 rounded-full transition-all duration-300"
+                style={{ width: `${progressPercentage}%` }}
+              ></div>
+            </div>
+          </div>
+
+          {/* Current Step */}
+          <div className="p-6">
+            <div className={`${currentStepData.color} rounded-lg p-6 border-2 mb-6 shadow-sm`}>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center">
+                  <div className="text-gray-700 mr-3">
+                    <Icon name={currentStepData.icon} className="w-8 h-8" />
+                  </div>
+                  <h2 className="text-xl font-bold text-gray-700">
+                    ステップ {currentStepData.id}: {currentStepData.title}
+                  </h2>
+                </div>
+                <button
+                  onClick={() => toggleStepCompletion(currentStepData.id)}
+                  className={`p-2 rounded-full transition-colors ${completedSteps.includes(currentStepData.id)
+                      ? 'text-green-600 bg-green-100'
+                      : 'text-gray-400 bg-gray-100'
+                    }`}
+                >
+                  <Icon name="check-circle" className="w-6 h-6" />
+                </button>
+              </div>
+
+              <p className="text-gray-700 mb-4 leading-relaxed">
+                {currentStepData.description}
+              </p>
+
+              <div className="bg-white/80 backdrop-blur rounded-lg p-4 mb-4">
+                <h3 className="font-semibold text-gray-700 mb-2">💡 ポイント</h3>
+                <ul className="space-y-1">
+                  {currentStepData.tips.map((tip, index) => (
+                    <li key={index} className="text-sm text-gray-600 flex items-start">
+                      <span className="text-green-600 mr-2">•</span>
+                      {tip}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="flex items-center text-sm text-gray-600">
+                <Icon name="calendar" className="w-4 h-4 mr-2" />
+                <span>期間: {currentStepData.duration}</span>
+              </div>
+            </div>
+
+            {/* Navigation */}
+            <div className="flex justify-between items-center">
+              <button
+                onClick={prevStep}
+                disabled={currentStep === 0}
+                className={`flex items-center px-4 py-2 rounded-lg font-medium transition-colors ${currentStep === 0
+                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+              >
+                <Icon name="chevron-left" className="w-5 h-5 mr-1" />
+                前へ
+              </button>
+
+              <button
+                onClick={nextStep}
+                disabled={currentStep === steps.length - 1}
+                className={`flex items-center px-4 py-2 rounded-lg font-medium transition-colors ${currentStep === steps.length - 1
+                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    : 'bg-green-600 text-white hover:bg-green-700'
+                  }`}
+              >
+                次へ
+                <Icon name="chevron-right" className="w-5 h-5 ml-1" />
+              </button>
+            </div>
+          </div>
+
+          {/* Step Overview */}
+          <div className="p-6 bg-gray-50 border-t">
+            <h3 className="font-bold text-gray-700 mb-4">全ステップ一覧</h3>
+            <div className="space-y-2">
+              {steps.map((step, index) => (
+                <div
+                  key={step.id}
+                  onClick={() => setCurrentStep(index)}
+                  className={`flex items-center justify-between p-3 rounded-lg cursor-pointer transition-colors ${index === currentStep
+                      ? 'bg-green-100 border-2 border-green-300'
+                      : 'bg-white border border-gray-200 hover:bg-gray-50'
+                    }`}
+                >
+                  <div className="flex items-center">
+                    <div className="text-gray-600 mr-3">
+                      <Icon name={step.icon} className="w-5 h-5" />
+                    </div>
+                    <span className={`font-medium ${index === currentStep ? 'text-green-700' : 'text-gray-700'
+                      }`}>
+                      {step.title}
+                    </span>
+                  </div>
+                  {completedSteps.includes(step.id) && (
+                    <Icon name="check-circle" className="w-5 h-5 text-green-600" />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Completion Status */}
+          <div className="p-8 bg-white text-center">
+            <div className="text-3xl font-bold text-green-600 mb-2">
+              {completedSteps.length}/{steps.length}
+            </div>
+            <p className="text-gray-600 font-medium">
+              {completedSteps.length === steps.length
+                ? '🎉 おめでとうございます！全ステップ完了です！'
+                : 'ステップを完了させてください'}
+            </p>
+          </div>
+        </div>
+      );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<SoybeanCultivationApp />);
+  </script>
+</body>
+
+</html>
