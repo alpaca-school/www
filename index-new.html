@@ -47,9 +47,11 @@
 
     /* ========= 設定 ========= */
     // Googleスプレッドシートのデータを読み込むためのURL
-    // ローカルファイル(file://)からでも読み込めるように、CORSプロキシを経由させています
-    const TARGET_URL = "https://docs.google.com/spreadsheets/d/1YXtuEzZHrV236tzNj7DfvdweXxAGZZNP8OVGJbujrrg/gviz/tq?tqx=out:csv";
-    const SHEET_CSV_URL = "https://api.allorigins.win/raw?url=" + encodeURIComponent(TARGET_URL);
+    // CORSエラーを回避するため、別のプロキシサービス(corsproxy.io)を経由させます
+    // ※ 本来は「ファイル」→「共有」→「Webに公開」で発行されたURLを使うのが最も確実です
+    const SHEET_ID = "1YXtuEzZHrV236tzNj7DfvdweXxAGZZNP8OVGJbujrrg";
+    const TARGET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
+    const SHEET_CSV_URL = "https://corsproxy.io/?" + encodeURIComponent(TARGET_URL);
 
 
 
