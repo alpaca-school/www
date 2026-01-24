@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>月桃虫除けスプレー学習ページ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #e8f5e9 0%, #fff9c4 100%);
+            min-height: 100vh;
+            padding: 15px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .mode-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .mode-btn {
+            background: white;
+            color: #2e7d32;
+            border: 2px solid #66bb6a;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 140px;
+        }
+        
+        .mode-btn.active {
+            background: linear-gradient(135deg, #66bb6a, #43a047);
+            color: white;
+            box-shadow: 0 4px 15px rgba(67, 160, 71, 0.3);
+        }
+        
+        .mode-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .view {
+            display: none;
+        }
+        
+        .view.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* ポンチ絵スタイル */
+        .ponchi {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+        
+        .ponchi h1 {
+            color: #2e7d32;
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #66bb6a;
+            padding-bottom: 10px;
+        }
+        
+        .ponchi-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f1f8e9;
+            border-radius: 12px;
+            border-left: 5px solid #66bb6a;
+        }
+        
+        .ponchi-section h2 {
+            color: #2e7d32;
+            font-size: 18px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .ponchi-section h2::before {
+            content: "🌿";
+            margin-right: 8px;
+            font-size: 22px;
+        }
+        
+        .ponchi ul {
+            margin-left: 20px;
+            color: #424242;
+            line-height: 1.8;
+        }
+        
+        .ponchi li {
+            margin: 8px 0;
+        }
+        
+        .highlight {
+            background: #fff59d;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        /* インフォグラフィックスタイル */
+        .infographic {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+        
+        .infographic h1 {
+            color: #2e7d32;
+            text-align: center;
+            font-size: 26px;
+            margin-bottom: 25px;
+        }
+        
+        .recipe-card {
+            background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .recipe-card h2 {
+            color: #1b5e20;
+            font-size: 20px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .ingredient {
+            background: white;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .ingredient-icon {
+            font-size: 28px;
+            margin-right: 12px;
+        }
+        
+        .ingredient-text {
+            flex: 1;
+        }
+        
+        .ingredient-name {
+            font-weight: bold;
+            color: #2e7d32;
+            font-size: 16px;
+        }
+        
+        .ingredient-amount {
+            color: #616161;
+            font-size: 14px;
+        }
+        
+        .step-container {
+            background: #fff3e0;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .step {
+            display: flex;
+            align-items: flex-start;
+            margin: 15px 0;
+        }
+        
+        .step-number {
+            background: #ff6f00;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .step-text {
+            color: #424242;
+            line-height: 1.6;
+            padding-top: 4px;
+        }
+        
+        .tips-box {
+            background: linear-gradient(135deg, #e1f5fe, #b3e5fc);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 2px dashed #0277bd;
+        }
+        
+        .tips-box h3 {
+            color: #01579b;
+            font-size: 18px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tips-box h3::before {
+            content: "💡";
+            margin-right: 8px;
+            font-size: 22px;
+        }
+        
+        .tips-box ul {
+            margin-left: 20px;
+            color: #424242;
+            line-height: 1.7;
+        }
+        
+        .tips-box li {
+            margin: 8px 0;
+        }
+        
+        /* 学習モードスタイル */
+        .learning {
+            background: white;
+            border-radius: 20px;
+            padding: 0;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .slide {
+            display: none;
+            padding: 30px 25px;
+            min-height: 400px;
+        }
+        
+        .slide.active {
+            display: block;
+            animation: slideIn 0.5s;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .slide-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .slide-number {
+            background: linear-gradient(135deg, #66bb6a, #43a047);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        
+        .slide-title {
+            color: #2e7d32;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .slide-content {
+            margin: 25px 0;
+        }
+        
+        .big-emoji {
+            font-size: 80px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .explanation-box {
+            background: #f1f8e9;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border-left: 5px solid #66bb6a;
+        }
+        
+        .explanation-box p {
+            color: #424242;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+        
+        .quiz-box {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .quiz-box h3 {
+            color: #e65100;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .quiz-option {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s;
+        }
+        
+        .quiz-option:hover {
+            border-color: #66bb6a;
+            transform: translateX(5px);
+        }
+        
+        .quiz-option.correct {
+            background: #c8e6c9;
+            border-color: #43a047;
+        }
+        
+        .quiz-option.wrong {
+            background: #ffcdd2;
+            border-color: #e53935;
+        }
+        
+        .materials-list {
+            display: grid;
+            gap: 12px;
+            margin: 20px 0;
+        }
+        
+        .material-item {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .material-emoji {
+            font-size: 32px;
+        }
+        
+        .material-info {
+            flex: 1;
+        }
+        
+        .material-name {
+            font-weight: bold;
+            color: #1565c0;
+            font-size: 16px;
+        }
+        
+        .material-detail {
+            color: #424242;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+        
+        .warning-box {
+            background: #fff9c4;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #fbc02d;
+            margin: 15px 0;
+        }
+        
+        .warning-box strong {
+            color: #f57f17;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+        }
+        
+        .nav-btn {
+            background: linear-gradient(135deg, #66bb6a, #43a047);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .nav-btn:disabled {
+            background: #bdbdbd;
+            cursor: not-allowed;
+        }
+        
+        .nav-btn:not(:disabled):active {
+            transform: scale(0.95);
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #66bb6a, #43a047);
+            transition: width 0.5s;
+        }
+        
+        .completion-box {
+            background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .completion-box h2 {
+            color: #1b5e20;
+            font-size: 28px;
+            margin: 20px 0;
+        }
+        
+        .completion-emoji {
+            font-size: 100px;
+        }
+        
+        @media (max-width: 390px) {
+            body {
+                padding: 10px;
+            }
+            
+            .mode-btn {
+                font-size: 13px;
+                padding: 10px 15px;
+                min-width: 100px;
+            }
+            
+            .ponchi, .infographic {
+                padding: 18px;
+            }
+            
+            .slide {
+                padding: 25px 18px;
+                min-height: 350px;
+            }
+            
+            .ponchi h1, .infographic h1, .slide-title {
+                font-size: 20px;
+            }
+            
+            .ponchi-section h2, .recipe-card h2 {
+                font-size: 16px;
+            }
+            
+            .ingredient-icon, .material-emoji {
+                font-size: 24px;
+            }
+            
+            .ingredient-name, .material-name {
+                font-size: 14px;
+            }
+            
+            .ingredient-amount, .material-detail {
+                font-size: 13px;
+            }
+            
+            .big-emoji {
+                font-size: 60px;
+            }
+            
+            .nav-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="mode-selector">
+            <button class="mode-btn active" onclick="changeMode('learning')">📚 学習モード</button>
+            <button class="mode-btn" onclick="changeMode('ponchi')">📝 ポンチ絵</button>
+            <button class="mode-btn" onclick="changeMode('infographic')">📊 インフォグラフィック</button>
+        </div>
+        
+        <!-- 学習モード -->
+        <div id="learningView" class="view active">
+            <div class="learning">
+                <div style="padding: 15px 25px; background: linear-gradient(135deg, #66bb6a, #43a047);">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressBar" style="width: 0%;"></div>
+                    </div>
+                </div>
+                
+                <!-- スライド1: イントロ -->
+                <div class="slide active" data-slide="1">
+                    <div class="slide-header">
+                        <div class="slide-number">スライド 1 / 10</div>
+                        <h2 class="slide-title">月桃虫除けスプレーを<br>作ろう！</h2>
+                    </div>
+                    <div class="slide-content">
+                        <div class="big-emoji">🌿</div>
+                        <div class="explanation-box">
+                            <p>
+                                これから月桃（げっとう）という植物を使って、自然にやさしい虫除けスプレーを作る方法を学びます。化学薬品を使わない、安全で効果的な虫除けスプレーです！
+                            </p>
+                        </div>
+                        <div class="warning-box">
+                            <strong>⚠️ 注意:</strong> この実験は必ず保護者と一緒に行いましょう。
+                        </div>
+                    </div>
+                    <div class="navigation">
+                        <button class="nav-btn" disabled>← 前へ</button>
+                        <button class="nav-btn" onclick="nextSlide()">次へ →</button>
+                    </div>
+                </div>
+                
+                <!-- スライド2: 月桃って何？ -->
+                <div class="slide" data-slide="2">
+                    <div class="slide-header">
+                        <div class="slide-number">スライド 2 / 10</div>
+                        <h2 class="slide-title">月桃ってどんな植物？</h2>
+                    </div>
+                    <div class="slide-content">
+                        <div class="big-emoji">🌺</div>
+                        <div class="explanation-box">
+                            <p>
+                                月桃は沖縄や九州南部などの温かい地域に生えている植物です。大きな葉っぱと白い花が特徴で、いい香りがします。
+                            </p>
+                        </div>
+                        <div class="quiz-box">
+                            <h3>🤔 考えてみよう</h3>
+                            <p style="color: #424242; margin-bottom: 12px;">月桃はどんな場所に生えているでしょう？</p>
+                            <div class="quiz-options">
+                                <div class="quiz-option" onclick="checkAnswer(this, false)">❄️ 寒い北海道</div>
+                                <div class="quiz-option" onclick="checkAnswer(this, true)">🌴 温かい沖縄</div>
+                                <div class="quiz-option" onclick="checkAnswer(this, false)">🏔️ 高い山の上</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="navigation">
+                        <button class="nav-btn" onclick="prevSlide()">← 前へ</button>
+                        <button class="nav-btn" onclick="nextSlide()">次へ →</button>
+                    </div>
+                </div>
+                
+                <!-- スライド3: なぜ虫が嫌がるの？ -->
+                <div class="slide" data-slide="3">
+                    <div class="slide-header">
+                        <div class="slide-number">スライド 3 / 10</div>
+                        <h2 class="slide-title">なぜ虫が嫌がるの？</h2>
+                    </div>
+                    <div class="slide-content">
+                        <div class="big-emoji">🦟❌</div>
+                        <div class="explanation-box">
+                            <p>
+                                月桃の葉には<strong class="highlight">シネオール</strong>と<strong class="highlight">カンファー</strong>という成分が含まれています。これらは虫が嫌いな香りなので、虫が近づかなくなるんです！
+                            </p>
+                        </div>
+                        <div style="background: #e1f5fe; padding: 15px; border-radius: 10px; margin-top: 15px;">
+                            <p style="color: #424242;"><strong>📖 科学メモ:</strong> シネオールはユーカリにも含まれる成分で、清涼感のある香りが特徴です。</p>
+                        </div>
+                    </div>
+                    <div class="navigation">
+                        <button class="nav-btn" onclick="prevSlide()">← 前へ</button>
+                        <button class="nav-btn" onclick="nextSlide()">次へ →</button>
+                    </div>
+                </div>
+                
+                <!-- スライド4: 必要な材料 -->
+                <div class="slide" data-slide="4">
+                    <div class="slide-header">
+                        <div class="slide-number">スライド 4 / 10</div>
+                        <h2 class="slide-title">準備するもの</h2>
+                    </div>
+                    <div class="slide-content">
+                        <div class="materials-list">
+                            <div class="material-item">
+                                <div class="material-emoji">🍃</div>
+                                <div class="material-info">
+                                    <div class="material-name">月桃の葉</div>
+                                    <div class="material-detail">瓶いっぱいになる量</div>
+                                </div>
+                            </div>
+                            <div class="material-item">
+                                <div class="material-emoji">🍶</div>
+                                <div class="material-info">
+                                    <div class="material-name">ホワイトリカー</div>
+                                    <div class="material-detail">葉が浸る量（アルコール35度）</div>
+                                </div>
+                            </div>
+                            <div class="material-item">
+                                <div class="material-emoji">🫙</div>
+                                <div class="material-info">
+                                    <div class="material-name">ガラス瓶</div>
+                                    <div class="material-detail">煮沸消毒したもの</div>
+                                </div>
+                            </div>
+                            <div class="material-item">
+                                <div class="material-emoji">💧</div>
+                                <div class="material-info">
+                                    <div class="material-name">精製水</div>
+                                    <div class="material-detail">希釈用（薬局で買えます）</div>
+                                </div>
+                            </div>
+                            <div class="material-item">
+                                <div class="material-emoji">🧴</div>
+                                <div class="material-info">
+                                    <div class="material-name">スプレー容器</div>
+                                    <div class="material-detail">100ml程度のもの</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="navigation">
+                        <button class="nav-btn" onclick="prevSlide()">← 前へ</button>
+                        <button class="nav-btn" onclick="nextSlide()">次へ →</button>
+                    </div>
+                </div>
+                
+                <!-- スライド5: 手順1 葉を準備 -->
+                <div class="slide" data-slide="5">
+                    <div class="slide-header">
+                        <div class="slide-number">スライド 5 / 10</div>
+                        <h2 class="slide-title">手順① 葉を準備しよう</h2>
+                    </div>
+                    <div class="slide-content">
+                        <div class="big-emoji">✂️</div>
+                        <div class="step-container">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <div class="step-text">月桃の葉をハサミで細かく切ります（1〜2cm角くらい）</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <div class="step-text">風通しの良い日陰で数日間乾燥させます</div>
+                            </div>
+                        </div>
+                        <div class="tips-box">
+                            <h3>なぜ乾燥させるの？</h3>
+                            <ul>
+                                <li>水分が減ると成分が濃くなる</li>
+                                <li>カビが生えにくくなる</li>
+                                <li>生のままでもOKだけど、早めに使おう</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="navigation">
+                        <button class="nav-btn" onclick="prevSlide()">← 前へ</button>
+                        <button class="nav-btn" onclick="nextSlide()">次へ →</button>
+                    </div>
+                </div>
+                
+                <!-- スライド6: 手順2 漬け込み -->
+                <div class="slide" data-slide="6">
+                    <div class="slide-header">
+                        <div class="slide-number">スライド 6 / 10</div>
+                        <h2 class="slide-title">手順② 漬け込もう</h2>
+                    </div>
+                    <div class="slide-content">
+                        <div class="big-emoji">🫙</div>
+                        <div class="step-container">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <div class="step-text">消毒した瓶に葉を入れます</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <div class="step-text">ホワイトリカーを葉が完全に浸るまで注ぎます</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <div class="step-text">フタをして冷暗所に置きます（2週間）</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">4</div>
+                                <div class="step-text">1日1回、瓶を軽く振ります</div>
+                            </div>
+                        </div>
+                        <div class="warning-box">
+                            <strong>⚠️ ポイント:</strong> これで「チンキ（原液）」ができます。まだ使えません！
+                        </div>
+                    </div>
+                    <div class="navigation">
+                        <button class="nav-btn" onclick="prevSlide()">← 前へ</button>
+                        <button class="nav-btn" onclick="nextSlide()">次へ →</button>
+                    </div>
+                </div>
+                
+                <!-- スライド7: 手順3 スプレー作り -->
+                <div class="slide" data-slide="7">
+                    <div class="slide-header">
+                        <div class="slide-number">スライド 7 / 10</div>
+                        <h2 class="slide-title">手順③ スプレーを作ろう</h2>
+                    </div>
+                    <div class="slide-content">
+                        <div class="big-emoji">🧪</div>
+                        <div class="explanation-box">
+                            <p><strong>黄金の配合比（100ml分）</strong></p>
+                        </div>
+                        <div class="materials-list">
+                            <div class="material-item">
+                                <div class="material-emoji">🧴</div>
+                                <div class="material-info">
+                                    <div class="material-name">月桃チンキ</div>
+                                    <div class="material-detail">10〜20ml（大さじ1くらい）</div>
+                                </div>
+                            </div>
+                            <div class="material-item">
+                                <div class="material-emoji">💧</div>
+                                <div class="material-info">
+                                    <div class="material-name">精製水</div>
+                                    <div class="material-detail">80〜90ml</div>
+                                </div>
+                            </div>
+                            <div class="material-item">
+                                <div class="material-emoji">🌱</div>
+                                <div class="material-info">
+                                    <div class="material-name">ハッカ油（お好みで）</div>
+                                    <div class="material-detail">1〜2滴</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tips-box">
+                            <h3>混ぜ方</h3>
+                            <ul>
+                                <li>スプレー容器にチンキを入れる</li>
+                                <li>精製水を加える</li>
+                                <li>よく振って混ぜる</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="navigation">
+                        <button class="nav-btn" onclick="prevSlide()">← 前へ</button>
+                        <button class="nav-btn" onclick="nextSlide()">次へ →</button>
+                    </div>
+                </div>
+                
+                <!-- スライド8: 使い方 -->
+                <div class="slide" data-slide="8">
+                    <div class="slide-header">
+                        <div class="slide-number">スライド 8 / 10</div>
+                        <h2 class="slide-title">使い方と注意点</h2>
+                    </div>
+                    <div class="slide-content">
+                        <div class="big-emoji">✨</div>
+                        <div class="step-container">
+                            <h3 style="color: #e65100; margin-bottom: 15px;">使う場所</h3>
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <div class="step-text">網戸や窓にシュッとスプレー</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <div class="step-text">玄関やベランダに</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <div class="step-text">ゴミ箱の周りに</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">4</div>
+                                <div class="step-text">お部屋の消臭にも使える</div>
+                            </div>
+                        </div>
+                        <div class="warning-box">
+                            <strong>⚠️ 大切な注意:</strong><br>
+                            • 使う前に必ず振る<br>
+                            • 2週間以内に使い切る<br>
+                            • 肌に使う前にパッチテストをする<br>
+                            • 目や口に入れない
+                        </div>
+                    </div>
+                    <div class="navigation">
+                        <button class="nav-btn" onclick="prevSlide()">← 前へ</button>
+                        <button class="nav-btn" onclick="nextSlide()">次へ →</button>
+                    </div>
+                </div>
+                
+                <!-- スライド9: クイズ -->
+                <div class="slide" data-slide="9">
+                    <div class="slide-header">
+                        <div class="slide-number">スライド 9 / 10</div>
+                        <h2 class="slide-title">理解度チェック！</h2>
+                    </div>
+                    <div class="slide-content">
+                        <div class="big-emoji">🧠</div>
+                        <div class="quiz-box">
+                            <h3>Q1: 月桃に含まれる虫が嫌がる成分は？</h3>
+                            <div class="quiz-options">
+                                <div class="quiz-option" onclick="checkAnswer(this, false)">ビタミンC</div>
+                                <div class="quiz-option" onclick="checkAnswer(this, true)">シネオールとカンファー</div>
+                                <div class="quiz-option" onclick="checkAnswer(this, false)">砂糖</div>
+                            </div>
+                        </div>
+                        <div class="quiz-box" style="margin-top: 20px;">
+                            <h3>Q2: チンキを作るのに何日かかる？</h3>
+                            <div class="quiz-options">
+                                <div class="quiz-option" onclick="checkAnswer(this, false)">1日</div>
+                                <div class="quiz-option" onclick="checkAnswer(this, true)">2週間</div>
+                                <div class="quiz-option" onclick="checkAnswer(this, false)">1ヶ月</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="navigation">
+                        <button class="nav-btn" onclick="prevSlide()">← 前へ</button>
+                        <button class="nav-btn" onclick="nextSlide()">次へ →</button>
+                    </div>
+                </div>
+                
+                <!-- スライド10: 完了 -->
+                <div class="slide" data-slide="10">
+                    <div class="slide-header">
+                        <div class="slide-number">スライド 10 / 10</div>
+                        <h2 class="slide-title">おめでとう！</h2>
+                    </div>
+                    <div class="slide-content">
+                        <div class="completion-box">
+                            <div class="completion-emoji">🎉</div>
+                            <h2>学習完了！</h2>
+                            <p style="color: #424242; line-height: 1.8; margin: 20px 0;">
+                                月桃虫除けスプレーの作り方をマスターしました！<br>
+                                自然にやさしい虫除けで、快適な暮らしを楽しんでくださいね。
+                            </p>
+                            <div style="background: white; padding: 20px; border-radius: 10px; margin-top: 20px;">
+                                <p style="color: #2e7d32; font-weight: bold; margin-bottom: 10px;">覚えておこう！</p>
+                                <p style="color: #424242; line-height: 1.7;">
+                                    ✓ 月桃には虫除け成分がある<br>
+                                    ✓ チンキは2週間漬ける<br>
+                                    ✓ 5〜10倍に薄めて使う<br>
+                                    ✓ 2週間以内に使い切る
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="navigation">
+                        <button class="nav-btn" onclick="prevSlide()">← 前へ</button>
+                        <button class="nav-btn" onclick="restartLearning()">最初から →</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ポンチ絵ビュー -->
+        <div id="ponchiView" class="view">
+            <div class="ponchi">
+                <h1>🌿 月桃虫除けスプレーの作り方</h1>
+                
+                <div class="ponchi-section">
+                    <h2>月桃の効果</h2>
+                    <p style="color: #424242; line-height: 1.7;">
+                        月桃には<span class="highlight">シネオール</span>や<span class="highlight">カンファー</span>という虫が嫌がる成分が含まれており、ナチュラルな防虫対策として人気です。
+                    </p>
+                </div>
+                
+                <div class="ponchi-section">
+                    <h2>方法1: アルコール抽出法（チンキ）</h2>
+                    <ul>
+                        <li><strong>乾燥させる:</strong> 葉を細かく切り、数日陰干しして水分を飛ばす（生のままでも可）</li>
+                        <li><strong>漬け込み:</strong> 瓶に入れ、ホワイトリカーをひたひたになるまで注いで2週間</li>
+                        <li><strong>希釈:</strong> 精製水で5〜10倍に薄めてスプレー容器へ</li>
+                    </ul>
+                </div>
+                
+                <div class="ponchi-section">
+                    <h2>方法2: 蒸留法（芳香蒸留水）</h2>
+                    <ul>
+                        <li><strong>特徴:</strong> アルコールを含まないため肌への刺激が少なく、香りが上品</li>
+                        <li><strong>注意:</strong> 冷蔵庫で保管し、1〜2週間で使い切る</li>
+                    </ul>
+                </div>
+                
+                <div class="ponchi-section">
+                    <h2>黄金レシピ（100ml分）</h2>
+                    <ul>
+                        <li>月桃チンキ: 10〜20ml</li>
+                        <li>精製水: 80〜90ml</li>
+                        <li>ハッカ油（お好みで）: 1〜2滴</li>
+                    </ul>
+                </div>
+                
+                <div class="tips-box">
+                    <h3>アドバイス</h3>
+                    <ul>
+                        <li><strong>使用場所:</strong> 網戸、玄関、ゴミ箱周辺に効果的</li>
+                        <li><strong>保存:</strong> 2週間以内に使い切る</li>
+                        <li><strong>肌への使用:</strong> パッチテストをしてから使用</li>
+                        <li><strong>多用途:</strong> 消臭やリラックス効果も期待できる</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- インフォグラフィックビュー -->
+        <div id="infographicView" class="view">
+            <div class="infographic">
+                <h1>🌿 月桃虫除けスプレー<br>黄金レシピ</h1>
+                
+                <div class="recipe-card">
+                    <h2>📝 チンキ（原液）の作り方</h2>
+                    <div class="ingredient">
+                        <div class="ingredient-icon">🍃</div>
+                        <div class="ingredient-text">
+                            <div class="ingredient-name">月桃の葉</div>
+                            <div class="ingredient-amount">瓶いっぱい（乾燥または細かく切った生葉）</div>
+                        </div>
+                    </div>
+                    <div class="ingredient">
+                        <div class="ingredient-icon">🍶</div>
+                        <div class="ingredient-text">
+                            <div class="ingredient-name">ホワイトリカー</div>
+                            <div class="ingredient-amount">葉が完全に浸るまで</div>
+                        </div>
+                    </div>
+                    <div class="ingredient">
+                        <div class="ingredient-icon">⏰</div>
+                        <div class="ingredient-text">
+                            <div class="ingredient-name">漬け込み期間</div>
+                            <div class="ingredient-amount">冷暗所で2週間（1日1回振る）</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="recipe-card">
+                    <h2>💧 スプレー黄金比（100ml分）</h2>
+                    <div class="ingredient">
+                        <div class="ingredient-icon">🧪</div>
+                        <div class="ingredient-text">
+                            <div class="ingredient-name">月桃チンキ</div>
+                            <div class="ingredient-amount">10ml〜20ml</div>
+                        </div>
+                    </div>
+                    <div class="ingredient">
+                        <div class="ingredient-icon">💧</div>
+                        <div class="ingredient-text">
+                            <div class="ingredient-name">精製水（または蒸留水）</div>
+                            <div class="ingredient-amount">80ml〜90ml</div>
+                        </div>
+                    </div>
+                    <div class="ingredient">
+                        <div class="ingredient-icon">🌱</div>
+                        <div class="ingredient-text">
+                            <div class="ingredient-name">ハッカ油（お好みで）</div>
+                            <div class="ingredient-amount">1〜2滴</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step-container">
+                    <h2 style="color: #e65100; margin-bottom: 15px; text-align: center;">使い方とコツ</h2>
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-text">使う前によく振ってください</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-text">天然成分のため、2週間以内に使い切る</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-text">網戸、玄関、ゴミ箱周辺、衣類などにシュッ</div>
+                    </div>
+                </div>
+                
+                <div class="tips-box">
+                    <h3>効果を高めるポイント</h3>
+                    <ul>
+                        <li><strong>シネオール & カンファー</strong>が虫を寄せ付けない</li>
+                        <li>消臭・リラックス効果も期待できる</li>
+                        <li>肌に使う場合はパッチテストを</li>
+                        <li>無水エタノールでより強力なチンキに</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 10;
+        
+        function changeMode(mode) {
+            // ボタンのアクティブ状態を更新
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // ビューの切り替え
+            document.querySelectorAll('.view').forEach(view => {
+                view.classList.remove('active');
+            });
+            
+            if (mode === 'learning') {
+                document.getElementById('learningView').classList.add('active');
+            } else if (mode === 'ponchi') {
+                document.getElementById('ponchiView').classList.add('active');
+            } else if (mode === 'infographic') {
+                document.getElementById('infographicView').classList.add('active');
+            }
+        }
+        
+        function updateProgress() {
+            const progress = (currentSlide / totalSlides) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+        
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                document.querySelector(`.slide[data-slide="${currentSlide}"]`).classList.remove('active');
+                currentSlide++;
+                document.querySelector(`.slide[data-slide="${currentSlide}"]`).classList.add('active');
+                updateProgress();
+            }
+        }
+        
+        function prevSlide() {
+            if (currentSlide > 1) {
+                document.querySelector(`.slide[data-slide="${currentSlide}"]`).classList.remove('active');
+                currentSlide--;
+                document.querySelector(`.slide[data-slide="${currentSlide}"]`).classList.add('active');
+                updateProgress();
+            }
+        }
+        
+        function restartLearning() {
+            document.querySelector(`.slide[data-slide="${currentSlide}"]`).classList.remove('active');
+            currentSlide = 1;
+            document.querySelector(`.slide[data-slide="${currentSlide}"]`).classList.add('active');
+            updateProgress();
+            
+            // クイズの回答をリセット
+            document.querySelectorAll('.quiz-option').forEach(option => {
+                option.classList.remove('correct', 'wrong');
+            });
+        }
+        
+        function checkAnswer(element, isCorrect) {
+            // 同じグループの他のオプションをリセット
+            const parent = element.parentElement;
+            parent.querySelectorAll('.quiz-option').forEach(opt => {
+                opt.classList.remove('correct', 'wrong');
+            });
+            
+            // 選択した回答にクラスを追加
+            if (isCorrect) {
+                element.classList.add('correct');
+            } else {
+                element.classList.add('wrong');
+                // 正解を表示
+                parent.querySelectorAll('.quiz-option').forEach(opt => {
+                    if (opt !== element && opt.onclick.toString().includes('true')) {
+                        setTimeout(() => opt.classList.add('correct'), 500);
+                    }
+                });
+            }
+        }
+        
+        // 初期プログレスバー設定
+        updateProgress();
+    </script>
+</body>
+</html>

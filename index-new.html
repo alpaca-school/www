@@ -271,15 +271,17 @@
       const [modal, setModal] = useState(null);
       const [floorData, setFloorData] = useState(initialFloorData);
       const [fetchError, setFetchError] = useState(null);
+      const [debugInfo, setDebugInfo] = useState(null);
 
       // Google Sheetからのデータ取得
       useEffect(() => {
         if (!SHEET_CSV_URL) return;
 
-        // 注意: Google Sheetsの「Webに公開」したURL（.../pub?output=csv）でないと、
-        // ブラウザのセキュリティ制限(CORS)により読み込みがブロックされることがよくあります。
+        // キャッシュ対策：URLの末尾に時刻を追加して、常に最新のデータを取得しようとする
+        const timestamp = new Date().getTime();
+        const urlWithTimestamp = SHEET_CSV_URL + "&t=" + timestamp;
 
-        Papa.parse(SHEET_CSV_URL, {
+        Papa.parse(urlWithTimestamp, {
           download: true,
           header: true,
           complete: function (results) {
@@ -290,13 +292,19 @@
 
             // 既存のデータをディープコピー
             const newFloorData = JSON.parse(JSON.stringify(initialFloorData));
+            const ignoredFloors = new Set(); // 定義にないフロア名を記録
 
             fetchedData.forEach(item => {
               if (!item.floor || !item.title) return;
 
               // データの整形
-              const floorKey = item.floor;
-              if (!newFloorData[floorKey]) return;
+              const floorKey = item.floor.trim(); // 余分な空白を除去
+
+              // コード側に存在しないフロア名（例: "仕事"のままなど）が含まれていないかチェック
+              if (!newFloorData[floorKey]) {
+                ignoredFloors.add(floorKey);
+                return;
+              }
 
               const newSection = {
                 id: item.id || Math.random().toString(36).substr(2, 9),
@@ -320,6 +328,15 @@
 
             setFloorData(newFloorData);
             setFetchError(null);
+
+            // デバッグ情報：もし無視されたフロアがあれば画面に表示
+            if (ignoredFloors.size > 0) {
+              const ignoredList = Array.from(ignoredFloors).join(", ");
+              setDebugInfo(`スプレッドシートに含まれるフロア名「${ignoredList}」は、現在の設定（${Object.keys(newFloorData).join(", ")}）に存在しないため無視されました。スプレッドシート側の「floor」列が更新されているか、反映待ち（最大5分）でないか確認してください。`);
+            } else {
+              setDebugInfo(null);
+            }
+
             console.log("Updated floor data from Google Sheet");
           },
           error: function (err) {
@@ -352,6 +369,13 @@
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative max-w-4xl mx-auto mt-4" role="alert">
               <strong className="font-bold">設定エラー: </strong>
               <span className="block sm:inline">{fetchError}</span>
+            </div>
+          )}
+
+          {debugInfo && (
+            <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative max-w-4xl mx-auto mt-4" role="alert">
+              <strong className="font-bold">確認: </strong>
+              <span className="block sm:inline">{debugInfo}</span>
             </div>
           )}
 
