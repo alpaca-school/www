@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>イナグヤ ナナバチ あとがき</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Hiragino Sans', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 15px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 25px 20px;
+            text-align: center;
+            color: white;
+        }
+        
+        h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        .subtitle {
+            font-size: 14px;
+            opacity: 0.95;
+        }
+        
+        .toggle-container {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        
+        .toggle-btn {
+            background: white;
+            border: 2px solid #667eea;
+            padding: 12px 30px;
+            margin: 0 8px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+            transition: all 0.3s;
+            color: #667eea;
+        }
+        
+        .toggle-btn.active {
+            background: #667eea;
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        .content {
+            padding: 25px 20px;
+        }
+        
+        .view {
+            display: none;
+        }
+        
+        .view.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* ポンチ絵スタイル */
+        .sketch-view {
+            text-align: center;
+        }
+        
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        
+        .timeline-item {
+            margin: 30px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .timeline-item::before {
+            content: '📖';
+            position: absolute;
+            left: -15px;
+            top: 20px;
+            font-size: 30px;
+            background: white;
+            border-radius: 50%;
+            padding: 5px;
+        }
+        
+        .year {
+            font-size: 18px;
+            font-weight: bold;
+            color: #d63447;
+            margin-bottom: 10px;
+        }
+        
+        .description {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #333;
+        }
+        
+        .key-people {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .person {
+            display: inline-block;
+            margin: 8px;
+            padding: 10px 18px;
+            background: white;
+            border-radius: 20px;
+            font-size: 13px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* インフォグラフィックスタイル */
+        .infographic-view {
+            padding: 10px;
+        }
+        
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .chapter-box {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .chapter-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #d63447;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .chapter-title::before {
+            content: '▸';
+            margin-right: 8px;
+            font-size: 20px;
+        }
+        
+        .chapter-content {
+            font-size: 13px;
+            line-height: 1.7;
+            color: #333;
+        }
+        
+        .theme-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .theme-list li {
+            background: white;
+            margin: 10px 0;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            font-size: 13px;
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 20px;
+            }
+            
+            .toggle-btn {
+                padding: 10px 20px;
+                font-size: 13px;
+                margin: 0 5px;
+            }
+            
+            .stat-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline-item::before {
+                left: 5px;
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>イナグヤ ナナバチ</h1>
+            <div class="subtitle">沖縄女性史を探る ― あとがき ―</div>
+        </header>
+        
+        <div class="toggle-container">
+            <button class="toggle-btn active" onclick="showView('sketch')">ポンチ絵</button>
+            <button class="toggle-btn" onclick="showView('infographic')">インフォグラフィック</button>
+        </div>
+        
+        <div class="content">
+            <!-- ポンチ絵ビュー -->
+            <div id="sketch" class="view active sketch-view">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="year">1950年代</div>
+                        <div class="description">
+                            サンフランシスコ講和条約発効のころ、早稲田大学大隈講堂で沖縄問題が論じられる。著者は学生として沖縄の花笠や衣装に魅了される。
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="year">1950年代後半</div>
+                        <div class="description">
+                            著者は2度の里帰りで沖縄を訪れ、神女への畏怖や紅型をまとう沖縄女性と約3ヶ月間触れ合う。
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="year">1968年3月</div>
+                        <div class="description">
+                            喜舎場徳一さんと大山幸さんとの出会いから、この研究への扉が開かれる。当時80歳を超えていた幸さんは、沖縄女性を代表する存在だった。
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="year">1980年代</div>
+                        <div class="description">
+                            那覇市女性問題キャンペーンからトートーメー(位牌)の男女系継承に関する運動が始まる。家父長制への対抗運動が展開される。
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="year">1985年3月</div>
+                        <div class="description">
+                            第一章の一部が雑誌『新沖縄文学』63号に掲載される。幸さんに見てもらうことができた。
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="year">1988年1月</div>
+                        <div class="description">
+                            大山幸さんが亡くなる(1月2日)。『沖縄文化研究』2号に「琉装、さようなら」掲載。
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="year">1989年9月25日</div>
+                        <div class="description">
+                            ニューヨークにて、あとがき執筆。本書完成。
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="key-people">
+                    <h3 style="text-align: center; margin-bottom: 15px; color: #d63447;">重要人物</h3>
+                    <div class="person">大山幸(リーダー)</div>
+                    <div class="person">喜舎場徳一</div>
+                    <div class="person">平良悦子</div>
+                    <div class="person">堀場清子(著者)</div>
+                </div>
+            </div>
+            
+            <!-- インフォグラフィックビュー -->
+            <div id="infographic" class="view infographic-view">
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">執筆期間</div>
+                        <div class="stat-number">20+</div>
+                        <div class="stat-label">年以上</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">研究の柱</div>
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">章構成</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">謝辞に記載</div>
+                        <div class="stat-number">100+</div>
+                        <div class="stat-label">名以上の協力者</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">沖縄滞在</div>
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">ヶ月間</div>
+                    </div>
+                </div>
+                
+                <div class="chapter-box">
+                    <div class="chapter-title">第一章: 日常語の刺青</div>
+                    <div class="chapter-content">
+                        喜舎場徳一さんと大山幸さんとの出会いから始まった研究。沖縄女性の日常に根差した歴史を探求。
+                    </div>
+                </div>
+                
+                <div class="chapter-box">
+                    <div class="chapter-title">第二章: きらびやかな現場・装束</div>
+                    <div class="chapter-content">
+                        戦前の沖縄新聞から服飾記事を収集。琉球大学附属図書館や沖縄県立図書館で約1ヶ月滞在し、戦前・戦中の女性生活史を記録。
+                    </div>
+                </div>
+                
+                <div class="chapter-box">
+                    <div class="chapter-title">第三章: トートーメー、男女系継承</div>
+                    <div class="chapter-content">
+                        1980年の那覇市女性問題キャンペーンから始まった位牌継承をめぐる運動。家父長制への対抗として展開。
+                    </div>
+                </div>
+                
+                <h3 style="margin: 25px 0 15px; color: #d63447; font-size: 18px;">3つの重要テーマ</h3>
+                <ul class="theme-list">
+                    <li>洗骨廃止運動 — 女と共同体との対決</li>
+                    <li>固有の民俗文化の圧縮 — 女と国家との対決</li>
+                    <li>男女系継承の慣習廃止 — 女と家族との対決</li>
+                </ul>
+                
+                <div class="chapter-box" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+                    <div class="chapter-title" style="color: #667eea;">研究の意義</div>
+                    <div class="chapter-content">
+                        沖縄とヤマトの異質性を乗り越え、家父長制とその遺制を一掃するための連帯の必要性を提起。沖縄女性史の「生」の根源に関わるテーマを探求。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showView(viewName) {
+            const views = document.querySelectorAll('.view');
+            const buttons = document.querySelectorAll('.toggle-btn');
+            
+            views.forEach(view => {
+                view.classList.remove('active');
+            });
+            
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById(viewName).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
