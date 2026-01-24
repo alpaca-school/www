@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,14 +13,16 @@
             background: linear-gradient(135deg, #87CEEB 0%, #E0F6FF 50%, #98FB98 100%);
             min-height: 100vh;
         }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
+
         .header {
             background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
             color: white;
@@ -27,6 +30,7 @@
             text-align: center;
             position: relative;
         }
+
         .header::before {
             content: "🌺";
             position: absolute;
@@ -35,6 +39,7 @@
             transform: translateY(-50%);
             font-size: 2.5em;
         }
+
         .header::after {
             content: "🏝️";
             position: absolute;
@@ -43,34 +48,53 @@
             transform: translateY(-50%);
             font-size: 2.5em;
         }
+
         h1 {
             margin: 0;
             font-size: 2.5em;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
             animation: bounce 2s infinite;
         }
+
         @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-10px);
+            }
+
+            60% {
+                transform: translateY(-5px);
+            }
         }
+
         .timeline {
             padding: 40px;
             position: relative;
         }
+
         .period {
             margin-bottom: 50px;
             position: relative;
             border-left: 5px solid #FF6B6B;
             padding-left: 30px;
-            background: linear-gradient(90deg, rgba(255,107,107,0.05) 0%, rgba(255,255,255,0) 30%);
+            background: linear-gradient(90deg, rgba(255, 107, 107, 0.05) 0%, rgba(255, 255, 255, 0) 30%);
             border-radius: 0 20px 20px 0;
             transition: transform 0.3s ease;
         }
+
         .period:hover {
             transform: translateX(10px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
+
         .period-title {
             font-size: 1.8em;
             font-weight: bold;
@@ -80,6 +104,7 @@
             align-items: center;
             gap: 15px;
         }
+
         .period-icon {
             font-size: 1.5em;
             background: #FF6B6B;
@@ -90,23 +115,26 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 3px 10px rgba(255,107,107,0.3);
+            box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
         }
+
         .events {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
         }
+
         .event-card {
             background: white;
             padding: 20px;
             border-radius: 15px;
             border-left: 4px solid #4ECDC4;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
+
         .event-card::before {
             content: "";
             position: absolute;
@@ -114,23 +142,32 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(78,205,196,0.1), transparent);
+            background: linear-gradient(45deg, transparent, rgba(78, 205, 196, 0.1), transparent);
             transform: rotate(45deg);
             transition: all 0.6s ease;
             opacity: 0;
         }
+
         .event-card:hover::before {
             opacity: 1;
             animation: shimmer 1.5s ease-in-out;
         }
+
         @keyframes shimmer {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
         }
+
         .event-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         }
+
         .event-date {
             font-weight: bold;
             color: #FF6B6B;
@@ -140,22 +177,26 @@
             align-items: center;
             gap: 5px;
         }
+
         .event-date::before {
             content: "📅";
             font-size: 1em;
         }
+
         .event-content {
             color: #333;
             line-height: 1.6;
             position: relative;
             z-index: 1;
         }
+
         .highlight {
-            background: linear-gradient(120deg, rgba(255,235,59,0.3) 0%, rgba(255,235,59,0.3) 100%);
+            background: linear-gradient(120deg, rgba(255, 235, 59, 0.3) 0%, rgba(255, 235, 59, 0.3) 100%);
             padding: 2px 6px;
             border-radius: 4px;
             font-weight: bold;
         }
+
         .character-note {
             background: linear-gradient(135deg, #E8F5E8 0%, #C8E6C9 100%);
             border: 2px solid #4CAF50;
@@ -164,6 +205,7 @@
             margin: 10px 0;
             position: relative;
         }
+
         .character-note::before {
             content: "👤";
             position: absolute;
@@ -175,18 +217,22 @@
             border-radius: 20px;
             font-size: 0.8em;
         }
+
         .war-period {
             border-left-color: #F44336;
-            background: linear-gradient(90deg, rgba(244,67,54,0.05) 0%, rgba(255,255,255,0) 30%);
+            background: linear-gradient(90deg, rgba(244, 67, 54, 0.05) 0%, rgba(255, 255, 255, 0) 30%);
         }
+
         .postwar-period {
             border-left-color: #2196F3;
-            background: linear-gradient(90deg, rgba(33,150,243,0.05) 0%, rgba(255,255,255,0) 30%);
+            background: linear-gradient(90deg, rgba(33, 150, 243, 0.05) 0%, rgba(255, 255, 255, 0) 30%);
         }
+
         .modern-period {
             border-left-color: #9C27B0;
-            background: linear-gradient(90deg, rgba(156,39,176,0.05) 0%, rgba(255,255,255,0) 30%);
+            background: linear-gradient(90deg, rgba(156, 39, 176, 0.05) 0%, rgba(255, 255, 255, 0) 30%);
         }
+
         .footer {
             background: #333;
             color: white;
@@ -194,11 +240,12 @@
             padding: 30px;
             font-size: 1.1em;
         }
+
         .cultural-element {
             display: inline-flex;
             align-items: center;
             gap: 5px;
-            background: rgba(78,205,196,0.1);
+            background: rgba(78, 205, 196, 0.1);
             padding: 3px 8px;
             border-radius: 12px;
             font-size: 0.9em;
@@ -206,6 +253,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
@@ -231,7 +279,8 @@
                     <div class="event-card">
                         <div class="event-content">
                             <strong>🏘️ ムラヤー（共同体）</strong><br>
-                            集落ごとに共同体が存在。各家庭で<span class="cultural-element">🐷 豚飼育</span>、トイレも兼用。<span class="cultural-element">🥔 芋中心</span>の自給自足生活
+                            集落ごとに共同体が存在。各家庭で<span class="cultural-element">🐷 豚飼育</span>、トイレも兼用。<span
+                                class="cultural-element">🥔 芋中心</span>の自給自足生活
                         </div>
                     </div>
                     <div class="event-card">
@@ -249,7 +298,8 @@
                     <div class="event-card">
                         <div class="event-content">
                             <strong>🕯️ 信仰・産業</strong><br>
-                            <span class="cultural-element">🔥 ヒヌカン（火の神）</span>と<span class="cultural-element">🏠 屋敷うがん</span>を実践。<span class="cultural-element">🐛 養蚕業</span>が盛ん
+                            <span class="cultural-element">🔥 ヒヌカン（火の神）</span>と<span class="cultural-element">🏠
+                                屋敷うがん</span>を実践。<span class="cultural-element">🐛 養蚕業</span>が盛ん
                         </div>
                     </div>
                 </div>
@@ -351,13 +401,16 @@
                     <div class="event-card">
                         <div class="event-content">
                             <strong>🍽️ 配給制度開始</strong><br>
-                            <span class="cultural-element">🌽 トウモロコシ粉</span><span class="cultural-element">🥚 粉卵</span><span class="cultural-element">🍫 チョコレート</span>などが配給される
+                            <span class="cultural-element">🌽 トウモロコシ粉</span><span class="cultural-element">🥚
+                                粉卵</span><span class="cultural-element">🍫 チョコレート</span>などが配給される
                         </div>
                     </div>
                     <div class="event-card">
                         <div class="event-content">
                             <strong>🍃 生存の工夫</strong><br>
-                            海水から塩を作成。<span class="cultural-element">🐦 メジロ</span><span class="cultural-element">🦗 イナゴ</span><span class="cultural-element">🪲 セミ</span><span class="cultural-element">🐌 カタツムリ</span>でタンパク質補給。薬草も摘んで食用に
+                            海水から塩を作成。<span class="cultural-element">🐦 メジロ</span><span class="cultural-element">🦗
+                                イナゴ</span><span class="cultural-element">🪲 セミ</span><span class="cultural-element">🐌
+                                カタツムリ</span>でタンパク質補給。薬草も摘んで食用に
                         </div>
                     </div>
                     <div class="event-card">
@@ -465,7 +518,9 @@
                     <div class="event-card">
                         <div class="event-content">
                             <strong>🎭 伝統行事</strong><br>
-                            <span class="cultural-element">🎉 9月9日トーティクン</span>で集落全体でご馳走。<span class="cultural-element">🌊 川の神様</span>を拝む行事。<span class="cultural-element">🥁 エイサー</span>継続。<span class="cultural-element">🧮 ソロバン教室</span>開催
+                            <span class="cultural-element">🎉 9月9日トーティクン</span>で集落全体でご馳走。<span
+                                class="cultural-element">🌊 川の神様</span>を拝む行事。<span class="cultural-element">🥁
+                                エイサー</span>継続。<span class="cultural-element">🧮 ソロバン教室</span>開催
                         </div>
                     </div>
                     <div class="event-card">
@@ -534,7 +589,8 @@
                     <div class="event-card">
                         <div class="event-content">
                             <strong>🎭 文化継承</strong><br>
-                            <span class="cultural-element">🥁 エイサー</span><span class="cultural-element">🎸 三線</span><span class="cultural-element">🧵 機織り</span>などの伝統文化継承が課題
+                            <span class="cultural-element">🥁 エイサー</span><span class="cultural-element">🎸
+                                三線</span><span class="cultural-element">🧵 機織り</span>などの伝統文化継承が課題
                         </div>
                     </div>
                     <div class="event-card">
@@ -552,7 +608,7 @@
                     <div class="event-card">
                         <div class="event-content">
                             <strong>👵 証言者たち</strong><br>
-                            新里信子さん（88歳）は戦争体験継承を強く願う。池原節子さんの母・島袋秀さん（105歳）現在も健在
+                            Nさん（88歳）は戦争体験継承を強く願う。Sさんのお母さん（105歳）、2025年取材時も現在も健在。
                             <div class="character-note">
                                 貴重な生き証人として若い世代への継承が急務
                             </div>
@@ -591,26 +647,27 @@
 
         // ホバー効果の強化
         document.querySelectorAll('.event-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
+            card.addEventListener('mouseenter', function () {
                 this.style.borderLeftWidth = '8px';
             });
-            card.addEventListener('mouseleave', function() {
+            card.addEventListener('mouseleave', function () {
                 this.style.borderLeftWidth = '4px';
             });
         });
 
         // 期間タイトルのアニメーション
         document.querySelectorAll('.period-title').forEach(title => {
-            title.addEventListener('mouseenter', function() {
+            title.addEventListener('mouseenter', function () {
                 const icon = this.querySelector('.period-icon');
                 icon.style.transform = 'rotate(360deg) scale(1.2)';
                 icon.style.transition = 'transform 0.6s ease';
             });
-            title.addEventListener('mouseleave', function() {
+            title.addEventListener('mouseleave', function () {
                 const icon = this.querySelector('.period-icon');
                 icon.style.transform = 'rotate(0deg) scale(1)';
             });
         });
     </script>
 </body>
+
 </html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>沖縄の未来予測</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Hiragino Sans','Yu Gothic',sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:10px}
+.container{max-width:1400px;margin:0 auto;background:#fff;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden}
+header{background:linear-gradient(135deg,#4a5568 0%,#2d3748 100%);color:#fff;padding:20px;text-align:center}
+h1{font-size:1.8em;margin-bottom:8px;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
+.subtitle{font-size:.9em;opacity:.9}
+.controls{display:flex;justify-content:center;gap:10px;padding:15px;background:#f7fafc;border-bottom:3px solid #e2e8f0;flex-wrap:wrap}
+button{padding:10px 20px;font-size:.9em;font-weight:bold;border:none;border-radius:25px;cursor:pointer;transition:all .3s;box-shadow:0 4px 6px rgba(0,0,0,.1)}
+button:hover{transform:translateY(-2px)}
+.view-btn{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff}
+.view-btn.active{background:linear-gradient(135deg,#764ba2 0%,#667eea 100%)}
+.theme-btn{background:linear-gradient(135deg,#48bb78 0%,#38a169 100%);color:#fff}
+.theme-btn.active{background:linear-gradient(135deg,#38a169 0%,#2f855a 100%)}
+.content{padding:20px;min-height:400px}
+.view{display:none}
+.view.active{display:block;animation:fadeIn .5s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.ponchi{display:flex;flex-direction:column;gap:25px}
+.scenario-section{border:3px solid #cbd5e0;border-radius:15px;padding:20px;background:linear-gradient(to right,#fff 0%,#f7fafc 100%)}
+.scenario-title{font-size:1.4em;margin-bottom:15px;padding-bottom:10px;border-bottom:3px solid;display:flex;align-items:center;gap:10px}
+.good .scenario-title{color:#38a169;border-color:#38a169}
+.bad .scenario-title{color:#e53e3e;border-color:#e53e3e}
+.timeline{display:flex;flex-direction:column;gap:15px;position:relative;padding-left:30px}
+.timeline::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:3px;background:linear-gradient(to bottom,#cbd5e0,#e2e8f0)}
+.timeline-item{position:relative;background:#fff;border-radius:10px;padding:15px;box-shadow:0 2px 8px rgba(0,0,0,.1);transition:all .3s}
+.timeline-item:hover{transform:translateX(5px);box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.timeline-item::before{content:'';position:absolute;left:-26px;top:18px;width:12px;height:12px;border-radius:50%;background:#fff;border:3px solid}
+.good .timeline-item::before{border-color:#48bb78}
+.bad .timeline-item::before{border-color:#fc8181}
+.year{font-size:1.1em;font-weight:bold;color:#2d3748;margin-bottom:8px}
+.description{color:#4a5568;line-height:1.6;font-size:.95em}
+.infographic{display:grid;gap:20px}
+.info-card{background:#fff;border-radius:15px;padding:20px;box-shadow:0 4px 12px rgba(0,0,0,.1);border-left:6px solid}
+.info-card.population{border-color:#4299e1}
+.info-card.community{border-color:#ed8936}
+.info-card.culture{border-color:#9f7aea}
+.info-card.economy{border-color:#48bb78}
+.card-title{font-size:1.3em;font-weight:bold;margin-bottom:15px;display:flex;align-items:center;gap:10px}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:15px;margin-top:15px}
+.stat-box{background:#f7fafc;padding:15px;border-radius:10px;text-align:center;transition:all .3s}
+.stat-box:hover{transform:translateY(-5px);box-shadow:0 8px 16px rgba(0,0,0,.1)}
+.stat-number{font-size:1.8em;font-weight:bold;margin-bottom:6px}
+.population .stat-number{color:#4299e1}
+.community .stat-number{color:#ed8936}
+.culture .stat-number{color:#9f7aea}
+.economy .stat-number{color:#48bb78}
+.stat-label{font-size:.85em;color:#718096;font-weight:500}
+.comparison{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:20px}
+.comparison-item{padding:12px;border-radius:8px}
+.comparison-item.positive{background:linear-gradient(135deg,#c6f6d5,#9ae6b4)}
+.comparison-item.negative{background:linear-gradient(135deg,#fed7d7,#fc8181)}
+.comparison-label{font-weight:bold;margin-bottom:8px;font-size:1em}
+.comparison-text{font-size:.85em;line-height:1.5}
+@media(max-width:768px){
+h1{font-size:1.5em}
+.subtitle{font-size:.85em}
+.subtitle:last-child{font-size:.72em;margin-top:6px}
+.controls{flex-direction:column;padding:10px}
+button{width:100%;padding:12px 15px;font-size:.9em}
+.content{padding:15px}
+.scenario-section{padding:15px}
+.scenario-title{font-size:1.2em;gap:8px}
+.timeline{padding-left:25px}
+.timeline::before{left:8px;width:2px}
+.timeline-item{padding:12px}
+.timeline-item::before{left:-23px;width:10px;height:10px;border-width:2px}
+.timeline-item:hover{transform:none}
+.year{font-size:1em}
+.description{font-size:.9em}
+.comparison{grid-template-columns:1fr;gap:10px}
+.stats-grid{grid-template-columns:1fr 1fr;gap:10px}
+.stat-number{font-size:1.5em}
+.stat-label{font-size:.8em}
+.card-title{font-size:1.1em}
+.info-card{padding:15px}
+.comparison-text{font-size:.82em}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+<h1>🌺 沖縄の未来予測 2030-2070 🌺</h1>
+<p class="subtitle">地縁団体・伝統文化・社会変化の展望</p>
+<p class="subtitle" style="margin-top:8px;font-size:.75em;opacity:.8;line-height:1.4">Gemini・Grok・Perplexityにリサーチしてもらって作成</p>
+</header>
+<div class="controls">
+<button class="view-btn active" onclick="switchView('ponchi')">📊 ポンチ絵表示</button>
+<button class="view-btn" onclick="switchView('infographic')">📈 インフォグラフィック表示</button>
+<button class="theme-btn active" onclick="switchTheme('community')">🏘️ 地縁団体</button>
+<button class="theme-btn" onclick="switchTheme('culture')">🎭 伝統文化</button>
+</div>
+<div class="content">
+<div id="ponchi-community" class="view active">
+<div class="ponchi">
+<div class="scenario-section good">
+<h2 class="scenario-title">✅ 良い展開：新しいコミュニティへの転換</h2>
+<div class="timeline">
+<div class="timeline-item"><div class="year">2030年：再編の始まり</div><div class="description">LINEグループやオンライン掲示板など、機能ごとに分かれた小さなつながりが増加。自治体やNPOが中心となり、防災・子ども食堂・学習支援などテーマ別の場が立ち上がる。</div></div>
+<div class="timeline-item"><div class="year">2040年：新コミュニティモデルの定着</div><div class="description">「自治会＋NPO＋学校＋事業者」が協力し、地域運営組織が整備。会合はオンライン参加OK、役割は小分け、年会費はキャッシュレスなど、無理のない仕組みが広がる。</div></div>
+<div class="timeline-item"><div class="year">2050年：ケアと共生のコミュニティ</div><div class="description">買い物支援・移動支援・見守りなどコミュニティ型サービスが整備。外国ルーツの住民や移住者も含め、「テーマや価値観でつながるコミュニティ」が主流に。</div></div>
+<div class="timeline-item"><div class="year">2060年："デジタル地縁"への移行</div><div class="description">「オンライン町内会」「アプリで防災・見守り・イベント告知」が当たり前に。AIによる見守り・災害時の自動安否確認など、新しい地縁ネットワークが構築される。</div></div>
+</div></div>
+<div class="scenario-section bad">
+<h2 class="scenario-title">⚠️ 悪い展開：孤立と無関心の連鎖</h2>
+<div class="timeline">
+<div class="timeline-item"><div class="year">2030年：空洞化の加速</div><div class="description">班長・役員のなり手が見つからず、自治会・PTA・婦人会・子ども会が「休会・解散」する地区が急増。回覧板や顔見知りの関係が失われ、災害時の安否確認が機能しなくなる。</div></div>
+<div class="timeline-item"><div class="year">2040年：弱い地域から崩壊</div><div class="description">人口減少や高齢化が進む集落・団地で担い手が完全に途絶え、祭りや運動会、清掃活動が長期的に中止。生活トラブルへの話し合いの場がなくなり、「面倒だから関わらない」姿勢が広がる。</div></div>
+<div class="timeline-item"><div class="year">2050年：孤立とサービス低下</div><div class="description">独居高齢者が増える一方、近所付き合いが薄く、訪問販売被害や孤独死リスクが高まる。人口の少ない地域では生活インフラが維持できず、「車に乗れない人は外に出られない」状態が固定化。</div></div>
+<div class="timeline-item"><div class="year">2060年：完全な"自己責任社会"化</div><div class="description">住民同士のつながりは極めて薄く、「困ったときは有料サービスか行政」が前提に。助け合い文化がほぼ消え、行政や企業のサービスが届きにくい人が取り残される。</div></div>
+</div></div>
+</div></div>
+<div id="ponchi-culture" class="view">
+<div class="ponchi">
+<div class="scenario-section good">
+<h2 class="scenario-title">🎎 良い展開：進化する伝統文化</h2>
+<div class="timeline">
+<div class="timeline-item"><div class="year">2030年：観光主導の過渡期</div><div class="description">琉舞、エイサー、三線が観光コンテンツとして安定収入を生み、学校カリキュラムに組み込まれる。空手や琉球食のグローバルブランド化でプロ継承者が増加。</div></div>
+<div class="timeline-item"><div class="year">2040年：デジタル継承の分岐点</div><div class="description">VR/ARアーカイブで組踊や古典音楽を世界に配信、海外ファンや移住者がオンライン習得。文化ハブ（公民館+デジタルスペース）が地域行事の基盤となる。</div></div>
+<div class="timeline-item"><div class="year">2050年：融合文化の定着期</div><div class="description">伝統×現代のハイブリッド（エイサー×電子音楽、空手×VR体験）が若者文化に浸透。SDGs計画下で文化が地域再生の柱に。コンテンツ輸出で経済効果も。</div></div>
+<div class="timeline-item"><div class="year">2060年：グローバルネットワーク期</div><div class="description">メタバース常設琉球フェスで世界参加型イベント定着。AI復元古典芸能と生演奏の共演。多様な住民が「新琉球文化」を創造し、持続サイクル確立。</div></div>
+<div class="timeline-item"><div class="year">2070年：進化した伝統の永続</div><div class="description">「命どぅ宝」の精神が福祉・教育に根付き、デジタル+実践のハイブリッドで永続。文化が生活様式として進化し、沖縄の独自性が維持される。</div></div>
+</div></div>
+<div class="scenario-section bad">
+<h2 class="scenario-title">😢 悪い展開：文化の博物館化</h2>
+<div class="timeline">
+<div class="timeline-item"><div class="year">2030年：表層化の始まり</div><div class="description">地縁団体縮小で地域エイサーや民謡祭が減少。観光向けパフォーマンスだけが残り、方言や信仰の日常使いが減少。文化の「表層化」が始まる。</div></div>
+<div class="timeline-item"><div class="year">2040年：継承者の危機</div><div class="description">高齢継承者の引退ラッシュで組踊や古典音楽が途絶え、離島の独自文化が消滅。観光客向けショー化が進み、本来の精神（ゆいまーる）が薄れる。</div></div>
+<div class="timeline-item"><div class="year">2050年：遺産化の進行</div><div class="description">人口130万人割れで集落祭りがほぼ消滅。方言話者が1割未満になり、琉球語が博物館レベルの遺産化。都市部に文化が集中し、地域格差が拡大。</div></div>
+<div class="timeline-item"><div class="year">2060年：テーマパーク化</div><div class="description">商業化の果てに本物志向がなくなり、ディズニーランド風のテーマパーク文化に。地元住民の日常文化はほぼ失われ、観光客しか知らない「沖縄像」が定着。</div></div>
+<div class="timeline-item"><div class="year">2070年：忘却された文化</div><div class="description">人口100万人を切り、伝統文化は教科書と動画だけに残る。地縁の崩壊で祭祀・習慣が途絶え、沖縄は「美しい過去を持つ普通の島」に変わる。</div></div>
+</div></div>
+</div></div>
+<div id="infographic-community" class="view">
+<div class="infographic">
+<div class="info-card population">
+<div class="card-title">👥 人口動態</div>
+<div class="stats-grid">
+<div class="stat-box"><div class="stat-number">146.7万</div><div class="stat-label">2020年人口</div></div>
+<div class="stat-box"><div class="stat-number">139万</div><div class="stat-label">2050年予測</div></div>
+<div class="stat-box"><div class="stat-number">-5%</div><div class="stat-label">人口減少率</div></div>
+<div class="stat-box"><div class="stat-number">67万</div><div class="stat-label">2050年世帯数</div></div>
+</div>
+<div class="comparison">
+<div class="comparison-item positive"><div class="comparison-label">✅ 良い展開</div><div class="comparison-text">単身世帯増加に対応した新しいコミュニティ形成。デジタルツールで世代を超えたつながりを実現。</div></div>
+<div class="comparison-item negative"><div class="comparison-label">⚠️ 悪い展開</div><div class="comparison-text">独居高齢者が2.34倍に増加。孤立化が進み、見守り機能が完全に失われる。</div></div>
+</div></div>
+<div class="info-card community">
+<div class="card-title">🏘️ 地縁団体の変化</div>
+<div class="stats-grid">
+<div class="stat-box"><div class="stat-number">18.5%</div><div class="stat-label">那覇市自治会加入率(2016)</div></div>
+<div class="stat-box"><div class="stat-number">50%+</div><div class="stat-label">良い展開での2050年目標</div></div>
+<div class="stat-box"><div class="stat-number">5%未満</div><div class="stat-label">悪い展開での2050年予測</div></div>
+<div class="stat-box"><div class="stat-number">2030年</div><div class="stat-label">重要な分岐点</div></div>
+</div>
+<div class="comparison">
+<div class="comparison-item positive"><div class="comparison-label">✅ 良い展開</div><div class="comparison-text">オンライン参加OK、役割小分け、キャッシュレス化で若者が参加しやすい仕組みへ転換。</div></div>
+<div class="comparison-item negative"><div class="comparison-label">⚠️ 悪い展開</div><div class="comparison-text">自治会・PTA・婦人会・子ども会が次々と休会・解散。地域の絆が完全に消失。</div></div>
+</div></div>
+<div class="info-card economy">
+<div class="card-title">💰 経済・社会システム</div>
+<div class="stats-grid">
+<div class="stat-box"><div class="stat-number">4.9兆円</div><div class="stat-label">2024年県内総生産</div></div>
+<div class="stat-box"><div class="stat-number">11兆円</div><div class="stat-label">2050年目標</div></div>
+<div class="stat-box"><div class="stat-number">1000万人+</div><div class="stat-label">観光客数目標</div></div>
+<div class="stat-box"><div class="stat-number">2050年</div><div class="stat-label">カーボンニュートラル</div></div>
+</div>
+<div class="comparison">
+<div class="comparison-item positive"><div class="comparison-label">✅ 良い展開</div><div class="comparison-text">観光・デジタル・海洋産業の振興で経済成長。コミュニティサービスが地域経済を支える。</div></div>
+<div class="comparison-item negative"><div class="comparison-label">⚠️ 悪い展開</div><div class="comparison-text">人口減少で経済が縮小。全てのサービスが有料化・市場化され、格差が拡大。</div></div>
+</div></div>
+</div></div>
+<div id="infographic-culture" class="view">
+<div class="infographic">
+<div class="info-card culture">
+<div class="card-title">🎭 伝統文化の継承</div>
+<div class="stats-grid">
+<div class="stat-box"><div class="stat-number">2030年</div><div class="stat-label">デジタル化の開始</div></div>
+<div class="stat-box"><div class="stat-number">2040年</div><div class="stat-label">継承者の分岐点</div></div>
+<div class="stat-box"><div class="stat-number">VR/AR</div><div class="stat-label">新技術活用</div></div>
+<div class="stat-box"><div class="stat-number">世界展開</div><div class="stat-label">グローバル化</div></div>
+</div>
+<div class="comparison">
+<div class="comparison-item positive"><div class="comparison-label">✅ 良い展開</div><div class="comparison-text">デジタルアーカイブで世界配信。伝統×現代のハイブリッド文化が若者に浸透し、継承が安定。</div></div>
+<div class="comparison-item negative"><div class="comparison-label">⚠️ 悪い展開</div><div class="comparison-text">高齢継承者の引退で組踊や古典音楽が途絶。観光ショー化で精神性が失われる。</div></div>
+</div></div>
+<div class="info-card economy">
+<div class="card-title">🌏 文化の経済効果</div>
+<div class="stats-grid">
+<div class="stat-box"><div class="stat-number">観光資源</div><div class="stat-label">琉舞・エイサー・空手</div></div>
+<div class="stat-box"><div class="stat-number">教育</div><div class="stat-label">学校カリキュラム化</div></div>
+<div class="stat-box"><div class="stat-number">輸出</div><div class="stat-label">文化コンテンツ産業</div></div>
+<div class="stat-box"><div class="stat-number">ブランド化</div><div class="stat-label">国際認知向上</div></div>
+</div>
+<div class="comparison">
+<div class="comparison-item positive"><div class="comparison-label">✅ 良い展開</div><div class="comparison-text">伝統文化がプロ職業として成立。コンテンツ輸出で地域経済を支える新産業に。</div></div>
+<div class="comparison-item negative"><div class="comparison-label">⚠️ 悪い展開</div><div class="comparison-text">文化が単なる「見せ物」に。本質的価値が失われ、テーマパーク化が進行。</div></div>
+</div></div>
+</div></div>
+</div></div>
+<script>
+let currentView='ponchi',currentTheme='community';
+function switchView(v){currentView=v;updateDisplay();document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active')}
+function switchTheme(t){currentTheme=t;updateDisplay();document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active')}
+function updateDisplay(){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));const el=document.getElementById(currentView+'-'+currentTheme);if(el)el.classList.add('active')}
+updateDisplay();
+</script>
+</body>
+</html>
