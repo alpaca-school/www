@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>沖縄ルネサンス構想</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .toggle-container {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        
+        .toggle-btn {
+            background: white;
+            border: 2px solid #667eea;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+        }
+        
+        .toggle-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .content {
+            padding: 30px 20px;
+        }
+        
+        .view {
+            display: none;
+        }
+        
+        .view.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* ポンチ絵スタイル */
+        .sketch {
+            text-align: center;
+        }
+        
+        .circuit-diagram {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+        
+        .circuit-step {
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .circuit-step::after {
+            content: '↓';
+            display: block;
+            text-align: center;
+            font-size: 24px;
+            color: #667eea;
+            margin-top: 15px;
+        }
+        
+        .circuit-step:last-child::after {
+            content: '';
+        }
+        
+        .circuit-step h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .circuit-step p {
+            color: #555;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        
+        .concept-box {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+        
+        .concept-box h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .concept-box p {
+            color: #555;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+        
+        /* インフォグラフィックスタイル */
+        .infographic {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+        }
+        
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        @media (min-width: 600px) {
+            .stat-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        
+        .stat-title {
+            font-size: 14px;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .stat-desc {
+            font-size: 13px;
+            color: #555;
+            line-height: 1.5;
+        }
+        
+        .comparison {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .comparison-item {
+            flex: 1;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .comparison-wrong {
+            background: #ffebee;
+            border: 2px solid #f44336;
+        }
+        
+        .comparison-right {
+            background: #e8f5e9;
+            border: 2px solid #4caf50;
+        }
+        
+        .comparison-symbol {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .comparison-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .comparison-desc {
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        
+        .flow-chart {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .flow-title {
+            text-align: center;
+            color: #667eea;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .key-point h3 {
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+        
+        .key-point p {
+            line-height: 1.7;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .toggle-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+            
+            .content {
+                padding: 20px 15px;
+            }
+            
+            .circuit-step h3,
+            .concept-box h3 {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌺 沖縄ルネサンス構想 🌺</h1>
+            <p>人が孤立から抜ける"経路"を設計し、保存し、次に渡す</p>
+        </div>
+        
+        <div class="toggle-container">
+            <button class="toggle-btn" onclick="toggleView()">
+                <span id="toggle-text">インフォグラフィックを表示</span>
+            </button>
+        </div>
+        
+        <div class="content">
+            <!-- ポンチ絵ビュー -->
+            <div id="sketch-view" class="view active">
+                <div class="sketch">
+                    <div class="concept-box">
+                        <h3>🎯 核心の定義</h3>
+                        <p>これは「助けるモデル」ではなく、<br>「役割が再起動されるモデル」</p>
+                    </div>
+                    
+                    <div class="circuit-diagram">
+                        <h2 style="color: #667eea; margin-bottom: 20px;">役割を取り戻す回路</h2>
+                        
+                        <div class="circuit-step">
+                            <h3>1️⃣ 安心</h3>
+                            <p>てぃあんだぁクラブ - 居場所の提供</p>
+                        </div>
+                        
+                        <div class="circuit-step">
+                            <h3>2️⃣ 学習</h3>
+                            <p>アルパカすく〜る - 知識と技術の習得</p>
+                        </div>
+                        
+                        <div class="circuit-step">
+                            <h3>3️⃣ 共有</h3>
+                            <p>子育て勉強会／MIKATA - 経験の交換</p>
+                        </div>
+                        
+                        <div class="circuit-step">
+                            <h3>4️⃣ 役割</h3>
+                            <p>文芸フリマ - 表現と貢献</p>
+                        </div>
+                        
+                        <div class="circuit-step">
+                            <h3>5️⃣ 記録</h3>
+                            <p>universe - プロセスの保存</p>
+                        </div>
+                        
+                        <div class="circuit-step">
+                            <h3>6️⃣ 循環</h3>
+                            <p>次の人の入口になる</p>
+                        </div>
+                    </div>
+                    
+                    <div class="concept-box">
+                        <h3>💡 重要な設計思想</h3>
+                        <p>✓ 一本道ではない<br>
+                        ✓ 途中参加・途中離脱OK<br>
+                        ✓ 戻ってもいい<br>
+                        ✓ 失敗はデータになる</p>
+                    </div>
+                    
+                    <div class="key-point">
+                        <h3>🚀 マスク視点での価値</h3>
+                        <p>「Failure is data」<br>
+                        失敗は恥ではなく、次の人のための設計情報。<br>
+                        途中で止まっても、それ自体が再利用可能なデータとなる。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- インフォグラフィックビュー -->
+            <div id="infographic-view" class="view">
+                <div class="infographic">
+                    <h2 style="color: #667eea; text-align: center; margin-bottom: 25px;">構想の全体像</h2>
+                    
+                    <div class="comparison">
+                        <div class="comparison-item comparison-wrong">
+                            <div class="comparison-symbol">❌</div>
+                            <div class="comparison-title">助けるモデル</div>
+                            <div class="comparison-desc">属人的・再現不能・感情依存</div>
+                        </div>
+                        <div class="comparison-item comparison-right">
+                            <div class="comparison-symbol">⭕</div>
+                            <div class="comparison-title">役割再起動モデル</div>
+                            <div class="comparison-desc">システム化・再現可能・持続的</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">🏠</div>
+                            <div class="stat-title">てぃあんだぁクラブ</div>
+                            <div class="stat-desc">安心できる居場所から始まる</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">📚</div>
+                            <div class="stat-title">アルパカすく〜る</div>
+                            <div class="stat-desc">学びを通じた自信の回復</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">👥</div>
+                            <div class="stat-title">MIKATA</div>
+                            <div class="stat-desc">経験を共有し価値を発見</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">✍️</div>
+                            <div class="stat-title">文芸フリマ</div>
+                            <div class="stat-desc">表現を通じた役割の獲得</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">🌌</div>
+                            <div class="stat-title">universe</div>
+                            <div class="stat-desc">人間のプロセスを記録</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">♻️</div>
+                            <div class="stat-title">循環システム</div>
+                            <div class="stat-desc">次の人の入口になる</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-chart">
+                        <div class="flow-title">孤立の定義（マスク視点）</div>
+                        <div style="text-align: center; margin: 20px 0;">
+                            <div style="background: #ffebee; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                                <strong style="color: #f44336;">入力ゼロ</strong><br>
+                                <span style="font-size: 13px;">誰からも必要とされない</span>
+                            </div>
+                            <div style="font-size: 24px; color: #667eea;">+</div>
+                            <div style="background: #ffebee; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                                <strong style="color: #f44336;">出力ゼロ</strong><br>
+                                <span style="font-size: 13px;">誰の役にも立てない</span>
+                            </div>
+                            <div style="font-size: 24px; color: #667eea; margin: 15px 0;">||</div>
+                            <div style="background: #333; color: white; padding: 15px; border-radius: 8px;">
+                                <strong>システム外の存在</strong>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="key-point">
+                        <h3>📊 universeの真の役割</h3>
+                        <p><strong>Human Process Repository</strong><br><br>
+                        人間がどう不安になり、どこで立ち止まり、何で少し動けたか。<br>
+                        その時系列データベース。<br><br>
+                        今、無料の新聞記事PDFしかない？<br>
+                        → それは問題ではなく、むしろ正しいスタート。</p>
+                    </div>
+                    
+                    <div class="concept-box">
+                        <h3>⚠️ 最大の失敗要因</h3>
+                        <p>「いい話」に戻ってしまうこと<br><br>
+                        ✗ 成功だけを載せる<br>
+                        ✗ きれいな言葉にまとめる<br>
+                        ✗ 迷いや停滞を消す<br><br>
+                        → これをやった瞬間、再利用できない物語になる</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentView = 'sketch';
+        
+        function toggleView() {
+            const sketchView = document.getElementById('sketch-view');
+            const infographicView = document.getElementById('infographic-view');
+            const toggleText = document.getElementById('toggle-text');
+            
+            if (currentView === 'sketch') {
+                sketchView.classList.remove('active');
+                infographicView.classList.add('active');
+                toggleText.textContent = 'ポンチ絵を表示';
+                currentView = 'infographic';
+            } else {
+                infographicView.classList.remove('active');
+                sketchView.classList.add('active');
+                toggleText.textContent = 'インフォグラフィックを表示';
+                currentView = 'sketch';
+            }
+        }
+    </script>
+</body>
+</html>
