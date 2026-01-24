@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>沖縄の歴史ポンチ絵</title>
+    <style>
+        body {
+            font-family: 'Hiragino Kaku Gothic Pro', 'Meiryo', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #87CEEB 0%, #E0F6FF 50%, #98FB98 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        .header::before {
+            content: "🌺";
+            position: absolute;
+            left: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2.5em;
+        }
+        .header::after {
+            content: "🏝️";
+            position: absolute;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2.5em;
+        }
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        .timeline {
+            padding: 40px;
+            position: relative;
+        }
+        .period {
+            margin-bottom: 50px;
+            position: relative;
+            border-left: 5px solid #FF6B6B;
+            padding-left: 30px;
+            background: linear-gradient(90deg, rgba(255,107,107,0.05) 0%, rgba(255,255,255,0) 30%);
+            border-radius: 0 20px 20px 0;
+            transition: transform 0.3s ease;
+        }
+        .period:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .period-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #FF6B6B;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .period-icon {
+            font-size: 1.5em;
+            background: #FF6B6B;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(255,107,107,0.3);
+        }
+        .events {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .event-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid #4ECDC4;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .event-card::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(78,205,196,0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            opacity: 0;
+        }
+        .event-card:hover::before {
+            opacity: 1;
+            animation: shimmer 1.5s ease-in-out;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .event-date {
+            font-weight: bold;
+            color: #FF6B6B;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .event-date::before {
+            content: "📅";
+            font-size: 1em;
+        }
+        .event-content {
+            color: #333;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+        .highlight {
+            background: linear-gradient(120deg, rgba(255,235,59,0.3) 0%, rgba(255,235,59,0.3) 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .character-note {
+            background: linear-gradient(135deg, #E8F5E8 0%, #C8E6C9 100%);
+            border: 2px solid #4CAF50;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 10px 0;
+            position: relative;
+        }
+        .character-note::before {
+            content: "👤";
+            position: absolute;
+            top: -10px;
+            left: 15px;
+            background: #4CAF50;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+        }
+        .war-period {
+            border-left-color: #F44336;
+            background: linear-gradient(90deg, rgba(244,67,54,0.05) 0%, rgba(255,255,255,0) 30%);
+        }
+        .postwar-period {
+            border-left-color: #2196F3;
+            background: linear-gradient(90deg, rgba(33,150,243,0.05) 0%, rgba(255,255,255,0) 30%);
+        }
+        .modern-period {
+            border-left-color: #9C27B0;
+            background: linear-gradient(90deg, rgba(156,39,176,0.05) 0%, rgba(255,255,255,0) 30%);
+        }
+        .footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            font-size: 1.1em;
+        }
+        .cultural-element {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(78,205,196,0.1);
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.9em;
+            margin: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏝️ 沖縄の歩み 🌺</h1>
+            <p style="margin:10px 0 0 0; opacity:0.9;">戦前から現代まで〜島人の記憶と生活〜</p>
+        </div>
+
+        <div class="timeline">
+            <!-- 戦前 -->
+            <div class="period">
+                <div class="period-title">
+                    <div class="period-icon">🏮</div>
+                    戦前の沖縄
+                </div>
+                <div class="events">
+                    <div class="event-card">
+                        <div class="event-date">時期不明</div>
+                        <div class="event-content">
+                            <strong>🚂 軽便鉄道</strong><br>
+                            那覇を拠点に<span class="highlight">与那原・嘉手納・糸満</span>の3箇所を結ぶ鉄道が運行
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>🏘️ ムラヤー（共同体）</strong><br>
+                            集落ごとに共同体が存在。各家庭で<span class="cultural-element">🐷 豚飼育</span>、トイレも兼用。<span class="cultural-element">🥔 芋中心</span>の自給自足生活
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>💧 イジュン（湧水）</strong><br>
+                            地域の湧水や井戸から水を汲み、<span class="highlight">ハンドゥー（水瓶）</span>に貯めて使用
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>🎌 国民学校時代</strong><br>
+                            軍国教育実施。<span class="highlight">方言札制度</span>で標準語を強制。音楽で防空壕避難方法を歌で指導
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>🕯️ 信仰・産業</strong><br>
+                            <span class="cultural-element">🔥 ヒヌカン（火の神）</span>と<span class="cultural-element">🏠 屋敷うがん</span>を実践。<span class="cultural-element">🐛 養蚕業</span>が盛ん
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 戦争中 -->
+            <div class="period war-period">
+                <div class="period-title">
+                    <div class="period-icon" style="background:#F44336;">💥</div>
+                    第二次世界大戦中
+                </div>
+                <div class="events">
+                    <div class="event-card">
+                        <div class="event-date">1944年10月10日</div>
+                        <div class="event-content">
+                            <strong>🔥 沖縄空襲</strong><br>
+                            新里信子さんの実家が全焼、家財道具をすべて失う
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-date">1945年頃</div>
+                        <div class="event-content">
+                            <strong>👨‍🏫 父の残留</strong><br>
+                            教員の父が<span class="highlight">天皇陛下のご真影</span>を守るため学校に残留、家族と別れる
+                            <div class="character-note">
+                                母（妊娠6ヶ月）が幼い子どもたちを連れて避難開始
+                            </div>
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>🚶‍♀️ 避難の道のり</strong><br>
+                            山や川を越え道なき道を歩く。体調の悪い姉を教え子が自転車で送り届ける美談
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>🏮 祖父母の迎え</strong><br>
+                            夜6時頃、祖父母が<span class="highlight">提灯を持って</span>沼の入り口まで迎えに来る
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>🏚️ 沼での共同生活</strong><br>
+                            祖父母は牛や豚、野菜、芋を育てており食糧は困らず。親戚がほ屋（仮小屋）で共同生活
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>👹➡️😊 初めてのアメリカ兵</strong><br>
+                            新里信子さんが「赤鬼さん」と認識していたアメリカ兵が、実は優しく病気のおじさんに<span class="highlight">アスピリン</span>を渡す
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>📚 青空教室</strong><br>
+                            学校教育中断。教師免許を持つ者が各地で青空教室を開き、<span class="highlight">地面に文字を書いて</span>学習
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>🏭 鋳物工場設立</strong><br>
+                            中城の奥間部落に工場設立。はがま、ひのし（アイロン）、芋の排水管を製造。<span class="highlight">宜野湾の松並木</span>が燃料に
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 戦後復興期 -->
+            <div class="period postwar-period">
+                <div class="period-title">
+                    <div class="period-icon" style="background:#2196F3;">🌅</div>
+                    戦後・復興期
+                </div>
+                <div class="events">
+                    <div class="event-card">
+                        <div class="event-date">1945年6月15日</div>
+                        <div class="event-content">
+                            <strong>👶 新しい命</strong><br>
+                            新里信子さんの末の妹が誕生
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-date">終戦直後</div>
+                        <div class="event-content">
+                            <strong>🦠 マラリアとの闘い</strong><br>
+                            家族全員がマラリアに感染。末の妹は骨と皮状態まで衰弱したが回復
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>🐛 養蚕で生計</strong><br>
+                            母が繭から糸を紡ぎ、機織りで<span class="highlight">絹織物「シルク」</span>を作り那覇の市場で販売
+                            <div class="character-note">
+                                父は老人に変装してアメリカ兵の目を欺く作戦も
+                            </div>
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>🍽️ 配給制度開始</strong><br>
+                            <span class="cultural-element">🌽 トウモロコシ粉</span><span class="cultural-element">🥚 粉卵</span><span class="cultural-element">🍫 チョコレート</span>などが配給される
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>🍃 生存の工夫</strong><br>
+                            海水から塩を作成。<span class="cultural-element">🐦 メジロ</span><span class="cultural-element">🦗 イナゴ</span><span class="cultural-element">🪲 セミ</span><span class="cultural-element">🐌 カタツムリ</span>でタンパク質補給。薬草も摘んで食用に
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>📖 灯りなき勉強</strong><br>
+                            アメリカ軍のティッシュや教科書が配布。<span class="highlight">芋の新芽を炊く釜の光</span>で勉強
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>🍱 質素な弁当</strong><br>
+                            芋をそのまま持参するか、皮を剥いてカットし<span class="highlight">油味噌</span>と一緒にアルミ弁当箱に
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>👶 子どもも労働力</strong><br>
+                            小学2年生から田植え参加。月1回の「増産日」は学校休みで薪拾いや畑仕事
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>🏫 父の転勤</strong><br>
+                            父が津波の学校の校長に。新里信子さんが家事全般を担当
+                            <div class="character-note">
+                                母は着物仕立てで出稼ぎ、姉は教員となり家計を支える
+                            </div>
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>🎓 進学の支援</strong><br>
+                            兄と弟が大学進学。兄の学費は伯母の夫（建築業）が支援
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>🚗 米軍基地での労働</strong><br>
+                            18歳未満も「労務カード」で基地労働。車のドライバーや炊事場勤務者は食料豊富。運転免許は実技のみで取得可能
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>💰 戦果アギヤー</strong><br>
+                            米軍倉庫から食料や物資を調達して配る人々が活動
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>🏠 住居の工夫</strong><br>
+                            最初はテント屋根、山間部は茅葺。後に「標準家」（6畳と2-3畳）建設。普天間飛行場の廃鉄骨で<span class="highlight">「三角かねぐぅわー」</span>建設
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>⚡ 電気の普及</strong><br>
+                            自家発電導入。配線も自分で施工。15キロワットから30キロワットへ増強。夕方発電、夜10時消灯
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>👶 子育ての工夫</strong><br>
+                            保育園がない時代、子どもは背負われたり柱に縛られたりして子守。公民館を幼稚園として利用し、区長が園長に
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>🥛 ミルクオバー</strong><br>
+                            粉ミルクをみんなに配る人が活動
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>🦶 裸足で登校</strong><br>
+                            集団登校制度。近所の子の悪いことは素直に聞き入れる文化。外遊び（木登り、隠れんぼ、あやとり、お手玉）が主流
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>🏢 普天間の都会ぶり</strong><br>
+                            銭湯、映画館、料亭などがある都会的な場所
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>🍯 砂糖作りの技術</strong><br>
+                            シズさんの父は「味にするししないと砂糖を作れない」特殊技術。3歳で他界後、タリー（吉山ターリー）が継承
+                            <div class="character-note">
+                                母は「ムス」と呼ばれる機織り専門家。「ガーギ」（稼ぎ役）として活動
+                            </div>
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>👥 養子縁組</strong><br>
+                            シズさんがユタ（霊媒師）の助言で裕福な親戚（メンター）に養子。養親は近隣にお米を振る舞って喜びを表現
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>🏭 機織り工房</strong><br>
+                            メンターの敷地に工房。秀ばあちゃんが90歳まで機織り継続。組合理事長も務める
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>🎭 伝統行事</strong><br>
+                            <span class="cultural-element">🎉 9月9日トーティクン</span>で集落全体でご馳走。<span class="cultural-element">🌊 川の神様</span>を拝む行事。<span class="cultural-element">🥁 エイサー</span>継続。<span class="cultural-element">🧮 ソロバン教室</span>開催
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>🏛️ ジス（神聖な川）</strong><br>
+                            現在の公民館場所にあった川。子どもが生まれると水を汲みに行く神聖な場所
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>👨‍🏫 教員養成</strong><br>
+                            教員養成所設立により多くの教員が育成される
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 高度成長期以降 -->
+            <div class="period modern-period">
+                <div class="period-title">
+                    <div class="period-icon" style="background:#9C27B0;">🚀</div>
+                    高度成長期〜現代
+                </div>
+                <div class="events">
+                    <div class="event-card">
+                        <div class="event-date">1949年頃</div>
+                        <div class="event-content">
+                            <strong>🇰🇷 朝鮮戦争</strong><br>
+                            沖縄がアメリカ軍の物資補給拠点に。その残り物が沖縄の人々の生活を助ける
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-date">1950年代</div>
+                        <div class="event-content">
+                            <strong>🚰 水道整備</strong><br>
+                            水道が整備開始。洗濯機（手回し式）も普及し始める
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-date">1961年</div>
+                        <div class="event-content">
+                            <strong>🌸 花織復興</strong><br>
+                            花織の復興活動が始まる（諸説あり）
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-date">1972年</div>
+                        <div class="event-content">
+                            <strong>🇯🇵 沖縄復帰</strong><br>
+                            日本復帰実現。復帰運動でデモ、座り込み、国際通りでの抗議活動が活発化
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-date">現代の課題</div>
+                        <div class="event-content">
+                            <strong>📱 社会変化</strong><br>
+                            地域の自治会、婦人会、老人会、PTAが減少傾向。スマートフォン普及で対面交流減少
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>👶 子どもの変化</strong><br>
+                            外遊び機会の減少が課題
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>🎭 文化継承</strong><br>
+                            <span class="cultural-element">🥁 エイサー</span><span class="cultural-element">🎸 三線</span><span class="cultural-element">🧵 機織り</span>などの伝統文化継承が課題
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>🌀 自然災害</strong><br>
+                            台風などによる継続的な被害
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>🚁 基地問題</strong><br>
+                            米軍基地問題が継続。オスプレイ飛行や基地拡張への反対運動
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-content">
+                            <strong>👵 証言者たち</strong><br>
+                            新里信子さん（88歳）は戦争体験継承を強く願う。池原節子さんの母・島袋秀さん（105歳）現在も健在
+                            <div class="character-note">
+                                貴重な生き証人として若い世代への継承が急務
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>🌺 沖縄の人々の営みと記憶 〜戦前から現代まで〜 🏝️</p>
+            <p style="font-size:0.9em; opacity:0.8; margin-top:10px;">
+                この歴史は、実際に体験された方々の貴重な証言に基づいています
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // 簡単なアニメーション効果
+        const cards = document.querySelectorAll('.event-card');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        cards.forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });
+
+        // ホバー効果の強化
+        document.querySelectorAll('.event-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.borderLeftWidth = '8px';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.borderLeftWidth = '4px';
+            });
+        });
+
+        // 期間タイトルのアニメーション
+        document.querySelectorAll('.period-title').forEach(title => {
+            title.addEventListener('mouseenter', function() {
+                const icon = this.querySelector('.period-icon');
+                icon.style.transform = 'rotate(360deg) scale(1.2)';
+                icon.style.transition = 'transform 0.6s ease';
+            });
+            title.addEventListener('mouseleave', function() {
+                const icon = this.querySelector('.period-icon');
+                icon.style.transform = 'rotate(0deg) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
