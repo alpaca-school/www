@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手作りジンジャーエール ガイド</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Hiragino Sans', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        .toggle-container {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .toggle-btn {
+            background: white;
+            border: 2px solid #ff6b6b;
+            color: #ff6b6b;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.2);
+        }
+
+        .toggle-btn:hover {
+            background: #ff6b6b;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ポンチ絵スタイル */
+        .ponchi {
+            text-align: center;
+        }
+
+        .illustration {
+            margin: 20px 0;
+        }
+
+        .ginger-jar {
+            width: 200px;
+            height: 250px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+
+        .jar-body {
+            width: 120px;
+            height: 180px;
+            background: linear-gradient(180deg, rgba(255, 200, 100, 0.3) 0%, rgba(255, 180, 80, 0.5) 100%);
+            border: 3px solid #333;
+            border-radius: 10px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .jar-lid {
+            width: 140px;
+            height: 20px;
+            background: #8B4513;
+            border: 3px solid #333;
+            border-radius: 5px;
+            margin: 0 auto 5px;
+        }
+
+        .ginger-slice {
+            width: 30px;
+            height: 30px;
+            background: #f4a460;
+            border: 2px solid #d2691e;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .slice1 {
+            top: 40px;
+            left: 20px;
+        }
+
+        .slice2 {
+            top: 80px;
+            left: 50px;
+        }
+
+        .slice3 {
+            top: 120px;
+            left: 30px;
+        }
+
+        .bubble {
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            position: absolute;
+            animation: rise 2s infinite;
+        }
+
+        .bubble1 {
+            bottom: 20px;
+            left: 30px;
+            animation-delay: 0s;
+        }
+
+        .bubble2 {
+            bottom: 40px;
+            left: 60px;
+            animation-delay: 0.5s;
+        }
+
+        .bubble3 {
+            bottom: 10px;
+            left: 80px;
+            animation-delay: 1s;
+        }
+
+        @keyframes rise {
+            0% {
+                transform: translateY(0);
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+        }
+
+        /* 包丁の回転アニメーション */
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .rotate-anim {
+            animation: spin 2s linear infinite;
+            display: inline-block;
+            /* 回転させるために必要 */
+        }
+
+        .step-illustration {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+
+        .step-card {
+            width: 140px;
+            margin: 10px;
+            text-align: center;
+        }
+
+        .step-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 10px;
+            background: #ffe5d9;
+            border-radius: 50%;
+            border: 3px solid #ff6b6b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        .step-text {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* インフォグラフィックスタイル */
+        .infographic {
+            max-width: 100%;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: '🔥';
+            margin-right: 10px;
+            font-size: 24px;
+        }
+
+        .ingredients-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .ingredient-card {
+            background: linear-gradient(135deg, #fff5eb 0%, #ffe5d9 100%);
+            padding: 15px;
+            border-radius: 15px;
+            border: 2px solid #ff6b6b;
+            text-align: center;
+        }
+
+        .ingredient-icon {
+            font-size: 40px;
+            margin-bottom: 8px;
+        }
+
+        .ingredient-name {
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+
+        .ingredient-amount {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .ingredient-note {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .steps-list {
+            counter-reset: step;
+        }
+
+        .step-item {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 15px;
+            border-left: 5px solid #ff6b6b;
+            position: relative;
+            padding-left: 60px;
+        }
+
+        .step-item::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 35px;
+            height: 35px;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .step-title {
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+
+        .step-desc {
+            color: #333;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .tips-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .tip-card {
+            background: linear-gradient(135deg, #fffbf0 0%, #fff5e1 100%);
+            padding: 15px;
+            border-radius: 15px;
+            border: 2px solid #ffa500;
+        }
+
+        .tip-title {
+            font-weight: bold;
+            color: #ff8c00;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .tip-content {
+            color: #333;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .ratio-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            border: 3px solid #2196f3;
+        }
+
+        .ratio-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+
+        .ratio-note {
+            font-size: 14px;
+            color: #333;
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .header p {
+                font-size: 13px;
+            }
+
+            .toggle-btn {
+                padding: 10px 25px;
+                font-size: 14px;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .section-title {
+                font-size: 16px;
+                padding: 10px 12px;
+            }
+
+            .ingredients-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .step-card {
+                width: 120px;
+            }
+
+            .step-icon {
+                width: 80px;
+                height: 80px;
+                font-size: 35px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍹 手作りジンジャーエール</h1>
+            <p>生姜のガツンとした辛みとスパイスの香りを楽しむ本格レシピ</p>
+        </div>
+
+        <div class="toggle-container">
+            <button class="toggle-btn" onclick="toggleView()">
+                <span id="toggle-text">インフォグラフィックで見る</span>
+            </button>
+        </div>
+
+        <div class="content">
+            <!-- ポンチ絵ビュー -->
+            <div id="ponchi-view" class="view active ponchi">
+                <div class="illustration">
+                    <div class="ginger-jar">
+                        <div class="jar-lid"></div>
+                        <div class="jar-body">
+                            <div class="ginger-slice slice1"></div>
+                            <div class="ginger-slice slice2"></div>
+                            <div class="ginger-slice slice3"></div>
+                            <div class="bubble bubble1"></div>
+                            <div class="bubble bubble2"></div>
+                            <div class="bubble bubble3"></div>
+                        </div>
+                    </div>
+                    <h2 style="color: #ff6b6b; margin-bottom: 20px;">ジンジャーシロップの作り方</h2>
+                </div>
+
+                <div class="step-illustration">
+                    <div class="step-card">
+                        <div class="step-icon"><span class="rotate-anim">🔪</span></div>
+                        <div class="step-text">1. 生姜を<br>薄切り</div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-icon">🍯</div>
+                        <div class="step-text">2. 砂糖・水と<br>一緒に煮る</div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-icon">🍋</div>
+                        <div class="step-text">3. レモン汁<br>を加える</div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-icon">🏺</div>
+                        <div class="step-text">4. 瓶に詰めて<br>保存</div>
+                    </div>
+                </div>
+
+                <div style="background: #e3f2fd; padding: 20px; border-radius: 15px; margin: 30px 0;">
+                    <h3 style="color: #1976d2; text-align: center; margin-bottom: 15px;">基本の黄金比率</h3>
+                    <div style="font-size: 28px; font-weight: bold; color: #1976d2; text-align: center;">
+                        生姜 : 砂糖 : 水<br>
+                        <span style="font-size: 40px;">1 : 1 : 1</span>
+                    </div>
+                </div>
+
+                <div style="background: #fff3e0; padding: 20px; border-radius: 15px; margin: 20px 0;">
+                    <h3 style="color: #ff8c00; margin-bottom: 15px; text-align: center;">💡 楽しみ方</h3>
+                    <div style="text-align: center; margin-bottom: 15px;">
+                        <div style="font-size: 24px; font-weight: bold; color: #ff6b6b;">シロップ 1 : 炭酸水 3〜4</div>
+                    </div>
+                    <div style="font-size: 14px; color: #333; line-height: 1.8;">
+                        ❄️ 冷やして → 爽やかジンジャーエール<br>
+                        ♨️ お湯割り → 体ポカポカホットジンジャー
+                    </div>
+                </div>
+            </div>
+
+            <!-- インフォグラフィックビュー -->
+            <div id="infographic-view" class="view infographic">
+                <div class="section">
+                    <div class="section-title">材料（作りやすい分量）</div>
+                    <div class="ingredients-grid">
+                        <div class="ingredient-card">
+                            <div class="ingredient-icon">🫚</div>
+                            <div class="ingredient-name">生姜</div>
+                            <div class="ingredient-amount">200g</div>
+                            <div class="ingredient-note">皮ごと使う</div>
+                        </div>
+                        <div class="ingredient-card">
+                            <div class="ingredient-icon">🍬</div>
+                            <div class="ingredient-name">砂糖</div>
+                            <div class="ingredient-amount">200g</div>
+                            <div class="ingredient-note">上白糖・きび砂糖</div>
+                        </div>
+                        <div class="ingredient-card">
+                            <div class="ingredient-icon">💧</div>
+                            <div class="ingredient-name">水</div>
+                            <div class="ingredient-amount">200ml</div>
+                            <div class="ingredient-note">基本は1:1:1</div>
+                        </div>
+                        <div class="ingredient-card">
+                            <div class="ingredient-icon">🍋</div>
+                            <div class="ingredient-name">レモン汁</div>
+                            <div class="ingredient-amount">大さじ2</div>
+                            <div class="ingredient-note">色鮮やかに</div>
+                        </div>
+                        <div class="ingredient-card">
+                            <div class="ingredient-icon">🌶️</div>
+                            <div class="ingredient-name">スパイス</div>
+                            <div class="ingredient-amount">お好み</div>
+                            <div class="ingredient-note">鷹の爪・シナモン等</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title" style="background: linear-gradient(135deg, #42a5f5 0%, #1976d2 100%);">
+                        作り方の手順
+                    </div>
+                    <div class="steps-list">
+                        <div class="step-item">
+                            <div class="step-title">生姜の下準備</div>
+                            <div class="step-desc">生姜をきれいに洗い、皮付きのままできるだけ薄くスライスします。皮の近くに香りと辛み成分が詰まっています！</div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-title">煮出す</div>
+                            <div class="step-desc">鍋にスライスした生姜、砂糖、水、お好みのスパイスを入れて中火にかけます。沸騰したら弱火にし、15〜20分ほどコトコト煮詰めます。
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-title">仕上げ</div>
+                            <div class="step-desc">火を止め、レモン汁を加えて混ぜます。そのまま冷めるまで放置して、味を馴染ませます。</div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-title">保存</div>
+                            <div class="step-desc">ザルで漉してシロップを清潔な瓶に移します。冷蔵庫で2週間ほど保存可能です。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title" style="background: linear-gradient(135deg, #ffa726 0%, #ff8c00 100%);">
+                        美味しく作るコツ
+                    </div>
+                    <div class="tips-grid">
+                        <div class="tip-card">
+                            <div class="tip-title">🌶️ 大人の辛口にするなら</div>
+                            <div class="tip-content">鷹の爪（唐辛子）を1本入れて煮出すと、喉にカッとくる刺激的な味になります。</div>
+                        </div>
+                        <div class="tip-card">
+                            <div class="tip-title">🌸 ピンク色にするなら</div>
+                            <div class="tip-content">新生姜を使うと、レモン汁を入れた瞬間にシロップが綺麗なピンク色に染まります。</div>
+                        </div>
+                        <div class="tip-card">
+                            <div class="tip-title">♻️ 残った生姜は</div>
+                            <div class="tip-content">漉した後の生姜は捨てないで！刻んで紅茶に入れたり、佃煮にしたり、お肉料理の味付けに再利用できます。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title" style="background: linear-gradient(135deg, #66bb6a 0%, #43a047 100%);">
+                        楽しみ方
+                    </div>
+                    <div class="ratio-box">
+                        <div class="ratio-text">シロップ 1 : 炭酸水 3〜4</div>
+                        <div class="ratio-note">冬場はお湯で割って「ホットジンジャー」にすると、体が芯から温まります</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentView = 'ponchi';
+
+        function toggleView() {
+            const ponchiView = document.getElementById('ponchi-view');
+            const infographicView = document.getElementById('infographic-view');
+            const toggleText = document.getElementById('toggle-text');
+
+            if (currentView === 'ponchi') {
+                ponchiView.classList.remove('active');
+                infographicView.classList.add('active');
+                toggleText.textContent = 'ポンチ絵で見る';
+                currentView = 'infographic';
+            } else {
+                infographicView.classList.remove('active');
+                ponchiView.classList.add('active');
+                toggleText.textContent = 'インフォグラフィックで見る';
+                currentView = 'ponchi';
+            }
+        }
+    </script>
+</body>
+
+</html>
