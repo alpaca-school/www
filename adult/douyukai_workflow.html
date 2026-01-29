@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>沖縄県中小企業家同友会 業務フロー可視化</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .toggle-container {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            background: #f7fafc;
+        }
+
+        .toggle-btn {
+            background: white;
+            border: 2px solid #667eea;
+            padding: 12px 30px;
+            margin: 0 10px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            color: #667eea;
+        }
+
+        .toggle-btn.active {
+            background: #667eea;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .content {
+            padding: 30px 20px;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        /* ポンチ絵スタイル */
+        .ponchi-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .flow-section {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 5px solid #667eea;
+        }
+
+        .flow-section h2 {
+            color: #2d3748;
+            font-size: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .flow-section h2::before {
+            content: "●";
+            color: #667eea;
+            margin-right: 10px;
+            font-size: 24px;
+        }
+
+        .flow-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .flow-step {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .flow-step::after {
+            content: "↓";
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+            color: #667eea;
+        }
+
+        .flow-step:last-child::after {
+            display: none;
+        }
+
+        .step-title {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .step-detail {
+            font-size: 14px;
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .member-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .member-role {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .member-name {
+            color: #2d3748;
+            font-size: 14px;
+        }
+
+        /* インフォグラフィックスタイル */
+        .infographic-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            opacity: 0.95;
+        }
+
+        .improvement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .improvement-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #667eea;
+        }
+
+        .improvement-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .improvement-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .improvement-desc {
+            font-size: 14px;
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        .gas-features {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .gas-feature {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #48bb78;
+        }
+
+        .gas-feature-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .gas-feature-title::before {
+            content: "✓";
+            color: #48bb78;
+            margin-right: 10px;
+            font-size: 24px;
+        }
+
+        .gas-feature-desc {
+            font-size: 14px;
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .timeline-dot {
+            width: 30px;
+            height: 30px;
+            background: #667eea;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .timeline-title {
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .timeline-desc {
+            font-size: 14px;
+            color: #4a5568;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .toggle-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+                margin: 0 5px;
+            }
+
+            .content {
+                padding: 20px 15px;
+            }
+
+            .stat-number {
+                font-size: 36px;
+            }
+
+            .members-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .improvement-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 沖縄県中小企業家同友会</h1>
+            <p>景況調査業務フロー可視化システム</p>
+        </div>
+
+        <div class="toggle-container">
+            <button class="toggle-btn active" onclick="switchView('ponchi')">🎨 ポンチ絵</button>
+            <button class="toggle-btn" onclick="switchView('infographic')">📈 インフォグラフィック</button>
+        </div>
+
+        <div class="content">
+            <!-- ポンチ絵ビュー -->
+            <div id="ponchi" class="view active">
+                <div class="ponchi-container">
+                    <!-- 業務サイクル -->
+                    <div class="flow-section">
+                        <h2>業務の全体サイクル</h2>
+                        <div class="flow-diagram">
+                            <div class="flow-step">
+                                <div class="step-title">📅 Q1: 4-6月期</div>
+                                <div class="step-detail">四半期ごとの景況調査開始</div>
+                            </div>
+                            <div class="flow-step">
+                                <div class="step-title">📅 Q2: 7-9月期</div>
+                                <div class="step-detail">継続的なデータ収集と分析</div>
+                            </div>
+                            <div class="flow-step">
+                                <div class="step-title">📅 Q3: 10-12月期</div>
+                                <div class="step-detail">年間を通じた傾向分析</div>
+                            </div>
+                            <div class="flow-step">
+                                <div class="step-title">📅 Q4: 1-3月期</div>
+                                <div class="step-detail">年度総括と次年度準備</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 主要メンバー -->
+                    <div class="flow-section">
+                        <h2>主要メンバー構成</h2>
+                        <div class="members-grid">
+                            <div class="member-card">
+                                <div class="member-role">🏢 同友会事務局</div>
+                                <div class="member-name">担当者（主窓口）</div>
+                            </div>
+                            <div class="member-card">
+                                <div class="member-role">🎓 分析担当</div>
+                                <div class="member-name">先生</div>
+                            </div>
+                            <div class="member-card">
+                                <div class="member-role">💻 集計担当</div>
+                                <div class="member-name">琉球のタネ</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 業務フロー -->
+                    <div class="flow-section">
+                        <h2>標準業務フロー</h2>
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-dot">1</div>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">📥 生データ受領</div>
+                                    <div class="timeline-desc">事業内容などの必須項目を即座に確認</div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot">2</div>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">📊 データ集計・分析</div>
+                                    <div class="timeline-desc">Excel集計とバリデーション実施</div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot">3</div>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">📝 初稿提出</div>
+                                    <div class="timeline-desc">集計データ・見解資料を提出</div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot">4</div>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">🔍 判定会議</div>
+                                    <div class="timeline-desc">関係者全員で内容確認と修正指示</div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot">5</div>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">✅ 最終納品</div>
+                                    <div class="timeline-desc">修正完了版を正式提出</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 重要確認事項 -->
+                    <div class="flow-section">
+                        <h2>データ受領時の重要確認事項</h2>
+                        <div class="flow-diagram">
+                            <div class="flow-step">
+                                <div class="step-title">✓ 項目の整合性チェック</div>
+                                <div class="step-detail">「事業内容」など必須列の存在確認</div>
+                            </div>
+                            <div class="flow-step">
+                                <div class="step-title">✓ 集計対象の確認</div>
+                                <div class="step-detail">質問項目追加（Q18等）や業種並び順の変更確認</div>
+                            </div>
+                            <div class="flow-step">
+                                <div class="step-title">✓ スケジュール調整</div>
+                                <div class="step-detail">連休考慮・時間帯明記・進捗確認タイミング設定</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- インフォグラフィックビュー -->
+            <div id="infographic" class="view">
+                <div class="infographic-container">
+                    <!-- 統計カード -->
+                    <div class="stat-card">
+                        <div class="stat-number">4</div>
+                        <div class="stat-label">年間調査実施回数（四半期ごと）</div>
+                    </div>
+
+                    <div class="stat-card" style="background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);">
+                        <div class="stat-number">5</div>
+                        <div class="stat-label">主要な業務ステップ<br>（受領→集計→提出→会議→納品）</div>
+                    </div>
+
+                    <!-- 業務改善案 -->
+                    <div class="flow-section">
+                        <h2>💡 業務改善提案</h2>
+                        <div class="improvement-grid">
+                            <div class="improvement-card">
+                                <div class="improvement-icon">📋</div>
+                                <div class="improvement-title">テンプレート固定化</div>
+                                <div class="improvement-desc">マクロや入力規制を施した標準テンプレートを提供し、データ欠落を物理的に防止</div>
+                            </div>
+                            <div class="improvement-card">
+                                <div class="improvement-icon">☁️</div>
+                                <div class="improvement-title">ファイル共有基盤刷新</div>
+                                <div class="improvement-desc">Googleドライブ共有フォルダへ移行し、バージョン管理された最新ファイルに常時アクセス可能に</div>
+                            </div>
+                            <div class="improvement-card">
+                                <div class="improvement-icon">📅</div>
+                                <div class="improvement-title">判定会議日程標準化</div>
+                                <div class="improvement-desc">生データ受領から10営業日後に会議設定する標準スケジュールを策定</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- GAS自動化システム -->
+                    <div class="flow-section">
+                        <h2>⚙️ GAS自動化システム提案</h2>
+                        <div class="gas-features">
+                            <div class="gas-feature">
+                                <div class="gas-feature-title">Gmail自動保存＆バリデーション</div>
+                                <div class="gas-feature-desc">
+                                    特定件名のメール受信時、添付Excelを自動保存。必須項目（事業内容・Q18等）の存在を自動チェックし、不備があれば即座にアラート通知。
+                                </div>
+                            </div>
+                            <div class="gas-feature">
+                                <div class="gas-feature-title">スケジュール自動登録</div>
+                                <div class="gas-feature-desc">
+                                    メール本文内のスケジュール案を解析し、Googleカレンダーに自動イベント登録。提出期限24時間前に未提出の場合リマインド通知を送信。
+                                </div>
+                            </div>
+                            <div class="gas-feature">
+                                <div class="gas-feature-title">進捗管理ダッシュボード</div>
+                                <div class="gas-feature-desc">
+                                    スプレッドシートで四半期ごとの各工程ステータスを一覧化。事務局・先生と共有し、作業停滞箇所を可視化してメール確認コストを削減。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 期待される効果 -->
+                    <div class="flow-section">
+                        <h2>🎯 期待される効果</h2>
+                        <div class="improvement-grid">
+                            <div class="improvement-card" style="border-top-color: #48bb78;">
+                                <div class="improvement-icon">⏰</div>
+                                <div class="improvement-title">作業時間削減</div>
+                                <div class="improvement-desc">手動確認作業の自動化により、夜間待機や催促メールなどの時間を大幅削減</div>
+                            </div>
+                            <div class="improvement-card" style="border-top-color: #ed8936;">
+                                <div class="improvement-icon">🎯</div>
+                                <div class="improvement-title">精度向上</div>
+                                <div class="improvement-desc">自動バリデーションによりデータ不備による手戻りを防止し、品質を向上</div>
+                            </div>
+                            <div class="improvement-card" style="border-top-color: #9f7aea;">
+                                <div class="improvement-icon">😌</div>
+                                <div class="improvement-title">心理的負担軽減</div>
+                                <div class="improvement-desc">進捗可視化と自動リマインドにより、不安や確認コストを削減</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchView(viewName) {
+            // すべてのビューを非表示
+            document.querySelectorAll('.view').forEach(view => {
+                view.classList.remove('active');
+            });
+
+            // すべてのボタンを非アクティブ化
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // 選択されたビューを表示
+            document.getElementById(viewName).classList.add('active');
+
+            // 対応するボタンをアクティブ化
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+
+</html>
