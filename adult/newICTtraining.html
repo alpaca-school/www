@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI時代の新・PC職業訓練カリキュラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Poppins:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e27;
+            --bg-secondary: #1a1f3a;
+            --accent-blue: #00d4ff;
+            --accent-purple: #8b5cf6;
+            --accent-orange: #ff6b35;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --card-bg: rgba(26, 31, 58, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .background-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        h1 {
+            font-family: 'Poppins', 'Noto Sans JP', sans-serif;
+            font-size: clamp(1.5rem, 5vw, 3rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: clamp(0.85rem, 2vw, 1.1rem);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        .toggle-container {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
+            gap: 15px;
+            animation: fadeIn 1s ease-out 0.3s both;
+        }
+
+        .toggle-btn {
+            padding: 14px 32px;
+            font-size: 15px;
+            font-weight: 700;
+            border: 2px solid var(--accent-blue);
+            background: transparent;
+            color: var(--text-primary);
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-family: 'Noto Sans JP', sans-serif;
+            position: relative;
+            overflow: hidden;
+            min-height: 48px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toggle-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            transition: width 0.4s, height 0.4s, top 0.4s, left 0.4s;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        .toggle-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .toggle-btn.active {
+            background: var(--accent-blue);
+            color: var(--bg-primary);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        }
+
+        .view {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        /* ポンチ絵スタイル */
+        .ponchi-container {
+            padding: 20px;
+        }
+
+        .ponchi-section {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(0, 212, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .ponchi-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+        }
+
+        .ponchi-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--accent-blue), var(--accent-purple));
+        }
+
+        .ponchi-title {
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            font-weight: 900;
+            margin-bottom: 20px;
+            color: var(--accent-blue);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            line-height: 1.3;
+        }
+
+        .ponchi-title::before {
+            content: '▶';
+            font-size: 0.8em;
+        }
+
+        .transform-box {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .transform-box {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+        }
+
+        .old-method, .new-method {
+            padding: 20px;
+            border-radius: 15px;
+            position: relative;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .old-method {
+            background: rgba(255, 107, 53, 0.1);
+            border: 2px dashed rgba(255, 107, 53, 0.3);
+        }
+
+        .new-method {
+            background: rgba(0, 212, 255, 0.1);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .method-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        .old-method .method-label {
+            color: var(--accent-orange);
+        }
+
+        .new-method .method-label {
+            color: var(--accent-blue);
+        }
+
+        .arrow {
+            font-size: 2rem;
+            color: var(--accent-purple);
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+
+        @media (max-width: 768px) {
+            .arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        .practice-list {
+            background: rgba(139, 92, 246, 0.1);
+            border-left: 3px solid var(--accent-purple);
+            padding: 15px 20px;
+            margin-top: 15px;
+            border-radius: 8px;
+        }
+
+        .practice-item {
+            margin: 12px 0;
+            padding-left: 25px;
+            position: relative;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .practice-item::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent-purple);
+            font-weight: 700;
+        }
+
+        /* インフォグラフィックスタイル */
+        .infographic-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 20px;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, var(--card-bg), rgba(139, 92, 246, 0.1));
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.3);
+        }
+
+        .info-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .card-number {
+            font-size: 4rem;
+            font-weight: 900;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--accent-blue);
+        }
+
+        .card-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .card-content {
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .highlight {
+            color: var(--accent-blue);
+            font-weight: 700;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 5px 12px;
+            background: rgba(0, 212, 255, 0.2);
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin: 5px 5px 5px 0;
+            color: var(--accent-blue);
+        }
+
+        .application-section {
+            margin-top: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(0, 212, 255, 0.1));
+            border-radius: 20px;
+            border: 2px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .application-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 30px;
+            text-align: center;
+            color: var(--accent-purple);
+        }
+
+        .application-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .application-card {
+            background: rgba(10, 14, 39, 0.8);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .application-card h3 {
+            color: var(--accent-purple);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        /* アニメーション */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        /* レスポンシブ調整 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 12px;
+            }
+
+            header {
+                padding: 25px 12px;
+            }
+
+            .toggle-container {
+                margin: 30px 0;
+                gap: 12px;
+                flex-wrap: wrap;
+            }
+
+            .toggle-btn {
+                padding: 12px 24px;
+                font-size: 14px;
+                flex: 1;
+                min-width: 140px;
+            }
+
+            .ponchi-section {
+                padding: 18px;
+                margin-bottom: 20px;
+            }
+
+            .transform-box {
+                gap: 20px;
+            }
+
+            .old-method, .new-method {
+                padding: 16px;
+                font-size: 0.9rem;
+            }
+
+            .method-label {
+                font-size: 0.75rem;
+            }
+
+            .practice-list {
+                padding: 12px 16px;
+                margin-top: 12px;
+            }
+
+            .practice-item {
+                font-size: 0.9rem;
+                margin: 10px 0;
+                padding-left: 20px;
+            }
+
+            .info-card {
+                padding: 20px;
+            }
+
+            .card-number {
+                font-size: 2.5rem;
+            }
+
+            .card-title {
+                font-size: 1.2rem;
+            }
+
+            .card-subtitle {
+                font-size: 0.9rem;
+            }
+
+            .card-content {
+                font-size: 0.9rem;
+            }
+
+            .application-section {
+                padding: 18px;
+                margin-top: 30px;
+            }
+
+            .application-title {
+                font-size: 1.4rem;
+                margin-bottom: 20px;
+            }
+
+            .application-card {
+                padding: 18px;
+            }
+
+            .application-card h3 {
+                font-size: 1.1rem;
+            }
+
+            .application-card p {
+                font-size: 0.9rem;
+                line-height: 1.6;
+            }
+
+            .tag {
+                font-size: 0.7rem;
+                padding: 4px 10px;
+            }
+
+            .infographic-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 12px;
+            }
+
+            .application-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* iPhone 12 Pro Max対応 (428px) */
+        @media (max-width: 428px) {
+            body {
+                font-size: 15px;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            .subtitle {
+                font-size: 0.85rem;
+            }
+
+            .ponchi-title {
+                font-size: 1.15rem;
+            }
+
+            .arrow {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-pattern"></div>
+    
+    <div class="container">
+        <header>
+            <h1>AI時代の新・PC職業訓練</h1>
+            <p class="subtitle">「操作を覚える」から「AIを使いこなし、成果を完成させる」実践的カリキュラムへ</p>
+        </header>
+
+        <div class="toggle-container">
+            <button class="toggle-btn active" onclick="showView('ponchi')">📊 ポンチ絵</button>
+            <button class="toggle-btn" onclick="showView('infographic')">📈 インフォグラフィック</button>
+        </div>
+
+        <!-- ポンチ絵ビュー -->
+        <div id="ponchi-view" class="view active">
+            <div class="ponchi-container">
+                <div class="ponchi-section">
+                    <h2 class="ponchi-title">タイピング・入力訓練</h2>
+                    <div class="transform-box">
+                        <div class="old-method">
+                            <div class="method-label">従来の方法</div>
+                            <p>✏️ 正確なタイピング</p>
+                            <p>📋 伝票の数値入力</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="new-method">
+                            <div class="method-label">AI時代の方法</div>
+                            <p><strong>🎤 音声入力とAI校正</strong></p>
+                            <p><strong>🔍 構造化抽出</strong></p>
+                        </div>
+                    </div>
+                    <div class="practice-list">
+                        <div class="practice-item">音声入力で作成した支離滅裂な文章を、AIを使って「ビジネス文書」に整える</div>
+                        <div class="practice-item">バラバラの領収書やメモから、AIを使って必要なデータ（日付、金額、項目）を抽出し、スプレッドシートに自動整理</div>
+                    </div>
+                </div>
+
+                <div class="ponchi-section">
+                    <h2 class="ponchi-title">Excel・事務作業</h2>
+                    <div class="transform-box">
+                        <div class="old-method">
+                            <div class="method-label">従来の方法</div>
+                            <p>📚 関数の暗記</p>
+                            <p>📊 複雑な表の作成</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="new-method">
+                            <div class="method-label">AI時代の方法</div>
+                            <p><strong>⚡ ノーコード自動化</strong></p>
+                            <p><strong>🔎 エラー監査</strong></p>
+                        </div>
+                    </div>
+                    <div class="practice-list">
+                        <div class="practice-item">「こういう表を作りたい」とAIに伝え、関数やGAS（Google Apps Script）を生成させる</div>
+                        <div class="practice-item">AIが書いたコードを実際に動かし、意図通りでない部分を「修正指示（プロンプト）」で直す能力を養う</div>
+                    </div>
+                </div>
+
+                <div class="ponchi-section">
+                    <h2 class="ponchi-title">文書作成・広報訓練</h2>
+                    <div class="transform-box">
+                        <div class="old-method">
+                            <div class="method-label">従来の方法</div>
+                            <p>📝 テンプレートに沿った手入力</p>
+                            <p>🎨 レイアウト調整</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="new-method">
+                            <div class="method-label">AI時代の方法</div>
+                            <p><strong>💬 プロンプト・エンジニアリング</strong></p>
+                            <p><strong>✨ AI画像生成と編集</strong></p>
+                        </div>
+                    </div>
+                    <div class="practice-list">
+                        <div class="practice-item">地域のイベント情報を箇条書きで入力し、ターゲット（若者向け、高齢者向け等）に合わせた告知文を複数パターン生成</div>
+                        <div class="practice-item">AI画像生成ツールを使い、告知ポスターに最適な画像を「言語で指示して」作成する</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="application-section">
+                <h2 class="application-title">訓練の「規格化」と「福祉・教育」への応用</h2>
+                <div class="application-grid">
+                    <div class="application-card">
+                        <h3>🎓 教育・職業訓練での展開</h3>
+                        <p><strong>「自分専用のAI先生」を作る:</strong> 自分が苦手な部分（例：敬語、計算）を重点的にフォローしてくれるAIチャットの作り方を学ぶ</p>
+                        <p style="margin-top: 15px;"><strong>プロジェクト型学習（PBL）:</strong> 「地域の歴史を動画にする」という目標に対し、AIで脚本を書き、AIでナレーションを入れ、AIで動画編集する。技術の習得ではなく<strong>「完遂する体験」</strong>を重視</p>
+                    </div>
+                    <div class="application-card">
+                        <h3>💼 事務・就労支援</h3>
+                        <p><strong>「チェック業務」へのシフト:</strong> 人間が1文字ずつ打つのではなく、AIが読み取ったデータと原本を照合する「検品」のプロを育成</p>
+                        <p style="margin-top: 15px;"><strong>マニュアルの自動生成:</strong> 複雑な業務手順を動画や写真からAIに解説させ、誰でも（障害特性があっても）理解できる「自分専用マニュアル」をその場で生成</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- インフォグラフィックビュー -->
+        <div id="infographic-view" class="view">
+            <div class="infographic-container">
+                <div class="info-card">
+                    <div class="card-number">01</div>
+                    <h3 class="card-title">タイピング・入力訓練</h3>
+                    <p class="card-subtitle">音声入力とAI校正・構造化抽出</p>
+                    <div class="card-content">
+                        <p><span class="highlight">従来:</span> 正確なタイピング、伝票の数値入力</p>
+                        <p style="margin-top: 10px;"><span class="highlight">新方式:</span> 音声で入力し、AIが自動整形・データ抽出</p>
+                        <div style="margin-top: 15px;">
+                            <span class="tag">音声入力</span>
+                            <span class="tag">AI校正</span>
+                            <span class="tag">データ抽出</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="card-number">02</div>
+                    <h3 class="card-title">Excel・事務作業</h3>
+                    <p class="card-subtitle">ノーコード自動化とエラー監査</p>
+                    <div class="card-content">
+                        <p><span class="highlight">従来:</span> 関数の暗記、複雑な表の作成</p>
+                        <p style="margin-top: 10px;"><span class="highlight">新方式:</span> AIに指示して自動生成、プロンプトで修正</p>
+                        <div style="margin-top: 15px;">
+                            <span class="tag">ノーコード</span>
+                            <span class="tag">GAS生成</span>
+                            <span class="tag">プロンプト修正</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="card-number">03</div>
+                    <h3 class="card-title">文書作成・広報訓練</h3>
+                    <p class="card-subtitle">プロンプト・エンジニアリングと編集</p>
+                    <div class="card-content">
+                        <p><span class="highlight">従来:</span> テンプレート手入力、レイアウト調整</p>
+                        <p style="margin-top: 10px;"><span class="highlight">新方式:</span> ターゲット別に複数パターンを自動生成</p>
+                        <div style="margin-top: 15px;">
+                            <span class="tag">プロンプト</span>
+                            <span class="tag">AI画像生成</span>
+                            <span class="tag">複数パターン</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="application-section">
+                <h2 class="application-title">実践的応用分野</h2>
+                <div class="infographic-container">
+                    <div class="info-card">
+                        <div class="card-number">🎓</div>
+                        <h3 class="card-title">教育・職業訓練</h3>
+                        <div class="card-content">
+                            <p><strong>自分専用のAI先生</strong></p>
+                            <p>苦手分野を重点的にフォロー</p>
+                            <p style="margin-top: 15px;"><strong>プロジェクト型学習</strong></p>
+                            <p>「完遂する体験」を重視した実践</p>
+                            <div style="margin-top: 15px;">
+                                <span class="tag">個別最適化</span>
+                                <span class="tag">PBL</span>
+                                <span class="tag">成功体験</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="card-number">💼</div>
+                        <h3 class="card-title">事務・就労支援</h3>
+                        <div class="card-content">
+                            <p><strong>チェック業務へのシフト</strong></p>
+                            <p>AIが読み取り、人間が検品</p>
+                            <p style="margin-top: 15px;"><strong>自動マニュアル生成</strong></p>
+                            <p>誰でも理解できる個別対応</p>
+                            <div style="margin-top: 15px;">
+                                <span class="tag">検品プロ</span>
+                                <span class="tag">個別マニュアル</span>
+                                <span class="tag">バリアフリー</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showView(viewType) {
+            // すべてのビューを非表示
+            document.querySelectorAll('.view').forEach(view => {
+                view.classList.remove('active');
+            });
+            
+            // すべてのボタンを非アクティブ
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // 選択されたビューを表示
+            if (viewType === 'ponchi') {
+                document.getElementById('ponchi-view').classList.add('active');
+                document.querySelectorAll('.toggle-btn')[0].classList.add('active');
+            } else {
+                document.getElementById('infographic-view').classList.add('active');
+                document.querySelectorAll('.toggle-btn')[1].classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
