@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>原発問題 - エネルギー政策について</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .nav {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 15px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            background: white;
+        }
+
+        .nav-btn:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .content {
+            padding: 20px;
+            min-height: 400px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ポンチ絵スタイル */
+        .ponchi {
+            max-width: 100%;
+        }
+
+        .ponchi-title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .ponchi-diagram {
+            position: relative;
+            padding: 20px;
+            background: #fff;
+            border: 3px solid #333;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .ponchi-box {
+            background: #fffacd;
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            position: relative;
+            box-shadow: 3px 3px 0 #666;
+        }
+
+        .ponchi-box h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #d63031;
+        }
+
+        .ponchi-box p {
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .arrow {
+            text-align: center;
+            font-size: 24px;
+            color: #d63031;
+            margin: 10px 0;
+        }
+
+        .highlight {
+            background: #ff6b6b;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        /* インフォグラフィックスタイル */
+        .infographic-section {
+            margin-bottom: 30px;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .info-card h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .info-card p {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .icon {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-box {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* 比較表スタイル */
+        .comparison-table {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+            background: white;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 10px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #e0e0e0;
+            line-height: 1.6;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .fact-badge {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .opinion-badge {
+            display: inline-block;
+            background: #FF9800;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .category {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .nav-btn {
+                font-size: 12px;
+                padding: 12px 8px;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .ponchi-box h3 {
+                font-size: 14px;
+            }
+
+            .ponchi-box p {
+                font-size: 12px;
+            }
+
+            .info-card h3 {
+                font-size: 16px;
+            }
+
+            .stat-number {
+                font-size: 24px;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 10px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚡ 原発問題を考える</h1>
+            <p>エネルギー政策の事実関係</p>
+        </div>
+
+        <div class="nav">
+            <button class="nav-btn active" onclick="showPage('ponchi')">ポンチ絵</button>
+            <button class="nav-btn" onclick="showPage('infographic')">インフォグラフィック</button>
+        </div>
+
+        <div class="content">
+            <!-- ポンチ絵ページ -->
+            <div id="ponchi" class="page active">
+                <div class="ponchi">
+                    <div class="ponchi-title">🔄 原発問題の事実関係</div>
+                    
+                    <div class="ponchi-diagram">
+                        <div class="ponchi-box">
+                            <h3>⚛️ 放射性廃棄物の管理</h3>
+                            <p>高レベル放射性廃棄物の管理期間：<span class="highlight">約12万年</span></p>
+                            <p>フィンランド：最終処分方針を決定し実行段階へ（世界でほぼ唯一）</p>
+                            <p>日本：処分場所は未定</p>
+                        </div>
+
+                        <div class="arrow">↓</div>
+
+                        <div class="ponchi-box">
+                            <h3>👥 人材の状況</h3>
+                            <p>• 福島第一原発事故以降、原発部門の人気が低下</p>
+                            <p>• 古い原発を扱えた技術者が定年退職</p>
+                            <p>• この10年で中堅層の多くが別部署に移動</p>
+                            <p>• 経験の継承が途切れている</p>
+                        </div>
+
+                        <div class="arrow">↓</div>
+
+                        <div class="ponchi-box">
+                            <h3>💰 廃炉費用の仕組み</h3>
+                            <p>• 制度：廃炉費用は稼働中に積み立てる</p>
+                            <p>• 現実：不足が慢性化している</p>
+                            <p>• 古い原発：ある程度の蓄えあり</p>
+                            <p>• 新しい原発：再稼働の遅れで引当不十分</p>
+                        </div>
+
+                        <div class="arrow">↓</div>
+
+                        <div class="ponchi-box">
+                            <h3>☢️ プルトニウム保有の法的枠組み</h3>
+                            <p>• 核不拡散条約：軍事保有は不可</p>
+                            <p>• 原子力基本法：兵器利用はNG</p>
+                            <p>• 日米原子力協定：政治的枠組みで保有が許可</p>
+                            <p>• 国際原則：廃棄物は出した国で処理</p>
+                        </div>
+
+                        <div class="arrow">↓</div>
+
+                        <div class="ponchi-box" style="background: #e3f2fd;">
+                            <h3>⚡ 代替技術の現状</h3>
+                            <p>• 核融合研究は進んでいる</p>
+                            <p>• 商業化の見通しは立っていない</p>
+                            <p>• IT財閥が巨額投資している</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- インフォグラフィックページ -->
+            <div id="infographic" class="page">
+                <div class="stat-grid">
+                    <div class="stat-box">
+                        <div class="stat-number">12万年</div>
+                        <div class="stat-label">放射性廃棄物の管理期間</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">10年</div>
+                        <div class="stat-label">筆者の研究会主宰期間</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">1カ国</div>
+                        <div class="stat-label">最終処分実行段階の国数<br>（フィンランド）</div>
+                    </div>
+                </div>
+
+                <div class="infographic-section">
+                    <div class="info-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <h3><span class="icon">⚛️</span>放射性廃棄物処理の国際状況</h3>
+                        <p><strong>国際原則：</strong>放射性廃棄物は出した国で処理する</p>
+                        <p><strong>フィンランド：</strong>最終処分方針を決定し、実行段階に進んでいる世界でもほとんどない例</p>
+                        <p><strong>日本：</strong>処分場所は未定</p>
+                    </div>
+
+                    <div class="info-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <h3><span class="icon">👷</span>人材の推移</h3>
+                        <p><strong>福島第一原発事故以降：</strong>原発部門の人気が低下し、人材確保が困難に</p>
+                        <p><strong>ベテラン層：</strong>古い原発を扱えた技術者が定年退職</p>
+                        <p><strong>中堅層：</strong>この10年で多くが別部署に移動</p>
+                        <p><strong>結果：</strong>経験の継承が途切れている</p>
+                    </div>
+
+                    <div class="info-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        <h3><span class="icon">💸</span>廃炉費用の制度と現実</h3>
+                        <p><strong>制度：</strong>廃炉費用は稼働中に積み立てる仕組み</p>
+                        <p><strong>現実：</strong>不足が慢性化している</p>
+                        <p><strong>古い原発：</strong>ある程度の蓄えがある</p>
+                        <p><strong>新しい原発：</strong>再稼働の遅れもあって十分な引当ができていない</p>
+                    </div>
+
+                    <div class="info-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                        <h3><span class="icon">☢️</span>プルトニウム保有の法的枠組み</h3>
+                        <p><strong>核不拡散条約：</strong>日本は加盟国のためプルトニウムを軍事保有できない</p>
+                        <p><strong>原子力基本法：</strong>兵器利用はNG</p>
+                        <p><strong>日米原子力協定：</strong>きわめて政治的な枠組みの中でのみ保有が許可されている</p>
+                        <p><strong>監視：</strong>核の国際監視機関が日本を監視</p>
+                    </div>
+
+                    <div class="info-card" style="background: linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%);">
+                        <h3><span class="icon">⚡</span>代替技術：核融合の現状</h3>
+                        <p><strong>研究状況：</strong>核融合研究は進んでいる</p>
+                        <p><strong>商業化：</strong>見通しは立っていない</p>
+                        <p><strong>投資主体：</strong>IT財閥が巨額投資をしている</p>
+                    </div>
+
+                    <div class="info-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <h3><span class="icon">📚</span>筆者の活動歴</h3>
+                        <p><strong>期間：</strong>約10年間</p>
+                        <p><strong>活動：</strong>原発問題の研究会を主宰</p>
+                        <p><strong>関与：</strong>廃棄物処理をめぐる対話の場づくり、各種シンポジウム</p>
+                        <p><strong>立場：</strong>以前は中立、現在は原発廃止</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-top: 2px solid #e0e0e0;">
+            <h3 style="font-size: 16px; color: #333; margin-bottom: 10px;">📎 参照元</h3>
+            <p style="font-size: 14px; color: #666; margin-bottom: 5px;">
+                <strong>Randy Taguchi</strong>　2026年1月29日投稿
+            </p>
+            <a href="https://www.facebook.com/permalink.php?story_fbid=pfbid0gStwuzRTkBka7wirLRNe9VdjNvtkPzaDhWzgy3SCV8Kc24DicRscoC9PagYx4gnCl&id=100023846584201&__cft__[0]=AZZlOsL4yFqJpQjOvIzt92Rbjx8_eTkmgi8pfblyX54BpCSzfWdSPqYsKQErUnqvlgs9B838cxRWcBFbqFLgTVTms6i6b_KVFKelMMsP3WaFhC969aHnbv3Hy1OvkJkaEkyj6ZOk97Pnc3XOB_YMk35CLdDGl3m-DwPVND0SWP_TKpsVkrHiRA1dKxpLN-S65tA&__tn__=%2CO%2CP-R" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               style="font-size: 13px; color: #667eea; text-decoration: none; word-wrap: break-word; display: inline-block; max-width: 100%;">
+                Facebook投稿を見る →
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function showPage(pageId) {
+            // すべてのページとボタンを非アクティブに
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // 選択されたページとボタンをアクティブに
+            document.getElementById(pageId).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
