@@ -11,6 +11,7 @@
             text-align: center;
             background-color: #f4f7f6;
             padding: 15px;
+            color: #333;
         }
 
         .game-container {
@@ -18,34 +19,66 @@
             border-radius: 20px;
             padding: 25px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
+            max-width: 550px;
             margin: auto;
+        }
+
+        /* 入力エリアとプルダウンの調整 */
+        input[type="text"],
+        select {
+            font-size: 20px;
+            padding: 12px;
+            border-radius: 12px;
+            margin: 10px 0;
+            width: 90%;
+            border: 2px solid #3498db;
+            background-color: #fff;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        p {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 15px 0 5px 0;
         }
 
         button {
             font-size: 18px;
-            margin: 8px;
-            padding: 12px 20px;
+            margin: 20px 8px 8px 8px;
+            padding: 15px 20px;
             cursor: pointer;
             border-radius: 12px;
             border: none;
             background: #3498db;
             color: white;
             width: 85%;
+            font-weight: bold;
         }
 
+        button:active {
+            background: #2980b9;
+            transform: scale(0.98);
+        }
+
+        /* 収支計算表の調整 */
         .money-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
-            font-size: 12px;
+            margin-top: 20px;
+            font-size: 11px;
+            /* スマホで見きれない場合は調整 */
         }
 
         .money-table th,
         .money-table td {
             border: 1px solid #ddd;
-            padding: 6px;
-            text-align: right;
+            padding: 8px 4px;
+            text-align: center;
+        }
+
+        .money-table th {
+            background-color: #ecf0f1;
         }
 
         .loss {
@@ -66,32 +99,36 @@
         <h1 id="game-title">🔨 ヨミタン職人紀行</h1>
         <div id="content">
             <p>チーム名を入力してね！</p>
-            <input type="text" id="team-name" style="font-size: 18px; padding: 10px; width: 70%;"><br><br>
+            <input type="text" id="team-name" placeholder="チーム名"><br>
             <button onclick="startGame()">ゲームスタート！</button>
         </div>
     </div>
 
     <script>
+        // GASのURL（あなたのものに差し替えてください）
         const GAS_URL = "https://script.google.com/macros/s/AKfycbxofuJnWD-8Zv_7f5QGxSldXP-b4pWjLXvyRavXb9fK__x6BUe_YBd2Dq8L5Re6xJXT/exec";
+
         let teamName = "";
         let turn = 1;
         let history = [];
         let prevMaterialWasCheap = false;
 
         const stages = [
-            { name: "1期：見習い 🏠", basePrice: 100000 },
-            { name: "2期：成長 🏡", basePrice: 300000 },
+            { name: "1期：経営者見習いスタート 🏠", basePrice: 100000 },
+            { name: "2期：成長と挑戦の時期 🏡", basePrice: 300000 },
             { name: "3期：社長への恩返し 🏰", basePrice: 600000 }
         ];
 
         function playSound() {
-            const context = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = context.createOscillator();
-            const gain = context.createGain();
-            osc.connect(gain); gain.connect(context.destination);
-            osc.type = 'sine'; osc.frequency.setValueAtTime(1000, context.currentTime);
-            gain.gain.setValueAtTime(0.1, context.currentTime);
-            osc.start(); osc.stop(context.currentTime + 0.1);
+            try {
+                const context = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = context.createOscillator();
+                const gain = context.createGain();
+                osc.connect(gain); gain.connect(context.destination);
+                osc.type = 'sine'; osc.frequency.setValueAtTime(1000, context.currentTime);
+                gain.gain.setValueAtTime(0.1, context.currentTime);
+                osc.start(); osc.stop(context.currentTime + 0.1);
+            } catch (e) { console.log("Sound error"); }
         }
 
         function startGame() {
@@ -104,19 +141,39 @@
         function showSelection() {
             let stage = stages[turn - 1];
             let html = `<h3>${stage.name}</h3>`;
-            html += `<p>人数: <select id="workers"><option value="1">1名</option><option value="2">2名</option><option value="3">3名</option><option value="4">4名</option></select></p>`;
-            html += `<p>給料: <select id="salary"><option value="5000">安い</option><option value="15000" selected>ふつう</option><option value="30000">高級</option></select></p>`;
-            html += `<p>材料: <select id="material"><option value="0.5">安い(リスク有)</option><option value="1.0" selected>標準</option><option value="1.5">高級</option></select></p>`;
+
+            html += `<p>👷 雇う人数を選んでね</p>`;
+            html += `<select id="workers">
+                <option value="1">1名</option>
+                <option value="2">2名</option>
+                <option value="3">3名</option>
+                <option value="4">4名</option>
+            </select>`;
+
+            html += `<p>💰 職人の給料設定</p>`;
+            html += `<select id="salary">
+                <option value="5000">安い</option>
+                <option value="15000" selected>ふつう</option>
+                <option value="30000">高級</option>
+            </select>`;
+
+            html += `<p>🧱 使う材料の質</p>`;
+            html += `<select id="material">
+                <option value="0.5">安い材料 (リスクあり⚠️)</option>
+                <option value="1.0" selected>標準の材料</option>
+                <option value="1.5">高級な材料✨</option>
+            </select>`;
 
             if (turn === 2) {
-                html += `<p style="color:red; font-weight:bold;">✨ イベントを選んでください(必須):</p>`;
+                html += `<p style="color:#e67e22;">✨ 大事なイベント (選んでね)</p>`;
                 html += `<select id="event">
-                <option value="wedding">結婚 (祝金 -5万)</option>
-                <option value="indep">独立準備 (費用 -10万)</option>
-                <option value="study">学び直し (費用 -3万 / 売上UP)</option>
-            </select>`;
+                    <option value="wedding">結婚 (祝金 -5万)</option>
+                    <option value="indep">独立準備 (費用 -10万)</option>
+                    <option value="study">学び直し (費用 -3万 / 売上UP)</option>
+                </select>`;
             }
-            html += `<br><button onclick="calculateTurn()">決算！</button>`;
+
+            html += `<br><button onclick="calculateTurn()">決算！次の期へ</button>`;
             document.getElementById('content').innerHTML = html;
         }
 
@@ -131,9 +188,10 @@
             let happeningLoss = 0;
             let happeningName = "-";
 
+            // 3期目のハプニングロジック
             if (turn === 3) {
                 if (prevMaterialWasCheap) {
-                    happeningName = "欠陥の損害賠償";
+                    happeningName = "欠陥の賠償";
                     happeningLoss = 200000;
                 } else if (Math.random() < 0.4) {
                     happeningName = "事故・病気";
@@ -147,7 +205,7 @@
                 let ev = document.getElementById('event').value;
                 if (ev === "wedding") { eventName = "結婚"; eventCost = 50000; }
                 if (ev === "indep") { eventName = "独立"; eventCost = 100000; }
-                if (ev === "study") { eventName = "学び"; eventCost = 30000; sales += 70000; }
+                if (ev === "study") { eventName = "学び"; eventCost = 30000; sales += 100000; }
             }
 
             let laborCost = workers * salary;
@@ -155,58 +213,87 @@
             let totalCost = laborCost + matCost + eventCost + happeningLoss;
             let profit = sales - totalCost;
 
+            // 1期目の材料チェックを保存
             if (turn === 1 && mat < 1.0) prevMaterialWasCheap = true;
 
-            history.push({ turn, sales, laborCost, matCost, eventName, eventCost, happeningName, happeningLoss, profit });
-            nextStep();
-        }
+            history.push({
+                turn,
+                sales,
+                laborCost,
+                matCost,
+                eventName,
+                eventCost,
+                happeningName,
+                happeningLoss,
+                profit
+            });
 
-        function nextStep() {
-            if (turn < 3) { turn++; showSelection(); }
-            else { showFinalResult(); }
+            if (turn < 3) {
+                turn++;
+                showSelection();
+            } else {
+                showFinalResult();
+            }
         }
 
         function showFinalResult() {
             let total = history.reduce((sum, h) => sum + h.profit, 0);
             let html = `<h2>最終収支報告書</h2>`;
+
             html += `<table class="money-table">
-            <tr><th>期</th><th>売上</th><th>給料</th><th>材料</th><th>イベント</th><th>ハプニング</th><th>利益</th></tr>`;
+                <thead>
+                    <tr>
+                        <th>期</th>
+                        <th>売上</th>
+                        <th>給料</th>
+                        <th>材料</th>
+                        <th>イベント</th>
+                        <th>ハプニング</th>
+                        <th>利益</th>
+                    </tr>
+                </thead>
+                <tbody>`;
 
             history.forEach(h => {
                 html += `<tr>
-                <td>${h.turn}</td>
-                <td>${h.sales.toLocaleString()}</td>
-                <td>${h.laborCost.toLocaleString()}</td>
-                <td>${h.matCost.toLocaleString()}</td>
-                <td>${h.eventName}(${h.eventCost})</td>
-                <td class="loss">${h.happeningName}<br>${h.happeningLoss.toLocaleString()}</td>
-                <td class="profit">${h.profit.toLocaleString()}</td>
-            </tr>`;
+                    <td>${h.turn}</td>
+                    <td>${h.sales.toLocaleString()}</td>
+                    <td>${h.laborCost.toLocaleString()}</td>
+                    <td>${h.matCost.toLocaleString()}</td>
+                    <td>${h.eventName}<br>(${(h.eventCost > 0 ? "-" : "") + h.eventCost.toLocaleString()})</td>
+                    <td class="loss">${h.happeningName}<br>${h.happeningLoss > 0 ? "-" + h.happeningLoss.toLocaleString() : "0"}</td>
+                    <td class="${h.profit >= 0 ? 'profit' : 'loss'}">${h.profit.toLocaleString()}</td>
+                </tr>`;
             });
-            html += `</table>`;
-            html += `<h3>合計利益: ${total.toLocaleString()}円</h3>`;
-            html += `<button onclick="saveAndRestart(${total})">スプレッドシートに保存してもう一度遊ぶ</button>`;
+
+            html += `</tbody></table>`;
+            html += `<h3 style="margin-top:20px;">合計利益: <span class="profit">${total.toLocaleString()}円</span></h3>`;
+
+            let comment = total > 300000 ? "素晴らしい！今の社長に最高の恩返しができましたね✨" : "がんばりました！次はもっと大きな恩返しを目指そう！";
+            html += `<p>${comment}</p>`;
+
+            html += `<button onclick="saveAndRestart(${total})">スプレッドシートに保存して<br>もう一度遊ぶ</button>`;
             document.getElementById('content').innerHTML = html;
         }
 
         async function saveAndRestart(total) {
-            if (GAS_URL.includes("ここに")) {
-                alert("GASのURLを設定してください！");
-                location.reload();
-                return;
-            }
-
-            // 保存中メッセージ
-            document.getElementById('content').innerHTML = "<p>スプレッドシートに記録中...</p>";
+            // 保存中表示
+            const originalContent = document.getElementById('content').innerHTML;
+            document.getElementById('content').innerHTML = "<h3>データを送信中... 🚀</h3>";
 
             try {
+                // GASへ送信
                 await fetch(GAS_URL, {
                     method: "POST",
+                    mode: "no-cors", // GASの仕様に合わせる
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ teamName, history, total })
                 });
-                alert("保存しました！");
+
+                alert("スプレッドシートに記録しました！最初に戻ります。");
             } catch (e) {
-                alert("保存に失敗しましたが、リロードします。");
+                console.error(e);
+                alert("保存に失敗しました。URLを確認してください。");
             }
             location.reload();
         }
