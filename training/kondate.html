@@ -3,355 +3,212 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>2月 1日トータル健康管理表（すき家＋学校給食）</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>読谷からはーい大湾 | お弁当・オードブルのご案内</title>
     <style>
+        /* ユニバーサルデザインを意識した基本設定 */
+        :root {
+            --main-green: #689f38;
+            --soft-green: #f1f8e9;
+            --accent-orange: #ff6f00;
+            --text-black: #212121;
+            /* コントラスト比を考慮 */
+            --bg-white: #ffffff;
+        }
+
         body {
-            font-family: 'Hiragino Kaku Gothic ProN', sans-serif;
-            line-height: 1.4;
-            color: #333;
-            max-width: 1300px;
-            margin: 20px auto;
-            background-color: #f0f4f8;
-            padding: 10px;
+            font-family: "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
+            /* 丸文字系で柔らかく */
+            margin: 0;
+            padding: 0;
+            background-color: #fdfdfd;
+            color: var(--text-black);
+            line-height: 1.8;
         }
 
-        h1 {
-            text-align: center;
-            color: #1e3a5f;
-        }
-
-        .base-info {
-            background: #fff;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            border-left: 5px solid #27ae60;
-            font-size: 0.9em;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            table-layout: fixed;
-        }
-
-        th,
-        td {
-            border: 1px solid #eee;
-            padding: 8px;
-            font-size: 0.8em;
-        }
-
-        th {
-            background-color: #1e3a5f;
+        /* ヘッダー：温かみのあるデザイン */
+        header {
+            background-color: var(--main-green);
             color: white;
-            position: sticky;
-            top: 0;
-        }
-
-        .date-col {
-            width: 60px;
             text-align: center;
+            padding: 30px 10px;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .title {
+            font-size: 2rem;
+            margin: 10px 0;
             font-weight: bold;
         }
 
-        .menu-col {
-            width: 300px;
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-        .num-col {
-            width: 70px;
-            text-align: right;
-        }
-
-        .judge-col {
-            width: 100px;
-            text-align: center;
-        }
-
-        .over {
-            color: #e74c3c;
-            font-weight: bold;
-        }
-
-        .status {
-            padding: 2px 6px;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 0.75em;
-        }
-
-        .good {
-            background-color: #d5f5e3;
-            color: #27ae60;
-        }
-
-        .care {
-            background-color: #ffeaa7;
-            color: #d35400;
-        }
-
-        .caution {
-            background-color: #ffcccc;
-            color: #c0392b;
-        }
-
-        .blood-tags {
+        /* セクション見出し：アイコン付き */
+        h2 {
             display: flex;
-            flex-wrap: wrap;
-            gap: 3px;
-            justify-content: center;
+            align-items: center;
+            color: var(--main-green);
+            font-size: 1.4rem;
+            border-bottom: 3px dotted var(--main-green);
+            padding-bottom: 5px;
         }
 
-        .tag {
-            font-size: 0.7em;
-            padding: 1px 4px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            background: #f9f9f9;
+        h2::before {
+            content: "🍱";
+            /* アイコン */
+            margin-right: 10px;
+            font-size: 1.6rem;
         }
 
-        .bad-tag {
-            border-color: #e74c3c;
-            color: #e74c3c;
+        /* カードデザイン：角を丸く */
+        .card {
+            background: var(--bg-white);
+            border: 2px solid var(--soft-green);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
 
-        .good-tag {
-            border-color: #27ae60;
-            color: #27ae60;
+        .price-tag {
+            background-color: var(--accent-orange);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 50px;
+            display: inline-block;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* 重要情報のボックス */
+        .important-info {
+            background-color: #fffde7;
+            border: 2px dashed var(--accent-orange);
+            border-radius: 15px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        /* ボタン：押しやすさを重視（UD） */
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            display: block;
+            text-decoration: none;
+            padding: 18px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: transform 0.2s;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:active {
+            transform: translateY(2px);
+            box-shadow: none;
+        }
+
+        .btn-phone {
+            background-color: #43a047;
+            color: white;
+        }
+
+        .btn-manager {
+            background-color: #546e7a;
+            color: white;
+        }
+
+        /* アイコン用絵文字 */
+        .icon {
+            margin-right: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 10px;
+            color: #666;
+            font-size: 0.9rem;
         }
     </style>
 </head>
 
 <body>
 
-    <h1>📊 2月 1日健康管理表（朝：すき家 ＋ 昼：学校給食）</h1>
+    <header>
+        <div class="subtitle">＼ 就労支援のまごころをお届け ／</div>
+        <div class="title">🌸 読谷からはーい大湾</div>
+        <p>あったか〜いお弁当とオードブル</p>
+    </header>
 
-    <div class="base-info">
-        <strong>朝食：すき家「塩サバたまかけ定食ミニ」固定</strong> (557kcal / 脂質 23.9g / 炭水化物 61.3g)<br>
-        ※サバの良質な脂質は<strong>HDL（善玉）</strong>を助け、<strong>中性脂肪</strong>を下げる効果があります。
+    <div class="container">
+
+        <section>
+            <h2>オードブルのご案内</h2>
+            <div class="card">
+                <span class="price-tag">お祝い・会合に！</span>
+                <h3 style="margin-top:5px;">特製オードブル</h3>
+                <p style="font-size: 1.4rem; color: #d32f2f; font-weight: bold;">4,000円〜 <small>(税込)</small></p>
+                <p>🌟 季節の野菜とメインをバランスよく詰め込みます。<br>
+                    🌟 ご要望に合わせて内容の相談も承ります！</p>
+            </div>
+
+            <div class="card">
+                <span class="price-tag">毎日のお昼に</span>
+                <h3 style="margin-top:5px;">日替わり弁当</h3>
+                <p style="font-size: 1.4rem; color: #d32f2f; font-weight: bold;">550円〜 <small>(税込)</small></p>
+                <p>🍱 健康を考えた、愛情たっぷりのお弁当です。</p>
+            </div>
+        </section>
+
+        <section>
+            <h2 style="border-color: var(--accent-orange); color: var(--accent-orange);">
+                注文についてのご案内
+            </h2>
+            <div class="important-info">
+                <p>📅 <strong>【3日前まで】</strong>にご注文をお願いします</p>
+                <p>🛵 <strong>【読谷村内】</strong>へお届けします！</p>
+                <p style="font-size: 0.9rem; color: #555;">※内容や距離によりご相談させていただく場合があります</p>
+            </div>
+
+            <div class="card" style="border: none; background: #f5f5f5;">
+                <p><span class="icon">⏰</span><strong>営業時間:</strong> 9:00 〜 17:00</p>
+                <p><span class="icon">📞</span><strong>電話受付:</strong> 17:00まで</p>
+                <p><span class="icon">📍</span><strong>住所:</strong> 読谷村大湾769-1</p>
+            </div>
+        </section>
+
+        <section class="btn-container">
+            <a href="tel:0989711396" class="btn btn-phone">
+                📞 お店に電話をかける<br>
+                <span style="font-size: 0.9rem;">(098-971-1396)</span>
+            </a>
+            <a href="tel:08098576900" class="btn btn-manager">
+                👤 店長(上地)へ直通電話<br>
+                <span style="font-size: 0.9rem;">(080-9857-6900)</span>
+            </a>
+        </section>
+
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th class="date-col">日付</th>
-                <th class="menu-col">学校給食（全メニュー）</th>
-                <th class="num-col">合計kcal</th>
-                <th class="num-col">合計脂質</th>
-                <th class="num-col">合計炭水</th>
-                <th class="judge-col">血液数値判定</th>
-                <th>数値別アドバイス</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>2/2</td>
-                <td>チキンカツ、味噌汁、白菜和え、ひじき炒め煮</td>
-                <td class="num-col">1407</td>
-                <td class="num-col over">51.9g</td>
-                <td class="num-col">171.3g</td>
-                <td>
-                    <div class="blood-tags"><span class="tag bad-tag">LDL↑</span><span class="tag bad-tag">ALT↑</span>
-                    </div>
-                </td>
-                <td>揚げ油は<strong>ALT</strong>と<strong>LDL</strong>を上げます。夜は蒸し野菜などで脂質をリセット。</td>
-            </tr>
-            <tr>
-                <td>2/3</td>
-                <td>牛肉とネギの味噌炒め、すまし汁、大根の甘酢和え</td>
-                <td class="num-col">1337</td>
-                <td class="num-col">45.9g</td>
-                <td class="num-col">166.3g</td>
-                <td>
-                    <div class="blood-tags"><span class="tag bad-tag">LDL↑</span></div>
-                </td>
-                <td>牛脂に含まれる飽和脂肪酸は<strong>LDL</strong>上昇に直結。夜は青魚が理想的。</td>
-            </tr>
-            <tr>
-                <td>2/4</td>
-                <td>しょうゆラーメン、揚げ餃子、ごはん</td>
-                <td class="num-col">1277</td>
-                <td class="num-col">41.9g</td>
-                <td class="num-col over">176.3g</td>
-                <td>
-                    <div class="blood-tags"><span class="tag bad-tag">中性脂肪↑</span></div>
-                </td>
-                <td>麺＋米は<strong>中性脂肪</strong>を急増させます。夜の炭水化物は完全に抜きましょう。</td>
-            </tr>
-            <tr>
-                <td>2/5</td>
-                <td>麻婆豆腐丼、中華スープ、バンサンスー</td>
-                <td class="num-col">1307</td>
-                <td class="num-col">43.9g</td>
-                <td class="num-col">171.3g</td>
-                <td>
-                    <div class="blood-tags"><span class="tag good-tag">肝機能補助</span></div>
-                </td>
-                <td>豆腐のタンパク質は肝細胞の再生（<strong>ALT/AST改善</strong>）を助けます。</td>
-            </tr>
-            <tr>
-                <td>2/6</td>
-                <td>サバの塩焼き、味噌汁、コールスロー、青菜炒め</td>
-                <td class="num-col">1257</td>
-                <td class="num-col">41.9g</td>
-                <td class="num-col">156.3g</td>
-                <td>
-                    <div class="blood-tags"><span class="tag good-tag">HDL↑</span><span
-                            class="tag good-tag">中性脂肪↓</span></div>
-                </td>
-                <td>朝昼サバの青魚パワーで血管掃除。<strong>中性脂肪</strong>が気になる方には最高の日。</td>
-            </tr>
-            <tr>
-                <td>2/9</td>
-                <td>クリームシチュー、ナゲット、生野菜サラダ、ごはん</td>
-                <td class="num-col">1377</td>
-                <td class="num-col">48.9g</td>
-                <td class="num-col over">176.3g</td>
-                <td>
-                    <div class="blood-tags"><span class="tag bad-tag">LDL↑</span></div>
-                </td>
-                <td>乳製品の脂質は<strong>LDL</strong>を上げがち。サラダを完食して食物繊維を。</td>
-            </tr>
-            <tr>
-                <td>2/10</td>
-                <td>【卒業生送別献立】※品数多め</td>
-                <td class="num-col">---</td>
-                <td class="num-col">---</td>
-                <td class="num-col">---</td>
-                <td>
-                    <div class="blood-tags"><span class="tag">お祝い</span></div>
-                </td>
-                <td>特別な日なので楽しみつつ、夜ごはんで全体の量を調整してください。</td>
-            </tr>
-            <tr>
-                <td>2/12</td>
-                <td>ささみチーズフライ、味噌汁、コールスロー、筑前煮、ごはん</td>
-                <td class="num-col">1387</td>
-                <td class="num-col over">49.9g</td>
-                <td class="num-col">166.3g</td>
-                <td>
-                    <div class="blood-tags"><span class="tag bad-tag">ALT↑</span><span class="tag bad-tag">LDL↑</span>
-                    </div>
-                </td>
-                <td>「チーズ×揚げ物」は<strong>ALT</strong>に負担。筑前煮の根菜で解毒力を高めて。</td>
-            </tr>
-            <tr>
-                <td>2/13</td>
-                <td>デミハンバーグ、エビフライ、コンソメ、インゲンソテー、他</td>
-                <td class="num-col over">1507</td>
-                <td class="num-col over">58.9g</td>
-                <td class="num-col over">181.3g</td>
-                <td>
-                    <div class="blood-tags"><span class="tag bad-tag">全項目警戒</span></div>
-                </td>
-                <td>脂質・糖質共に最大。$\gamma$-GTPが高い方は休肝日ならぬ「休食日」で調整。</td>
-            </tr>
-            <tr>
-                <td>2/16</td>
-                <td>チキンカレー、ごぼうサラダ、ポテトフライ</td>
-                <td class="num-col">1437</td>
-                <td class="num-col">47.9g</td>
-                <td class="num-col over">191.3g</td>
-                <td>
-                    <div class="blood-tags"><span class="tag bad-tag">中性脂肪↑</span></div>
-                </td>
-                <td>ルウとポテトで糖質が蓄積。夜は白米なしでおかずのみを推奨。</td>
-            </tr>
-            <tr>
-                <td>2/17</td>
-                <td>牛丼、味噌汁、おくら煮びたし</td>
-                <td class="num-col">1357</td>
-                <td class="num-col">45.9g</td>
-                <td class="num-col over">181.3g</td>
-                <td>
-                    <div class="blood-tags"><span class="tag bad-tag">中性脂肪↑</span></div>
-                </td>
-                <td>おくらの食物繊維が糖の吸収を緩和。丼物の早食いは厳禁です。</td>
-            </tr>
-            <tr>
-                <td>2/18</td>
-                <td>沖縄そば、もずく酢、ジューシー、デザート</td>
-                <td class="num-col">1407</td>
-                <td class="num-col">43.9g</td>
-                <td class="num-col over">196.3g</td>
-                <td>
-                    <div class="blood-tags"><span class="tag bad-tag">中性脂肪↑↑</span></div>
-                </td>
-                <td>ダブル炭水化物。<strong>中性脂肪</strong>が気になる方は夜の糖質を完全にカット。</td>
-            </tr>
-            <tr>
-                <td>2/19</td>
-                <td>白身魚フライ、鶏汁、コールスロー、白菜のツナ和え、ごはん</td>
-                <td class="num-col">1337</td>
-                <td class="num-col">45.9g</td>
-                <td class="num-col">161.3g</td>
-                <td>
-                    <div class="blood-tags"><span class="tag care">脂質注意</span></div>
-                </td>
-                <td>揚げ物があるので夜は焼き物か煮物を。鶏汁の野菜をしっかり摂取。</td>
-            </tr>
-            <tr>
-                <td>2/20</td>
-                <td>とんかつ、味噌汁、ブロッコリーソテー、マカロニサラダ、ごはん</td>
-                <td class="num-col">1457</td>
-                <td class="num-col over">55.9g</td>
-                <td class="num-col">171.3g</td>
-                <td>
-                    <div class="blood-tags"><span class="tag bad-tag">ALT↑</span><span class="tag bad-tag">LDL↑</span>
-                    </div>
-                </td>
-                <td><strong>ALT</strong>（肝臓）に最も負担がかかる日。夜は納豆や豆腐で体を休めて。</td>
-            </tr>
-            <tr>
-                <td>2/24</td>
-                <td>ハヤシライス、ミートボールソテー、ほうれん草のゴマ和え</td>
-                <td class="num-col">1377</td>
-                <td class="num-col">46.9g</td>
-                <td class="num-col over">186.3g</td>
-                <td>
-                    <div class="blood-tags"><span class="tag bad-tag">中性脂肪↑</span></div>
-                </td>
-                <td>ほうれん草の成分が肝臓の解毒を助けます。ルウの脂質には注意。</td>
-            </tr>
-            <tr>
-                <td>2/25</td>
-                <td>スパゲッティミートソース、コロッケ、サラダ、デザート</td>
-                <td class="num-col">1357</td>
-                <td class="num-col">45.9g</td>
-                <td class="num-col over">176.3g</td>
-                <td>
-                    <div class="blood-tags"><span class="tag care">糖質注意</span></div>
-                </td>
-                <td>麺と揚げ物のコンボ。食後の血糖値上昇を抑えるため夜は低糖質に。</td>
-            </tr>
-            <tr>
-                <td>2/26</td>
-                <td>八宝菜、中華スープ、コールスロー、ホタテフライ、ごはん</td>
-                <td class="num-col">1297</td>
-                <td class="num-col">41.9g</td>
-                <td class="num-col">166.3g</td>
-                <td>
-                    <div class="blood-tags"><span class="tag good-tag">肝機能保護</span></div>
-                </td>
-                <td>魚介のタウリンが<strong>$\gamma$-GTP</strong>や<strong>ALT</strong>の改善を助ける良いメニュー。</td>
-            </tr>
-            <tr>
-                <td>2/27</td>
-                <td>ビーフシチュー、コロッケ、コールスロー、かぼちゃコロッケ、ごはん</td>
-                <td class="num-col">1407</td>
-                <td class="num-col over">49.9g</td>
-                <td class="num-col over">176.3g</td>
-                <td>
-                    <div class="blood-tags"><span class="tag bad-tag">LDL↑</span><span class="tag bad-tag">中性脂肪↑</span>
-                    </div>
-                </td>
-                <td>複数の揚げ物が重なるため、夜は魚や大豆製品で脂質のバランス調整を。</td>
-            </tr>
-        </tbody>
-    </table>
+    <footer>
+        <p>© 読谷からはーい大湾<br>みんなが笑顔になれるお弁当を作っています</p>
+    </footer>
 
 </body>
 
