@@ -3,72 +3,84 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>1日トータル健康管理：朝食（すき家）＋学校給食</title>
+    <title>2月 1日トータル健康管理表（すき家＋学校給食）</title>
     <style>
         body {
             font-family: 'Hiragino Kaku Gothic ProN', sans-serif;
-            line-height: 1.6;
+            line-height: 1.4;
             color: #333;
-            max-width: 1200px;
+            max-width: 1300px;
             margin: 20px auto;
-            background-color: #f8fafc;
-            padding: 20px;
+            background-color: #f0f4f8;
+            padding: 10px;
         }
 
         h1 {
             text-align: center;
             color: #1e3a5f;
-            border-bottom: 3px solid #1e3a5f;
-            padding-bottom: 10px;
         }
 
-        .summary-box {
+        .base-info {
             background: #fff;
-            padding: 15px;
+            padding: 10px;
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             border-left: 5px solid #27ae60;
+            font-size: 0.9em;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            table-layout: fixed;
         }
 
         th,
         td {
             border: 1px solid #eee;
-            padding: 10px;
-            text-align: center;
-            font-size: 0.85em;
+            padding: 8px;
+            font-size: 0.8em;
         }
 
         th {
             background-color: #1e3a5f;
             color: white;
+            position: sticky;
+            top: 0;
         }
 
-        .morning-row {
-            background-color: #fff9db;
+        .date-col {
+            width: 60px;
+            text-align: center;
             font-weight: bold;
         }
 
-        .total-row {
-            background-color: #e3f2fd;
+        .menu-col {
+            width: 300px;
+        }
+
+        .num-col {
+            width: 70px;
+            text-align: right;
+        }
+
+        .judge-col {
+            width: 100px;
+            text-align: center;
+        }
+
+        .over {
+            color: #e74c3c;
             font-weight: bold;
-            font-size: 1em;
         }
 
         .status {
-            padding: 3px 8px;
-            border-radius: 15px;
+            padding: 2px 6px;
+            border-radius: 10px;
             font-weight: bold;
-            font-size: 0.8em;
+            font-size: 0.75em;
         }
 
         .good {
@@ -86,126 +98,260 @@
             color: #c0392b;
         }
 
-        .advice {
-            text-align: left;
-            font-size: 0.8em;
-            color: #555;
-            background-color: #fafafa;
+        .blood-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px;
+            justify-content: center;
+        }
+
+        .tag {
+            font-size: 0.7em;
+            padding: 1px 4px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            background: #f9f9f9;
+        }
+
+        .bad-tag {
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+
+        .good-tag {
+            border-color: #27ae60;
+            color: #27ae60;
         }
     </style>
 </head>
 
 <body>
 
-    <h1>🩺 1日トータル健康管理表（朝食＋給食）</h1>
+    <h1>📊 2月 1日健康管理表（朝：すき家 ＋ 昼：学校給食）</h1>
 
-    <div class="summary-box">
-        <strong>基準メニュー：朝食「すき家：自社製自慢の冷やし塩サバたまかけ定食（ごはんミニ）」</strong><br>
-        目安：約557kcal / 脂質 23.9g / 炭水化物 61.3g<br>
-        <span class="status good">判定：良好</span> サバのEPA/DHA、卵の良質なタンパク質が肝機能をサポートします。
+    <div class="base-info">
+        <strong>朝食：すき家「塩サバたまかけ定食ミニ」固定</strong> (557kcal / 脂質 23.9g / 炭水化物 61.3g)<br>
+        ※サバの良質な脂質は<strong>HDL（善玉）</strong>を助け、<strong>中性脂肪</strong>を下げる効果があります。
     </div>
 
     <table>
         <thead>
             <tr>
-                <th>日付</th>
-                <th>食事区分</th>
-                <th>全メニュー内容</th>
-                <th>エネルギー</th>
-                <th>脂質</th>
-                <th>炭水化物</th>
-                <th>血液数値判定</th>
+                <th class="date-col">日付</th>
+                <th class="menu-col">学校給食（全メニュー）</th>
+                <th class="num-col">合計kcal</th>
+                <th class="num-col">合計脂質</th>
+                <th class="num-col">合計炭水</th>
+                <th class="judge-col">血液数値判定</th>
+                <th>数値別アドバイス</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td rowspan="3" style="font-weight:bold;">2/2 (月)</td>
-                <td class="morning-row">朝：すき家</td>
-                <td>塩サバ、たまかけ、ごはんミニ、味噌汁、ひじき煮</td>
-                <td>557 kcal</td>
-                <td>23.9g</td>
-                <td>61.3g</td>
-                <td><span class="status good">✅ 良好</span></td>
-            </tr>
-            <tr>
-                <td>昼：給食</td>
+                <td>2/2</td>
                 <td>チキンカツ、味噌汁、白菜和え、ひじき炒め煮</td>
-                <td>850 kcal</td>
-                <td>28.0g</td>
-                <td>110.0g</td>
-                <td><span class="status caution">🚫 警戒</span></td>
-            </tr>
-            <tr class="total-row">
-                <td>1日合計</td>
-                <td>（朝＋昼の合計）</td>
-                <td>1,407 kcal</td>
-                <td>51.9g</td>
-                <td>171.3g</td>
-                <td class="advice">脂質が1日の上限に近いです。夜はノンオイルの魚か豆腐、野菜中心に。</td>
-            </tr>
-
-            <tr>
-                <td rowspan="3" style="font-weight:bold;">2/6 (金)</td>
-                <td class="morning-row">朝：すき家</td>
-                <td>塩サバたまかけ定食（ミニ）</td>
-                <td>557 kcal</td>
-                <td>23.9g</td>
-                <td>61.3g</td>
-                <td><span class="status good">✅ 良好</span></td>
+                <td class="num-col">1407</td>
+                <td class="num-col over">51.9g</td>
+                <td class="num-col">171.3g</td>
+                <td>
+                    <div class="blood-tags"><span class="tag bad-tag">LDL↑</span><span class="tag bad-tag">ALT↑</span>
+                    </div>
+                </td>
+                <td>揚げ油は<strong>ALT</strong>と<strong>LDL</strong>を上げます。夜は蒸し野菜などで脂質をリセット。</td>
             </tr>
             <tr>
-                <td>昼：給食</td>
+                <td>2/3</td>
+                <td>牛肉とネギの味噌炒め、すまし汁、大根の甘酢和え</td>
+                <td class="num-col">1337</td>
+                <td class="num-col">45.9g</td>
+                <td class="num-col">166.3g</td>
+                <td>
+                    <div class="blood-tags"><span class="tag bad-tag">LDL↑</span></div>
+                </td>
+                <td>牛脂に含まれる飽和脂肪酸は<strong>LDL</strong>上昇に直結。夜は青魚が理想的。</td>
+            </tr>
+            <tr>
+                <td>2/4</td>
+                <td>しょうゆラーメン、揚げ餃子、ごはん</td>
+                <td class="num-col">1277</td>
+                <td class="num-col">41.9g</td>
+                <td class="num-col over">176.3g</td>
+                <td>
+                    <div class="blood-tags"><span class="tag bad-tag">中性脂肪↑</span></div>
+                </td>
+                <td>麺＋米は<strong>中性脂肪</strong>を急増させます。夜の炭水化物は完全に抜きましょう。</td>
+            </tr>
+            <tr>
+                <td>2/5</td>
+                <td>麻婆豆腐丼、中華スープ、バンサンスー</td>
+                <td class="num-col">1307</td>
+                <td class="num-col">43.9g</td>
+                <td class="num-col">171.3g</td>
+                <td>
+                    <div class="blood-tags"><span class="tag good-tag">肝機能補助</span></div>
+                </td>
+                <td>豆腐のタンパク質は肝細胞の再生（<strong>ALT/AST改善</strong>）を助けます。</td>
+            </tr>
+            <tr>
+                <td>2/6</td>
                 <td>サバの塩焼き、味噌汁、コールスロー、青菜炒め</td>
-                <td>700 kcal</td>
-                <td>18.0g</td>
-                <td>95.0g</td>
-                <td><span class="status good">✅ 良好</span></td>
-            </tr>
-            <tr class="total-row">
-                <td>1日合計</td>
-                <td>（朝＋昼の合計）</td>
-                <td>1,257 kcal</td>
-                <td>41.9g</td>
-                <td>156.3g</td>
-                <td class="advice">サバ重なりで青魚の油が豊富。中性脂肪対策に非常に良い1日です。</td>
-            </tr>
-
-            <tr>
-                <td rowspan="3" style="font-weight:bold;">2/13 (金)</td>
-                <td class="morning-row">朝：すき家</td>
-                <td>塩サバたまかけ定食（ミニ）</td>
-                <td>557 kcal</td>
-                <td>23.9g</td>
-                <td>61.3g</td>
-                <td><span class="status good">✅ 良好</span></td>
+                <td class="num-col">1257</td>
+                <td class="num-col">41.9g</td>
+                <td class="num-col">156.3g</td>
+                <td>
+                    <div class="blood-tags"><span class="tag good-tag">HDL↑</span><span
+                            class="tag good-tag">中性脂肪↓</span></div>
+                </td>
+                <td>朝昼サバの青魚パワーで血管掃除。<strong>中性脂肪</strong>が気になる方には最高の日。</td>
             </tr>
             <tr>
-                <td>昼：給食</td>
-                <td>デミハンバーグ、エビフライ、インゲンソテー、デザート他</td>
-                <td>950 kcal</td>
-                <td>35.0g</td>
-                <td>120.0g</td>
-                <td><span class="status caution">🚫 警戒</span></td>
+                <td>2/9</td>
+                <td>クリームシチュー、ナゲット、生野菜サラダ、ごはん</td>
+                <td class="num-col">1377</td>
+                <td class="num-col">48.9g</td>
+                <td class="num-col over">176.3g</td>
+                <td>
+                    <div class="blood-tags"><span class="tag bad-tag">LDL↑</span></div>
+                </td>
+                <td>乳製品の脂質は<strong>LDL</strong>を上げがち。サラダを完食して食物繊維を。</td>
             </tr>
-            <tr class="total-row">
-                <td>1日合計</td>
-                <td>（朝＋昼の合計）</td>
-                <td>1,507 kcal</td>
-                <td>58.9g</td>
-                <td>181.3g</td>
-                <td class="advice">脂質・カロリー共に過多。夕食は主食を抜き、サラダと味噌汁のみを推奨。</td>
+            <tr>
+                <td>2/10</td>
+                <td>【卒業生送別献立】※品数多め</td>
+                <td class="num-col">---</td>
+                <td class="num-col">---</td>
+                <td class="num-col">---</td>
+                <td>
+                    <div class="blood-tags"><span class="tag">お祝い</span></div>
+                </td>
+                <td>特別な日なので楽しみつつ、夜ごはんで全体の量を調整してください。</td>
+            </tr>
+            <tr>
+                <td>2/12</td>
+                <td>ささみチーズフライ、味噌汁、コールスロー、筑前煮、ごはん</td>
+                <td class="num-col">1387</td>
+                <td class="num-col over">49.9g</td>
+                <td class="num-col">166.3g</td>
+                <td>
+                    <div class="blood-tags"><span class="tag bad-tag">ALT↑</span><span class="tag bad-tag">LDL↑</span>
+                    </div>
+                </td>
+                <td>「チーズ×揚げ物」は<strong>ALT</strong>に負担。筑前煮の根菜で解毒力を高めて。</td>
+            </tr>
+            <tr>
+                <td>2/13</td>
+                <td>デミハンバーグ、エビフライ、コンソメ、インゲンソテー、他</td>
+                <td class="num-col over">1507</td>
+                <td class="num-col over">58.9g</td>
+                <td class="num-col over">181.3g</td>
+                <td>
+                    <div class="blood-tags"><span class="tag bad-tag">全項目警戒</span></div>
+                </td>
+                <td>脂質・糖質共に最大。$\gamma$-GTPが高い方は休肝日ならぬ「休食日」で調整。</td>
+            </tr>
+            <tr>
+                <td>2/16</td>
+                <td>チキンカレー、ごぼうサラダ、ポテトフライ</td>
+                <td class="num-col">1437</td>
+                <td class="num-col">47.9g</td>
+                <td class="num-col over">191.3g</td>
+                <td>
+                    <div class="blood-tags"><span class="tag bad-tag">中性脂肪↑</span></div>
+                </td>
+                <td>ルウとポテトで糖質が蓄積。夜は白米なしでおかずのみを推奨。</td>
+            </tr>
+            <tr>
+                <td>2/17</td>
+                <td>牛丼、味噌汁、おくら煮びたし</td>
+                <td class="num-col">1357</td>
+                <td class="num-col">45.9g</td>
+                <td class="num-col over">181.3g</td>
+                <td>
+                    <div class="blood-tags"><span class="tag bad-tag">中性脂肪↑</span></div>
+                </td>
+                <td>おくらの食物繊維が糖の吸収を緩和。丼物の早食いは厳禁です。</td>
+            </tr>
+            <tr>
+                <td>2/18</td>
+                <td>沖縄そば、もずく酢、ジューシー、デザート</td>
+                <td class="num-col">1407</td>
+                <td class="num-col">43.9g</td>
+                <td class="num-col over">196.3g</td>
+                <td>
+                    <div class="blood-tags"><span class="tag bad-tag">中性脂肪↑↑</span></div>
+                </td>
+                <td>ダブル炭水化物。<strong>中性脂肪</strong>が気になる方は夜の糖質を完全にカット。</td>
+            </tr>
+            <tr>
+                <td>2/19</td>
+                <td>白身魚フライ、鶏汁、コールスロー、白菜のツナ和え、ごはん</td>
+                <td class="num-col">1337</td>
+                <td class="num-col">45.9g</td>
+                <td class="num-col">161.3g</td>
+                <td>
+                    <div class="blood-tags"><span class="tag care">脂質注意</span></div>
+                </td>
+                <td>揚げ物があるので夜は焼き物か煮物を。鶏汁の野菜をしっかり摂取。</td>
+            </tr>
+            <tr>
+                <td>2/20</td>
+                <td>とんかつ、味噌汁、ブロッコリーソテー、マカロニサラダ、ごはん</td>
+                <td class="num-col">1457</td>
+                <td class="num-col over">55.9g</td>
+                <td class="num-col">171.3g</td>
+                <td>
+                    <div class="blood-tags"><span class="tag bad-tag">ALT↑</span><span class="tag bad-tag">LDL↑</span>
+                    </div>
+                </td>
+                <td><strong>ALT</strong>（肝臓）に最も負担がかかる日。夜は納豆や豆腐で体を休めて。</td>
+            </tr>
+            <tr>
+                <td>2/24</td>
+                <td>ハヤシライス、ミートボールソテー、ほうれん草のゴマ和え</td>
+                <td class="num-col">1377</td>
+                <td class="num-col">46.9g</td>
+                <td class="num-col over">186.3g</td>
+                <td>
+                    <div class="blood-tags"><span class="tag bad-tag">中性脂肪↑</span></div>
+                </td>
+                <td>ほうれん草の成分が肝臓の解毒を助けます。ルウの脂質には注意。</td>
+            </tr>
+            <tr>
+                <td>2/25</td>
+                <td>スパゲッティミートソース、コロッケ、サラダ、デザート</td>
+                <td class="num-col">1357</td>
+                <td class="num-col">45.9g</td>
+                <td class="num-col over">176.3g</td>
+                <td>
+                    <div class="blood-tags"><span class="tag care">糖質注意</span></div>
+                </td>
+                <td>麺と揚げ物のコンボ。食後の血糖値上昇を抑えるため夜は低糖質に。</td>
+            </tr>
+            <tr>
+                <td>2/26</td>
+                <td>八宝菜、中華スープ、コールスロー、ホタテフライ、ごはん</td>
+                <td class="num-col">1297</td>
+                <td class="num-col">41.9g</td>
+                <td class="num-col">166.3g</td>
+                <td>
+                    <div class="blood-tags"><span class="tag good-tag">肝機能保護</span></div>
+                </td>
+                <td>魚介のタウリンが<strong>$\gamma$-GTP</strong>や<strong>ALT</strong>の改善を助ける良いメニュー。</td>
+            </tr>
+            <tr>
+                <td>2/27</td>
+                <td>ビーフシチュー、コロッケ、コールスロー、かぼちゃコロッケ、ごはん</td>
+                <td class="num-col">1407</td>
+                <td class="num-col over">49.9g</td>
+                <td class="num-col over">176.3g</td>
+                <td>
+                    <div class="blood-tags"><span class="tag bad-tag">LDL↑</span><span class="tag bad-tag">中性脂肪↑</span>
+                    </div>
+                </td>
+                <td>複数の揚げ物が重なるため、夜は魚や大豆製品で脂質のバランス調整を。</td>
             </tr>
         </tbody>
     </table>
-
-    <div style="margin-top: 20px; background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #ddd;">
-        <h3>📊 血液数値を改善するための計算の考え方</h3>
-        <ul>
-            <li><strong>脂質目標</strong>：1日の脂質は50〜60g程度が目安。給食が揚げ物の日は、朝食のサバ以外の油（ドレッシング等）を控えましょう。</li>
-            <li><strong>中性脂肪（炭水化物）</strong>：1日合計で炭水化物が250gを超えないよう、2/18（沖縄そば）の日は夕食の米を控えめに。</li>
-            <li><strong>$\gamma$-GTP / ALT</strong>：すき家の卵（タンパク質）は肝臓に良いですが、昼が「警戒」の日は肝臓が疲れます。水分を多めに摂りましょう。</li>
-        </ul>
-    </div>
 
 </body>
 
