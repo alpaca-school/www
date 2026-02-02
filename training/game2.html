@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ヨミタン職人紀行</title>
+    <style>
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; text-align: center; background-color: #f4f7f6; padding: 15px; color: #333; }
+        .game-container { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 450px; margin: auto; }
+        h1 { color: #2c3e50; font-size: 24px; }
+        button { font-size: 18px; margin: 8px; padding: 12px 20px; cursor: pointer; border-radius: 12px; border: none; background: #3498db; color: white; transition: 0.2s; width: 80%; }
+        button:active { background: #2980b9; transform: scale(0.98); }
+        select { font-size: 18px; padding: 8px; border-radius: 8px; margin: 5px; width: 60%; }
+        .money-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
+        .money-table th, .money-table td { border: 1px solid #ddd; padding: 8px; text-align: right; }
+        .profit { color: #e74c3c; font-weight: bold; }
+        .happening { background: #fff3cd; padding: 10px; border-radius: 10px; border: 1px solid #ffeeba; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <h1 id="game-title">🔨 ヨミタン職人紀行</h1>
+    <div id="content">
+        <p>チーム名を入力してね！</p>
+        <input type="text" id="team-name" placeholder="チーム名" style="font-size: 18px; padding: 10px; width: 70%; border-radius: 8px; border: 1px solid #ccc;"><br><br>
+        <button onclick="startGame()">ゲームスタート！</button>
+    </div>
+</div>
+
+<script>
+    let teamName = "";
+    let turn = 1;
+    let history = [];
+    let prevMaterialWasCheap = false; // 1期目に安い材料を使ったか
+
+    const stages = [
+        { name: "1期：見習い期間 🏠", basePrice: 100000 },
+        { name: "2期：成長期間 🏡", basePrice: 300000 },
+        { name: "3期：社長への道 🏰", basePrice: 600000 }
+    ];
+
+    function playSound() {
+        const context = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = context.createOscillator();
+        const gain = context.createGain();
+        osc.connect(gain); gain.connect(context.destination);
+        osc.type = 'sine'; osc.frequency.setValueAtTime(1200, context.currentTime);
+        gain.gain.setValueAtTime(0.1, context.currentTime);
+        osc.start(); osc.stop(context.currentTime + 0.1);
+    }
+
+    function startGame() {
+        teamName = document.getElementById('team-name').value || "名無しの職人";
+        document.getElementById('game-title').innerText = "🔨 " + teamName + "の職人紀行";
+        playSound();
+        showSelection();
+    }
+
+    function showSelection() {
+        let stage = stages[turn-1];
+        let html = `<h3>${stage.name}</h3>`;
+        
+        html += `<p>👷 人数: <select id="workers">
+            <option value="1">1名</option><option value="2">2名</option>
+            <option value="3">3名</option><option value="4">4名</option>
+        </select></p>`;
+        
+        html += `<p>💰 給料: <select id="salary">
+            <option value="5000">安い (5,000円)</option>
+            <option value="15000" selected>ふつう (15,000円)</option>
+            <option value="30000">高級 (30,000円)</option>
+        </select></p>`;
+
+        html += `<p>🧱 材料: <select id="material">
+            <option value="0.5">安い材料 (リスク有)</option>
+            <option value="1.0" selected>標準の材料</option>
+            <option value="1.5">こだわりの材料✨</option>
+        </select></p>`;
+
+        if (turn === 2) {
+            html += `<p>✨ イベント: <select id="event">
+                <option value="none">なし</option>
+                <option value="wedding">結婚 (お祝い金 -5万)</option>
+                <option value="indep">独立準備 (勉強代 -10万)</option>
+                <option value="study">学び直し (スキルUP -3万)</option>
+            </select></p>`;
+        }
+
+        html += `<button onclick="calculateTurn()">この内容で決算！</button>`;
+        document.getElementById('content').innerHTML = html;
+    }
+
+    function calculateTurn() {
+        playSound();
+        let stage = stages[turn-1];
+        let workers = parseInt(document.getElementById('workers').value);
+        let salaryPerPerson = parseInt(document.getElementById('salary').value);
+        let matMultiplier = parseFloat(document.getElementById('material').value);
+        
+        // 基本売上
+        let sales = stage.basePrice * matMultiplier;
+        let happeningMsg = "";
+        let happeningLoss = 0;
+
+        // ハプニング判定 (3期目)
+        if (turn === 3) {
+            let rnd = Math.random();
+            if (prevMaterialWasCheap) {
+                happeningMsg = "⚠️ 過去の安い材料で損害賠償が発生！";
+                happeningLoss = 200000;
+            } else if (rnd < 0.3) {
+                happeningMsg = "⚠️ 事故・病気で作業が遅れた！";
+                happeningLoss = 100000;
+            }
+        }
+
+        // イベント経費 (2期目)
+        let eventCost = 0;
+        if (turn === 2) {
+            let ev = document.getElementById('event').value;
+            if (ev === "wedding") eventCost = 50000;
+            if (ev === "indep") eventCost = 100000;
+            if (ev === "study") { eventCost = 30000; sales += 50000; } // 学び直しは売上UP
+        }
+
+        // 経費計算
+        let laborCost = workers * salaryPerPerson;
+        let matCost = stage.basePrice * 0.4 * matMultiplier;
+        let totalCost = laborCost + matCost + eventCost + happeningLoss;
+        let profit = sales - totalCost;
+
+        // 1期目の材料チェック
+        if (turn === 1 && matMultiplier < 1.0) prevMaterialWasCheap = true;
+
+        history.push({ turn, sales, laborCost, matCost, eventCost, happeningLoss, profit });
+
+        let html = happeningMsg ? `<div class="happening">${happeningMsg}</div>` : "";
+        html += `<h3>${turn}期の結果</h3>`;
+        html += `<p>💰 売上: ${sales.toLocaleString()}円</p>`;
+        html += `<p>💸 経費合計: ${totalCost.toLocaleString()}円</p>`;
+        html += `<p class="profit">📈 利益: ${profit.toLocaleString()}円</p>`;
+        html += `<button onclick="nextStep()">次へ</button>`;
+        document.getElementById('content').innerHTML = html;
+    }
+
+    function nextStep() {
+        turn++;
+        if (turn > 3) {
+            showFinalResult();
+        } else {
+            showSelection();
+        }
+    }
+
+    function showFinalResult() {
+        let total = history.reduce((sum, h) => sum + h.profit, 0);
+        let html = `<h2>完！恩返しの結末</h2>`;
+        html += `<p>3期合計の利益: <span class="profit">${total.toLocaleString()}円</span></p>`;
+        
+        html += `<table class="money-table">
+            <tr><th>期</th><th>売上</th><th>経費</th><th>利益</th></tr>`;
+        history.forEach(h => {
+            html += `<tr><td>${h.turn}</td><td>${h.sales.toLocaleString()}</td><td>${(h.laborCost + h.matCost + h.eventCost + h.happeningLoss).toLocaleString()}</td><td>${h.profit.toLocaleString()}</td></tr>`;
+        });
+        html += `</table>`;
+
+        let comment = total > 500000 ? "立派な社長になりました！今の社長も大喜びです！" : "まだまだ修行中。でも心は伝わりました！";
+        html += `<p><b>${comment}</b></p>`;
+        
+        const mailBody = encodeURIComponent(`${teamName}の結果\n合計利益: ${total}円`);
+        html += `<button onclick="window.location.href='mailto:SAD22@gmail.com?subject=職人紀行結果&body=${mailBody}'">結果をメールする</button>`;
+        html += `<button onclick="location.reload()" style="background:#95a5a6;">もう一度挑戦</button>`;
+        
+        document.getElementById('content').innerHTML = html;
+    }
+</script>
+
+</body>
+</html>
