@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>2月 1日トータル栄養管理表（三色食品群＋血液数値）</title>
+    <title>2月 1日トータル健康管理表（三色食品群＋血液数値）</title>
     <style>
         body {
             font-family: 'Hiragino Kaku Gothic ProN', sans-serif;
@@ -34,13 +34,15 @@
             border-collapse: collapse;
             background: white;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            table-layout: fixed;
         }
 
         th,
         td {
             border: 1px solid #eee;
             padding: 6px;
-            font-size: 0.75em;
+            font-size: 0.7em;
+            overflow: hidden;
         }
 
         th {
@@ -55,19 +57,25 @@
             font-weight: bold;
         }
 
-        /* 血や肉 */
         .ki {
             color: #f39c12;
             font-weight: bold;
         }
 
-        /* エネルギー */
         .midori {
             color: #27ae60;
             font-weight: bold;
         }
 
-        /* 体調維持 */
+        .date-col {
+            width: 50px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .menu-col {
+            width: 180px;
+        }
 
         .num-col {
             text-align: right;
@@ -75,7 +83,7 @@
         }
 
         .judge-col {
-            width: 90px;
+            width: 80px;
             text-align: center;
         }
 
@@ -89,6 +97,7 @@
             border-radius: 8px;
             font-weight: bold;
             font-size: 0.7em;
+            display: block;
         }
 
         .caution {
@@ -120,13 +129,14 @@
     <table>
         <thead>
             <tr>
-                <th>日付</th>
-                <th>給食メニュー</th>
-                <th class="aka">赤（血や肉）</th>
-                <th class="ki">黄（力のもと）</th>
-                <th class="midori">緑（体の調子）</th>
+                <th class="date-col">日付</th>
+                <th class="menu-col">学校給食メニュー</th>
+                <th class="aka">赤（血・肉）</th>
+                <th class="ki">黄（熱・力）</th>
+                <th class="midori">緑（調子）</th>
                 <th class="num-col">合計kcal</th>
                 <th class="num-col">合計脂質</th>
+                <th class="num-col">合計炭水</th>
                 <th class="judge-col">判定</th>
                 <th>血液数値アドバイス</th>
             </tr>
@@ -135,94 +145,210 @@
             <tr>
                 <td>2/2</td>
                 <td>チキンカツ、和え物、ひじき煮</td>
-                <td>鶏肉、ひじき、油揚げ</td>
-                <td>パン粉、米、油</td>
+                <td>鶏肉、ひじき、サバ、卵</td>
+                <td>米、パン粉、油</td>
                 <td>白菜、人参、小松菜</td>
                 <td class="num-col">1407</td>
                 <td class="num-col over">51.9g</td>
+                <td class="num-col">171.3g</td>
                 <td><span class="status caution">🚫 警戒</span></td>
-                <td>揚げ油は<strong>ALT/LDL</strong>を上昇。夜は蒸し料理で。</td>
+                <td>揚げ油はALT/LDLを上昇。夜は蒸し料理で。</td>
             </tr>
             <tr>
                 <td>2/3</td>
                 <td>牛肉味噌炒め、甘酢和え</td>
-                <td>牛肉、味噌、卵</td>
+                <td>牛肉、味噌、サバ、卵</td>
                 <td>米、砂糖</td>
                 <td>ネギ、大根、きゅうり</td>
                 <td class="num-col">1337</td>
                 <td class="num-col">45.9g</td>
+                <td class="num-col">166.3g</td>
                 <td><span class="status care">⚠️ 注意</span></td>
-                <td>牛脂の飽和脂肪酸は<strong>LDL</strong>に影響。野菜を先に。</td>
+                <td>牛脂はLDLに影響。大根の食物繊維を摂取。</td>
             </tr>
             <tr>
                 <td>2/4</td>
-                <td>醤油ラーメン、揚げ餃子</td>
+                <td>醤油ラーメン、揚げ餃子、米</td>
                 <td>豚肉、サバ、卵</td>
-                <td>中華麺、米、皮</td>
+                <td>麺、米、皮、油</td>
                 <td>もやし、ネギ、メンマ</td>
                 <td class="num-col">1277</td>
                 <td class="num-col">41.9g</td>
+                <td class="num-col over">176.3g</td>
                 <td><span class="status care">⚠️ 注意</span></td>
-                <td>麺＋米は<strong>中性脂肪</strong>に直結。夜の炭水化物は抜き。</td>
+                <td>ダブル炭水化物は中性脂肪へ。夜は米抜き。</td>
             </tr>
             <tr>
                 <td>2/5</td>
                 <td>麻婆豆腐丼、バンサンスー</td>
-                <td>豆腐、豚肉、卵</td>
-                <td>米、片栗粉、油</td>
+                <td>豆腐、肉、サバ、卵</td>
+                <td>米、油、片栗粉</td>
                 <td>きゅうり、人参、ネギ</td>
                 <td class="num-col">1307</td>
                 <td class="num-col">43.9g</td>
+                <td class="num-col">171.3g</td>
                 <td><span class="status good">✅ 良好</span></td>
-                <td>大豆タンパクが肝機能をサポート（<strong>ALT改善</strong>）。</td>
+                <td>大豆タンパクが肝機能をサポート。</td>
             </tr>
             <tr>
                 <td>2/6</td>
-                <td>サバの塩焼き、青菜炒め</td>
-                <td>サバ、味噌、卵</td>
+                <td>サバ塩焼き、青菜炒め</td>
+                <td>サバ(朝昼)、卵、味噌</td>
                 <td>米、油</td>
                 <td>キャベツ、青菜、人参</td>
                 <td class="num-col">1257</td>
                 <td class="num-col">41.9g</td>
+                <td class="num-col">156.3g</td>
                 <td><span class="status good">✅ 良好</span></td>
-                <td>朝昼サバで<strong>中性脂肪低下・HDL上昇</strong>を促進。</td>
+                <td>サバの油でHDL上昇・中性脂肪低下。</td>
+            </tr>
+            <tr>
+                <td>2/9</td>
+                <td>クリームシチュー、ナゲット</td>
+                <td>鶏、乳製品、サバ、卵</td>
+                <td>米、芋、小麦粉、油</td>
+                <td>玉ねぎ、人参、生野菜</td>
+                <td class="num-col">1377</td>
+                <td class="num-col">48.9g</td>
+                <td class="num-col over">176.3g</td>
+                <td><span class="status care">⚠️ 注意</span></td>
+                <td>動物性脂質あり。夜は野菜スープ推奨。</td>
+            </tr>
+            <tr>
+                <td>2/12</td>
+                <td>ささみチーズフライ、筑前煮</td>
+                <td>ささみ、チーズ、サバ、卵</td>
+                <td>米、パン粉、油、里芋</td>
+                <td>キャベツ、人参、牛蒡</td>
+                <td class="num-col">1387</td>
+                <td class="num-col over">49.9g</td>
+                <td class="num-col">166.3g</td>
+                <td><span class="status caution">🚫 警戒</span></td>
+                <td>揚げ物×チーズはALT負担。夜は納豆。</td>
             </tr>
             <tr>
                 <td>2/13</td>
-                <td>ハンバーグ、エビフライ</td>
-                <td>肉、エビ、卵、サバ</td>
-                <td>米、パン粉、油</td>
+                <td>ハンバーグ、海老フライ</td>
+                <td>肉、海老、サバ、卵</td>
+                <td>米、パン粉、油、砂糖</td>
                 <td>インゲン、人参、果物</td>
                 <td class="num-col over">1507</td>
                 <td class="num-col over">58.9g</td>
+                <td class="num-col over">181.3g</td>
                 <td><span class="status caution">🚫 警戒</span></td>
-                <td>最大脂質日。<strong>$\gamma$-GTP</strong>高めなら夜はスープのみ。</td>
+                <td>最大脂質日。夜は主食抜き＆低脂質で。</td>
+            </tr>
+            <tr>
+                <td>2/16</td>
+                <td>チキンカレー、ポテトフライ</td>
+                <td>鶏、サバ、卵、脱脂粉乳</td>
+                <td>米、芋、ルー、油</td>
+                <td>玉ねぎ、人参、牛蒡</td>
+                <td class="num-col">1437</td>
+                <td class="num-col">47.9g</td>
+                <td class="num-col over">191.3g</td>
+                <td><span class="status care">⚠️ 注意</span></td>
+                <td>糖質過多。中性脂肪対策に夜は歩く等。</td>
+            </tr>
+            <tr>
+                <td>2/17</td>
+                <td>牛丼、おくら煮びたし</td>
+                <td>牛肉、味噌、サバ、卵</td>
+                <td>米、砂糖</td>
+                <td>玉ねぎ、おくら、人参</td>
+                <td class="num-col">1357</td>
+                <td class="num-col">45.9g</td>
+                <td class="num-col over">181.3g</td>
+                <td><span class="status care">⚠️ 注意</span></td>
+                <td>おくらの食物繊維が糖の吸収を緩和。</td>
             </tr>
             <tr>
                 <td>2/18</td>
                 <td>沖縄そば、ジューシー</td>
-                <td>豚肉、サバ、卵</td>
+                <td>豚、かまぼこ、サバ、卵</td>
                 <td>麺、米、油</td>
                 <td>ネギ、人参、もずく</td>
                 <td class="num-col">1407</td>
                 <td class="num-col">43.9g</td>
+                <td class="num-col over">196.3g</td>
                 <td><span class="status caution">🚫 警戒</span></td>
-                <td>炭水化物最大。<strong>中性脂肪</strong>対策で夜は主食抜き。</td>
+                <td>炭水化物最大。中性脂肪上昇のリスク。</td>
+            </tr>
+            <tr>
+                <td>2/19</td>
+                <td>白身魚フライ、鶏汁</td>
+                <td>白身魚、鶏、ツナ、サバ</td>
+                <td>米、パン粉、油</td>
+                <td>白菜、大根、キャベツ</td>
+                <td class="num-col">1337</td>
+                <td class="num-col">45.9g</td>
+                <td class="num-col">161.3g</td>
+                <td><span class="status care">⚠️ 注意</span></td>
+                <td>魚だが揚げ物。夜は煮魚等で脂質調整。</td>
+            </tr>
+            <tr>
+                <td>2/20</td>
+                <td>とんかつ、マカロニサラダ</td>
+                <td>豚肉、ハム、味噌、サバ</td>
+                <td>米、パン粉、マカロニ、油</td>
+                <td>ブロッコリー、キャベツ</td>
+                <td class="num-col">1457</td>
+                <td class="num-col over">55.9g</td>
+                <td class="num-col">171.3g</td>
+                <td><span class="status caution">🚫 警戒</span></td>
+                <td>肝臓に負担。夜は水分多めで代謝促進。</td>
+            </tr>
+            <tr>
+                <td>2/24</td>
+                <td>ハヤシライス、ミートボール</td>
+                <td>豚、サバ、卵</td>
+                <td>米、ルー、油</td>
+                <td>玉ねぎ、人参、ほうれん草</td>
+                <td class="num-col">1377</td>
+                <td class="num-col">46.9g</td>
+                <td class="num-col over">186.3g</td>
+                <td><span class="status care">⚠️ 注意</span></td>
+                <td>糖質・脂質共。夜は緑黄色野菜を中心に。</td>
+            </tr>
+            <tr>
+                <td>2/25</td>
+                <td>ミートソーススパ、コロッケ</td>
+                <td>豚、チーズ、鶏、サバ</td>
+                <td>麺、米、パン粉、油、芋</td>
+                <td>玉ねぎ、人参、生野菜</td>
+                <td class="num-col">1357</td>
+                <td class="num-col">45.9g</td>
+                <td class="num-col over">176.3g</td>
+                <td><span class="status care">⚠️ 注意</span></td>
+                <td>麺とパン粉の重なり。夜は軽く。</td>
             </tr>
             <tr>
                 <td>2/26</td>
                 <td>八宝菜、ホタテフライ</td>
-                <td>豚、イカ、エビ、卵</td>
+                <td>豚、烏賊、海老、貝、卵</td>
                 <td>米、片栗粉、油</td>
-                <td>白菜、ピーマン、筍</td>
+                <td>白菜、筍、人参</td>
                 <td class="num-col">1297</td>
                 <td class="num-col">41.9g</td>
+                <td class="num-col">166.3g</td>
                 <td><span class="status good">✅ 良好</span></td>
-                <td>魚介のタウリンが肝臓の解毒（<strong>ALT</strong>）を助けます。</td>
+                <td>魚介のタウリンが肝臓（ALT）を保護。</td>
+            </tr>
+            <tr>
+                <td>2/27</td>
+                <td>ビーフシチュー、コロッケ</td>
+                <td>牛肉、サバ、卵</td>
+                <td>米、芋、ルー、パン粉、油</td>
+                <td>玉ねぎ、人参、キャベツ</td>
+                <td class="num-col">1407</td>
+                <td class="num-col over">49.9g</td>
+                <td class="num-col over">176.3g</td>
+                <td><span class="status care">⚠️ 注意</span></td>
+                <td>脂質過多。夜は冷奴等でタンパク質のみ。</td>
             </tr>
         </tbody>
     </table>
-    <p style="font-size: 0.7em;">※朝食（すき家）の栄養素を全日程に加算しています。他日程も同様のロジックで判定。</p>
+
 </body>
 
 </html>
