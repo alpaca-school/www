@@ -3,213 +3,226 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>読谷からはーい大湾 | お弁当・オードブルのご案内</title>
+    <title>2月 1日トータル栄養管理表（三色食品群＋血液数値）</title>
     <style>
-        /* ユニバーサルデザインを意識した基本設定 */
-        :root {
-            --main-green: #689f38;
-            --soft-green: #f1f8e9;
-            --accent-orange: #ff6f00;
-            --text-black: #212121;
-            /* コントラスト比を考慮 */
-            --bg-white: #ffffff;
-        }
-
         body {
-            font-family: "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
-            /* 丸文字系で柔らかく */
-            margin: 0;
-            padding: 0;
-            background-color: #fdfdfd;
-            color: var(--text-black);
-            line-height: 1.8;
+            font-family: 'Hiragino Kaku Gothic ProN', sans-serif;
+            line-height: 1.4;
+            color: #333;
+            max-width: 1400px;
+            margin: 20px auto;
+            background-color: #f0f4f8;
+            padding: 10px;
         }
 
-        /* ヘッダー：温かみのあるデザイン */
-        header {
-            background-color: var(--main-green);
-            color: white;
+        h1 {
             text-align: center;
-            padding: 30px 10px;
-            border-bottom-left-radius: 30px;
-            border-bottom-right-radius: 30px;
+            color: #1e3a5f;
         }
 
-        .subtitle {
-            font-size: 0.9rem;
-            letter-spacing: 1px;
+        .base-info {
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 5px solid #27ae60;
+            font-size: 0.85em;
         }
 
-        .title {
-            font-size: 2rem;
-            margin: 10px 0;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            border: 1px solid #eee;
+            padding: 6px;
+            font-size: 0.75em;
+        }
+
+        th {
+            background-color: #1e3a5f;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+
+        .aka {
+            color: #e74c3c;
             font-weight: bold;
         }
 
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* セクション見出し：アイコン付き */
-        h2 {
-            display: flex;
-            align-items: center;
-            color: var(--main-green);
-            font-size: 1.4rem;
-            border-bottom: 3px dotted var(--main-green);
-            padding-bottom: 5px;
-        }
-
-        h2::before {
-            content: "🍱";
-            /* アイコン */
-            margin-right: 10px;
-            font-size: 1.6rem;
-        }
-
-        /* カードデザイン：角を丸く */
-        .card {
-            background: var(--bg-white);
-            border: 2px solid var(--soft-green);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        }
-
-        .price-tag {
-            background-color: var(--accent-orange);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 50px;
-            display: inline-block;
+        /* 血や肉 */
+        .ki {
+            color: #f39c12;
             font-weight: bold;
-            margin-bottom: 10px;
         }
 
-        /* 重要情報のボックス */
-        .important-info {
-            background-color: #fffde7;
-            border: 2px dashed var(--accent-orange);
-            border-radius: 15px;
-            padding: 15px;
-            margin: 20px 0;
-        }
-
-        /* ボタン：押しやすさを重視（UD） */
-        .btn-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-top: 30px;
-        }
-
-        .btn {
-            display: block;
-            text-decoration: none;
-            padding: 18px;
-            border-radius: 15px;
-            text-align: center;
-            font-size: 1.2rem;
+        /* エネルギー */
+        .midori {
+            color: #27ae60;
             font-weight: bold;
-            transition: transform 0.2s;
-            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
         }
 
-        .btn:active {
-            transform: translateY(2px);
-            box-shadow: none;
+        /* 体調維持 */
+
+        .num-col {
+            text-align: right;
+            width: 60px;
         }
 
-        .btn-phone {
-            background-color: #43a047;
-            color: white;
-        }
-
-        .btn-manager {
-            background-color: #546e7a;
-            color: white;
-        }
-
-        /* アイコン用絵文字 */
-        .icon {
-            margin-right: 8px;
-        }
-
-        footer {
+        .judge-col {
+            width: 90px;
             text-align: center;
-            padding: 40px 10px;
-            color: #666;
-            font-size: 0.9rem;
+        }
+
+        .over {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .status {
+            padding: 2px 5px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.7em;
+        }
+
+        .caution {
+            background-color: #ffcccc;
+            color: #c0392b;
+        }
+
+        .good {
+            background-color: #d5f5e3;
+            color: #27ae60;
+        }
+
+        .care {
+            background-color: #ffeaa7;
+            color: #d35400;
         }
     </style>
 </head>
 
 <body>
 
-    <header>
-        <div class="subtitle">＼ 就労支援のまごころをお届け ／</div>
-        <div class="title">🌸 読谷からはーい大湾</div>
-        <p>あったか〜いお弁当とオードブル</p>
-    </header>
+    <h1>📊 2月 健康管理表（朝：すき家 ＋ 昼：学校給食）</h1>
 
-    <div class="container">
-
-        <section>
-            <h2>オードブルのご案内</h2>
-            <div class="card">
-                <span class="price-tag">お祝い・会合に！</span>
-                <h3 style="margin-top:5px;">特製オードブル</h3>
-                <p style="font-size: 1.4rem; color: #d32f2f; font-weight: bold;">4,000円〜 <small>(税込)</small></p>
-                <p>🌟 季節の野菜とメインをバランスよく詰め込みます。<br>
-                    🌟 ご要望に合わせて内容の相談も承ります！</p>
-            </div>
-
-            <div class="card">
-                <span class="price-tag">毎日のお昼に</span>
-                <h3 style="margin-top:5px;">日替わり弁当</h3>
-                <p style="font-size: 1.4rem; color: #d32f2f; font-weight: bold;">550円〜 <small>(税込)</small></p>
-                <p>🍱 健康を考えた、愛情たっぷりのお弁当です。</p>
-            </div>
-        </section>
-
-        <section>
-            <h2 style="border-color: var(--accent-orange); color: var(--accent-orange);">
-                注文についてのご案内
-            </h2>
-            <div class="important-info">
-                <p>📅 <strong>【3日前まで】</strong>にご注文をお願いします</p>
-                <p>🛵 <strong>【読谷村内】</strong>へお届けします！</p>
-                <p style="font-size: 0.9rem; color: #555;">※内容や距離によりご相談させていただく場合があります</p>
-            </div>
-
-            <div class="card" style="border: none; background: #f5f5f5;">
-                <p><span class="icon">⏰</span><strong>営業時間:</strong> 9:00 〜 17:00</p>
-                <p><span class="icon">📞</span><strong>電話受付:</strong> 17:00まで</p>
-                <p><span class="icon">📍</span><strong>住所:</strong> 読谷村大湾769-1</p>
-            </div>
-        </section>
-
-        <section class="btn-container">
-            <a href="tel:0989711396" class="btn btn-phone">
-                📞 お店に電話をかける<br>
-                <span style="font-size: 0.9rem;">(098-971-1396)</span>
-            </a>
-            <a href="tel:08098576900" class="btn btn-manager">
-                👤 店長(上地)へ直通電話<br>
-                <span style="font-size: 0.9rem;">(080-9857-6900)</span>
-            </a>
-        </section>
-
+    <div class="base-info">
+        <strong>朝食：すき家「塩サバたまかけ定食ミニ」固定</strong> (557kcal / 脂質 23.9g / 炭水化物 61.3g)<br>
+        <span class="aka">赤：サバ・卵</span>、<span class="ki">黄：ごはん</span>、<span class="midori">緑：味噌汁の具・ひじき</span>
     </div>
 
-    <footer>
-        <p>© 読谷からはーい大湾<br>みんなが笑顔になれるお弁当を作っています</p>
-    </footer>
-
+    <table>
+        <thead>
+            <tr>
+                <th>日付</th>
+                <th>給食メニュー</th>
+                <th class="aka">赤（血や肉）</th>
+                <th class="ki">黄（力のもと）</th>
+                <th class="midori">緑（体の調子）</th>
+                <th class="num-col">合計kcal</th>
+                <th class="num-col">合計脂質</th>
+                <th class="judge-col">判定</th>
+                <th>血液数値アドバイス</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>2/2</td>
+                <td>チキンカツ、和え物、ひじき煮</td>
+                <td>鶏肉、ひじき、油揚げ</td>
+                <td>パン粉、米、油</td>
+                <td>白菜、人参、小松菜</td>
+                <td class="num-col">1407</td>
+                <td class="num-col over">51.9g</td>
+                <td><span class="status caution">🚫 警戒</span></td>
+                <td>揚げ油は<strong>ALT/LDL</strong>を上昇。夜は蒸し料理で。</td>
+            </tr>
+            <tr>
+                <td>2/3</td>
+                <td>牛肉味噌炒め、甘酢和え</td>
+                <td>牛肉、味噌、卵</td>
+                <td>米、砂糖</td>
+                <td>ネギ、大根、きゅうり</td>
+                <td class="num-col">1337</td>
+                <td class="num-col">45.9g</td>
+                <td><span class="status care">⚠️ 注意</span></td>
+                <td>牛脂の飽和脂肪酸は<strong>LDL</strong>に影響。野菜を先に。</td>
+            </tr>
+            <tr>
+                <td>2/4</td>
+                <td>醤油ラーメン、揚げ餃子</td>
+                <td>豚肉、サバ、卵</td>
+                <td>中華麺、米、皮</td>
+                <td>もやし、ネギ、メンマ</td>
+                <td class="num-col">1277</td>
+                <td class="num-col">41.9g</td>
+                <td><span class="status care">⚠️ 注意</span></td>
+                <td>麺＋米は<strong>中性脂肪</strong>に直結。夜の炭水化物は抜き。</td>
+            </tr>
+            <tr>
+                <td>2/5</td>
+                <td>麻婆豆腐丼、バンサンスー</td>
+                <td>豆腐、豚肉、卵</td>
+                <td>米、片栗粉、油</td>
+                <td>きゅうり、人参、ネギ</td>
+                <td class="num-col">1307</td>
+                <td class="num-col">43.9g</td>
+                <td><span class="status good">✅ 良好</span></td>
+                <td>大豆タンパクが肝機能をサポート（<strong>ALT改善</strong>）。</td>
+            </tr>
+            <tr>
+                <td>2/6</td>
+                <td>サバの塩焼き、青菜炒め</td>
+                <td>サバ、味噌、卵</td>
+                <td>米、油</td>
+                <td>キャベツ、青菜、人参</td>
+                <td class="num-col">1257</td>
+                <td class="num-col">41.9g</td>
+                <td><span class="status good">✅ 良好</span></td>
+                <td>朝昼サバで<strong>中性脂肪低下・HDL上昇</strong>を促進。</td>
+            </tr>
+            <tr>
+                <td>2/13</td>
+                <td>ハンバーグ、エビフライ</td>
+                <td>肉、エビ、卵、サバ</td>
+                <td>米、パン粉、油</td>
+                <td>インゲン、人参、果物</td>
+                <td class="num-col over">1507</td>
+                <td class="num-col over">58.9g</td>
+                <td><span class="status caution">🚫 警戒</span></td>
+                <td>最大脂質日。<strong>$\gamma$-GTP</strong>高めなら夜はスープのみ。</td>
+            </tr>
+            <tr>
+                <td>2/18</td>
+                <td>沖縄そば、ジューシー</td>
+                <td>豚肉、サバ、卵</td>
+                <td>麺、米、油</td>
+                <td>ネギ、人参、もずく</td>
+                <td class="num-col">1407</td>
+                <td class="num-col">43.9g</td>
+                <td><span class="status caution">🚫 警戒</span></td>
+                <td>炭水化物最大。<strong>中性脂肪</strong>対策で夜は主食抜き。</td>
+            </tr>
+            <tr>
+                <td>2/26</td>
+                <td>八宝菜、ホタテフライ</td>
+                <td>豚、イカ、エビ、卵</td>
+                <td>米、片栗粉、油</td>
+                <td>白菜、ピーマン、筍</td>
+                <td class="num-col">1297</td>
+                <td class="num-col">41.9g</td>
+                <td><span class="status good">✅ 良好</span></td>
+                <td>魚介のタウリンが肝臓の解毒（<strong>ALT</strong>）を助けます。</td>
+            </tr>
+        </tbody>
+    </table>
+    <p style="font-size: 0.7em;">※朝食（すき家）の栄養素を全日程に加算しています。他日程も同様のロジックで判定。</p>
 </body>
 
 </html>
