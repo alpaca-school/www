@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ヨミタン職人紀行</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; background-color: #f0f8ff; padding: 20px; }
+        .game-container { background: white; border-radius: 15px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 400px; margin: auto; }
+        button { font-size: 18px; margin: 10px; padding: 10px 20px; cursor: pointer; border-radius: 10px; border: 1px solid #ccc; background: #e1e1e1; }
+        .money { color: #d9534f; font-weight: bold; }
+        .log { text-align: left; font-size: 14px; background: #eee; padding: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="game-container" id="game-screen">
+    <h1 id="game-title">🔨 ヨミタン職人紀行</h1>
+    <div id="content">
+        <p>チーム名を入力してね！</p>
+        <input type="text" id="team-name" placeholder="チーム名" style="font-size: 18px; padding: 5px;"><br>
+        <button onclick="startGame()">スタート！</button>
+    </div>
+</div>
+
+<script>
+    let teamName = "";
+    let turn = 1;
+    let totalProfit = 0;
+    const stages = [
+        { name: "小さな小屋 🏠", basePrice: 50000 },
+        { name: "普通のお家 🏡", basePrice: 200000 },
+        { name: "豪華なお家 🏰", basePrice: 500000 }
+    ];
+
+    // 音を鳴らす（簡易版）
+    function playSound() {
+        const context = new AudioContext();
+        const osc = context.createOscillator();
+        const gain = context.createGain();
+        osc.connect(gain);
+        gain.connect(context.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, context.currentTime);
+        gain.gain.setValueAtTime(0.1, context.currentTime);
+        osc.start();
+        osc.stop(context.currentTime + 0.1);
+    }
+
+    function startGame() {
+        teamName = document.getElementById('team-name').value || "見習い";
+        document.getElementById('game-title').innerText = "🔨 " + teamName + "の職人紀行";
+        playSound();
+        showSelection();
+    }
+
+    function showSelection() {
+        if (turn > 3) {
+            finishGame();
+            return;
+        }
+        let stage = stages[turn-1];
+        let html = `<h3>第 ${turn} 期：${stage.name}</h3>`;
+        html += `<p>リフォームの計画を立てよう！</p>`;
+        html += `<p>1. 雇う人数：<select id="workers"><option value="1">1人</option><option value="3">3人</option></select></p>`;
+        html += `<p>2. 材料：<select id="material"><option value="1">ふつう</option><option value="2">高級✨</option></select></p>`;
+        html += `<button onclick="calculateTurn()">これで決定！</button>`;
+        document.getElementById('content').innerHTML = html;
+    }
+
+    function calculateTurn() {
+        playSound();
+        let stage = stages[turn-1];
+        let workers = parseInt(document.getElementById('workers').value);
+        let matLevel = parseInt(document.getElementById('material').value);
+
+        let sales = stage.basePrice * matLevel; // 高級なら売上アップ
+        let costs = (workers * 10000) + (stage.basePrice * 0.3 * matLevel); // 人件費＋材料費
+        let profit = sales - costs;
+
+        totalProfit += profit;
+
+        let html = `<h3>結果報告書</h3>`;
+        html += `<p>💰売上: ${sales.toLocaleString()}円</p>`;
+        html += `<p>📉経費: ${costs.toLocaleString()}円</p>`;
+        html += `<p class="money">✅利益: ${profit.toLocaleString()}円</p>`;
+        html += `<button onclick="nextTurn()">次の期へ</button>`;
+        document.getElementById('content').innerHTML = html;
+    }
+
+    function nextTurn() {
+        turn++;
+        showSelection();
+    }
+
+    function finishGame() {
+        let message = totalProfit > 500000 ? "立派な社長だね！恩返し大成功！" : "まだまだ修行が必要だ！";
+        let html = `<h2>最終結果</h2>`;
+        html += `<p>合計利益: <span class="money">${totalProfit.toLocaleString()}円</span></p>`;
+        html += `<p>${message} 🎁</p>`;
+        html += `<p>結果を報告する：<br><a href="mailto:SAD22@gmail.com?subject=ゲーム結果&body=${teamName}の利益は${totalProfit}円でした！">📧 メールを送る</a></p>`;
+        html += `<button onclick="location.reload()">もう一度あそぶ</button>`;
+        document.getElementById('content').innerHTML = html;
+    }
+</script>
+
+</body>
+</html>
