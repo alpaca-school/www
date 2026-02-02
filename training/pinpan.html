@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>読谷からはーい大湾 | オードブル・お弁当注文</title>
+    <style>
+        :root {
+            --main-green: #4CAF50;
+            --sub-green: #e8f5e9;
+            --accent-orange: #ff9800;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 5px solid var(--main-green);
+        }
+
+        .logo-sub {
+            font-size: 0.9rem;
+            color: var(--main-green);
+            font-weight: bold;
+        }
+
+        .logo-main {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2e7d32;
+            margin: 5px 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .hero-img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            text-align: center;
+            border-bottom: 2px solid var(--main-green);
+            padding-bottom: 10px;
+            margin-top: 40px;
+            color: var(--main-green);
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .price {
+            font-size: 1.4rem;
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .info-table th, .info-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        .info-table th {
+            width: 30%;
+            background-color: var(--sub-green);
+        }
+
+        .alert-box {
+            background-color: #fff3e0;
+            border-left: 5px solid var(--accent-orange);
+            padding: 15px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .cta-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            display: block;
+            text-align: center;
+            padding: 15px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            color: white;
+        }
+
+        .btn-main { background-color: var(--main-green); }
+        .btn-sub { background-color: #555; }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: #eee;
+            margin-top: 50px;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 600px) {
+            .cta-buttons { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo-sub">就労継続支援B型事業・就労移行支援事業</div>
+    <div class="logo-main">読谷からはーい大湾</div>
+    <p>あったか弁当・オードブルお届けします</p>
+</header>
+
+<div class="container">
+    <div style="text-align:center;">
+        <p>📸 [ここにオードブルの写真を配置]</p>
+    </div>
+
+    <section>
+        <h2 class="section-title">オードブルのご案内</h2>
+        <div class="card">
+            <h3>読谷からはーい大湾 オードブル</h3>
+            <p class="price">4,000円（税込）〜</p>
+            <ul>
+                <li>ご要望や季節により内容が変動します。</li>
+                <li>「揚げ物多め」「野菜中心」など内容相談OK！</li>
+                <li>お祝い事、模合、集まりに最適です。</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>日替わり弁当</h3>
+            <p class="price">550円（税込）〜</p>
+            <p>野菜とメインのバランスが良い、毎日食べても飽きないお弁当です。大量注文も承ります。</p>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title">ご注文ルール</h2>
+        <div class="alert-box">
+            📢 ご注文は【3日前まで】にお願いいたします！
+        </div>
+        <table class="info-table">
+            <tr>
+                <th>配達エリア</th>
+                <td>読谷村内（内容により応相談）</td>
+            </tr>
+            <tr>
+                <th>営業時間</th>
+                <td>9:00 〜 17:00</td>
+            </tr>
+            <tr>
+                <th>電話受付</th>
+                <td>17:00まで</td>
+            </tr>
+        </table>
+    </section>
+
+    <section>
+        <h2 class="section-title">お問い合わせ・注文</h2>
+        <p style="text-align: center;">お電話にて「サイトを見た」とお伝えください。</p>
+        <div class="cta-buttons">
+            <a href="tel:0989711396" class="btn btn-main">📞 店舗に電話<br>098-971-1396</a>
+            <a href="tel:08098576900" class="btn btn-sub">👤 店長直通<br>080-9857-6900</a>
+        </div>
+    </section>
+</div>
+
+<footer>
+    <p>〒904-0313 沖縄県中頭郡読谷村大湾769-1</p>
+    <p>&copy; 読谷からはーい大湾 All Rights Reserved.</p>
+</footer>
+
+</body>
+</html>
