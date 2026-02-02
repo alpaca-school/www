@@ -23,7 +23,7 @@
             margin: auto;
         }
 
-        /* 入力エリアとプルダウンの調整 */
+        /* 大きく押しやすい入力・選択エリア */
         input[type="text"],
         select {
             font-size: 20px;
@@ -35,6 +35,7 @@
             background-color: #fff;
             cursor: pointer;
             box-sizing: border-box;
+            display: inline-block;
         }
 
         p {
@@ -67,7 +68,6 @@
             border-collapse: collapse;
             margin-top: 20px;
             font-size: 11px;
-            /* スマホで見きれない場合は調整 */
         }
 
         .money-table th,
@@ -105,7 +105,7 @@
     </div>
 
     <script>
-        // GASのURL（あなたのものに差し替えてください）
+        // ★GASのURLを最新のデプロイURLに差し替えてください
         const GAS_URL = "https://script.google.com/macros/s/AKfycbw59a7aJTs7FNMk0nXEtSIbG_-sQLfcFFkRrrmv_DJRdZaUODak9MbnkC_57TS-zzrA/exec";
 
         let teamName = "";
@@ -152,9 +152,9 @@
 
             html += `<p>💰 職人の給料設定</p>`;
             html += `<select id="salary">
-                <option value="5000">安い</option>
-                <option value="15000" selected>ふつう</option>
-                <option value="30000">高級</option>
+                <option value="5000">安い (5,000円)</option>
+                <option value="15000" selected>ふつう (15,000円)</option>
+                <option value="30000">高級 (30,000円)</option>
             </select>`;
 
             html += `<p>🧱 使う材料の質</p>`;
@@ -188,7 +188,6 @@
             let happeningLoss = 0;
             let happeningName = "-";
 
-            // 3期目のハプニングロジック
             if (turn === 3) {
                 if (prevMaterialWasCheap) {
                     happeningName = "欠陥の賠償";
@@ -213,7 +212,6 @@
             let totalCost = laborCost + matCost + eventCost + happeningLoss;
             let profit = sales - totalCost;
 
-            // 1期目の材料チェックを保存
             if (turn === 1 && mat < 1.0) prevMaterialWasCheap = true;
 
             history.push({
@@ -277,23 +275,30 @@
         }
 
         async function saveAndRestart(total) {
-            // 保存中表示
-            const originalContent = document.getElementById('content').innerHTML;
-            document.getElementById('content').innerHTML = "<h3>データを送信中... 🚀</h3>";
+            document.getElementById('content').innerHTML = "<h3>スプレッドシートに送信中... 🚀</h3>";
+
+            const payload = {
+                teamName: teamName,
+                history: history,
+                total: total
+            };
 
             try {
-                // GASへ送信
+                // 送信処理（no-corsモードでリダイレクトを無視して送信のみ完遂させる）
                 await fetch(GAS_URL, {
                     method: "POST",
-                    mode: "no-cors", // GASの仕様に合わせる
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ teamName, history, total })
+                    mode: "no-cors",
+                    cache: "no-cache",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(payload)
                 });
 
-                alert("スプレッドシートに記録しました！最初に戻ります。");
+                alert("記録しました！");
             } catch (e) {
                 console.error(e);
-                alert("保存に失敗しました。URLを確認してください。");
+                alert("送信中にエラーが発生しましたが、リロードします。");
             }
             location.reload();
         }
