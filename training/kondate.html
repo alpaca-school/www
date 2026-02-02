@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>2月給食：全メニュー＆血液数値健康判定</title>
+    <style>
+        body {
+            font-family: 'Hiragino Kaku Gothic ProN', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: #f4f7f9;
+            padding: 15px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1e3a5f;
+            border-bottom: 3px solid #1e3a5f;
+            padding-bottom: 10px;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .status {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.85em;
+            display: inline-block;
+        }
+
+        .good {
+            background-color: #d5f5e3;
+            color: #27ae60;
+        }
+
+        /* 肝臓・血管に良 */
+        .care {
+            background-color: #ffeaa7;
+            color: #d35400;
+        }
+
+        /* 中性脂肪注意 */
+        .caution {
+            background-color: #ffcccc;
+            color: #c0392b;
+        }
+
+        /* 脂質・LDL警戒 */
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            border: 1px solid #eee;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #1e3a5f;
+            color: white;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .date-col {
+            width: 80px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .menu-col {
+            width: 350px;
+        }
+
+        .judge-col {
+            width: 150px;
+            text-align: center;
+        }
+
+        .nutrition-col {
+            width: 100px;
+            text-align: center;
+            font-size: 0.9em;
+        }
+
+        .advice-col {
+            font-size: 0.85em;
+            color: #555;
+            background-color: #fafafa;
+        }
+
+        tr:hover {
+            background-color: #f1f4f9;
+        }
+
+        .highlight-text {
+            font-weight: bold;
+            color: #d35400;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🩺 2月給食：全メニュー血液数値健康判定表</h1>
+
+    <div class="legend">
+        <span class="status good">✅ 良好：血管・肝臓に優しい</span>
+        <span class="status care">⚠️ 注意：中性脂肪・ALTに影響</span>
+        <span class="status caution">🚫 警戒：高脂質・LDL上昇リスク</span>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th class="date-col">日付</th>
+                <th class="menu-col">全献立メニュー</th>
+                <th class="judge-col">判定</th>
+                <th class="nutrition-col">エネルギー</th>
+                <th class="advice-col">健康・数値改善アドバイス</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>2/2</td>
+                <td>チキンカツ、味噌汁、白菜の和え物、ひじき炒め煮</td>
+                <td><span class="status caution">🚫 警戒</span></td>
+                <td>850kcal</td>
+                <td class="advice-col">揚げ物の油は<span class="highlight-text">LDL</span>を上げます。副菜のひじきで食物繊維を先に摂取して。</td>
+            </tr>
+            <tr>
+                <td>2/3</td>
+                <td>牛肉とネギの味噌炒め、すまし汁、大根の甘酢和え</td>
+                <td><span class="status care">⚠️ 注意</span></td>
+                <td>780kcal</td>
+                <td class="advice-col">牛脂は飽和脂肪酸が多く、コレステロール値に影響。ネギが血流を助けます。</td>
+            </tr>
+            <tr>
+                <td>2/4</td>
+                <td>しょうゆラーメン、揚げ餃子、ごはん</td>
+                <td><span class="status care">⚠️ 注意</span></td>
+                <td>720kcal</td>
+                <td class="advice-col">炭水化物＋炭水化物は<span class="highlight-text">中性脂肪</span>に直結。スープは残すのが鉄則です。</td>
+            </tr>
+            <tr>
+                <td>2/5</td>
+                <td>麻婆豆腐丼、中華スープ、バンサンスー</td>
+                <td><span class="status good">✅ 良好</span></td>
+                <td>750kcal</td>
+                <td class="advice-col">大豆製品は肝臓の修復を助けます。きゅうり（緑）でカリウムを補給。</td>
+            </tr>
+            <tr>
+                <td>2/6</td>
+                <td>サバの塩焼き、味噌汁、コールスロー、青菜炒め</td>
+                <td><span class="status good">✅ 良好</span></td>
+                <td>700kcal</td>
+                <td class="advice-col">サバのEPA/DHAは<span class="highlight-text">中性脂肪を下げ、HDLを上げます</span>。理想的な献立。</td>
+            </tr>
+            <tr>
+                <td>2/9</td>
+                <td>クリームシチュー、ナゲット、生野菜サラダ、ごはん</td>
+                <td><span class="status care">⚠️ 注意</span></td>
+                <td>820kcal</td>
+                <td class="advice-col">シチューのルウは脂質・糖質が多め。サラダを完食して吸収を抑えて。</td>
+            </tr>
+            <tr>
+                <td>2/12</td>
+                <td>ささみチーズフライ、味噌汁、コールスロー、筑前煮、ごはん</td>
+                <td><span class="status caution">🚫 警戒</span></td>
+                <td>830kcal</td>
+                <td class="advice-col">チーズと揚げ物のコンボは脂質高。筑前煮の根菜で肝機能をサポート。</td>
+            </tr>
+            <tr>
+                <td>2/13</td>
+                <td>デミハンバーグ、エビフライ、コンソメ、インゲンソテー、デザート、ごはん</td>
+                <td><span class="status caution">🚫 警戒</span></td>
+                <td>950kcal</td>
+                <td class="advice-col">2月最大脂質日。<span class="highlight-text">ALT/r-GTP</span>が高い方は、夜の主食を半分に減らす調整を。</td>
+            </tr>
+            <tr>
+                <td>2/16</td>
+                <td>チキンカレー、ごぼうサラダ、ポテトフライ</td>
+                <td><span class="status care">⚠️ 注意</span></td>
+                <td>880kcal</td>
+                <td class="advice-col">カレールウとポテトは糖質過多。<span class="highlight-text">中性脂肪</span>注意。ごぼうの繊維が救い。</td>
+            </tr>
+            <tr>
+                <td>2/17</td>
+                <td>牛丼、味噌汁、おくら煮びたし</td>
+                <td><span class="status care">⚠️ 注意</span></td>
+                <td>800kcal</td>
+                <td class="advice-col">おくらのネバネバ成分が糖の吸収を緩やかに。牛脂によるLDL上昇に注意。</td>
+            </tr>
+            <tr>
+                <td>2/18</td>
+                <td>沖縄そば、もずく酢、ジューシー、デザート</td>
+                <td><span class="status caution">🚫 警戒</span></td>
+                <td>850kcal</td>
+                <td class="advice-col">ダブル炭水化物は肝臓に脂肪を溜めます。もずく酢の酢酸で代謝を促進して。</td>
+            </tr>
+            <tr>
+                <td>2/19</td>
+                <td>白身魚フライ、鶏汁、コールスロー、白菜のツナ和え、ごはん</td>
+                <td><span class="status care">⚠️ 注意</span></td>
+                <td>780kcal</td>
+                <td class="advice-col">白身魚は良質タンパクですが、揚げ油に注意。鶏汁の野菜で栄養バランスを。</td>
+            </tr>
+            <tr>
+                <td>2/20</td>
+                <td>とんかつ、味噌汁、ブロッコリーソテー、マカロニサラダ、ごはん</td>
+                <td><span class="status caution">🚫 警戒</span></td>
+                <td>900kcal</td>
+                <td class="advice-col">高脂質日は<span class="highlight-text">ALT</span>数値への影響大。ブロッコリーをよく噛んで食べて肝臓保護。</td>
+            </tr>
+            <tr>
+                <td>2/24</td>
+                <td>ハヤシライス、ミートボールソテー、ほうれん草のゴマ和え</td>
+                <td><span class="status care">⚠️ 注意</span></td>
+                <td>820kcal</td>
+                <td class="advice-col">濃厚ソースは塩分と脂質。ほうれん草の鉄分とビタミンが代謝を助けます。</td>
+            </tr>
+            <tr>
+                <td>2/25</td>
+                <td>スパゲッティミートソース、コロッケ、サラダ、デザート</td>
+                <td><span class="status care">⚠️ 注意</span></td>
+                <td>800kcal</td>
+                <td class="advice-col">麺＋揚げ物の組み合わせ。食後のデザートは控えめにするのが正解。</td>
+            </tr>
+            <tr>
+                <td>2/26</td>
+                <td>八宝菜、中華スープ、コールスロー、ホタテフライ、ごはん</td>
+                <td><span class="status good">✅ 良好</span></td>
+                <td>740kcal</td>
+                <td class="advice-col">多種類の野菜と魚介類。ビタミン・ミネラルが豊富で肝数値改善に寄与。</td>
+            </tr>
+            <tr>
+                <td>2/27</td>
+                <td>ビーフシチュー、コロッケ、コールスロー、かぼちゃコロッケ、ごはん</td>
+                <td><span class="status care">⚠️ 注意</span></td>
+                <td>850kcal</td>
+                <td class="advice-col">複数の揚げ物が重なります。<span class="highlight-text">LDL</span>が気になる方は、夜は豆腐料理が推奨。</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div style="margin-top: 25px; padding: 15px; background: #fff; border-left: 5px solid #1e3a5f; border-radius: 4px;">
+        <strong>💡 血液数値を守るための食習慣：</strong><br>
+        ・<strong>$\gamma$-GTP/ALT</strong>：肝臓を休ませるため、揚げ物は週2回までに抑えるのが理想です。<br>
+        ・<strong>中性脂肪</strong>：麺＋飯などの「炭水化物セット」の日は、夜の糖質を大幅にカットしましょう。<br>
+        ・<strong>LDL/HDL</strong>：サバや青菜などの「緑」と「良質な脂」を意識的に選んでください。
+    </div>
+
+</body>
+
+</html>

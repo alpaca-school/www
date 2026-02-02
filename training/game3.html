@@ -7,7 +7,7 @@
     <title>ヨミタン職人紀行</title>
     <style>
         body {
-            font-family: sans-serif;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
             text-align: center;
             background-color: #f4f7f6;
             padding: 15px;
@@ -19,11 +19,11 @@
             border-radius: 20px;
             padding: 25px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            max-width: 550px;
+            max-width: 600px;
             margin: auto;
         }
 
-        /* 大きく押しやすい入力・選択エリア */
+        /* 入力・選択エリアのデザイン */
         input[type="text"],
         select {
             font-size: 20px;
@@ -33,9 +33,7 @@
             width: 90%;
             border: 2px solid #3498db;
             background-color: #fff;
-            cursor: pointer;
             box-sizing: border-box;
-            display: inline-block;
         }
 
         p {
@@ -55,6 +53,7 @@
             color: white;
             width: 85%;
             font-weight: bold;
+            transition: 0.2s;
         }
 
         button:active {
@@ -62,7 +61,7 @@
             transform: scale(0.98);
         }
 
-        /* 収支計算表の調整 */
+        /* 最終報告書のテーブルデザイン */
         .money-table {
             width: 100%;
             border-collapse: collapse;
@@ -79,6 +78,14 @@
 
         .money-table th {
             background-color: #ecf0f1;
+        }
+
+        .choice-summary {
+            font-size: 10px;
+            color: #666;
+            display: block;
+            margin-top: 5px;
+            line-height: 1.2;
         }
 
         .loss {
@@ -99,13 +106,15 @@
         <h1 id="game-title">🔨 ヨミタン職人紀行</h1>
         <div id="content">
             <p>チーム名を入力してね！</p>
-            <input type="text" id="team-name" placeholder="チーム名"><br>
+            <input type="text" id="team-name" placeholder="チーム名を入力"><br>
             <button onclick="startGame()">ゲームスタート！</button>
         </div>
     </div>
 
     <script>
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbw59a7aJTs7FNMk0nXEtSIbG_-sQLfcFFkRrrmv_DJRdZaUODak9MbnkC_57TS-zzrA/exec"; // ★必ず更新してください
+        // ★GASのウェブアプリURLをここに貼り付けてください
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbw59a7aJTs7FNMk0nXEtSIbG_-sQLfcFFkRrrmv_DJRdZaUODak9MbnkC_57TS-zzrA/exec";
+
         let teamName = "";
         let turn = 1;
         let history = [];
@@ -117,43 +126,88 @@
             { name: "3期：社長への恩返し 🏰", basePrice: 600000 }
         ];
 
+        function playSound() {
+            try {
+                const context = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = context.createOscillator();
+                const gain = context.createGain();
+                osc.connect(gain); gain.connect(context.destination);
+                osc.type = 'sine'; osc.frequency.setValueAtTime(1000, context.currentTime);
+                gain.gain.setValueAtTime(0.1, context.currentTime);
+                osc.start(); osc.stop(context.currentTime + 0.1);
+            } catch (e) { console.log("Sound error"); }
+        }
+
         function startGame() {
             teamName = document.getElementById('team-name').value || "見習い職人";
             document.getElementById('game-title').innerText = "🔨 " + teamName + "の職人紀行";
+            playSound();
             showSelection();
         }
 
         function showSelection() {
             let stage = stages[turn - 1];
             let html = `<h3>${stage.name}</h3>`;
-            html += `<p>👷 人数</p><select id="workers"><option value="1">1名</option><option value="2">2名</option><option value="3">3名</option><option value="4">4名</option></select>`;
-            html += `<p>💰 給料</p><select id="salary"><option value="5000">安い</option><option value="15000" selected>ふつう</option><option value="30000">高級</option></select>`;
-            html += `<p>🧱 材料</p><select id="material"><option value="0.5">安い(リスク有)</option><option value="1.0" selected>標準</option><option value="1.5">高級</option></select>`;
+
+            html += `<p>👷 雇う人数</p>`;
+            html += `<select id="workers">
+                <option value="1">1名</option><option value="2">2名</option>
+                <option value="3">3名</option><option value="4">4名</option>
+            </select>`;
+
+            html += `<p>💰 職人の給料</p>`;
+            html += `<select id="salary">
+                <option value="5000">安い</option>
+                <option value="15000" selected>ふつう</option>
+                <option value="30000">高級</option>
+            </select>`;
+
+            html += `<p>🧱 材料の質</p>`;
+            html += `<select id="material">
+                <option value="0.5">安い材料 (リスク⚠️)</option>
+                <option value="1.0" selected>標準の材料</option>
+                <option value="1.5">高級な材料✨</option>
+            </select>`;
 
             if (turn === 2) {
-                html += `<p>✨ イベント</p><select id="event"><option value="wedding">結婚</option><option value="indep">独立</option><option value="study">学び直し</option></select>`;
+                html += `<p style="color:#e67e22;">✨ 大事なイベント</p>`;
+                html += `<select id="event">
+                    <option value="wedding">結婚 (祝金 -5万)</option>
+                    <option value="indep">独立準備 (費用 -10万)</option>
+                    <option value="study" selected>学び直し (費用 -3万 / 売上UP)</option>
+                </select>`;
             }
 
-            // 3期目ならボタンの文字を「決算！送信」にする
-            const btnText = (turn === 3) ? "決算！データを送信" : "決算！次の期へ";
+            const btnText = (turn === 3) ? "決算！データを送信して終了" : "決算！次の期へ";
             html += `<br><button onclick="calculateTurn()">${btnText}</button>`;
             document.getElementById('content').innerHTML = html;
         }
 
         async function calculateTurn() {
+            playSound();
             let stage = stages[turn - 1];
             let workers = parseInt(document.getElementById('workers').value);
             let salary = parseInt(document.getElementById('salary').value);
             let mat = parseFloat(document.getElementById('material').value);
 
             let sales = stage.basePrice * mat;
-            let happeningLoss = 0; let happeningName = "-";
+            let happeningLoss = 0;
+            let happeningName = "-";
+
+            // 3期目のハプニング
             if (turn === 3) {
-                if (prevMaterialWasCheap) { happeningName = "欠陥賠償"; happeningLoss = 200000; }
-                else if (Math.random() < 0.4) { happeningName = "事故・病気"; happeningLoss = 100000; }
+                if (prevMaterialWasCheap) {
+                    happeningName = "欠陥の賠償";
+                    happeningLoss = 200000;
+                } else if (Math.random() < 0.4) {
+                    happeningName = "事故・病気";
+                    happeningLoss = 100000;
+                }
             }
 
-            let eventCost = 0; let eventName = "-";
+            // 2期目のイベント
+            let eventCost = 0;
+            let eventName = "-";
             if (turn === 2) {
                 let ev = document.getElementById('event').value;
                 if (ev === "wedding") { eventName = "結婚"; eventCost = 50000; }
@@ -161,41 +215,81 @@
                 if (ev === "study") { eventName = "学び"; eventCost = 30000; sales += 100000; }
             }
 
-            let totalCost = (workers * salary) + (stage.basePrice * 0.4 * mat) + eventCost + happeningLoss;
+            let laborCost = workers * salary;
+            let matCost = stage.basePrice * 0.4 * mat;
+            let totalCost = laborCost + matCost + eventCost + happeningLoss;
             let profit = sales - totalCost;
+
             if (turn === 1 && mat < 1.0) prevMaterialWasCheap = true;
 
-            history.push({ turn, workers, salary, mat, sales, eventName, eventCost, happeningName, happeningLoss, profit });
+            // 選択履歴を詳細に保存
+            history.push({
+                turn, workers, salary, mat, sales, laborCost, matCost, eventName, eventCost, happeningName, happeningLoss, profit
+            });
 
             if (turn < 3) {
                 turn++;
                 showSelection();
             } else {
-                // 3期目の決算を押した瞬間に送信
-                await saveDataToSheets();
+                // 3期目の決算で送信開始
+                await sendToGas();
                 showFinalResult();
             }
         }
 
-        async function saveDataToSheets() {
+        async function sendToGas() {
+            const originalContent = document.getElementById('content').innerHTML;
+            document.getElementById('content').innerHTML = "<h3>スプレッドシートに記録中... 🚀</h3>";
             const total = history.reduce((sum, h) => sum + h.profit, 0);
-            document.getElementById('content').innerHTML = "<h3>データを送信中... 🚀</h3>";
             try {
                 await fetch(GAS_URL, {
                     method: "POST",
                     mode: "no-cors",
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ teamName, history, total })
                 });
-                console.log("送信完了");
-            } catch (e) { console.error(e); }
+            } catch (e) {
+                console.error("送信エラー:", e);
+            }
         }
 
         function showFinalResult() {
             let total = history.reduce((sum, h) => sum + h.profit, 0);
-            let html = `<h2>最終報告書</h2><table class="money-table">...中略...</table>`;
-            // （収支表を表示するコードは前回と同じ）
+            let html = `<h2>📊 最終収支報告書</h2>`;
+            html += `<table class="money-table">
+                <thead>
+                    <tr>
+                        <th>期 / 選択内容</th>
+                        <th>売上</th>
+                        <th>経費</th>
+                        <th>ハプニング</th>
+                        <th>利益</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+            history.forEach(h => {
+                const matText = h.mat === 0.5 ? "安い材" : (h.mat === 1.5 ? "高級材" : "標準材");
+                const choiceText = `人数:${h.workers} / 給:${h.salary / 1000}k / ${matText}`;
+                const exp = h.laborCost + h.matCost + h.eventCost;
+
+                html += `<tr>
+                    <td>${h.turn}期<br><span class="choice-summary">${choiceText}${h.eventName !== '-' ? '<br>イベ:' + h.eventName : ''}</span></td>
+                    <td>${h.sales.toLocaleString()}円</td>
+                    <td>${exp.toLocaleString()}円</td>
+                    <td class="loss">${h.happeningName}<br>${h.happeningLoss > 0 ? "-" + h.happeningLoss.toLocaleString() : "0"}</td>
+                    <td class="${h.profit >= 0 ? 'profit' : 'loss'}">${h.profit.toLocaleString()}円</td>
+                </tr>`;
+            });
+
+            html += `</tbody></table>`;
+            html += `<h3 style="margin-top:20px;">合計利益: <span class="profit">${total.toLocaleString()}円</span></h3>`;
+
+            let comment = total > 300000 ? "大成功！立派な社長になって恩返しができました✨" : "がんばりました！次はもっと大きな恩返しを！";
+            html += `<p>${comment}</p>`;
             html += `<button onclick="location.reload()">もう一度あそぶ</button>`;
-            document.getElementById('content').innerHTML = html; // 実際にはここに収支表のhtmlを組み立てて入れてください
+
+            document.getElementById('content').innerHTML = html;
         }
     </script>
 
