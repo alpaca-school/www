@@ -270,7 +270,22 @@
         </div>
     </div>
 
-    <!-- モーダル -->
+    <!-- ミス確認モーダル -->
+    <div id="mistake-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title" style="color: #dc2626;">⚠️ 間違いチェック (5回)</div>
+            <div class="modal-message" style="text-align: left;">
+                <p style="margin-bottom: 10px;">直近の間違い:</p>
+                <div id="mistake-list"
+                    style="background: #fef2f2; padding: 10px; border-radius: 8px; font-size: 0.9rem;"></div>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-save" id="mistake-close">確認して次へ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 完了通知モーダル（既存） -->
     <div id="modal" class="modal">
         <div class="modal-content">
             <div class="modal-title" id="modal-title">記録完了</div>
@@ -282,7 +297,7 @@
     </div>
 
     <script>
-        // Google Apps ScriptのウェブアプリURL（後で設定します）
+        // Google Apps ScriptのウェブアプリURL
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxitUfrK_cZ1hrsTHA31AFJ9QA55mmfSvR0fu0KH2JYvC3-nsDM2x2DKtsDE5roP7pS/exec';
 
         // ローマ字データ
@@ -405,6 +420,8 @@
         let usedIndices = new Set();
         let startTime = Date.now();
         let timerInterval = null;
+        let mistakeLog = []; // 全ての間違いログ
+        let pendingMistakes = []; // 直近の間違い（表示用）
 
         // DOM要素の取得
         const hiraganaDisplay = document.getElementById('hiragana-display');
@@ -427,8 +444,13 @@
         const modalMessage = document.getElementById('modal-message');
         const modalClose = document.getElementById('modal-close');
 
+        // ミス確認モーダル要素
+        const mistakeModal = document.getElementById('mistake-modal');
+        const mistakeList = document.getElementById('mistake-list');
+        const mistakeClose = document.getElementById('mistake-close');
+
         // タイマーを更新する関数
-        function updateTimer() {
+        updateTimer = function () {
             const elapsed = Math.floor((Date.now() - startTime) / 1000);
             const minutes = Math.floor(elapsed / 60);
             const seconds = elapsed % 60;
@@ -439,6 +461,9 @@
         function playSound(isSuccess) {
             try {
                 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
                 const oscillator = audioContext.createOscillator();
                 const gainNode = audioContext.createGain();
                 oscillator.connect(gainNode);
@@ -490,6 +515,7 @@
             successMessage.style.display = 'none';
             // ヒントの表示/非表示
             hintBox.style.display = showHint ? 'block' : 'none';
+            inputField.focus();
         }
 
         // 新しい問題を設定
@@ -500,23 +526,45 @@
             updateDisplay();
         }
 
+        // ミス履歴を表示する関数
+        function showMistakeSummary() {
+            if (pendingMistakes.length === 0) return;
+
+            let html = '<ul style="list-style-type: disc; padding-left: 20px;">';
+            pendingMistakes.forEach(m => {
+                html += `<li style="margin-bottom: 5px;">
+                    「<b>${m.hiragana}</b>」(${m.expected}) に 
+                    <span style="color:red; font-weight:bold;">「${m.input}」</span> と入力
+                </li>`;
+            });
+            html += '</ul>';
+            mistakeList.innerHTML = html;
+            mistakeModal.style.display = 'block';
+        }
+
         // 入力処理
         function handleInput(e) {
             const input = e.target.value.toLowerCase();
             const currentProblem = romajiData[currentIndex];
             const possibleRomaji = currentProblem.romaji;
+
             if (input.length === 0) {
                 inputField.className = 'input-field';
                 errorMessage.style.display = 'none';
                 successMessage.style.display = 'none';
                 return;
             }
+
             const isPrefix = possibleRomaji.some(r => r.startsWith(input));
+
             if (isPrefix) {
+                // 正解の一部である場合
                 inputField.className = 'input-field correct';
                 errorMessage.style.display = 'none';
+
                 const isComplete = possibleRomaji.includes(input);
                 if (isComplete) {
+                    // 正解完了
                     playSound(true);
                     score += 10;
                     completedCount++;
@@ -524,6 +572,10 @@
                     scoreSpan.textContent = score;
                     completedSpan.textContent = completedCount;
                     inputField.disabled = true;
+
+                    // 1問完了ごとに自動保存（サイレント実行）
+                    saveToSpreadsheet(true);
+
                     setTimeout(() => {
                         setNewProblem();
                         inputField.disabled = false;
@@ -533,19 +585,42 @@
                     playSound(true);
                 }
             } else {
+                // 間違いの場合
                 inputField.className = 'input-field incorrect';
                 errorMessage.style.display = 'block';
                 successMessage.style.display = 'none';
                 playSound(false);
                 errorCount++;
                 errorsSpan.textContent = errorCount;
-                // 間違った文字は入力させない
+
+                // ミスを記録
+                const wrongChar = input.slice(-1); // 最後に入力された間違った文字
+                const mistakeInfo = {
+                    hiragana: currentProblem.hiragana,
+                    expected: possibleRomaji.join(' or '),
+                    input: input // 入力された文字列全体を記録
+                };
+
+                mistakeLog.push(mistakeInfo);
+                pendingMistakes.push(mistakeInfo);
+
+                // 自動保存（ミスの記録も送る）
+                saveToSpreadsheet(true);
+
+                // 間違った文字は入力させない（取り消し）
                 e.target.value = input.slice(0, -1);
+
+                // 5回ミスが溜まったら表示
+                if (pendingMistakes.length >= 5) {
+                    inputField.disabled = true; // モーダル中は入力不可
+                    showMistakeSummary();
+                }
             }
         }
 
         // 結果をスプレッドシートに保存
-        async function saveToSpreadsheet() {
+        // isAuto: 自動保存かどうか（trueなら完了モーダルを出さない）
+        async function saveToSpreadsheet(isAuto = false) {
             const elapsed = Math.floor((Date.now() - startTime) / 1000);
             const minutes = Math.floor(elapsed / 60);
             const seconds = elapsed % 60;
@@ -556,28 +631,36 @@
                 date: date,
                 score: score,
                 time: timeString,
-                errors: errorCount
+                errors: errorCount,
+                completed: completedCount,
+                mistakeLog: mistakeLog // 追加: 詳細ログも送る
             };
 
             try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                // fetchはFire and Forgetに近い形で投げるが、エラーログは残す
+                fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(data)
+                }).then(() => {
+                    if (!isAuto) {
+                        modalTitle.textContent = '記録完了';
+                        modalMessage.textContent = `結果をスプレッドシートに記録しました！\n\nスコア: ${score}\n時間: ${timeString}\nミス: ${errorCount}`;
+                        modal.style.display = 'block';
+                    }
+                }).catch(err => {
+                    if (!isAuto) {
+                        console.error('Error:', err);
+                        modalTitle.textContent = 'エラー';
+                        modalMessage.textContent = 'スプレッドシートへの記録に失敗しました。';
+                        modal.style.display = 'block';
+                    }
                 });
-
-                // no-corsモードでは正確なレスポンスを取得できないため、成功と見なします
-                modalTitle.textContent = '記録完了';
-                modalMessage.textContent = `結果をスプレッドシートに記録しました！\n\nスコア: ${score}\n時間: ${timeString}\nミス: ${errorCount}`;
-                modal.style.display = 'block';
             } catch (error) {
                 console.error('Error:', error);
-                modalTitle.textContent = 'エラー';
-                modalMessage.textContent = 'スプレッドシートへの記録に失敗しました。\nGoogle Apps ScriptのURLを確認してください。';
-                modal.style.display = 'block';
             }
         }
 
@@ -602,16 +685,27 @@
             errorCount = 0;
             showHint = false;
             startTime = Date.now();
+            mistakeLog = [];
+            pendingMistakes = [];
             hintButton.textContent = 'ヒントを表示';
             updateDisplay();
         });
 
+        // 通常の「結果を記録」ボタンは手動保存扱い（モーダル表示あり）
         saveButton.addEventListener('click', () => {
-            saveToSpreadsheet();
+            saveToSpreadsheet(false);
         });
 
         modalClose.addEventListener('click', () => {
             modal.style.display = 'none';
+        });
+
+        // ミス確認モーダルを閉じる時の処理
+        mistakeClose.addEventListener('click', () => {
+            mistakeModal.style.display = 'none';
+            pendingMistakes = []; // 表示したのでリセット
+            inputField.disabled = false;
+            inputField.focus();
         });
 
         // 初期化
@@ -620,10 +714,13 @@
             currentIndex = randomIndex;
             usedIndices = new Set([randomIndex]);
             startTime = Date.now();
+
+            // AudioContextの初期化（ユーザー操作が必要な場合があるため、最初のクリック等でresumeする配慮はplaySound内で実施）
+
             updateDisplay();
-            inputField.focus();
 
             // タイマーを1秒ごとに更新
+            if (timerInterval) clearInterval(timerInterval);
             timerInterval = setInterval(updateTimer, 1000);
         }
 
