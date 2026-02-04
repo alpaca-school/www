@@ -43,6 +43,7 @@
             padding: 6px;
             font-size: 0.7em;
             overflow: hidden;
+            vertical-align: middle;
         }
 
         th {
@@ -50,6 +51,7 @@
             color: white;
             position: sticky;
             top: 0;
+            z-index: 10;
         }
 
         .aka {
@@ -74,7 +76,7 @@
         }
 
         .menu-col {
-            width: 180px;
+            width: 220px;
         }
 
         .num-col {
@@ -114,23 +116,136 @@
             background-color: #ffeaa7;
             color: #d35400;
         }
+
+        /* Checkbox & Toggle Styles */
+        .check-col {
+            width: 60px;
+            text-align: center;
+        }
+
+        .bk-toggle {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 8px 0;
+            background: #eee;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: #7f8c8d;
+            transition: all 0.2s ease;
+            user-select: none;
+            border: 1px solid #ddd;
+        }
+
+        .bk-toggle input {
+            display: none;
+        }
+
+        .bk-toggle.active {
+            background: #ffeaa7;
+            color: #d35400;
+            border-color: #f39c12;
+            box-shadow: 0 2px 4px rgba(243, 156, 18, 0.3);
+        }
+
+        /* Night Menu List Styles */
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .menu-item-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 0.95em;
+            padding: 3px 5px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .menu-item-label:hover {
+            background-color: #f8f9fa;
+        }
+
+        .menu-item-label input {
+            margin-right: 6px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        .menu-item-label.checked {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .menu-item-label.unchecked {
+            color: #aaa;
+            text-decoration: line-through;
+        }
+
+        .num-val {
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: #eee;
+            border-radius: 2px;
+            margin-top: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
     </style>
 </head>
 
 <body>
 
-    <h1>📊 2月 健康管理表（朝：すき家 ＋ 昼：学校給食）</h1>
+    <h1>📊 2月 健康管理表（朝：すき家 ＋ 夜：学校給食）</h1>
 
     <div class="base-info">
-        <strong>朝食：すき家「塩サバたまかけ定食ミニ」固定</strong> (557kcal / 脂質 23.9g / 炭水化物 61.3g)<br>
-        <span class="aka">赤：サバ・卵</span>、<span class="ki">黄：ごはん</span>、<span class="midori">緑：味噌汁の具・ひじき</span>
+        <strong>【朝】すき家「塩サバたまかけ定食ミニ」固定</strong> (557kcal / 脂質 23.9g / 炭水化物 61.3g)<br>
+        <strong>【夜】学校給食メニュー個別にチェック可能</strong> (ご飯は150g=252kcalで計算)<br>
+        <div style="margin-top:5px; font-size:0.9em; color:#555;">
+            ※食べたメニュー項目をチェックしてください。栄養価は自動計算されます。
+        </div>
+    </div>
+
+    <!-- Data Management Area -->
+    <div class="data-mgmt"
+        style="background:#fff; padding:15px; margin-bottom:20px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1); border-left: 5px solid #3498db;">
+        <h3 style="margin-top:0; font-size:1em; color:#2c3e50;">💾 データの保存・読み込み</h3>
+        <textarea id="io-area"
+            style="width:100%; height:60px; margin-bottom:10px; border:1px solid #ccc; font-family:monospace; font-size:0.8em; padding:5px;"
+            placeholder="【書き出し】ボタンを押すとここにテキストが表示されます。保存する場合はコピーしてください。&#10;【読み込み】以前保存したテキストをここに貼り付けてボタンを押してください。"></textarea>
+        <div>
+            <button id="btn-export"
+                style="padding:6px 12px; background:#3498db; color:white; border:none; border-radius:4px; cursor:pointer; font-weight:bold;">📤
+                現在の状態をテキスト化（書き出し）</button>
+            <button id="btn-import"
+                style="padding:6px 12px; background:#e67e22; color:white; border:none; border-radius:4px; cursor:pointer; font-weight:bold; margin-left:10px;">📥
+                テキストから復元（読み込み）</button>
+        </div>
     </div>
 
     <table>
         <thead>
             <tr>
                 <th class="date-col">日付</th>
-                <th class="menu-col">学校給食メニュー</th>
+                <th class="check-col">朝食</th>
+                <th class="menu-col">【夜】メニュー詳細（選択可）</th>
                 <th class="aka">赤（血・肉）</th>
                 <th class="ki">黄（熱・力）</th>
                 <th class="midori">緑（調子）</th>
@@ -144,7 +259,7 @@
         <tbody>
             <tr>
                 <td>2/2</td>
-                <td>チキンカツ、和え物、ひじき煮</td>
+                <td>【夜】チキンカツ、和え物、ひじき煮</td>
                 <td>鶏肉、ひじき、サバ、卵</td>
                 <td>米、パン粉、油</td>
                 <td>白菜、人参、小松菜</td>
@@ -156,7 +271,7 @@
             </tr>
             <tr>
                 <td>2/3</td>
-                <td>牛肉味噌炒め、甘酢和え</td>
+                <td>【夜】牛肉味噌炒め、甘酢和え</td>
                 <td>牛肉、味噌、サバ、卵</td>
                 <td>米、砂糖</td>
                 <td>ネギ、大根、きゅうり</td>
@@ -168,7 +283,7 @@
             </tr>
             <tr>
                 <td>2/4</td>
-                <td>醤油ラーメン、揚げ餃子、米</td>
+                <td>【夜】醤油ラーメン、揚げ餃子、米</td>
                 <td>豚肉、サバ、卵</td>
                 <td>麺、米、皮、油</td>
                 <td>もやし、ネギ、メンマ</td>
@@ -180,7 +295,7 @@
             </tr>
             <tr>
                 <td>2/5</td>
-                <td>麻婆豆腐丼、バンサンスー</td>
+                <td>【夜】麻婆豆腐丼、バンサンスー</td>
                 <td>豆腐、肉、サバ、卵</td>
                 <td>米、油、片栗粉</td>
                 <td>きゅうり、人参、ネギ</td>
@@ -192,8 +307,8 @@
             </tr>
             <tr>
                 <td>2/6</td>
-                <td>サバ塩焼き、青菜炒め</td>
-                <td>サバ(朝昼)、卵、味噌</td>
+                <td>【夜】サバ塩焼き、青菜炒め</td>
+                <td>サバ(朝夜)、卵、味噌</td>
                 <td>米、油</td>
                 <td>キャベツ、青菜、人参</td>
                 <td class="num-col">1257</td>
@@ -204,7 +319,7 @@
             </tr>
             <tr>
                 <td>2/9</td>
-                <td>クリームシチュー、ナゲット</td>
+                <td>【夜】クリームシチュー、ナゲット</td>
                 <td>鶏、乳製品、サバ、卵</td>
                 <td>米、芋、小麦粉、油</td>
                 <td>玉ねぎ、人参、生野菜</td>
@@ -216,7 +331,7 @@
             </tr>
             <tr>
                 <td>2/12</td>
-                <td>ささみチーズフライ、筑前煮</td>
+                <td>【夜】ささみチーズフライ、筑前煮</td>
                 <td>ささみ、チーズ、サバ、卵</td>
                 <td>米、パン粉、油、里芋</td>
                 <td>キャベツ、人参、牛蒡</td>
@@ -228,7 +343,7 @@
             </tr>
             <tr>
                 <td>2/13</td>
-                <td>ハンバーグ、海老フライ</td>
+                <td>【夜】ハンバーグ、海老フライ</td>
                 <td>肉、海老、サバ、卵</td>
                 <td>米、パン粉、油、砂糖</td>
                 <td>インゲン、人参、果物</td>
@@ -240,7 +355,7 @@
             </tr>
             <tr>
                 <td>2/16</td>
-                <td>チキンカレー、ポテトフライ</td>
+                <td>【夜】チキンカレー、ポテトフライ</td>
                 <td>鶏、サバ、卵、脱脂粉乳</td>
                 <td>米、芋、ルー、油</td>
                 <td>玉ねぎ、人参、牛蒡</td>
@@ -252,7 +367,7 @@
             </tr>
             <tr>
                 <td>2/17</td>
-                <td>牛丼、おくら煮びたし</td>
+                <td>【夜】牛丼、おくら煮びたし</td>
                 <td>牛肉、味噌、サバ、卵</td>
                 <td>米、砂糖</td>
                 <td>玉ねぎ、おくら、人参</td>
@@ -264,7 +379,7 @@
             </tr>
             <tr>
                 <td>2/18</td>
-                <td>沖縄そば、ジューシー</td>
+                <td>【夜】沖縄そば、ジューシー</td>
                 <td>豚、かまぼこ、サバ、卵</td>
                 <td>麺、米、油</td>
                 <td>ネギ、人参、もずく</td>
@@ -276,7 +391,7 @@
             </tr>
             <tr>
                 <td>2/19</td>
-                <td>白身魚フライ、鶏汁</td>
+                <td>【夜】白身魚フライ、鶏汁</td>
                 <td>白身魚、鶏、ツナ、サバ</td>
                 <td>米、パン粉、油</td>
                 <td>白菜、大根、キャベツ</td>
@@ -288,7 +403,7 @@
             </tr>
             <tr>
                 <td>2/20</td>
-                <td>とんかつ、マカロニサラダ</td>
+                <td>【夜】とんかつ、マカロニサラダ</td>
                 <td>豚肉、ハム、味噌、サバ</td>
                 <td>米、パン粉、マカロニ、油</td>
                 <td>ブロッコリー、キャベツ</td>
@@ -300,7 +415,7 @@
             </tr>
             <tr>
                 <td>2/24</td>
-                <td>ハヤシライス、ミートボール</td>
+                <td>【夜】ハヤシライス、ミートボール</td>
                 <td>豚、サバ、卵</td>
                 <td>米、ルー、油</td>
                 <td>玉ねぎ、人参、ほうれん草</td>
@@ -312,7 +427,7 @@
             </tr>
             <tr>
                 <td>2/25</td>
-                <td>ミートソーススパ、コロッケ</td>
+                <td>【夜】ミートソーススパ、コロッケ</td>
                 <td>豚、チーズ、鶏、サバ</td>
                 <td>麺、米、パン粉、油、芋</td>
                 <td>玉ねぎ、人参、生野菜</td>
@@ -324,7 +439,7 @@
             </tr>
             <tr>
                 <td>2/26</td>
-                <td>八宝菜、ホタテフライ</td>
+                <td>【夜】八宝菜、ホタテフライ</td>
                 <td>豚、烏賊、海老、貝、卵</td>
                 <td>米、片栗粉、油</td>
                 <td>白菜、筍、人参</td>
@@ -336,7 +451,7 @@
             </tr>
             <tr>
                 <td>2/27</td>
-                <td>ビーフシチュー、コロッケ</td>
+                <td>【夜】ビーフシチュー、コロッケ</td>
                 <td>牛肉、サバ、卵</td>
                 <td>米、芋、ルー、パン粉、油</td>
                 <td>玉ねぎ、人参、キャベツ</td>
@@ -349,6 +464,270 @@
         </tbody>
     </table>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const BK_FIXED = { kcal: 557, fat: 23.9, carb: 61.3 };
+            const RICE_FIXED = { kcal: 252, fat: 0.5, carb: 55.7 }; // Approx 150g Rice
+
+            const table = document.querySelector('table');
+            const rows = table.querySelectorAll('tbody tr');
+
+            rows.forEach(row => {
+                // Determine existing cells BEFORE insertion
+                // Indices: 0:Date, 1:Menu, 2:Red, 3:Yellow, 4:Green, 5:Kcal, 6:Fat, 7:Carb
+                const menuCell = row.cells[1];
+                const kcalCell = row.cells[5];
+                const fatCell = row.cells[6];
+                const carbCell = row.cells[7];
+
+                // 1. Parse Plan Values (Total of Day from HTML)
+                const planKcal = parseFloat(kcalCell.textContent.replace(/[^0-9.]/g, '')) || 0;
+                const planFat = parseFloat(fatCell.textContent.replace(/[^0-9.]/g, '')) || 0;
+                const planCarb = parseFloat(carbCell.textContent.replace(/[^0-9.]/g, '')) || 0;
+
+                row.dataset.planKcal = planKcal;
+
+                // 2. Calculate "Night Total" (Plan - Breakfast) and clamp to 0
+                let nightTotalKcal = Math.max(0, planKcal - BK_FIXED.kcal);
+                let nightTotalFat = Math.max(0, planFat - BK_FIXED.fat);
+                let nightTotalCarb = Math.max(0, planCarb - BK_FIXED.carb);
+
+                // 3. Insert Check Column at Index 1
+                const bkCell = row.insertCell(1);
+                bkCell.className = "check-col";
+                bkCell.innerHTML = `
+                    <label class="bk-toggle">
+                        <input type="checkbox" class="check-bk"> <span>朝</span>
+                    </label>
+                `;
+
+                // 4. Parse Menu Items and Create Checkboxes
+                let menuText = menuCell.textContent.replace('【夜】', '').trim();
+                let items = menuText.split('、').map(s => s.trim()).filter(s => s);
+
+                // --- Distribution Logic ---
+                // If "Rice/米" exists, assign FIXED Rice values to it.
+                // Subtract Rice values from the Night Total.
+                // Distribute remainder equally among other items.
+
+                let riceItemIndex = items.findIndex(item => item.includes('米') || item.includes('ごはん') || item.includes('ご飯'));
+                let otherItemCount = (riceItemIndex >= 0) ? items.length - 1 : items.length;
+                if (otherItemCount < 1) otherItemCount = 1; // Fallback
+
+                // Adjust totals for remaining distribution
+                let distKcal = nightTotalKcal;
+                let distFat = nightTotalFat;
+                let distCarb = nightTotalCarb;
+
+                if (riceItemIndex >= 0) {
+                    distKcal -= RICE_FIXED.kcal;
+                    distFat -= RICE_FIXED.fat;
+                    distCarb -= RICE_FIXED.carb;
+                }
+
+                // If values go negative, clamp to 0
+                distKcal = Math.max(0, distKcal);
+                distFat = Math.max(0, distFat);
+                distCarb = Math.max(0, distCarb);
+
+                // Calculate per-item (non-rice) values
+                let perItemKcal = distKcal / otherItemCount;
+                let perItemFat = distFat / otherItemCount;
+                let perItemCarb = distCarb / otherItemCount;
+
+                // Build Item Data Structure
+                let menuData = items.map((name, index) => {
+                    let isRice = (index === riceItemIndex);
+                    return {
+                        name: name,
+                        kcal: isRice ? RICE_FIXED.kcal : perItemKcal,
+                        fat: isRice ? RICE_FIXED.fat : perItemFat,
+                        carb: isRice ? RICE_FIXED.carb : perItemCarb
+                    };
+                });
+
+                // Clear Menu Cell and Render Checkboxes
+                menuCell.innerHTML = `<div class="menu-list"></div>`;
+                const menuList = menuCell.querySelector('.menu-list');
+
+                menuData.forEach((item, idx) => {
+                    const label = document.createElement('label');
+                    label.className = 'menu-item-label unchecked';
+                    label.innerHTML = `<input type="checkbox" class="night-item-check" data-idx="${idx}"> ${item.name}`;
+
+                    // Store metrics in the input element
+                    const input = label.querySelector('input');
+                    input.dataset.kcal = item.kcal;
+                    input.dataset.fat = item.fat;
+                    input.dataset.carb = item.carb;
+
+                    // Row-level listener wrapper
+                    input.addEventListener('change', (e) => {
+                        const lbl = e.target.parentElement;
+                        if (e.target.checked) {
+                            lbl.classList.remove('unchecked');
+                            lbl.classList.add('checked');
+                        } else {
+                            lbl.classList.remove('checked');
+                            lbl.classList.add('unchecked');
+                        }
+                        updateRow(row);
+                    });
+
+                    menuList.appendChild(label);
+                });
+
+                // Listener for Breakfast
+                const bkInput = bkCell.querySelector('input');
+                bkInput.addEventListener('change', (e) => {
+                    const btn = e.target.parentElement;
+                    if (e.target.checked) btn.classList.add('active');
+                    else btn.classList.remove('active');
+                    updateRow(row);
+                });
+
+                // Initial Update
+                updateRow(row);
+            });
+
+            function updateRow(row) {
+                // Get Breakfast Status
+                const bkChecked = row.querySelector('.check-bk').checked;
+
+                // Get Night Status (Sum of checked items)
+                const nightChecks = row.querySelectorAll('.night-item-check:checked');
+
+                let currentKcal = 0;
+                let currentFat = 0;
+                let currentCarb = 0;
+
+                // Add Breakfast
+                if (bkChecked) {
+                    currentKcal += BK_FIXED.kcal;
+                    currentFat += BK_FIXED.fat;
+                    currentCarb += BK_FIXED.carb;
+                }
+
+                // Add Night Items
+                nightChecks.forEach(chk => {
+                    currentKcal += parseFloat(chk.dataset.kcal);
+                    currentFat += parseFloat(chk.dataset.fat);
+                    currentCarb += parseFloat(chk.dataset.carb);
+                });
+
+                // Update Display
+                // Indices shifted by +1 because of new column insertion
+                // Old 5->New 6, Old 6->New 7, Old 7->New 8
+                const kCell = row.cells[6];
+                const fCell = row.cells[7];
+                const cCell = row.cells[8];
+                const planKcal = parseFloat(row.dataset.planKcal);
+
+                // Percentage
+                const pct = planKcal > 0 ? (currentKcal / planKcal) * 100 : 0;
+
+                kCell.innerHTML = `<div class="num-val">${Math.round(currentKcal)}</div><div class="progress-bar"><div class="progress-fill" style="width:${Math.min(100, pct)}%; background-color: ${getBarColor(currentKcal, planKcal)}"></div></div>`;
+                fCell.innerHTML = `<div class="num-val">${currentFat.toFixed(1)}g</div>`;
+                cCell.innerHTML = `<div class="num-val">${currentCarb.toFixed(1)}g</div>`;
+
+                // Dynamic Over/Warning Styling
+                // Re-creating logic: Fat > 50 is bad? Carb > 175 is bad?
+                const fatLimit = 50;
+                const carbLimit = 175;
+
+                if (currentFat >= fatLimit) fCell.classList.add('over'); else fCell.classList.remove('over');
+                if (currentCarb >= carbLimit) cCell.classList.add('over'); else cCell.classList.remove('over');
+            }
+
+            function getBarColor(current, max) {
+                const pct = current / max;
+                if (pct < 0.5) return '#f1c40f'; // Yellow
+                if (pct < 1.0) return '#2ecc71'; // Green
+                return '#e74c3c'; // Red (Full)
+            }
+
+            // --- Data Export ---
+            document.getElementById('btn-export').addEventListener('click', () => {
+                const data = {};
+                rows.forEach(row => {
+                    const date = row.cells[0].innerText.trim();
+                    const bkChecked = row.querySelector('.check-bk').checked;
+                    // Night items are dynamic
+                    const nightChecks = Array.from(row.querySelectorAll('.night-item-check')).map(c => c.checked);
+
+                    data[date] = {
+                        bk: bkChecked,
+                        night: nightChecks
+                    };
+                });
+
+                // Pretty print for readability, though less compact
+                document.getElementById('io-area').value = JSON.stringify(data);
+                alert('データを書き出しました。テキストエリアの内容をコピーして保存してください。');
+            });
+
+            // --- Data Import ---
+            document.getElementById('btn-import').addEventListener('click', () => {
+                const json = document.getElementById('io-area').value;
+                if (!json.trim()) {
+                    alert('エリアが空です。データを貼り付けてください。');
+                    return;
+                }
+
+                try {
+                    const data = JSON.parse(json);
+                    let count = 0;
+
+                    rows.forEach(row => {
+                        const date = row.cells[0].innerText.trim();
+                        if (data[date]) {
+                            // 1. Restore Breakfast
+                            const bkInput = row.querySelector('.check-bk');
+                            const bkState = data[date].bk;
+                            bkInput.checked = bkState;
+
+                            // Visual toggle
+                            const bkBtn = bkInput.parentElement;
+                            if (bkState) bkBtn.classList.add('active');
+                            else bkBtn.classList.remove('active');
+
+                            // 2. Restore Night Items
+                            const nightInputs = row.querySelectorAll('.night-item-check');
+                            const nightStates = data[date].night;
+
+                            if (Array.isArray(nightStates)) {
+                                nightInputs.forEach((input, idx) => {
+                                    if (nightStates[idx] !== undefined) {
+                                        input.checked = nightStates[idx];
+
+                                        // Visual toggle
+                                        const lbl = input.parentElement;
+                                        if (input.checked) {
+                                            lbl.classList.remove('unchecked');
+                                            lbl.classList.add('checked');
+                                        } else {
+                                            lbl.classList.remove('checked');
+                                            lbl.classList.add('unchecked');
+                                        }
+                                    }
+                                });
+                            }
+
+                            // 3. Recalculate
+                            updateRow(row);
+                            count++;
+                        }
+                    });
+
+                    alert(`${count}日分のデータを復元しました。`);
+
+                } catch (e) {
+                    console.error(e);
+                    alert('エラー：データの形式が正しくないようです。');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
