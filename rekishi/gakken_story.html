@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>『科学』誕生の奇跡 - 鬼編集長の挑戦</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', 'Meiryo', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .toggle-container {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .toggle-btn {
+            background: white;
+            border: 2px solid #667eea;
+            padding: 12px 24px;
+            margin: 0 5px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #667eea;
+        }
+
+        .toggle-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        /* ポンチ絵スタイル */
+        .illustration-mode .story-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #fff;
+            border-left: 5px solid #667eea;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .illustration-mode .story-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .illustration-mode h2 {
+            color: #1e3c72;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 5px;
+        }
+
+        .illustration-mode .story-text {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .illustration-mode .highlight {
+            background: linear-gradient(transparent 60%, #ffd700 60%);
+            font-weight: bold;
+            padding: 2px 4px;
+        }
+
+        .illustration-mode .speech-bubble {
+            background: #e3f2fd;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 15px 0;
+            position: relative;
+            border: 2px solid #2196f3;
+        }
+
+        .illustration-mode .speech-bubble:before {
+            content: "💭";
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            font-size: 1.5rem;
+        }
+
+        /* インフォグラフィックスタイル */
+        .infographic-mode {
+            display: none;
+        }
+
+        .infographic-mode.active {
+            display: block;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline:before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 70px;
+            margin-bottom: 30px;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 18px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #667eea;
+            border: 4px solid white;
+            box-shadow: 0 0 0 2px #667eea;
+        }
+
+        .timeline-content {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid #667eea;
+        }
+
+        .timeline-year {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .timeline-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #1e3c72;
+            margin-bottom: 8px;
+        }
+
+        .timeline-desc {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        .character-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .character-icon {
+            font-size: 3rem;
+            margin-right: 15px;
+        }
+
+        .character-info h3 {
+            color: #1e3c72;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .character-info p {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .impact-section {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .impact-section h3 {
+            color: #d63031;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .impact-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #d63031;
+            display: block;
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.2rem;
+            }
+
+            .toggle-btn {
+                padding: 10px 16px;
+                font-size: 0.8rem;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline:before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                padding-left: 50px;
+            }
+
+            .timeline-dot {
+                left: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔬 『科学』誕生の奇跡<br>鬼編集長・中川浩の挑戦</h1>
+        </div>
+
+        <div class="toggle-container">
+            <button class="toggle-btn active" onclick="showIllustration()">📖 ポンチ絵</button>
+            <button class="toggle-btn" onclick="showInfographic()">📊 インフォグラフィック</button>
+        </div>
+
+        <div class="content">
+            <!-- ポンチ絵モード -->
+            <div id="illustration" class="illustration-mode">
+                <div class="story-section">
+                    <div class="story-icon">🏢</div>
+                    <h2>プロローグ：鬼と呼ばれた男</h2>
+                    <p class="story-text">
+                        働き方改革とは無縁の時代。休日返上、徹夜は日常茶飯事。<span class="highlight">学習研究社（学研）</span>に、社内で<span class="highlight">「鬼」と恐れられた一人の男</span>がいた。これは、日本の未来を信じ、出版界の常識にたった一人で闘いを挑んだ男が成し遂げた、奇跡の物語である。
+                    </p>
+                </div>
+
+                <div class="story-section">
+                    <div class="story-icon">🚀</div>
+                    <h2>第一章：熱い想い、冷たい現実</h2>
+                    <p class="story-text">
+                        今から約<span class="highlight">66年前（1960年）</span>、学研の編集長・<span class="highlight">根本行庸</span>は情熱に燃えていた。
+                    </p>
+                    <div class="speech-bubble">
+                        「宇宙飛行士や科学者になりたいと夢見る子供たちのための雑誌を作りたい！資源の乏しい日本が世界で生き残るには科学技術しかない！」
+                    </div>
+                    <p class="story-text">
+                        一流の学者に監修を頼み、学習指導要領をすべて暗記するほどの熱意で創刊した月刊誌<span class="highlight">『科学の教室』</span>。しかし、その情熱とは裏腹に、<span class="highlight">雑誌は全く売れなかった</span>。
+                    </p>
+                </div>
+
+                <div class="story-section">
+                    <div class="story-icon">😈</div>
+                    <h2>第二章：鬼の登場</h2>
+                    <p class="story-text">
+                        廃刊の二文字がちらつく中、社長が白羽の矢を立てたのが、大ヒット雑誌『学習』を率いる<span class="highlight">中川浩</span>。社内で<span class="highlight">「鬼」と恐れられる男</span>である。
+                    </p>
+                    <div class="speech-bubble">
+                        「教科書の延長のようなものを家で読むわけがない！」
+                    </div>
+                    <p class="story-text">
+                        中川は着任するやいなや、これまでの『科学の教室』を完全否定。何日も徹夜して作った資料が、<span class="highlight">一瞬でゴミ箱に叩き込まれる</span>ことも珍しくなかった。
+                    </p>
+                </div>
+
+                <div class="story-section">
+                    <div class="story-icon">💥</div>
+                    <h2>第三章：無謀な賭け</h2>
+                    <p class="story-text">
+                        中川が最初に打った手は、従来の<span class="highlight">3誌体制を学年別の6誌体制へ倍増</span>させること。大成功していた『学習』と同じ手法だが、赤字雑誌で同じことをするのは<span class="highlight">無謀の極み</span>。
+                    </p>
+                    <p class="story-text">
+                        周囲の猛反対を押し切り強引に改革を進めたが、結果は惨敗。売上は全く伸びず、<span class="highlight">中川は崖っぷちに立たされた</span>。
+                    </p>
+                </div>
+
+                <div class="story-section">
+                    <div class="story-icon">👨‍🏫</div>
+                    <h2>第四章：科学への執念</h2>
+                    <p class="story-text">
+                        なぜ中川はそこまで科学に固執したのか？研究職の両親のもとに生まれ、<span class="highlight">第二次世界大戦で二人の兄を亡くした</span>彼は、戦後、物理の教師となった。
+                    </p>
+                    <p class="story-text">
+                        しかし正義感が強すぎるあまり同僚と衝突し、半年で職を辞す。それでも教育への情熱は消えず、「より多くの子供たちに関われる」と学研に転職。<span class="highlight">二人の息子に「理作」「研作」と名付ける</span>ほど、科学への想いは深かった。
+                    </p>
+                </div>
+
+                <div class="story-section">
+                    <div class="story-icon">💡</div>
+                    <h2>第五章：革命のアイデア</h2>
+                    <p class="story-text">
+                        役員会議で『科学の教室』の存続が議題に上がる。そこで中川が打ち出した起死回生の一手は、誰もが耳を疑うものだった。
+                    </p>
+                    <div class="speech-bubble">
+                        「雑誌に付録をつけます」
+                    </div>
+                    <p class="story-text">
+                        それは、<span class="highlight">我が子が虫眼鏡で紙に火をつけて遊ぶ姿</span>から得た、単純だが革命的なアイデアだった。
+                    </p>
+                </div>
+
+                <div class="story-section">
+                    <div class="story-icon">🧗</div>
+                    <h2>第六章：三つの壁</h2>
+                    <p class="story-text">
+                        <strong>【第一の壁：予算】</strong><br>
+                        赤字雑誌は値上げできない。本誌と付録にかけられる費用は<span class="highlight">わずか70円</span>。本誌を切り詰めても、付録に使えるのは<span class="highlight">たった30円</span>。中川は諦めなかった。東京中の問屋街を一人で駆けずり回り、業者やメーカーと顔をつなぎ、<span class="highlight">30円の壁を突破</span>した。
+                    </p>
+                    <p class="story-text">
+                        <strong>【第二の壁：輸送】</strong><br>
+                        当時、雑誌は国鉄が格安で運んでいたが、それは紙製品に限られ、かさばる付録は運べない。発送部門の役員・小林が、当時はまだ珍しかった<span class="highlight">トラック輸送</span>という活路を見出した。
+                    </p>
+                    <p class="story-text">
+                        <strong>【第三の壁：社内の抵抗】</strong><br>
+                        最大の壁は社内にあった。造本部の最高責任者である常務の川本は、何万個もの付録の品質管理を、取引実績のない街の問屋に任せることなど認めなかった。
+                    </p>
+                </div>
+
+                <div class="story-section">
+                    <div class="story-icon">🔥</div>
+                    <h2>第七章：絶望的な要求</h2>
+                    <p class="story-text">
+                        中川を諦めさせるため、川本常務は無理難題を突きつける。
+                    </p>
+                    <div class="speech-bubble">
+                        「6学年、3年分の付録プラン216種類を、明日の朝までに持ってこい」
+                    </div>
+                    <p class="story-text">
+                        それは絶望的な要求だった。しかし、中川と、彼を信じる編集部員たちは諦めなかった。学習指導要領を暗記している彼らは、その知識を総動員し、<span class="highlight">徹夜でプランを作り上げた</span>。夜が明ける頃、完成したのは2年分。それでも、その<span class="highlight">鬼気迫る情熱と緻密なプラン</span>は、ついに常務の心を動かした。
+                    </p>
+                </div>
+
+                <div class="story-section">
+                    <div class="story-icon">✨</div>
+                    <h2>第八章：奇跡の瞬間</h2>
+                    <p class="story-text">
+                        <span class="highlight">1963年4月</span>、日本初の立体付録付き科学雑誌<span class="highlight">『1年〜6年の科学』</span>が発売されると、奇跡が起きた。
+                    </p>
+                    <p class="story-text">
+                        <span class="highlight">初版12万部は瞬く間になくなり、追加注文が殺到</span>。付録という"体験"は、子供たちの心を鷲掴みにしたのだ。『科学』はその後、<span class="highlight">月間300万部を突破</span>するお化け雑誌へと成長した。
+                    </p>
+                </div>
+
+                <div class="story-section">
+                    <div class="story-icon">🌟</div>
+                    <h2>エピローグ：受け継がれる想い</h2>
+                    <p class="story-text">
+                        時代は流れ、児童数の減少などから『科学』は<span class="highlight">2010年に休刊</span>したが、中川たちがまいた種は、日本の科学技術を支える大きな木へと育った。
+                    </p>
+                    <p class="story-text">
+                        <span class="highlight">ノーベル物理学賞を受賞した天野浩さん</span>も、幼い頃に付録で科学の面白さに目覚めた一人だ。
+                    </p>
+                    <div class="speech-bubble">
+                        「すべては子供たちの科学教育のために…」
+                    </div>
+                    <p class="story-text">
+                        生涯をかけてその信念を貫いた中川浩の熱い思いは、形を変え、今も後輩たちに確かに受け継がれている。
+                    </p>
+                </div>
+            </div>
+
+            <!-- インフォグラフィックモード -->
+            <div id="infographic" class="infographic-mode">
+                <h2 style="text-align: center; color: #1e3c72; margin-bottom: 20px;">📊 データで見る『科学』の奇跡</h2>
+
+                <div class="character-card">
+                    <div class="character-icon">😈</div>
+                    <div class="character-info">
+                        <h3>中川浩（なかがわ ひろし）</h3>
+                        <p>社内で「鬼」と恐れられた編集長。物理教師から学研へ。二人の息子の名は「理作」「研作」。科学教育への情熱で奇跡を起こした男。</p>
+                    </div>
+                </div>
+
+                <div class="character-card">
+                    <div class="character-icon">🚀</div>
+                    <div class="character-info">
+                        <h3>根本行庸（ねもと ゆきつね）</h3>
+                        <p>初代編集長。「子供たちのための科学雑誌を」という夢を抱くも、『科学の教室』は不振に終わる。</p>
+                    </div>
+                </div>
+
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-year">1960年</div>
+                            <div class="timeline-title">『科学の教室』創刊</div>
+                            <div class="timeline-desc">根本行庸編集長のもと、学習指導要領を暗記するほどの熱意で創刊。しかし全く売れず。</div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-year">1960年代初頭</div>
+                            <div class="timeline-title">中川浩が編集長に着任</div>
+                            <div class="timeline-desc">大ヒット雑誌『学習』の編集長が抜擢される。「教科書の延長を家で読むわけがない」と全否定から始まる。</div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-year">改革第一弾</div>
+                            <div class="timeline-title">3誌→6誌体制へ</div>
+                            <div class="timeline-desc">学年別の6誌体制に倍増。周囲の猛反対を押し切るも結果は惨敗。中川は崖っぷちに。</div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-year">革命的アイデア</div>
+                            <div class="timeline-title">「付録をつける」</div>
+                            <div class="timeline-desc">我が子が虫眼鏡で遊ぶ姿からヒント。予算30円、輸送、社内抵抗という三つの壁を突破。</div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-year">決死の徹夜</div>
+                            <div class="timeline-title">216種類のプラン要求</div>
+                            <div class="timeline-desc">常務の無理難題「明日の朝までに216種類の付録プランを」。徹夜で2年分を完成させ、常務の心を動かす。</div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-year">1963年4月</div>
+                            <div class="timeline-title">『1年〜6年の科学』発売</div>
+                            <div class="timeline-desc">日本初の立体付録付き科学雑誌。初版12万部が瞬く間に完売、追加注文殺到。</div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-year">全盛期</div>
+                            <div class="timeline-title">月間300万部突破</div>
+                            <div class="timeline-desc">お化け雑誌へと成長。付録という"体験"が子供たちの心を鷲掴みに。</div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-year">2010年</div>
+                            <div class="timeline-title">『科学』休刊</div>
+                            <div class="timeline-desc">児童数減少などにより休刊。しかし47年間、日本の科学教育を支え続けた。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-number">70円</span>
+                        <span class="stat-label">本誌+付録の予算</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">30円</span>
+                        <span class="stat-label">付録の予算</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">216種</span>
+                        <span class="stat-label">要求された付録プラン数</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">12万部</span>
+                        <span class="stat-label">初版部数（即完売）</span>
+                    </div>
+                </div>
+
+                <div class="impact-section">
+                    <h3>🏆 最大の成果</h3>
+                    <span class="impact-number">300万部</span>
+                    <p style="margin-top: 10px; font-weight: bold;">月間発行部数（全盛期）</p>
+                    <p style="margin-top: 15px; font-size: 0.9rem; color: #2d3436;">日本の科学教育を支え、ノーベル賞受賞者も輩出</p>
+                </div>
+
+                <div class="character-card" style="background: #dfe6e9;">
+                    <div class="character-icon">🏆</div>
+                    <div class="character-info">
+                        <h3>レガシー（遺産）</h3>
+                        <p><strong>天野浩</strong>（ノーベル物理学賞受賞）も幼い頃に『科学』の付録で科学の面白さに目覚めた一人。中川たちがまいた種は、日本の科学技術を支える大きな木へと育った。</p>
+                    </div>
+                </div>
+
+                <div style="background: #74b9ff; color: white; padding: 20px; border-radius: 12px; margin-top: 20px; text-align: center;">
+                    <h3 style="margin-bottom: 10px;">💬 中川浩の信念</h3>
+                    <p style="font-size: 1.1rem; font-weight: bold; line-height: 1.8;">「すべては子供たちの科学教育のために…」</p>
+                    <p style="margin-top: 10px; font-size: 0.9rem;">生涯をかけてその信念を貫いた熱い思いは、形を変え、今も後輩たちに受け継がれている。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showIllustration() {
+            document.getElementById('illustration').style.display = 'block';
+            document.getElementById('infographic').classList.remove('active');
+            
+            const buttons = document.querySelectorAll('.toggle-btn');
+            buttons[0].classList.add('active');
+            buttons[1].classList.remove('active');
+        }
+
+        function showInfographic() {
+            document.getElementById('illustration').style.display = 'none';
+            document.getElementById('infographic').classList.add('active');
+            
+            const buttons = document.querySelectorAll('.toggle-btn');
+            buttons[0].classList.remove('active');
+            buttons[1].classList.add('active');
+        }
+    </script>
+</body>
+</html>
