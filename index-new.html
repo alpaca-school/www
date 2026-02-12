@@ -51,8 +51,7 @@
     // ※ 本来は「ファイル」→「共有」→「Webに公開」で発行されたURLを使うのが最も確実です
     const SHEET_ID = "1YXtuEzZHrV236tzNj7DfvdweXxAGZZNP8OVGJbujrrg";
     const TARGET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
-    const SHEET_CSV_URL = "https://corsproxy.io/?" + encodeURIComponent(TARGET_URL);
-
+    const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=0`;
 
 
     /* ========= フロア意味づけ（体験ベース） ========= */
