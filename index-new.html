@@ -12,7 +12,6 @@
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap');
@@ -62,7 +61,7 @@
 
     const floors = ["歴史", "文化", "自然", "平和", "生活", "社会"];
 
-    /* ========= 初期の静的データ ========= */
+    /* ========= 初期の静的データ構造 ========= */
     const initialFloorData = {
       歴史: { title: "歴史", color: "bg-pink-100 border-pink-300", headerColor: "bg-pink-200", sections: [] },
       文化: { title: "文化", color: "bg-green-100 border-green-300", headerColor: "bg-green-200", sections: [] },
@@ -102,36 +101,43 @@
       </header>
     );
 
-    const FloorContent = ({ data, onVideoClick, onModalClick }) => (
-      <main className="max-w-4xl mx-auto p-6 grid md:grid-cols-2 gap-4">
-        {data.sections.length === 0 ? (
-          <p className="col-span-full text-center py-20 text-gray-400">読み込み中、またはこのフロアのデータがありません 🦙</p>
-        ) : data.sections.map(s => (
-          <div key={s.id} className={`${data.color} border-2 rounded-xl p-6 shadow hover:shadow-md transition`}>
-            <h3 className="font-bold text-lg mb-2">{s.title}</h3>
-            <p className="text-sm text-gray-700 mb-4 whitespace-pre-wrap">{s.description}</p>
-            <div className="flex flex-wrap gap-2">
-              {s.videoId && (
-                <button onClick={() => onVideoClick(s.videoId)}
-                  className="bg-red-500 text-white px-3 py-2 rounded font-bold hover:bg-red-600 transition shadow-sm">
-                  動画を見る
-                </button>
-              )}
-              {s.actionType === "modal" && (
-                <button onClick={() => onModalClick(s)}
-                  className="bg-purple-500 text-white px-3 py-2 rounded font-bold hover:bg-purple-600 transition shadow-sm">
-                  学ぶ
-                </button>
-              )}
-              {s.isComingSoon && (
-                <button disabled
-                  className="bg-gray-300 text-gray-500 px-3 py-2 rounded font-bold cursor-not-allowed">
-                  Coming Soon
-                </button>
-              )}
-            </div>
+    const FloorContent = ({ data, onVideoClick, onModalClick, fetchError }) => (
+      <main className="max-w-4xl mx-auto p-6">
+        {fetchError && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+            <strong>エラー:</strong> {fetchError}
           </div>
-        ))}
+        )}
+        <div className="grid md:grid-cols-2 gap-4">
+          {data.sections.length === 0 && !fetchError ? (
+            <p className="col-span-full text-center py-20 text-gray-400">読み込み中、またはこのフロアのデータがありません 🦙</p>
+          ) : data.sections.map(s => (
+            <div key={s.id} className={`${data.color} border-2 rounded-xl p-6 shadow hover:shadow-md transition`}>
+              <h3 className="font-bold text-lg mb-2">{s.title}</h3>
+              <p className="text-sm text-gray-700 mb-4 whitespace-pre-wrap">{s.description}</p>
+              <div className="flex flex-wrap gap-2">
+                {s.videoId && (
+                  <button onClick={() => onVideoClick(s.videoId)}
+                    className="bg-red-500 text-white px-3 py-2 rounded font-bold hover:bg-red-600 transition shadow-sm">
+                    動画を見る
+                  </button>
+                )}
+                {s.actionType === "modal" && (
+                  <button onClick={() => onModalClick(s)}
+                    className="bg-purple-500 text-white px-3 py-2 rounded font-bold hover:bg-purple-600 transition shadow-sm">
+                    学ぶ
+                  </button>
+                )}
+                {s.isComingSoon && (
+                  <button disabled
+                    className="bg-gray-300 text-gray-500 px-3 py-2 rounded font-bold cursor-not-allowed">
+                    Coming Soon
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
       </main>
     );
 
@@ -144,29 +150,17 @@
               体験したことは、表現を通して社会とつながっていきます。
             </p>
             <a href="https://furima.ryukyu-tane.com"
-              target="_blank"
-              rel="noopener noreferrer"
+              target="_blank" rel="noopener noreferrer"
               className="bg-emerald-500 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-600 transition inline-block shadow-sm">
               文芸フリマで表現してみる
             </a>
           </div>
         </section >
-
-        <section className="max-w-4xl mx-auto p-6">
-          <div className="bg-white border-2 border-dashed border-gray-200 rounded-xl p-8 text-center">
-            <p className="mb-4 text-gray-700">学びの中で使った教材や記録をまとめています。</p>
-            <a href="https://universe.tea-under.club/"
-              className="inline-block px-6 py-2 bg-blue-50 text-blue-900 rounded-full font-bold hover:bg-blue-100 transition">
-              てぃあんだぁクラブ universe
-            </a>
-          </div>
-        </section>
-
-        <footer className="bg-gray-800 text-white p-6 text-sm">
+        <footer className="bg-gray-800 text-white p-6 text-sm mt-10">
           <div className="max-w-4xl mx-auto">
             <p>
               仕事は、誰かとのご縁。<br />アルパカすく〜るは、その入口をつくります。<br />
-              このコンテンツは、ご自宅から快適に学習できるよう設計されています。車椅子をご利用の方、高齢の方、外出が難しい方など、すべての方が楽しめるよう善処します。
+              このコンテンツは、ご自宅から快適に学習できるよう設計されています。
             </p>
             <a href="./concept.html" className="inline-block mt-2 underline hover:text-emerald-300">
               ▶ この学びの設計思想を読む
@@ -179,7 +173,7 @@
     const VideoModal = ({ videoId, onClose }) => (
       <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4" onClick={onClose}>
         <div className="relative w-full max-w-4xl">
-          <button onClick={onClose} className="absolute -top-10 right-0 text-white text-sm font-bold">✕ 閉じる</button>
+          <button onClick={onClose} className="absolute -top-10 right-0 text-white font-bold">✕ 閉じる</button>
           <iframe src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&playsinline=1&autoplay=1`}
             className="w-full aspect-video rounded-lg shadow-2xl" allow="autoplay" allowFullScreen />
         </div>
@@ -188,8 +182,8 @@
 
     const ContentModal = ({ content, onClose }) => (
       <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4" onClick={onClose}>
-        <div className="relative w-full max-w-5xl h-5/6">
-          <button onClick={onClose} className="absolute -top-10 right-0 text-white text-sm font-bold">✕ 閉じる</button>
+        <div className="relative w-full max-w-5xl h-[85vh]">
+          <button onClick={onClose} className="absolute -top-10 right-0 text-white font-bold">✕ 閉じる</button>
           <iframe src={content.modalUrl} className="w-full h-full rounded-xl bg-white shadow-2xl" onClick={e => e.stopPropagation()} />
         </div>
       </div>
@@ -200,22 +194,28 @@
       const [videoUrl, setVideoUrl] = useState(null);
       const [modal, setModal] = useState(null);
       const [floorData, setFloorData] = useState(initialFloorData);
+      const [fetchError, setFetchError] = useState(null);
       const [debugInfo, setDebugInfo] = useState(null);
 
       useEffect(() => {
         const timestamp = new Date().getTime();
-        Papa.parse(SHEET_CSV_URL + "&t=" + timestamp, {
+        const finalUrl = SHEET_CSV_URL + "&t=" + timestamp;
+
+        Papa.parse(finalUrl, {
           download: true,
           header: true,
+          skipEmptyLines: true,
           complete: function (results) {
             const fetchedData = results.data;
-            if (!fetchedData || fetchedData.length === 0) return;
+            if (!fetchedData || fetchedData.length === 0) {
+              setFetchError("スプレッドシートからデータが見つかりませんでした。Webに公開されているか確認してください。");
+              return;
+            }
 
             const newFloorData = JSON.parse(JSON.stringify(initialFloorData));
             const ignoredFloors = new Set();
 
             fetchedData.forEach((item, index) => {
-              // 【修正：お掃除＆自動ID＆日本語ヘッダー対応】
               const f = String(item.floor || item.フロア || "").trim();
               const t = String(item.title || item.タイトル || "").trim();
               const d = item.description || item.説明 || "";
@@ -230,24 +230,24 @@
                 return;
               }
 
-              const section = {
-                id: item.id || `row-${index}`, // id列がなければ行番号を使用
+              newFloorData[f].sections.push({
+                id: item.id || `row-${index}`,
                 title: t,
                 description: d,
+                videoId: type === "video" ? url : null,
+                modalUrl: type === "modal" ? url : null,
+                actionType: type === "modal" ? "modal" : null,
                 isComingSoon: cs === "TRUE"
-              };
-
-              if (type === "video") section.videoId = url;
-              else if (type === "modal") {
-                section.actionType = "modal";
-                section.modalUrl = url;
-              }
-
-              newFloorData[f].sections.push(section);
+              });
             });
 
             setFloorData(newFloorData);
+            setFetchError(null);
             setDebugInfo(ignoredFloors.size > 0 ? `無視されたフロア名: ${Array.from(ignoredFloors).join(", ")}` : null);
+          },
+          error: function (err) {
+            console.error("PapaParse Error:", err);
+            setFetchError("データの読み込みに失敗しました。Webに公開（CSV形式）の設定を確認してください。");
           }
         });
       }, []);
@@ -265,7 +265,7 @@
             </div>
           )}
           <Header currentFloor={currentFloor} setCurrentFloor={setCurrentFloor} meta={floorMeta[currentFloor]} data={data} />
-          <FloorContent data={data} onVideoClick={setVideoUrl} onModalClick={setModal} />
+          <FloorContent data={data} onVideoClick={setVideoUrl} onModalClick={setModal} fetchError={fetchError} />
           <Footer />
           {videoUrl && <VideoModal videoId={videoUrl} onClose={() => setVideoUrl(null)} />}
           {modal && <ContentModal content={modal} onClose={() => setModal(null)} />}
