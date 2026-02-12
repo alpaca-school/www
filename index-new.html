@@ -5,17 +5,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>アルパカすく〜る｜体験フロア 🦙</title>
+  <link rel="icon"
+    href="https://lh6.googleusercontent.com/HUVxVFqoa_HrqwbO5sJ2JLzW8zY1A2HWxKXhjxrLsOG__vg47Yqrj85Vc1kSb9FxaFmxYM2tp2IBQ5r8mq0dh36txvYtg3hFfBowEr6rJiBaoG5bSmRmqYHmOA=w16383">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap');
 
     body {
       font-family: 'M PLUS Rounded 1c', sans-serif;
+    }
+
+    .text-fluid-4xl {
+      font-size: clamp(2rem, 6vw, 3rem);
+    }
+
+    .text-fluid-xl {
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
     }
 
     .no-scrollbar::-webkit-scrollbar {
@@ -34,15 +45,24 @@
   <script type="text/babel">
     const { useState, useEffect } = React;
 
+    /* ========= 設定 ========= */
     const SHEET_ID = "1YXtuEzZHrV236tzNj7DfvdweXxAGZZNP8OVGJbujrrg";
+    // 修正：CORSエラーを回避し、かつid列がなくても直接取得できるURL
     const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=0`;
 
+    /* ========= フロア意味づけ（体験ベース） ========= */
     const floorMeta = {
-      歴史: "過去を知り、今を理解する", 文化: "手仕事と物語に触れる", 自然: "生きている環境を感じる",
-      平和: "社会と自分の関係を考える", 生活: "暮らしの中で生きる力を育てる", 社会: "社会と関わる準備をする"
+      歴史: "過去を知り、今を理解する",
+      文化: "手仕事と物語に触れる",
+      自然: "生きている環境を感じる",
+      平和: "社会と自分の関係を考える",
+      生活: "暮らしの中で生きる力を育てる",
+      社会: "社会と関わる準備をする"
     };
+
     const floors = ["歴史", "文化", "自然", "平和", "生活", "社会"];
 
+    /* ========= 初期の静的データ ========= */
     const initialFloorData = {
       歴史: { title: "歴史", color: "bg-pink-100 border-pink-300", headerColor: "bg-pink-200", sections: [] },
       文化: { title: "文化", color: "bg-green-100 border-green-300", headerColor: "bg-green-200", sections: [] },
@@ -52,6 +72,129 @@
       社会: { title: "社会", color: "bg-cyan-100 border-cyan-300", headerColor: "bg-cyan-200", sections: [] }
     };
 
+    /* ========= Components ========= */
+    const Hero = () => (
+      <section className="bg-gradient-to-b from-sky-100 to-gray-50">
+        <div className="max-w-4xl mx-auto p-8 text-center">
+          <h1 className="text-fluid-4xl font-extrabold mb-4">アルパカすく〜る 🦙</h1>
+          <p className="text-fluid-xl text-gray-700 leading-relaxed">
+            子どもから大人まで、<br />学びが社会につながる社会人予備校
+          </p>
+        </div>
+      </section>
+    );
+
+    const Header = ({ currentFloor, setCurrentFloor, meta, data }) => (
+      <header className={`${data.headerColor} sticky top-0 z-10 shadow transition-colors duration-300`}>
+        <div className="max-w-4xl mx-auto p-4">
+          <h2 className="text-xl font-extrabold">{currentFloor}</h2>
+          <p className="text-sm text-gray-700">{meta}</p>
+          <div className="flex gap-2 overflow-x-auto no-scrollbar mt-3">
+            {floors.map(f => (
+              <button key={f}
+                onClick={() => setCurrentFloor(f)}
+                className={`px-4 py-2 rounded-lg font-bold hover:bg-white transition whitespace-nowrap ${f === currentFloor ? "bg-white shadow-sm" : "bg-white/50"}`}>
+                {f}
+              </button>
+            ))}
+          </div>
+        </div>
+      </header>
+    );
+
+    const FloorContent = ({ data, onVideoClick, onModalClick }) => (
+      <main className="max-w-4xl mx-auto p-6 grid md:grid-cols-2 gap-4">
+        {data.sections.length === 0 ? (
+          <p className="col-span-full text-center py-20 text-gray-400">読み込み中、またはこのフロアのデータがありません 🦙</p>
+        ) : data.sections.map(s => (
+          <div key={s.id} className={`${data.color} border-2 rounded-xl p-6 shadow hover:shadow-md transition`}>
+            <h3 className="font-bold text-lg mb-2">{s.title}</h3>
+            <p className="text-sm text-gray-700 mb-4 whitespace-pre-wrap">{s.description}</p>
+            <div className="flex flex-wrap gap-2">
+              {s.videoId && (
+                <button onClick={() => onVideoClick(s.videoId)}
+                  className="bg-red-500 text-white px-3 py-2 rounded font-bold hover:bg-red-600 transition shadow-sm">
+                  動画を見る
+                </button>
+              )}
+              {s.actionType === "modal" && (
+                <button onClick={() => onModalClick(s)}
+                  className="bg-purple-500 text-white px-3 py-2 rounded font-bold hover:bg-purple-600 transition shadow-sm">
+                  学ぶ
+                </button>
+              )}
+              {s.isComingSoon && (
+                <button disabled
+                  className="bg-gray-300 text-gray-500 px-3 py-2 rounded font-bold cursor-not-allowed">
+                  Coming Soon
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
+      </main>
+    );
+
+    const Footer = () => (
+      <>
+        <section className="max-w-4xl mx-auto p-6">
+          <div className="bg-white border-2 border-dashed rounded-xl p-6 text-center">
+            <h3 className="font-bold text-lg mb-2">学んだことを、次の一歩へ</h3>
+            <p className="text-sm text-gray-600 mb-2">
+              体験したことは、表現を通して社会とつながっていきます。
+            </p>
+            <a href="https://furima.ryukyu-tane.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-emerald-500 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-600 transition inline-block shadow-sm">
+              文芸フリマで表現してみる
+            </a>
+          </div>
+        </section >
+
+        <section className="max-w-4xl mx-auto p-6">
+          <div className="bg-white border-2 border-dashed border-gray-200 rounded-xl p-8 text-center">
+            <p className="mb-4 text-gray-700">学びの中で使った教材や記録をまとめています。</p>
+            <a href="https://universe.tea-under.club/"
+              className="inline-block px-6 py-2 bg-blue-50 text-blue-900 rounded-full font-bold hover:bg-blue-100 transition">
+              てぃあんだぁクラブ universe
+            </a>
+          </div>
+        </section>
+
+        <footer className="bg-gray-800 text-white p-6 text-sm">
+          <div className="max-w-4xl mx-auto">
+            <p>
+              仕事は、誰かとのご縁。<br />アルパカすく〜るは、その入口をつくります。<br />
+              このコンテンツは、ご自宅から快適に学習できるよう設計されています。車椅子をご利用の方、高齢の方、外出が難しい方など、すべての方が楽しめるよう善処します。
+            </p>
+            <a href="./concept.html" className="inline-block mt-2 underline hover:text-emerald-300">
+              ▶ この学びの設計思想を読む
+            </a>
+          </div>
+        </footer>
+      </>
+    );
+
+    const VideoModal = ({ videoId, onClose }) => (
+      <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4" onClick={onClose}>
+        <div className="relative w-full max-w-4xl">
+          <button onClick={onClose} className="absolute -top-10 right-0 text-white text-sm font-bold">✕ 閉じる</button>
+          <iframe src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&playsinline=1&autoplay=1`}
+            className="w-full aspect-video rounded-lg shadow-2xl" allow="autoplay" allowFullScreen />
+        </div>
+      </div>
+    );
+
+    const ContentModal = ({ content, onClose }) => (
+      <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4" onClick={onClose}>
+        <div className="relative w-full max-w-5xl h-5/6">
+          <button onClick={onClose} className="absolute -top-10 right-0 text-white text-sm font-bold">✕ 閉じる</button>
+          <iframe src={content.modalUrl} className="w-full h-full rounded-xl bg-white shadow-2xl" onClick={e => e.stopPropagation()} />
+        </div>
+      </div>
+    );
+
     function App() {
       const [currentFloor, setCurrentFloor] = useState("歴史");
       const [videoUrl, setVideoUrl] = useState(null);
@@ -60,7 +203,8 @@
       const [debugInfo, setDebugInfo] = useState(null);
 
       useEffect(() => {
-        Papa.parse(SHEET_CSV_URL + "&t=" + new Date().getTime(), {
+        const timestamp = new Date().getTime();
+        Papa.parse(SHEET_CSV_URL + "&t=" + timestamp, {
           download: true,
           header: true,
           complete: function (results) {
@@ -71,13 +215,13 @@
             const ignoredFloors = new Set();
 
             fetchedData.forEach((item, index) => {
-              // 列名のゆらぎを吸収（日本語でも英語でも動くように）
-              const f = (item.floor || item.フロア || "").toString().trim();
-              const t = (item.title || item.タイトル || "").toString().trim();
-              const d = (item.description || item.説明 || "").toString().trim();
-              const type = (item.type || item.タイプ || "").toString().trim();
-              const url = (item.url || "").toString().trim();
-              const cs = (item.coming_soon || item.カミングスーン || "").toString().toUpperCase().trim();
+              // 【修正：お掃除＆自動ID＆日本語ヘッダー対応】
+              const f = String(item.floor || item.フロア || "").trim();
+              const t = String(item.title || item.タイトル || "").trim();
+              const d = item.description || item.説明 || "";
+              const type = String(item.type || item.タイプ || "").trim();
+              const url = String(item.url || "").trim();
+              const cs = String(item.coming_soon || item.カミングスーン || "").toUpperCase().trim();
 
               if (!f || !t) return;
 
@@ -87,7 +231,7 @@
               }
 
               const section = {
-                id: item.id || `auto-${index}`,
+                id: item.id || `row-${index}`, // id列がなければ行番号を使用
                 title: t,
                 description: d,
                 isComingSoon: cs === "TRUE"
@@ -103,75 +247,28 @@
             });
 
             setFloorData(newFloorData);
-            if (ignoredFloors.size > 0) {
-              setDebugInfo(`スプレッドシートの「${Array.from(ignoredFloors).join(", ")}」という名前は認識できません。「歴史、文化、自然、平和、生活、社会」のいずれかに書き換えてください。`);
-            }
+            setDebugInfo(ignoredFloors.size > 0 ? `無視されたフロア名: ${Array.from(ignoredFloors).join(", ")}` : null);
           }
         });
       }, []);
 
+      useEffect(() => { lucide.createIcons(); }, [currentFloor, floorData]);
+
       const data = floorData[currentFloor];
 
       return (
-        <div className="min-h-screen bg-gray-50 pb-20">
-          <header className="bg-sky-100 p-8 text-center">
-            <h1 className="text-4xl font-extrabold mb-2">アルパカすく〜る 🦙</h1>
-            <p className="text-gray-700">子どもから大人まで、学びが社会につながる社会人予備校</p>
-          </header>
-
+        <div className="min-h-screen bg-gray-50">
+          <Hero />
           {debugInfo && (
-            <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 max-w-4xl mx-auto mt-4 mx-4 shadow-sm">
-              <strong>💡 ヒント:</strong> {debugInfo}
+            <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 p-4 max-w-4xl mx-auto mt-4 mx-4 text-sm rounded shadow-sm">
+              <strong>💡 確認：</strong> {debugInfo}
             </div>
           )}
-
-          <nav className={`${data.headerColor} sticky top-0 z-10 shadow-md p-4 transition-colors duration-500`}>
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-xl font-bold">{currentFloor}</h2>
-              <p className="text-sm opacity-80 mb-3">{floorMeta[currentFloor]}</p>
-              <div className="flex gap-2 overflow-x-auto no-scrollbar">
-                {floors.map(f => (
-                  <button key={f} onClick={() => setCurrentFloor(f)}
-                    className={`px-4 py-2 rounded-lg font-bold whitespace-nowrap transition ${f === currentFloor ? "bg-white shadow" : "bg-white/40 hover:bg-white/60"}`}>
-                    {f}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </nav>
-
-          <main className="max-w-4xl mx-auto p-6 grid md:grid-cols-2 gap-6">
-            {data.sections.length === 0 ? (
-              <p className="col-span-full text-center py-20 text-gray-400">読み込み中、またはこのフロアのデータがありません 🦙</p>
-            ) : data.sections.map(s => (
-              <div key={s.id} className={`${data.color} border-2 rounded-2xl p-6 shadow hover:shadow-lg transition-all`}>
-                <h3 className="font-bold text-xl mb-3">{s.title}</h3>
-                <p className="text-gray-700 mb-6 leading-relaxed whitespace-pre-wrap">{s.description}</p>
-                <div className="flex gap-2">
-                  {s.videoId && <button onClick={() => setVideoUrl(s.videoId)} className="bg-red-500 text-white px-4 py-2 rounded-full font-bold hover:bg-red-600 shadow-sm transition">動画を見る</button>}
-                  {s.actionType === "modal" && <button onClick={() => setModal(s)} className="bg-purple-600 text-white px-4 py-2 rounded-full font-bold hover:bg-purple-700 shadow-sm transition">学ぶ</button>}
-                  {s.isComingSoon && <button disabled className="bg-gray-300 text-gray-500 px-4 py-2 rounded-full font-bold cursor-not-allowed">Coming Soon</button>}
-                </div>
-              </div>
-            ))}
-          </main>
-
-          {videoUrl && (
-            <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4" onClick={() => setVideoUrl(null)}>
-              <div className="relative w-full max-w-4xl aspect-video">
-                <iframe src={`https://www.youtube.com/embed/${videoUrl}?autoplay=1`} className="w-full h-full rounded-xl" allow="autoplay" allowFullScreen />
-              </div>
-            </div>
-          )}
-
-          {modal && (
-            <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4" onClick={() => setModal(null)}>
-              <div className="relative w-full max-w-5xl h-[85vh] bg-white rounded-2xl overflow-hidden shadow-2xl" onClick={e => e.stopPropagation()}>
-                <button onClick={() => setModal(null)} className="absolute top-4 right-4 bg-gray-100 hover:bg-gray-200 w-10 h-10 rounded-full font-bold z-10">✕</button>
-                <iframe src={modal.modalUrl} className="w-full h-full border-none" />
-              </div>
-            </div>
-          )}
+          <Header currentFloor={currentFloor} setCurrentFloor={setCurrentFloor} meta={floorMeta[currentFloor]} data={data} />
+          <FloorContent data={data} onVideoClick={setVideoUrl} onModalClick={setModal} />
+          <Footer />
+          {videoUrl && <VideoModal videoId={videoUrl} onClose={() => setVideoUrl(null)} />}
+          {modal && <ContentModal content={modal} onClose={() => setModal(null)} />}
         </div>
       );
     }
