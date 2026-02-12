@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>知的障害者の地域生活基盤 - 仲眞朝雄議員 一般質問</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B6B;
+            --secondary: #4ECDC4;
+            --accent: #FFE66D;
+            --dark: #2D3142;
+            --light: #F8F9FA;
+            --gray: #6C757D;
+            --success: #51CF66;
+            --warning: #FFB84D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark);
+            overflow-x: hidden;
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(78,205,196,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .subtitle {
+            color: var(--gray);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .video-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(255,107,107,0.3);
+        }
+
+        .video-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,107,107,0.4);
+        }
+
+        /* Toggle Switch */
+        .toggle-container {
+            background: white;
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .toggle-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 12px;
+            display: block;
+            text-align: center;
+        }
+
+        .toggle-switch {
+            display: flex;
+            background: var(--light);
+            border-radius: 40px;
+            padding: 4px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .toggle-option {
+            flex: 1;
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 700;
+            border-radius: 36px;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            color: var(--gray);
+        }
+
+        .toggle-option.active {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: white;
+            box-shadow: 0 4px 12px rgba(78,205,196,0.3);
+        }
+
+        /* Content Sections */
+        .content {
+            display: none;
+        }
+
+        .content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Ponchi-e Style */
+        .ponchi-container {
+            background: white;
+            border-radius: 24px;
+            padding: 24px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .ponchi-title {
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+        .ponchi-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        .ponchi-scene {
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .ponchi-illustration {
+            background: linear-gradient(135deg, #FFF5F5 0%, #E6F7F7 100%);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 16px;
+            border: 3px solid var(--primary);
+            position: relative;
+            min-height: 160px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ponchi-character {
+            font-size: 64px;
+            margin-bottom: 12px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .ponchi-label {
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--dark);
+            text-align: center;
+            padding: 8px 16px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .ponchi-stat {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .ponchi-description {
+            background: var(--light);
+            padding: 16px;
+            border-radius: 16px;
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--dark);
+        }
+
+        .ponchi-arrow {
+            text-align: center;
+            font-size: 32px;
+            color: var(--secondary);
+            margin: 20px 0;
+            animation: bounce-arrow 1.5s ease-in-out infinite;
+        }
+
+        @keyframes bounce-arrow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(8px); }
+        }
+
+        /* Infographic Style */
+        .info-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+            border-left: 6px solid var(--primary);
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(255,107,107,0.1) 0%, transparent 70%);
+        }
+
+        .info-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .info-icon {
+            font-size: 32px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .info-title {
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--dark);
+        }
+
+        .info-subtitle {
+            font-size: 12px;
+            color: var(--gray);
+            margin-top: 2px;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, var(--light) 0%, #E8F5F3 100%);
+            padding: 16px;
+            border-radius: 16px;
+            text-align: center;
+            border: 2px solid var(--secondary);
+        }
+
+        .stat-number {
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        .info-content {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--dark);
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-list li {
+            padding: 10px 0 10px 28px;
+            position: relative;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .info-list li:last-child {
+            border-bottom: none;
+        }
+
+        .info-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: 900;
+            font-size: 18px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin: 4px 4px 4px 0;
+        }
+
+        .badge-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .badge-info {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .badge-danger {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            margin-top: 20px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -25px;
+            top: 6px;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px rgba(255,107,107,0.2);
+        }
+
+        .timeline-content {
+            background: var(--light);
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .timeline-time {
+            color: var(--secondary);
+            font-weight: 700;
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 24px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 390px) {
+            h1 {
+                font-size: 20px;
+            }
+
+            .ponchi-title,
+            .info-title {
+                font-size: 16px;
+            }
+
+            .stat-number {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <h1>知的障害者の地域生活基盤と「親なき後」の備え</h1>
+                <div class="subtitle">令和7年12月19日配信 | 仲眞朝雄議員 一般質問</div>
+                <a href="https://www.youtube.com/watch?v=ZtDnPLeuhII" target="_blank" class="video-link">
+                    📹 動画を見る (42:42〜)
+                </a>
+            </div>
+        </div>
+
+        <!-- Toggle Switch -->
+        <div class="toggle-container">
+            <label class="toggle-label">表示形式を選択</label>
+            <div class="toggle-switch" id="toggleSwitch">
+                <div class="toggle-option active" data-view="ponchi">
+                    🎨 ポンチ絵
+                </div>
+                <div class="toggle-option" data-view="infographic">
+                    📊 インフォグラフィック
+                </div>
+            </div>
+        </div>
+
+        <!-- Ponchi-e Content -->
+        <div id="ponchi-content" class="content active">
+            <div class="ponchi-container">
+                <h2 class="ponchi-title">現状の施設状況</h2>
+                
+                <div class="ponchi-scene">
+                    <div class="ponchi-illustration">
+                        <div class="ponchi-character">🏠</div>
+                        <div class="ponchi-label">グループホーム</div>
+                        <div class="ponchi-stat">
+                            <span>定員88名</span>
+                        </div>
+                    </div>
+                    <div class="ponchi-description">
+                        村内のグループホームは定員88名で、ほぼ満杯の状態です。新規入居が難しい状況が続いています。
+                    </div>
+                </div>
+
+                <div class="ponchi-scene">
+                    <div class="ponchi-illustration">
+                        <div class="ponchi-character">🛏️</div>
+                        <div class="ponchi-label">短期入所施設</div>
+                        <div class="ponchi-stat">
+                            <span>定員22名</span>
+                        </div>
+                    </div>
+                    <div class="ponchi-description">
+                        短期入所施設も定員22名でほぼ満杯。家族の急な用事や休息のための利用が困難になっています。
+                    </div>
+                </div>
+
+                <div class="ponchi-arrow">↓</div>
+
+                <div class="ponchi-scene">
+                    <div class="ponchi-illustration" style="border-color: var(--warning);">
+                        <div class="ponchi-character">⚠️</div>
+                        <div class="ponchi-label">待機者の把握</div>
+                    </div>
+                    <div class="ponchi-description">
+                        待機者の正確な人数は村として一括把握していない状態。計画相談員が個別に調整を行っているため、全体像が不明確です。
+                    </div>
+                </div>
+
+                <div class="ponchi-arrow">↓</div>
+
+                <div class="ponchi-scene">
+                    <div class="ponchi-illustration" style="background: linear-gradient(135deg, #E6F7F7 0%, #FFF5E6 100%); border-color: var(--success);">
+                        <div class="ponchi-character">🎯</div>
+                        <div class="ponchi-label">今後の対策</div>
+                    </div>
+                    <div class="ponchi-description">
+                        副村長は次期障害者福祉計画の策定において、これらの課題解消に向けた議論を行う考えを示しました。親なき後の生活設計支援も重要な課題として認識されています。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Infographic Content -->
+        <div id="infographic-content" class="content">
+            <div class="info-card">
+                <div class="info-header">
+                    <div class="info-icon">🏠</div>
+                    <div>
+                        <div class="info-title">施設の現状</div>
+                        <div class="info-subtitle">村内の障害者支援施設</div>
+                    </div>
+                </div>
+
+                <div class="stat-grid">
+                    <div class="stat-box">
+                        <div class="stat-number">88</div>
+                        <div class="stat-label">グループホーム定員</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">22</div>
+                        <div class="stat-label">短期入所定員</div>
+                    </div>
+                </div>
+
+                <div class="info-content">
+                    <span class="badge badge-danger">ほぼ満杯</span>
+                    <p style="margin-top: 12px;">両施設とも満杯状態で、新規入居や短期利用が困難な状況が続いています。</p>
+                </div>
+            </div>
+
+            <div class="info-card" style="border-left-color: var(--warning);">
+                <div class="info-header">
+                    <div class="info-icon">⚠️</div>
+                    <div>
+                        <div class="info-title">待機者の状況</div>
+                        <div class="info-subtitle">把握の課題</div>
+                    </div>
+                </div>
+
+                <div class="info-content">
+                    <span class="badge badge-warning">課題あり</span>
+                    <ul class="info-list">
+                        <li>村として待機者数を一括把握していない</li>
+                        <li>計画相談員が個別に調整</li>
+                        <li>全体像が不明確な状態</li>
+                        <li>今後の課題として認識</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-card" style="border-left-color: var(--secondary);">
+                <div class="info-header">
+                    <div class="info-icon">👨‍👩‍👧</div>
+                    <div>
+                        <div class="info-title">「親なき後」の備え</div>
+                        <div class="info-subtitle">将来設計の支援</div>
+                    </div>
+                </div>
+
+                <div class="info-content">
+                    <p style="margin-bottom: 12px;">親が亡くなった後の生活設計支援について質問がありました。家族の不安に対する支援体制の整備が求められています。</p>
+                    <span class="badge badge-info">重要課題</span>
+                </div>
+            </div>
+
+            <div class="info-card" style="border-left-color: var(--success);">
+                <div class="info-header">
+                    <div class="info-icon">🎯</div>
+                    <div>
+                        <div class="info-title">今後の取り組み</div>
+                        <div class="info-subtitle">副村長の答弁</div>
+                    </div>
+                </div>
+
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-time">次期計画策定</div>
+                            次期障害者福祉計画の策定において課題解消に向けた議論を実施
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-time">施設整備</div>
+                            グループホームと短期入所施設の拡充を検討
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-time">支援体制</div>
+                            親なき後の生活設計支援体制の構築
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-text">
+                この情報は令和7年12月19日配信の議会動画(42:42〜)に基づいています<br>
+                詳細は動画をご覧ください
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle functionality
+        const toggleSwitch = document.getElementById('toggleSwitch');
+        const toggleOptions = document.querySelectorAll('.toggle-option');
+        const ponchiContent = document.getElementById('ponchi-content');
+        const infographicContent = document.getElementById('infographic-content');
+
+        toggleOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove active class from all options
+                toggleOptions.forEach(opt => opt.classList.remove('active'));
+                
+                // Add active class to clicked option
+                this.classList.add('active');
+                
+                // Show/hide content
+                const view = this.dataset.view;
+                if (view === 'ponchi') {
+                    ponchiContent.classList.add('active');
+                    infographicContent.classList.remove('active');
+                } else {
+                    ponchiContent.classList.remove('active');
+                    infographicContent.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
