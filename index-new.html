@@ -297,7 +297,7 @@
               if (!item.floor || !item.title) return;
 
               // データの整形
-              const floorKey = item.floor.trim(); // 余分な空白を除去
+              const floorKey = String(item.floor).trim(); // 余分な空白を除去
 
               // コード側に存在しないフロア名（例: "仕事"のままなど）が含まれていないかチェック
               if (!newFloorData[floorKey]) {
