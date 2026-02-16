@@ -16,359 +16,175 @@
         body {
             font-family: 'M PLUS Rounded 1c', sans-serif;
             background: linear-gradient(135deg, #FFE66D 0%, #A8E063 100%);
-            overflow: hidden; 
-            height: 100dvh;
-            -webkit-text-size-adjust: 100%;
+            overflow: hidden; height: 100dvh; -webkit-text-size-adjust: 100%;
         }
 
-        /* --- ルビ修正：漢字の上に正しく表示し、改行を防止 --- */
+        /* --- ルビ修正：漢字の上に正しく表示 --- */
         ruby {
             ruby-position: over;
-            white-space: nowrap; /* 熟語が途中で切れるのを防ぐ */
+            -webkit-ruby-position: before;
         }
-        rt {
-            font-size: 0.5em;
-            letter-spacing: 0.05em;
-        }
+        rt { font-size: 0.5em; }
 
         .container {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 10px;
+            height: 100%; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; padding: 10px;
         }
 
         .slide-outer {
-            background: var(--light);
-            border-radius: 30px;
-            padding: 25px 15px;
-            width: 100%;
-            max-width: 900px;
-            height: 75dvh; /* 高さを固定して安定させる */
-            overflow-y: auto;
-            position: relative;
+            background: var(--light); border-radius: 30px;
+            padding: 25px 15px; width: 100%; max-width: 900px;
+            height: 75dvh; overflow-y: auto; position: relative;
             box-shadow: 0 20px 40px rgba(0,0,0,0.2);
             -webkit-overflow-scrolling: touch;
-            z-index: 1;
         }
 
         .slide-content { display: none; }
         .slide-content.active { display: block; animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        h1 { font-family: 'Zen Maru Gothic', serif; font-size: 1.8em; color: var(--primary); text-align: center; margin-bottom: 20px; font-weight: 900; text-shadow: 2px 2px 0 var(--secondary); line-height: 1.3; }
+        h1 { font-family: 'Zen Maru Gothic', serif; font-size: 1.8em; color: var(--primary); text-align: center; margin-bottom: 20px; font-weight: 900; line-height: 1.3; }
         h2 { font-family: 'Zen Maru Gothic', serif; font-size: 1.5em; color: var(--primary); margin: 15px 0; font-weight: 800; line-height: 1.4; }
         p, li { font-size: 1.05em; line-height: 1.8; color: var(--dark); margin-bottom: 12px; }
 
-        .emoji-large { font-size: 3.5em; text-align: center; margin: 15px 0; animation: bounce 2s infinite; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-
         .info-box { background: linear-gradient(135deg, #FFE66D 0%, #A8E063 100%); padding: 18px; border-radius: 20px; margin: 15px 0; }
-        .timeline { background: white; border-left: 5px solid var(--accent); padding: 15px; margin: 15px 0; border-radius: 10px; }
-        .timeline-item { margin-bottom: 12px; padding-left: 20px; position: relative; font-size: 0.95em; }
-        .timeline-item::before { content: '📍'; position: absolute; left: -14px; font-size: 1.2em; }
+        
+        /* 学年選択ボタン */
+        .mode-select { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
+        .mode-btn { background: white; border: 3px solid var(--accent); padding: 20px; border-radius: 20px; cursor: pointer; font-size: 1.2em; font-weight: 800; color: var(--dark); transition: 0.3s; }
+        .mode-btn:active { background: var(--accent); color: white; }
 
-        /* クイズ */
-        .quiz-option {
-            background: white; border: 3px solid var(--accent); padding: 15px;
-            margin: 10px 0; border-radius: 15px; cursor: pointer; display: flex; align-items: center; gap: 10px;
-        }
-        .quiz-option.correct { background: #d4edda !important; border-color: #28a745 !important; }
-        .quiz-option.incorrect { background: #f8d7da !important; border-color: #dc3545 !important; }
-        .quiz-option.disabled { pointer-events: none; opacity: 0.7; }
-
-        .answer-reveal { background: #fff3cd; border: 3px solid #ffc107; padding: 15px; margin: 15px 0; border-radius: 15px; display: none; }
-        .answer-reveal.show { display: block; animation: slideDown 0.4s ease-out; }
-
-        /* ナビゲーション：スライドの外側に配置して確実にタップ可能にする */
-        .navigation {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            max-width: 900px;
-            margin-top: 20px;
-            gap: 15px;
-            z-index: 10;
-        }
-
-        button {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white; border: none; padding: 16px; font-size: 1.1em;
-            border-radius: 50px; cursor: pointer; font-weight: 700; flex: 1;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            touch-action: manipulation;
-        }
-        button:active { transform: scale(0.98); }
-        button:disabled { opacity: 0.3; cursor: not-allowed; }
+        .navigation { display: flex; justify-content: space-between; width: 100%; max-width: 900px; margin-top: 20px; gap: 15px; }
+        button { background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color: white; border: none; padding: 16px; font-size: 1.1em; border-radius: 50px; cursor: pointer; font-weight: 700; flex: 1; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        button:disabled { opacity: 0.3; }
 
         .progress { text-align: center; margin-top: 15px; font-size: 0.9em; font-weight: bold; }
         .highlight { background: linear-gradient(transparent 60%, #FFE66D 60%); font-weight: bold; }
-
-        /* 年表ゲーム */
-        .timeline-item-game { background: white; border: 3px solid var(--accent); padding: 12px; border-radius: 12px; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; }
-        .timeline-item-game.selected { border-color: var(--primary); background: #fff5f0; }
-        .timeline-item-game.correct { background: #d4edda; border-color: #28a745; }
-        .timeline-item-game.incorrect { background: #f8d7da; border-color: #dc3545; }
-        .timeline-item-game .number { background: var(--accent); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         
-        table { width: 100%; border-collapse: separate; border-spacing: 0 8px; min-width: 400px; }
-        th, td { padding: 10px; font-size: 0.85em; text-align: left; }
-        th { background: var(--primary); color: white; border-radius: 5px; }
-        tr { background: white; box-shadow: 0 2px 5px var(--shadow); }
+        .quiz-option { background: white; border: 3px solid var(--accent); padding: 15px; margin: 10px 0; border-radius: 15px; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+        .answer-reveal { background: #fff3cd; border: 3px solid #ffc107; padding: 15px; margin: 15px 0; border-radius: 15px; display: none; }
+        .answer-reveal.show { display: block; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="slide-outer" id="slideBox">
+            
             <div class="slide-content active" data-slide="0">
-                <h1>🏯 喜名番所を学ぼう！ 🌺</h1>
-                <div class="emoji-large">🏛️</div>
+                <h1>🏯 喜名番所を学ぼう！</h1>
                 <div class="info-box">
-                    <h2>📚 この学習サイトについて</h2>
-                    <p>沖縄の歴史ある建物「喜名番所」について、楽しく学べるよ！</p>
-                    <p>✨ 最後まで読んで、クイズに<ruby>挑戦<rt>ちょうせん</rt></ruby>しよう！</p>
+                    <p>沖縄の読谷村にある歴史ある建物「喜名番所」について学ぼう！</p>
+                    <p>まずは君にぴったりのコースを選んでね！</p>
+                </div>
+                <div class="mode-select">
+                    <div class="mode-btn" onclick="startCourse('junior')">🐥 小学生向けコース</div>
+                    <div class="mode-btn" onclick="startCourse('senior')">🎓 中高生向けコース</div>
                 </div>
             </div>
 
             <div class="slide-content" data-slide="1">
                 <h2>🏛️ 喜名番所ってなに？</h2>
-                <div class="emoji-large">🏯</div>
                 <div class="info-box">
-                    <p><strong>喜名番所（きなばんじょ）</strong>は、沖縄県の読谷村にある、昔の役場を<ruby>再現<rt>さいげん</rt></ruby>した建物だよ。</p>
-                    <p>今は<span class="highlight">「道の<ruby>駅<rt>えき</rt></ruby>」</span>として、多くの人が<ruby>訪<rt>おとず</rt></ruby>れるんだ！</p>
+                    <p><strong>喜名番所（きなばんじょ）</strong>は、昔の役場を<ruby>再現<rt>さいげん</rt></ruby>した建物だよ。</p>
+                    <p>今は<span class="highlight">「道の<ruby>駅<rt>えき</rt></ruby>」</span>として有名なんだ！</p>
                 </div>
             </div>
 
             <div class="slide-content" data-slide="2">
-                <h2>⏰ いつ建てられたの？</h2>
-                <div class="emoji-large">📅</div>
-                <p>今から約<span class="highlight">270年前の1753年ごろ</span>に建てられたよ。</p>
-                <div class="timeline">
-                    <div class="timeline-item"><strong>1753年ごろ</strong> 最初の番所が完成</div>
-                    <div class="timeline-item"><strong>1945年</strong> 戦争で<ruby>焼失<rt>しょうしつ</rt></ruby> 😢</div>
-                    <div class="timeline-item"><strong>2005年</strong> <ruby>再建<rt>さいけん</rt></ruby>された！ 🎉</div>
+                <h2>⚓ なぜペリーがやってきたの？</h2>
+                
+                <div id="junior-text" class="course-text">
+                    <p>約170年前、アメリカからペリー<ruby>提督<rt>ていとく</rt></ruby>が黒い船でやってきたよ。</p>
+                    <p><strong>理由は２つ！</strong></p>
+                    <ul>
+                        <li>🚢 遠い海でクジラをとる船に、<strong>水や食料を分ける場所</strong>が欲しかったから。</li>
+                        <li>🤝 日本と<strong>商売（貿易）</strong>をしたかったから。</li>
+                    </ul>
+                </div>
+
+                <div id="senior-text" class="course-text" style="display:none;">
+                    <h3>🇺🇸 1853年、東インド艦隊司令長官として来航</h3>
+                    <p>当時、アメリカは太平洋での捕鯨や中国との貿易を強化していました。</p>
+                    <ul>
+                        <li><strong>石炭補給地の確保：</strong> 蒸気船の燃料となる石炭や、水・食料の補給基地が必要でした。</li>
+                        <li><strong>市場の開拓：</strong> 日本と貿易を行うための「開国」を要求しました。</li>
+                    </ul>
+                    <p>沖縄（琉球）は、その中継地点として非常に重要な場所だったのです。</p>
                 </div>
             </div>
 
             <div class="slide-content" data-slide="3">
-                <h2>💼 どんな役割があったの？</h2>
-                <div class="emoji-large">🏢</div>
-                <p>喜名番所は、<ruby>琉球<rt>りゅうきゅう</rt></ruby><ruby>王国<rt>おうこく</rt></ruby>時代の役所だったんだ。</p>
-                <ul>
-                    <li style="margin-left:20px;">村の<ruby>政治<rt>せいじ</rt></ruby>や<ruby>行政<rt>ぎょうせい</rt></ruby>を行う場所</li>
-                    <li style="margin-left:20px;">旅人が休む場所</li>
-                </ul>
+                <h2>🏯 喜名番所とペリー</h2>
+                <p>ペリーたちは首里城へ向かう途中で、喜名番所に立ち寄りました。</p>
+                <div class="info-box">
+                    <p>当時の記録では、ペリーたちはここで<strong>お茶やタバコ</strong>で<ruby>接待<rt>せったい</rt></ruby>されたと書かれているんだよ！</p>
+                </div>
             </div>
 
             <div class="slide-content" data-slide="4">
-                <h2>⚓ ペリー<ruby>提督<rt>ていとく</rt></ruby>がやってきた！</h2>
-                <div class="emoji-large">🚢</div>
-                <div class="info-box">
-                    <h3>🌟 ペリー<ruby>提督<rt>ていとく</rt></ruby>って誰？</h3>
-                    <p>マシュー・ペリーはアメリカの偉い人。日本を<ruby>開国<rt>かいこく</rt></ruby>させるためにやってきたんだ。</p>
-                </div>
-                <div class="timeline">
-                    <div class="timeline-item"><strong>1853年6月</strong> 喜名番所を<ruby>訪<rt>おとず</rt></ruby>れた</div>
+                <h2>❓ クイズ</h2>
+                <h3>ペリーが日本に来た目的のひとつは？</h3>
+                <div class="quiz-option" onclick="handleQuiz(this, true)">✨ 船の補給基地をつくるため</div>
+                <div class="quiz-option" onclick="handleQuiz(this, false)">🏝️ 遊びにきた</div>
+                <div class="answer-reveal" id="quiz-ans">
+                    <p><strong>💡 正解！</strong> 水や食料、石炭を補給する場所が欲しかったんだね。</p>
                 </div>
             </div>
 
             <div class="slide-content" data-slide="5">
-                <h2>📜 その後の歴史</h2>
-                <p>ペリーが来たあと、日本は大きな変化を迎えたよ。</p>
-                <div class="timeline">
-                    <div class="timeline-item"><strong>1854年3月</strong> 日米和親<ruby>条約<rt>じょうやく</rt></ruby>を締結</div>
-                    <div class="timeline-item"><strong>1854年7月</strong> 琉球とも<ruby>条約<rt>じょうやく</rt></ruby>を締結</div>
-                </div>
-            </div>
-
-            <div class="slide-content" data-slide="6">
-                <h2>📝 名前の変化</h2>
-                <div style="overflow-x:auto;">
-                    <table>
-                        <thead><tr><th>時代</th><th>名前</th></tr></thead>
-                        <tbody>
-                            <tr><td>琉球王国</td><td>読谷山間切番所</td></tr>
-                            <tr><td>明治時代</td><td>読谷山村役場</td></tr>
-                            <tr><td>平成</td><td>道の駅 喜名番所</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="slide-content" data-slide="7">
-                <h2>🏗️ 建物の特ちょう</h2>
-                <p><strong>くぎを使わない</strong><ruby>伝統<rt>でんとう</rt></ruby>的な工法で作られているよ。</p>
-                <ul>
-                    <li style="margin-left:20px;">灰色（はい色）の瓦</li>
-                    <li style="margin-left:20px;">チャーギの木の柱</li>
-                </ul>
-            </div>
-
-            <div class="slide-content" data-slide="8">
-                <h2>🏪 どんな施設？</h2>
-                <p>ここは「歴史を学ぶ場所」としての役割を大切にしているんだ。</p>
-                <div class="info-box">
-                    <p>✅ 観光案内所・休憩所</p>
-                    <p>❌ レストラン・お土産屋</p>
-                </div>
-            </div>
-
-            <div class="slide-content" data-slide="9">
-                <h2>📚 ガイドさんがいるよ</h2>
-                <div class="emoji-large">👥</div>
-                <p><ruby>案内人<rt>あんないにん</rt></ruby>さんが常駐していて、読谷の歴史を詳しく教えてくれるよ！</p>
-            </div>
-
-            <div class="slide-content" data-slide="10">
-                <h2>🎮 年表並べ替えゲーム</h2>
-                <p>2つの項目を順番にタップして入れ替え、正しい順（昔→今）に並べよう！</p>
-                <div id="timeline-items" style="margin:15px 0;"></div>
-                <button onclick="checkTimelineAnswer()" style="width:100%;">答え合わせ ✨</button>
-                <div id="timeline-result" class="answer-reveal">
-                    <h3 id="timeline-feedback"></h3>
-                </div>
-            </div>
-
-            <div class="slide-content" data-slide="11">
-                <h2>🎯 まとめ</h2>
-                <p>喜名番所は、沖縄の歴史を今に伝えるとても大切な場所なんだね。</p>
-            </div>
-
-            <div class="slide-content" data-slide="12">
-                <h2>❓ クイズ1</h2>
-                <h3>昔は何をする場所だった？</h3>
-                <div class="quiz-option" data-answer="correct"><span>🏢</span> 村の政治を行う役所</div>
-                <div class="quiz-option" data-answer="incorrect"><span>🏪</span> 道具を売るお店</div>
-                <div class="answer-reveal"><h3>💡 正解：役所</h3></div>
-            </div>
-
-            <div class="slide-content" data-slide="13">
-                <h2>❓ クイズ2</h2>
-                <h3>ペリーが来たのは何年前？</h3>
-                <div class="quiz-option" data-answer="correct"><span>📅</span> 約170年前</div>
-                <div class="quiz-option" data-answer="incorrect"><span>📅</span> 約50年前</div>
-                <div class="answer-reveal"><h3>💡 正解：約170年前</h3></div>
-            </div>
-
-            <div class="slide-content" data-slide="14">
-                <h2>❓ クイズ3</h2>
-                <h3>売店がない理由は？</h3>
-                <div class="quiz-option" data-answer="correct"><span>🏛️</span> 歴史を学ぶ場所だから</div>
-                <div class="quiz-option" data-answer="incorrect"><span>👷</span> 工事中だから</div>
-                <div class="answer-reveal"><h3>💡 正解：歴史を学ぶ場所だから</h3></div>
-            </div>
-
-            <div class="slide-content" data-slide="15">
-                <h2>❓ クイズ4</h2>
-                <h3>建物の特徴は？</h3>
-                <div class="quiz-option" data-answer="correct"><span>🎨</span> くぎを使わず建てた</div>
-                <div class="quiz-option" data-answer="incorrect"><span>🏗️</span> コンクリート製</div>
-                <div class="answer-reveal"><h3>💡 正解：くぎを使っていない</h3></div>
-            </div>
-
-            <div class="slide-content" data-slide="16">
                 <h1>🎉 学習完了！</h1>
-                <div class="emoji-large">🏆</div>
-                <p>喜名番所マスターになったね！おめでとう！</p>
-                <button onclick="location.reload()" style="width:100%; margin-top:20px;">もう一度学ぶ 🔄</button>
+                <p>喜名番所とペリーの歴史、よくわかったかな？</p>
+                <button onclick="location.reload()" style="margin-top:20px; width:100%;">最初に戻る 🔄</button>
             </div>
         </div>
 
-        <div class="navigation">
-            <button id="prevBtn" onclick="changeSlide(-1)">⬅️ 前へ</button>
-            <button id="nextBtn" onclick="changeSlide(1)">次へ ➡️</button>
+        <div class="navigation" id="nav-bar" style="display:none;">
+            <button onclick="changeSlide(-1)">⬅️ 前へ</button>
+            <button onclick="changeSlide(1)">次へ ➡️</button>
         </div>
-        <div class="progress" id="progress">1 / 17</div>
+        <div class="progress" id="progress-text" style="display:none;"></div>
     </div>
 
     <script>
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide-content');
-        const totalSlides = slides.length;
-        let selectedItem = null;
+        let selectedCourse = 'junior';
 
-        const timelineEvents = [
-            { id: 1, year: "1753年", event: "喜名番所が完成", order: 1 },
-            { id: 2, year: "1853年", event: "ペリーが来訪", order: 2 },
-            { id: 3, year: "1945年", event: "戦争で焼失", order: 3 },
-            { id: 4, year: "2005年", event: "再建された", order: 4 }
-        ];
-
-        function initTimelineGame() {
-            const container = document.getElementById('timeline-items');
-            if (!container) return;
-            container.innerHTML = '';
-            [...timelineEvents].sort(() => Math.random() - 0.5).forEach((item, idx) => {
-                const div = document.createElement('div');
-                div.className = 'timeline-item-game';
-                div.dataset.id = item.id;
-                div.innerHTML = `<div class="number">${idx+1}</div><div><strong>${item.year}</strong>: ${item.event}</div>`;
-                div.onclick = function() {
-                    if (this.classList.contains('correct')) return;
-                    if (!selectedItem) {
-                        selectedItem = this;
-                        this.classList.add('selected');
-                    } else {
-                        const items = [...container.children];
-                        const fromIdx = items.indexOf(selectedItem);
-                        const toIdx = items.indexOf(this);
-                        if (fromIdx < toIdx) this.after(selectedItem); else this.before(selectedItem);
-                        selectedItem.classList.remove('selected');
-                        selectedItem = null;
-                        updateNumbers();
-                    }
-                };
-                container.appendChild(div);
-            });
-        }
-
-        function updateNumbers() {
-            document.querySelectorAll('.timeline-item-game .number').forEach((n, i) => n.innerText = i + 1);
-        }
-
-        function checkTimelineAnswer() {
-            const items = document.querySelectorAll('.timeline-item-game');
-            let correct = 0;
-            items.forEach((item, i) => {
-                const ev = timelineEvents.find(e => e.id == item.dataset.id);
-                if (ev.order === i + 1) { item.classList.add('correct'); correct++; }
-                else item.classList.add('incorrect');
-            });
-            const feedback = document.getElementById('timeline-feedback');
-            document.getElementById('timeline-result').classList.add('show');
-            feedback.innerText = correct === 4 ? "🎉 全問正解！" : "💪 並び替えてみて！";
+        function startCourse(mode) {
+            selectedCourse = mode;
+            document.getElementById('junior-text').style.display = (mode === 'junior') ? 'block' : 'none';
+            document.getElementById('senior-text').style.display = (mode === 'senior') ? 'block' : 'none';
+            
+            document.getElementById('nav-bar').style.display = 'flex';
+            document.getElementById('progress-text').style.display = 'block';
+            changeSlide(1);
         }
 
         function showSlide(n) {
-            slides.forEach((s, i) => s.classList.toggle('active', i === n));
+            slides.forEach(s => s.classList.remove('active'));
             currentSlide = n;
-            document.getElementById('prevBtn').disabled = n === 0;
-            document.getElementById('nextBtn').style.display = (n === totalSlides - 1) ? 'none' : 'inline-block';
-            document.getElementById('progress').innerText = `${n + 1} / ${totalSlides}`;
-            if (n === 10) initTimelineGame();
+            slides[currentSlide].classList.add('active');
+            
+            // プログレス表示
+            document.getElementById('progress-text').innerText = `${currentSlide} / ${slides.length - 1}`;
             document.getElementById('slideBox').scrollTop = 0;
         }
 
         function changeSlide(d) {
             const next = currentSlide + d;
-            if (next >= 0 && next < totalSlides) {
+            if (next >= 0 && next < slides.length) {
                 showSlide(next);
             }
         }
 
-        document.querySelectorAll('.quiz-option').forEach(opt => {
-            opt.addEventListener('click', function() {
-                const parent = this.closest('.slide-content');
-                parent.querySelectorAll('.quiz-option').forEach(o => o.classList.add('disabled'));
-                this.classList.add(this.dataset.answer);
-                parent.querySelector('.answer-reveal').classList.add('show');
-            });
-        });
-
-        // 起動
-        showSlide(0);
+        function handleQuiz(el, isCorrect) {
+            if (isCorrect) {
+                el.style.background = '#d4edda';
+                document.getElementById('quiz-ans').classList.add('show');
+            } else {
+                el.style.background = '#f8d7da';
+            }
+        }
     </script>
 </body>
 </html>
