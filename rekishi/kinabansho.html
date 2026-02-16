@@ -7,49 +7,68 @@
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
         :root {
             --primary: #FF6B35; --secondary: #F7931E; --accent: #4ECDC4;
             --dark: #2C3E50; --light: #FFF8F0; --shadow: rgba(0, 0, 0, 0.1);
         }
+
         body {
             font-family: 'M PLUS Rounded 1c', sans-serif;
             background: linear-gradient(135deg, #FFE66D 0%, #A8E063 100%);
             overflow: hidden; height: 100dvh; -webkit-text-size-adjust: 100%;
         }
-        /* ルビ：漢字の上に表示 */
-        ruby { ruby-position: over; -webkit-ruby-position: before; white-space: nowrap; }
-        rt { font-size: 0.55em; line-height: 1; }
+
+        /* --- ルビ修正：漢字の上に表示し、熟語が途切れないようにする --- */
+        ruby {
+            ruby-position: over;
+            -webkit-ruby-position: before;
+            display: inline-block; /* 熟語の途中で改行されるのを防ぐ */
+            text-align: center;
+        }
+        rt {
+            font-size: 0.5em;
+            line-height: 1.2;
+            display: block;
+        }
 
         .container { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; }
+
         .slide-outer {
             background: var(--light); border-radius: 30px; padding: 25px 15px; width: 100%; max-width: 900px;
-            height: 78dvh; overflow-y: auto; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            height: 75dvh; overflow-y: auto; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
             -webkit-overflow-scrolling: touch;
         }
+
         .slide-content { display: none; }
         .slide-content.active { display: block; animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        h1 { font-family: 'Zen Maru Gothic', serif; font-size: 1.7em; color: var(--primary); text-align: center; margin-bottom: 20px; font-weight: 900; line-height: 1.3; }
-        h2 { font-family: 'Zen Maru Gothic', serif; font-size: 1.4em; color: var(--primary); margin: 15px 0; font-weight: 800; border-bottom: 2px solid var(--accent); }
-        p, li { font-size: 1em; line-height: 1.7; color: var(--dark); margin-bottom: 12px; }
+        h1 { font-family: 'Zen Maru Gothic', serif; font-size: 1.8em; color: var(--primary); text-align: center; margin: 10px 0 20px; font-weight: 900; line-height: 1.3; }
+        h2 { font-family: 'Zen Maru Gothic', serif; font-size: 1.5em; color: var(--primary); margin: 15px 0; font-weight: 800; border-bottom: 2px solid var(--accent); padding-bottom: 5px; }
+        p, li { font-size: 1.05em; line-height: 1.8; color: var(--dark); margin-bottom: 15px; }
 
-        .info-box { background: white; border-radius: 20px; padding: 15px; margin: 15px 0; border-left: 5px solid var(--secondary); }
+        .info-box { background: white; border-radius: 20px; padding: 15px; margin: 15px 0; border-left: 6px solid var(--secondary); box-shadow: 0 5px 15px var(--shadow); }
         
-        /* 学年選択 */
-        .mode-btn { background: white; border: 3px solid var(--accent); padding: 15px; border-radius: 20px; cursor: pointer; font-size: 1em; font-weight: 800; margin-bottom: 10px; text-align: center; }
-        
-        /* クイズ */
-        .quiz-option { background: white; border: 3px solid var(--accent); padding: 12px; margin: 8px 0; border-radius: 15px; cursor: pointer; font-size: 0.95em; }
+        /* 学年選択ボタン */
+        .mode-select { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+        .mode-btn { background: white; border: 3px solid var(--accent); padding: 15px; border-radius: 20px; cursor: pointer; font-size: 1.1em; font-weight: 800; text-align: center; transition: 0.3s; }
+        .mode-btn:active { background: var(--accent); color: white; }
+
+        .navigation { display: flex; justify-content: space-between; width: 100%; max-width: 900px; margin-top: 15px; gap: 15px; }
+        button { background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color: white; border: none; padding: 16px; font-size: 1.1em; border-radius: 50px; cursor: pointer; font-weight: 700; flex: 1; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        button:disabled { opacity: 0.3; }
+
+        /* 3択クイズ */
+        .quiz-option { background: white; border: 3px solid var(--accent); padding: 12px; margin: 10px 0; border-radius: 15px; cursor: pointer; font-size: 1em; display: flex; align-items: center; gap: 10px; }
         .quiz-option.correct { background: #d4edda !important; border-color: #28a745 !important; }
         .quiz-option.incorrect { background: #f8d7da !important; border-color: #dc3545 !important; }
-        .answer-reveal { background: #fff3cd; border: 3px solid #ffc107; padding: 15px; margin: 10px 0; border-radius: 15px; display: none; }
-        .answer-reveal.show { display: block; }
+        .quiz-option.disabled { pointer-events: none; opacity: 0.7; }
+        .answer-reveal { background: #fff3cd; border: 3px solid #ffc107; padding: 15px; margin: 15px 0; border-radius: 15px; display: none; }
+        .answer-reveal.show { display: block; animation: slideDown 0.4s ease-out; }
 
-        .navigation { display: flex; justify-content: space-between; width: 100%; max-width: 900px; margin-top: 15px; gap: 10px; }
-        button { background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color: white; border: none; padding: 15px; font-size: 1em; border-radius: 50px; cursor: pointer; font-weight: 700; flex: 1; }
-        button:disabled { opacity: 0.3; }
-        .progress { text-align: center; margin-top: 10px; font-size: 0.8em; font-weight: bold; }
+        .progress { text-align: center; margin-top: 15px; font-size: 0.9em; font-weight: bold; }
+        .highlight { background: linear-gradient(transparent 60%, #FFE66D 60%); font-weight: bold; }
     </style>
 </head>
 <body>
@@ -57,68 +76,93 @@
         <div class="slide-outer" id="slideBox">
             
             <div class="slide-content active" data-slide="0">
-                <h1>🏯 喜名番所を学ぼう！</h1>
-                <div class="info-box"><p>今の自分にぴったりのコースを選んでね。ペリー提督と読谷の歴史を深掘りしよう！</p></div>
-                <div class="mode-btn" onclick="startCourse('junior')">🐥 小学生：やさしい</div>
-                <div class="mode-btn" onclick="startCourse('middle')">✏️ 中学生：標準</div>
-                <div class="mode-btn" onclick="startCourse('high')">🎓 高校生：専門的</div>
+                <h1>🏯 <ruby>喜名番所<rt>きなばんじょ</rt></ruby>を学ぼう！</h1>
+                <div class="info-box">
+                    <p><ruby>読谷村<rt>よみたんそん</rt></ruby>の歴史ある建物「<ruby>喜名番所<rt>きなばんじょ</rt></ruby>」を学ぼう！コースを選んでね。</p>
+                </div>
+                <div class="mode-select">
+                    <div class="mode-btn" onclick="startCourse('junior')">🐥 小学生：やさしい解説</div>
+                    <div class="mode-btn" onclick="startCourse('middle')">✏️ 中学生：標準的な歴史</div>
+                    <div class="mode-btn" onclick="startCourse('high')">🎓 高校生：専門的な背景</div>
+                </div>
             </div>
 
             <div class="slide-content" data-slide="1">
-                <h2>🏛️ 喜名番所ってどんな場所？</h2>
-                <p>喜名番所（きなばんじょ）は、琉球王国時代に「読谷山間切（ゆんたんざまぎり）」の役所として使われていた建物です。</p>
+                <h2>🏛️ <ruby>喜名番所<rt>きなばんじょ</rt></ruby>ってなに？</h2>
                 <div class="info-box">
-                    <p class="junior-only">今の市役所や村役場のような、村で一番大事な場所だったんだよ！</p>
-                    <p class="middle-only" style="display:none;">行政機能だけでなく、首里から北部へ向かう役人の宿舎としての役割もありました。</p>
-                    <p class="high-only" style="display:none;">宿道（主要道路）沿いの要所に設置され、地域の統治と情報の伝達、さらには接客拠点としての機能を備えていました。</p>
+                    <p><strong><ruby>喜名番所<rt>きなばんじょ</rt></ruby></strong>は、昔の<ruby>役場<rt>やくば</rt></ruby>を<ruby>再現<rt>さいげん</rt></ruby>した建物だよ。</p>
+                    <p>今は<span class="highlight">「道の<ruby>駅<rt>えき</rt></ruby>」</span>として、多くの人が<ruby>訪<rt>おとず</rt></ruby>れるんだ！</p>
                 </div>
+                <p class="high-only" style="display:none;"><ruby>琉球王国<rt>りゅうきゅうおうこく</rt></ruby>時代の行政区画である「<ruby>間切<rt>まぎり</rt></ruby>」の役所を<ruby>番所<rt>ばんじょ</rt></ruby>と呼びました。ここは<ruby>読谷山<rt>ゆんたんざ</rt></ruby><ruby>間切<rt>まぎり</rt></ruby>の拠点でした。</p>
             </div>
 
             <div class="slide-content" data-slide="2">
                 <h2>⚓ なぜペリーは日本に来たの？</h2>
+                
                 <div class="junior-only">
-                    <p>アメリカで使っていた大きな船のために、<strong>水や食べ物をわけてもらう場所</strong>が必要だったんだ。それに、日本と<strong>商売（貿易）</strong>をしたかったんだよ。</p>
+                    <p>アメリカから来たペリー<ruby>提督<rt>ていとく</rt></ruby>には、<strong>２つの大きな目的</strong>があったよ。</p>
+                    <ul>
+                        <li>🚢 クジラをとる船のために、<strong>水や食べ物をわけてもらう場所</strong>がほしかった。</li>
+                        <li>🤝 日本と<strong><ruby>貿易<rt>ぼうえき</rt></ruby>（商売）</strong>をして、お互いの国の物を売り買いしたかった。</li>
+                    </ul>
                 </div>
+
                 <div class="middle-only" style="display:none;">
-                    <p>捕鯨船の<strong>薪水給与（しんすいきゅうよ）</strong>や、中国航路を走る蒸気船の<strong>石炭補給</strong>のための拠点確保が主な目的でした。</p>
+                    <p>1853年、アメリカのペリーが来航した背景には、太平洋航路の拡大がありました。</p>
+                    <ul>
+                        <li>捕鯨船（クジラをとる船）の<strong><ruby>薪水給与<rt>しんすいきゅうよ</rt></ruby></strong>（水や燃料の補給）の拠点がほしかった。</li>
+                        <li>中国市場との<ruby>貿易<rt>ぼうえき</rt></ruby>を有利に進めるため、日本を中継地点にしたかった。</li>
+                    </ul>
                 </div>
+
                 <div class="high-only" style="display:none;">
-                    <p>米国の太平洋戦略に基づき、<strong>捕鯨産業の保護</strong>と清への進出に向けた<strong>地政学的な中継拠点</strong>の確保を狙っていました。また、当時最新の蒸気船のための石炭補給地として日本を「開国」させる必要があったのです。</p>
+                    <p>19世紀、アメリカは太平洋進出を加速させていました。</p>
+                    <ul>
+                        <li><strong>捕鯨産業の保護：</strong> 当時、鯨油は照明燃料として不可欠で、北太平洋での捕鯨船の補給地（水・食料）が急務でした。</li>
+                        <li><strong>蒸気船の石炭補給：</strong> 帆船から蒸気船への転換期。中国への航路を確立するため、日本（琉球）を石炭補給の拠点とする必要がありました。</li>
+                        <li><strong>地政学的戦略：</strong> 清との貿易を拡大させるため、太平洋の覇権を握る「中継地」としての日本を開国させる狙いがありました。</li>
+                    </ul>
                 </div>
             </div>
 
             <div class="slide-content" data-slide="3">
-                <h2>🏯 喜名番所での「もてなし」</h2>
-                <p>1853年、首里へ向かうペリー一行を喜名番所で迎え、お茶やお菓子を出しました。</p>
+                <h2>🏯 <ruby>喜名番所<rt>きなばんじょ</rt></ruby>での「もてなし」</h2>
+                <p>1853年6月6日、<ruby>首里城<rt>しゅりじょう</rt></ruby>に向かう途中のペリー一行を、ここ<ruby>喜名番所<rt>きなばんじょ</rt></ruby>で迎えました。</p>
                 <div class="info-box">
-                    <p class="junior-only">怖い顔をしたペリーさんたちを、村の人たちは精一杯おもてなししたんだよ。</p>
-                    <p class="middle-only" style="display:none;">武力衝突を避けるための外交手段として、丁重なもてなしを行い、緊張を緩和させようとしました。</p>
-                    <p class="high-only" style="display:none;">王国政府は直接的な軍事衝突を回避するため、番所等の拠点での「接遇」を外交上の緩衝材として活用する戦略をとりました。</p>
+                    <p class="junior-only">怖い顔をしたペリーさんたちを、村の人たちは精一杯お茶やお菓子でもてなしたんだよ。</p>
+                    <p class="middle-only" style="display:none;">武力衝突を避けるための外交戦略として、丁重な<ruby>接待<rt>せったい</rt></ruby>を行いました。当時の記録には、お茶、タバコ、菓子が振る舞われたとあります。</p>
+                    <p class="high-only" style="display:none;">王国政府は直接の武力行使を避けるため、「接遇」という形で時間稼ぎと緊張緩和を図りました。ペリーの日記にも、この地での休息と<ruby>接待<rt>せったい</rt></ruby>が記録されています。</p>
                 </div>
             </div>
 
             <div class="slide-content" data-slide="4">
-                <h2>🏗️ 釘を一本も使わない建物</h2>
-                <p>現在の建物は当時の技法で再現されています。柱にはシロアリに強い<ruby>チャーギ<rt>イヌマキ</rt></ruby>が使われています。</p>
-                <p class="high-only" style="display:none;">伝統的な「貫（ぬき）工法」により、地震の揺れを逃がす構造になっており、釘を使わずに組み上げられています。</p>
+                <h2>🏗️ くぎを一本も使わない技術</h2>
+                <p>今の建物は2005年に<ruby>再建<rt>さいけん</rt></ruby>されたものだけど、当時のすごい技術を使っているよ。</p>
+                <ul>
+                    <li><strong><ruby>貫工法<rt>ぬきこうほう</rt></ruby>：</strong> 柱を横木でつないで、くぎを使わずに丈夫にする作り方。</li>
+                    <li><strong>チャーギ：</strong> シロアリに強い「イヌマキ」という木を使っているよ。</li>
+                </ul>
             </div>
 
             <div class="slide-content" data-slide="5">
                 <h2>❓ クイズ</h2>
-                <h3 id="quiz-q">ペリーが日本に求めた一番の目的は？</h3>
-                <div class="quiz-option" onclick="handleQuiz(this, true)">A. 船の補給地を確保するため</div>
-                <div class="quiz-option" onclick="handleQuiz(this, false)">B. 沖縄に旅行に来たかったから</div>
-                <div class="quiz-option" onclick="handleQuiz(this, false)">C. 新しい食べ物を探すため</div>
+                <h3 id="quiz-q">ペリーが日本に一番求めていたものは何？</h3>
+                <div class="quiz-option" onclick="handleQuiz(this, true)">1. 船の補給地を確保するため</div>
+                <div class="quiz-option" onclick="handleQuiz(this, false)">2. 観光旅行をしたかったから</div>
+                <div class="quiz-option" onclick="handleQuiz(this, false)">3. 沖縄でお店を開きたかったから</div>
                 <div class="answer-reveal" id="reveal">
-                    <p><strong>💡 正解はA！</strong> 蒸気船の石炭や、船乗りのための水・食料がどうしても必要だったんだね。</p>
+                    <p><strong>💡 正解は「1. 船の補給地」だよ！</strong></p>
+                    <p>当時は船で長旅をするのに、水や燃料（石炭）がどうしても必要だったんだね。</p>
                 </div>
             </div>
 
             <div class="slide-content" data-slide="6">
-                <h1>🎉 クリア！</h1>
-                <div class="emoji-large" style="text-align:center;">🏆</div>
-                <p>喜名番所の歴史を学んでくれてありがとう！読谷村に来たら、ぜひ本物の建物を見てみてね。</p>
-                <button onclick="location.reload()" style="width:100%; margin-top:20px;">もう一度学ぶ 🔄</button>
+                <h1>🎉 <ruby>学習完了<rt>がくしゅうかんりょう</rt></ruby>！</h1>
+                <div class="info-box" style="text-align:center;">
+                    <p><ruby>喜名番所<rt>きなばんじょ</rt></ruby>の歴史、よくわかったかな？</p>
+                    <p><ruby>読谷村<rt>よみたんそん</rt></ruby>に来たら、ぜひ本物の建物を見てみてね！</p>
+                </div>
+                <button onclick="location.reload()" style="margin-top:20px; width:100%;">最初からやり直す 🔄</button>
             </div>
         </div>
 
@@ -132,10 +176,9 @@
     <script>
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide-content');
-        let selectedMode = 'junior';
+        const totalSlides = slides.length;
 
         function startCourse(m) {
-            selectedMode = m;
             document.querySelectorAll('.junior-only').forEach(el => el.style.display = (m==='junior'?'block':'none'));
             document.querySelectorAll('.middle-only').forEach(el => el.style.display = (m==='middle'?'block':'none'));
             document.querySelectorAll('.high-only').forEach(el => el.style.display = (m==='high'?'block':'none'));
@@ -149,20 +192,20 @@
             slides.forEach(s => s.classList.remove('active'));
             currentSlide = n;
             slides[currentSlide].classList.add('active');
-            document.getElementById('prog-text').innerText = `${currentSlide} / ${slides.length - 1}`;
+            document.getElementById('prog-text').innerText = `${currentSlide} / ${totalSlides - 1}`;
             document.getElementById('slideBox').scrollTop = 0;
         }
 
         function changeSlide(d) {
             const next = currentSlide + d;
-            if (next >= 0 && next < slides.length) {
+            if (next >= 0 && next < totalSlides) {
                 showSlide(next);
             }
         }
 
         function handleQuiz(el, isCorrect) {
             const options = el.parentNode.querySelectorAll('.quiz-option');
-            options.forEach(o => o.style.pointerEvents = 'none');
+            options.forEach(o => o.classList.add('disabled'));
             el.classList.add(isCorrect ? 'correct' : 'incorrect');
             document.getElementById('reveal').classList.add('show');
         }
