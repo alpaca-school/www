@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>うるま市田場 平和学習教材</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: clamp(1.2rem, 5vw, 2rem);
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .subtitle {
+            font-size: clamp(0.8rem, 3vw, 1rem);
+            opacity: 0.9;
+        }
+
+        .toggle-container {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            gap: 10px;
+            background: #f8f9fa;
+            flex-wrap: wrap;
+        }
+
+        .toggle-btn {
+            padding: 12px 24px;
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .toggle-btn:not(.active) {
+            background: white;
+            color: #333;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ポンチ絵スタイル */
+        .ponchi-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .ponchi-title {
+            font-size: clamp(1.1rem, 4vw, 1.5rem);
+            color: #1e3c72;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            font-weight: bold;
+        }
+
+        .ponchi-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .ponchi-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+            position: relative;
+        }
+
+        .ponchi-box h3 {
+            color: #1e3c72;
+            font-size: clamp(1rem, 3.5vw, 1.2rem);
+            margin-bottom: 8px;
+        }
+
+        .ponchi-box p {
+            font-size: clamp(0.85rem, 3vw, 1rem);
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .arrow {
+            text-align: center;
+            font-size: 2rem;
+            color: #667eea;
+            margin: 5px 0;
+        }
+
+        /* インフォグラフィックスタイル */
+        .infographic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .info-icon {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .info-title {
+            font-size: clamp(1rem, 3.5vw, 1.3rem);
+            font-weight: bold;
+            color: #1e3c72;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .info-content {
+            font-size: clamp(0.85rem, 3vw, 0.95rem);
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .timeline-date {
+            min-width: 100px;
+            font-weight: bold;
+            color: #667eea;
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            margin-left: 20px;
+        }
+
+        .timeline-content h4 {
+            color: #1e3c72;
+            margin-bottom: 8px;
+            font-size: clamp(0.95rem, 3.5vw, 1.1rem);
+        }
+
+        .timeline-content p {
+            font-size: clamp(0.85rem, 3vw, 0.95rem);
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .stat-number {
+            font-size: clamp(2rem, 8vw, 3rem);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            opacity: 0.9;
+        }
+
+        .key-message {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 3px solid #fdcb6e;
+        }
+
+        .key-message h3 {
+            color: #2d3436;
+            font-size: clamp(1.1rem, 4vw, 1.4rem);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .key-message p {
+            color: #2d3436;
+            font-size: clamp(0.9rem, 3vw, 1.05rem);
+            line-height: 1.8;
+            text-align: center;
+        }
+
+        @media (max-width: 390px) {
+            .container {
+                border-radius: 10px;
+            }
+            
+            header {
+                padding: 15px;
+            }
+            
+            .content {
+                padding: 15px;
+            }
+            
+            .ponchi-section {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>うるま市田場 平和学習教材</h1>
+            <p class="subtitle">琉球王国から戦後復興まで：命と教育の物語</p>
+        </header>
+
+        <div class="toggle-container">
+            <button class="toggle-btn active" onclick="switchView('ponchi')">ポンチ絵</button>
+            <button class="toggle-btn" onclick="switchView('infographic')">インフォグラフィック</button>
+        </div>
+
+        <div class="content">
+            <!-- ポンチ絵ビュー -->
+            <div id="ponchi" class="view active">
+                <div class="ponchi-section">
+                    <h2 class="ponchi-title">平和学習の三段階アプローチ</h2>
+                    <div class="ponchi-flow">
+                        <div class="ponchi-box" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+                            <h3>第一段階：豊かな村の発見</h3>
+                            <p>🌊 琉球王国時代の井戸や伝説を歩き、この土地が本来持っていた「命を育む力」を体感する</p>
+                            <p><strong>ポイント:</strong> 深さ17.2mの深井戸（1757年開削）、犬名河の伝説、ノロ制度と祭祀文化</p>
+                        </div>
+                        
+                        <div class="arrow">↓</div>
+                        
+                        <div class="ponchi-box" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
+                            <h3>第二段階：戦場の断裂</h3>
+                            <p>💔 グスクの壕や収容所の跡地を確認し、戦争が平穏な生活をどのように破壊したかを分析する</p>
+                            <p><strong>ポイント:</strong> 聖域の陣地化、住民への手榴弾配布、収容所での管理生活</p>
+                        </div>
+                        
+                        <div class="arrow">↓</div>
+                        
+                        <div class="ponchi-box" style="background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);">
+                            <h3>第三段階：教育による再建</h3>
+                            <p>📚 田場小学校（戦後沖縄最初）の創設物語を学び、未来の平和を築くために自分たちが何を学んでいるのかを考える</p>
+                            <p><strong>ポイント:</strong> 1945年5月開校、青空教室、生活指導から始まった教育</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ponchi-section">
+                    <h2 class="ponchi-title">田場地域の歴史的レイヤー</h2>
+                    <div class="ponchi-flow">
+                        <div class="ponchi-box" style="border-left-color: #3498db;">
+                            <h3>🏛️ 琉球王国時代</h3>
+                            <p>水利構造と祭祀文化が共同体を支える</p>
+                        </div>
+                        
+                        <div class="arrow">↓</div>
+                        
+                        <div class="ponchi-box" style="border-left-color: #2ecc71;">
+                            <h3>🌾 戦前の農村社会</h3>
+                            <p>ユイマール（相互扶助）と伝統芸能の継承</p>
+                        </div>
+                        
+                        <div class="arrow">↓</div>
+                        
+                        <div class="ponchi-box" style="border-left-color: #e74c3c;">
+                            <h3>⚔️ 沖縄戦の暴力</h3>
+                            <p>聖域から戦場へ、尊厳の剥奪</p>
+                        </div>
+                        
+                        <div class="arrow">↓</div>
+                        
+                        <div class="ponchi-box" style="border-left-color: #f39c12;">
+                            <h3>🏕️ 収容所生活</h3>
+                            <p>管理される平和、文化の胎動</p>
+                        </div>
+                        
+                        <div class="arrow">↓</div>
+                        
+                        <div class="ponchi-box" style="border-left-color: #9b59b6;">
+                            <h3>🎓 教育による再生</h3>
+                            <p>人間性の回復、平和の基盤構築</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-message">
+                    <h3>💡 核心メッセージ</h3>
+                    <p>平和とは与えられるものではなく、<br>知恵と勇気と教育によって築き上げるものである</p>
+                </div>
+            </div>
+
+            <!-- インフォグラフィックビュー -->
+            <div id="infographic" class="view">
+                <h2 class="ponchi-title">田場の歴史を数字で見る</h2>
+                
+                <div class="infographic-grid">
+                    <div class="stat-box">
+                        <div class="stat-number">17.2m</div>
+                        <div class="stat-label">深井戸の深さ<br>(1757年開削)</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">150段</div>
+                        <div class="stat-label">犬名河への石段<br>(女性の重労働)</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">15m+</div>
+                        <div class="stat-label">収容所の監視塔<br>(管理の象徴)</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">1945年5月</div>
+                        <div class="stat-label">田場小学校開校<br>(戦後沖縄最初)</div>
+                    </div>
+                </div>
+
+                <h2 class="ponchi-title">水と命の文化遺産</h2>
+                <div class="infographic-grid">
+                    <div class="info-card">
+                        <div class="info-icon">🏛️</div>
+                        <div class="info-title">田場の深井戸</div>
+                        <div class="info-content">
+                            <p><strong>深さ:</strong> 17.2m</p>
+                            <p><strong>開削年:</strong> 1757年</p>
+                            <p><strong>意義:</strong> 沖縄屈指の土木遺構、高度な共同体組織の証</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-icon">💧</div>
+                        <div class="info-title">円筒井戸</div>
+                        <div class="info-content">
+                            <p><strong>深さ:</strong> 13.0m</p>
+                            <p><strong>特徴:</strong> 洗い場併設</p>
+                            <p><strong>役割:</strong> 農業生産拠点、女性の交流の場</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-icon">🌊</div>
+                        <div class="info-title">里之子井戸</div>
+                        <div class="info-content">
+                            <p><strong>深さ:</strong> 約2.0m</p>
+                            <p><strong>改修:</strong> 1911年</p>
+                            <p><strong>文化:</strong> 正月の若水、村の繁栄祈願</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-icon">🐕</div>
+                        <div class="info-title">犬名河</div>
+                        <div class="info-content">
+                            <p><strong>形態:</strong> 崖下の迸出泉</p>
+                            <p><strong>アクセス:</strong> 150段の石段</p>
+                            <p><strong>伝説:</strong> 犬が発見した命の水</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="ponchi-title">歴史のタイムライン</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">1757年</div>
+                        <div class="timeline-content">
+                            <h4>深井戸の開削</h4>
+                            <p>17.2mの深井戸が完成。琉球王国時代の高度な土木技術と共同体の力を示す</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">戦前</div>
+                        <div class="timeline-content">
+                            <h4>平穏な農村社会</h4>
+                            <p>サトウキビ栽培、ユイマール（相互扶助）、獅子舞などの伝統芸能が息づく</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">1944年</div>
+                        <div class="timeline-content">
+                            <h4>十・十空襲と陣地化</h4>
+                            <p>グスクが日本軍の陣地に。聖域が戦場へと変貌</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">1945年4月</div>
+                        <div class="timeline-content">
+                            <h4>米軍上陸と収容所</h4>
+                            <p>石川・田場収容所設置。15m超の監視塔、軍作業への従事</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">1945年5月</div>
+                        <div class="timeline-content">
+                            <h4>田場小学校開校</h4>
+                            <p>戦後沖縄最初の小学校。青空教室から始まる教育の再建</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="ponchi-title">収容所の諸相</h2>
+                <div class="infographic-grid">
+                    <div class="info-card">
+                        <div class="info-icon">🗼</div>
+                        <div class="info-title">監視塔</div>
+                        <div class="info-content">
+                            15m以上の高さから全域を監視。被占領下の非対称な権力関係の象徴
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-icon">⚙️</div>
+                        <div class="info-title">軍作業</div>
+                        <div class="info-content">
+                            生き延びるための労働提供。戦争協力と生存のジレンマ
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-icon">☀️</div>
+                        <div class="info-title">青空教室</div>
+                        <div class="info-content">
+                            砂浜や岩陰での教育再開。平和への第一歩としての教育
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-icon">📦</div>
+                        <div class="info-title">配給制度</div>
+                        <div class="info-content">
+                            米軍による食糧・物資の管理。外部依存による生存の不安定さ
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-message">
+                    <h3>🌱 レジリエンス（回復力）の物語</h3>
+                    <p>深井戸が干ばつでも水を枯らさなかったように、<br>
+                    この地に住む人々の「平和を希求する心」も<br>
+                    戦火の中でも枯れることはなかった</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchView(viewName) {
+            // すべてのビューを非表示
+            document.querySelectorAll('.view').forEach(view => {
+                view.classList.remove('active');
+            });
+            
+            // すべてのボタンの active クラスを削除
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // 選択されたビューを表示
+            document.getElementById(viewName).classList.add('active');
+            
+            // クリックされたボタンに active クラスを追加
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
