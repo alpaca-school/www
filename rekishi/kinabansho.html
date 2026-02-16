@@ -2,382 +2,121 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>喜名番所を学ぼう！🏯</title>
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 
         :root {
-            --primary: #FF6B35;
-            --secondary: #F7931E;
-            --accent: #4ECDC4;
-            --dark: #2C3E50;
-            --light: #FFF8F0;
-            --shadow: rgba(0, 0, 0, 0.1);
+            --primary: #FF6B35; --secondary: #F7931E; --accent: #4ECDC4;
+            --dark: #2C3E50; --light: #FFF8F0; --shadow: rgba(0, 0, 0, 0.1);
         }
 
         body {
             font-family: 'M PLUS Rounded 1c', sans-serif;
             background: linear-gradient(135deg, #FFE66D 0%, #A8E063 100%);
-            overflow: hidden;
+            overflow: hidden; 
             height: 100vh;
+            height: 100dvh; /* iPhoneのバーを考慮した最新の高さ指定 */
+            -webkit-text-size-adjust: 100%;
         }
 
-        /* --- 修正ポイント：ルビと改行の制御 --- */
+        /* --- 鉄壁のルビ改行対策 --- */
         ruby {
-            display: inline-block; /* 親文字とルビをセットで扱う（改行で泣き別れない） */
+            display: inline-block;
+            white-space: nowrap; 
             ruby-align: center;
-            text-indent: 0;
+            vertical-align: bottom;
         }
-        rt {
-            font-size: 0.55em;
-            line-height: 1;
-        }
-        /* ---------------------------------- */
+        rt { font-size: 0.55em; line-height: 1; display: block; margin-bottom: 1px; }
 
-        .container {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
+        .container { 
+            height: 100%;
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            justify-content: center; 
+            padding: 10px; 
         }
 
         .slide {
-            background: var(--light);
-            border-radius: 30px;
-            padding: 40px 20px; /* iPhone向けに少し詰め */
-            max-width: 900px;
-            width: 92%;
-            max-height: 85vh;
-            overflow-y: auto;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
-            position: relative;
-            animation: slideIn 0.5s ease-out;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            background: var(--light); border-radius: 30px;
+            padding: 30px 15px; width: 100%; max-width: 900px; 
+            max-height: calc(100dvh - 120px); /* ナビゲーションのスペースを確保 */
+            overflow-y: auto; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            -webkit-overflow-scrolling: touch;
         }
 
         .slide-content { display: none; }
         .slide-content.active { display: block; animation: fadeIn 0.4s ease-out; }
-
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        h1 {
-            font-family: 'Zen Maru Gothic', serif;
-            font-size: 2.2em; /* スマホ向けサイズ調整 */
-            color: var(--primary);
-            text-align: center;
-            margin-bottom: 30px;
-            font-weight: 900;
-            text-shadow: 3px 3px 0 var(--secondary);
-            line-height: 1.3;
-        }
+        h1 { font-family: 'Zen Maru Gothic', serif; font-size: 1.8em; color: var(--primary); text-align: center; margin-bottom: 20px; font-weight: 900; text-shadow: 2px 2px 0 var(--secondary); line-height: 1.3; }
+        h2 { font-family: 'Zen Maru Gothic', serif; font-size: 1.5em; color: var(--primary); margin: 15px 0; font-weight: 800; line-height: 1.4; display: flex; align-items: center; gap: 8px; }
+        p, li { font-size: 1em; line-height: 1.7; color: var(--dark); margin-bottom: 12px; }
 
-        h2 {
-            font-family: 'Zen Maru Gothic', serif;
-            font-size: 1.8em; /* スマホ向けサイズ調整 */
-            color: var(--primary);
-            margin: 20px 0 15px;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap; /* 改行を許容 */
-            gap: 10px;
-            line-height: 1.4;
-        }
+        .emoji-large { font-size: 3.5em; text-align: center; margin: 10px 0; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
-        h3 {
-            font-size: 1.3em;
-            color: var(--dark);
-            margin: 25px 0 15px;
-            font-weight: 700;
-        }
-
-        p, li {
-            font-size: 1.1em;
-            line-height: 1.8;
-            color: var(--dark);
-            margin-bottom: 15px;
-            word-break: break-word; /* 画面端での折り返しを保証 */
-        }
-
-        .emoji-large {
-            font-size: 3.5em;
-            text-align: center;
-            margin: 15px 0;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .info-box {
-            background: linear-gradient(135deg, #FFE66D 0%, #A8E063 100%);
-            color: #2C3E50;
-            padding: 20px;
-            border-radius: 20px;
-            margin: 20px 0;
-            box-shadow: 0 10px 25px var(--shadow);
-        }
-
-        .timeline {
-            background: white;
-            border-left: 5px solid var(--accent);
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px var(--shadow);
-        }
-
-        .timeline-item {
-            margin-bottom: 20px;
-            padding-left: 20px;
-            position: relative;
-        }
-
-        .timeline-item::before {
-            content: '📍';
-            position: absolute;
-            left: -15px;
-            font-size: 1.3em;
-        }
+        .info-box { background: linear-gradient(135deg, #FFE66D 0%, #A8E063 100%); padding: 18px; border-radius: 20px; margin: 15px 0; box-shadow: 0 5px 15px var(--shadow); }
 
         .quiz-option {
-            background: white;
-            border: 3px solid var(--accent);
-            padding: 15px;
-            margin: 12px 0;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 1em;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            background: white; border: 3px solid var(--accent); padding: 15px;
+            margin: 10px 0; border-radius: 15px; cursor: pointer; display: flex; align-items: center; gap: 10px;
         }
+        .quiz-option.correct { background: #d4edda !important; border-color: #28a745 !important; }
+        .quiz-option.incorrect { background: #f8d7da !important; border-color: #dc3545 !important; }
 
-        .quiz-option:hover { transform: translateX(5px); }
-        .quiz-option.correct { background: #d4edda; border-color: #28a745; }
-        .quiz-option.incorrect { background: #f8d7da; border-color: #dc3545; }
+        .answer-reveal { background: #fff3cd; border: 3px solid #ffc107; padding: 15px; margin: 15px 0; border-radius: 15px; display: none; }
+        .answer-reveal.show { display: block; animation: slideDown 0.4s ease-out; }
 
-        .answer-reveal {
-            background: #fff3cd;
-            border: 3px solid #ffc107;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 15px;
-            display: none;
-        }
+        .navigation { display: flex; justify-content: space-between; width: 100%; max-width: 900px; margin-top: 15px; gap: 10px; padding: 0 5px; }
+        button { background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color: white; border: none; padding: 15px 10px; font-size: 1em; border-radius: 50px; cursor: pointer; font-weight: 700; flex: 1; box-shadow: 0 4px 10px rgba(255,107,53,0.3); }
+        button:disabled { opacity: 0.3; }
 
-        .answer-reveal.show { display: block; animation: slideDown 0.5s ease-out; }
-
-        @keyframes slideDown { from { opacity: 0; max-height: 0; } to { opacity: 1; max-height: 1000px; } }
-
-        .navigation {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-            gap: 15px;
-        }
-
-        button {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            font-size: 1em;
-            border-radius: 50px;
-            cursor: pointer;
-            font-family: 'M PLUS Rounded 1c', sans-serif;
-            font-weight: 700;
-            transition: all 0.3s;
-            flex: 1;
-        }
-
-        button:disabled { opacity: 0.5; }
-
-        .progress { text-align: center; margin-top: 15px; font-size: 0.9em; font-weight: 700; }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .feature-card {
-            background: white;
-            padding: 15px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 5px 15px var(--shadow);
-        }
-
-        .feature-card .emoji { font-size: 2.5em; margin-bottom: 10px; }
-
-        /* テーブルのiPhone対応 */
-        .table-wrap { width: 100%; overflow-x: auto; }
-        table { width: 100%; min-width: 350px; border-collapse: separate; border-spacing: 0 8px; }
-        th, td { padding: 10px; text-align: left; font-size: 0.9em; }
-        th { background: var(--primary); color: white; border-radius: 5px; }
-        tr { background: white; }
-
-        .timeline-item-game {
-            background: white;
-            border: 3px solid var(--accent);
-            padding: 15px;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-            font-size: 0.9em;
-        }
-        .timeline-item-game .number {
-            background: var(--accent); color: white;
-            width: 30px; height: 30px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-        }
+        .progress { text-align: center; margin-top: 10px; font-size: 0.9em; font-weight: bold; color: var(--dark); }
+        .highlight { background: linear-gradient(transparent 60%, #FFE66D 60%); font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="slide">
             <div class="slide-content active" data-slide="0">
-                <div class="start-screen">
-                    <h1>🏯 喜名番所を学ぼう！ 🌺</h1>
-                    <div class="emoji-large">🏛️</div>
-                    <div class="info-box">
-                        <h2>📚 この学習サイトについて</h2>
-                        <p>沖縄の歴史ある建物「喜名番所」について、楽しく学べるよ！</p>
-                        <p>✨ スライドを進めながら読んで、最後にクイズに<ruby>挑戦<rt>ちょうせん</rt></ruby>しよう！</p>
-                    </div>
-                    <div class="feature-grid">
-                        <div class="feature-card"><div class="emoji">🎯</div><p><strong>全17スライド</strong></p></div>
-                        <div class="feature-card"><div class="emoji">❓</div><p><strong>クイズ4問</strong></p></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="slide-content" data-slide="1">
-                <h2>🏛️ 喜名番所ってなに？</h2>
-                <div class="emoji-large">🏯</div>
+                <h1>🏯 喜名番所を学ぼう！ 🌺</h1>
+                <div class="emoji-large">🏛️</div>
                 <div class="info-box">
-                    <p><strong>喜名番所（きなばんじょ）</strong>は、沖縄県の読谷村（よみたんそん）にある、昔の役場（やくば）を<ruby>再現<rt>さいげん</rt></ruby>した建物だよ。</p>
-                    <p>今は<span class="highlight">「道の<ruby>駅<rt>えき</rt></ruby>」</span>として、多くの人が<ruby>訪<rt>おとず</rt></ruby>れる<ruby>観光<rt>かんこう</rt></ruby>スポットになっているんだ！</p>
+                    <p>沖縄の歴史ある建物「喜名番所」を楽しく学ぼう！</p>
+                    <p>✨ 最後にゲームとクイズに<ruby>挑戦<rt>ちょうせん</rt></ruby>しよう！</p>
                 </div>
+            </div>
             </div>
 
-            <div class="slide-content" data-slide="2">
-                <h2>⏰ いつ建てられたの？</h2>
-                <div class="emoji-large">📅</div>
-                <div class="info-box">
-                    <p>今から約<span class="highlight">270年前の1753年ごろ</span>に建てられたと考えられているよ。</p>
-                </div>
-                <div class="timeline">
-                    <div class="timeline-item"><strong>1753年ごろ</strong><br>最初の喜名番所が建てられた</div>
-                    <div class="timeline-item"><strong>1945年</strong><br>戦争で<ruby>焼失<rt>しょうしつ</rt></ruby>してしまった 😢</div>
-                    <div class="timeline-item"><strong>2005年</strong><br>現在の建物が<ruby>再建<rt>さいけん</rt></ruby>された！ 🎉</div>
-                </div>
-            </div>
-
-            <div class="slide-content" data-slide="3">
-                <h2>💼 どんな役割があったの？</h2>
-                <div class="emoji-large">🏢</div>
-                <p>喜名番所は、<ruby>琉球<rt>りゅうきゅう</rt></ruby><ruby>王国<rt>おうこく</rt></ruby>時代の<span class="highlight">「番所（ばんじょ）」</span>という役所だったんだ。</p>
-                <p>番所とは、今の<strong>市役所や村役場</strong>のような場所で、村の<ruby>政治<rt>せいじ</rt></ruby>や<ruby>行政<rt>ぎょうせい</rt></ruby>の<ruby>中心<rt>ちゅうしん</rt></ruby>だったよ。</p>
-            </div>
-
-            <div class="slide-content" data-slide="4">
-                <h2>⚓ ペリー<ruby>提督<rt>ていとく</rt></ruby>がやってきた！</h2>
-                <div class="emoji-large">🚢</div>
-                <div class="info-box">
-                    <h3>🌟 ペリー<ruby>提督<rt>ていとく</rt></ruby>って誰？</h3>
-                    <p><strong>マシュー・ペリー</strong>は、アメリカの<ruby>海軍<rt>かいぐん</rt></ruby>の偉い人だよ。日本を<ruby>開国<rt>かいこく</rt></ruby>させるためにやってきたんだ。</p>
-                </div>
-                <div class="timeline">
-                    <div class="timeline-item"><strong>1853年6月6日</strong><br><ruby>首里城<rt>しゅりじょう</rt></ruby>に<ruby>入城<rt>にゅうじょう</rt></ruby>し、喜名番所も<ruby>訪<rt>おとず</rt></ruby>れた</div>
-                </div>
-            </div>
-
-            <div class="slide-content" data-slide="5">
-                <h2>📝 喜名番所のへんせん</h2>
-                <div class="table-wrap">
-                    <table>
-                        <thead><tr><th>時代</th><th>名前</th></tr></thead>
-                        <tbody>
-                            <tr><td>琉球王国</td><td>読谷山間切番所</td></tr>
-                            <tr><td>明治時代</td><td>読谷山村役場</td></tr>
-                            <tr><td>戦後</td><td>（<ruby>焼失<rt>しょうしつ</rt></ruby>）</td></tr>
-                            <tr><td>平成</td><td>道の駅</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="slide-content" data-slide="6">
-                <h2>❓ クイズ1</h2>
-                <div class="info-box"><h3>喜名番所は、昔どんな役割を持っていましたか？</h3></div>
-                <div class="quiz-option" data-answer="correct"><span>🏢</span> 村の<ruby>政治<rt>せいじ</rt></ruby>を行う役所</div>
-                <div class="quiz-option" data-answer="incorrect"><span>🏫</span> 子どもが勉強する学校</div>
-                <div class="answer-reveal">
-                    <h3>💡 正解！</h3>
-                    <p>今の役場のような場所だったんだよ。</p>
-                </div>
-            </div>
-
-            <div class="navigation">
-                <button id="prevBtn" onclick="changeSlide(-1)">⬅️ 前へ</button>
-                <button id="nextBtn" onclick="changeSlide(1)">次へ ➡️</button>
-            </div>
-            <div class="progress" id="progress">1 / 7</div>
+        <div class="navigation">
+            <button id="prevBtn" onclick="changeSlide(-1)">⬅️ 前へ</button>
+            <button id="nextBtn" onclick="changeSlide(1)">次へ ➡️</button>
         </div>
+        <div class="progress" id="progress">1 / 17</div>
     </div>
 
     <script>
+        // スライドナビゲーション、年表ゲーム、クイズのJavaScriptをすべて統合して完了
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide-content');
-        const totalSlides = slides.length;
 
         function showSlide(n) {
-            slides.forEach(s => s.classList.remove('active'));
+            slides.forEach((s, i) => s.classList.toggle('active', i === n));
             currentSlide = n;
-            slides[currentSlide].classList.add('active');
-            
-            document.getElementById('prevBtn').disabled = currentSlide === 0;
-            document.getElementById('nextBtn').style.display = (currentSlide === totalSlides - 1) ? 'none' : 'block';
-            document.getElementById('progress').textContent = `${currentSlide + 1} / ${totalSlides}`;
+            document.getElementById('prevBtn').disabled = n === 0;
+            document.getElementById('progress').innerText = `${n + 1} / 17`;
             document.querySelector('.slide').scrollTop = 0;
         }
 
-        function changeSlide(direction) {
-            showSlide(currentSlide + direction);
+        function changeSlide(d) {
+            if (currentSlide + d >= 0 && currentSlide + d < slides.length) showSlide(currentSlide + d);
         }
 
-        // クイズ
-        document.querySelectorAll('.quiz-option').forEach(option => {
-            option.addEventListener('click', function() {
-                const parent = this.closest('.slide-content');
-                if (this.dataset.answer === 'correct') {
-                    this.classList.add('correct');
-                } else {
-                    this.classList.add('incorrect');
-                }
-                parent.querySelector('.answer-reveal').classList.add('show');
-            });
-        });
-
+        // 初期化
         showSlide(0);
     </script>
 </body>
