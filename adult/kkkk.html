@@ -47,6 +47,7 @@
             justify-content: center;
             align-items: center;
             gap: 10px;
+            z-index: 10;
         }
 
         .mode-grid {
@@ -60,10 +61,10 @@
         .mode-btn {
             background: white; border: 3px solid var(--accent); padding: 15px 5px;
             border-radius: 15px; cursor: pointer; font-weight: 800; text-align: center;
-            font-size: 0.9em; transition: 0.3s;
+            font-size: 0.9em; transition: 0.2s;
         }
         .mode-btn span { display: block; font-size: 0.7em; font-weight: 400; color: #666; }
-        .mode-btn.active { background: var(--primary); color: white; border-color: white; }
+        .mode-btn:active { background: var(--accent); color: white; }
 
         /* メインビュー */
         #main-view {
@@ -75,6 +76,7 @@
             overflow-y: auto;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             position: relative;
+            z-index: 1;
         }
 
         h1#content-title { font-family: 'Zen Maru Gothic', serif; color: var(--primary); font-size: 1.4em; margin-bottom: 15px; border-bottom: 3px solid var(--accent); }
@@ -86,21 +88,24 @@
 
         /* 建築シミュレーター用 */
         .building-canvas {
-            width: 100%; height: 120px; background: #eee; margin-top: 10px;
-            display: flex; align-items: flex-end; justify-content: center; gap: 5px;
+            width: 100%; height: 100px; background: #eee; margin-top: 10px;
+            display: flex; align-items: flex-end; justify-content: center; gap: 8px;
             border-radius: 10px; overflow: hidden;
         }
-        .bar { width: 30px; background: var(--secondary); transition: 0.5s ease-out; }
+        .bar { width: 40px; background: var(--secondary); transition: 0.5s ease-out; }
 
         /* ナビゲーション */
         .nav-bar {
-            display: flex; justify-content: space-between; gap: 10px; margin-top: 10px;
+            display: flex; justify-content: space-between; gap: 10px; margin-top: 15px;
+            padding-bottom: 10px;
         }
         .nav-btn {
-            background: var(--dark); color: white; border: none; padding: 12px;
-            border-radius: 50px; flex: 1; font-weight: 700;
+            background: var(--dark); color: white; border: none; padding: 15px;
+            border-radius: 50px; flex: 1; font-weight: 700; cursor: pointer;
+            z-index: 20;
         }
-        #back-home { background: var(--secondary); margin-bottom: 10px; padding: 5px; font-size: 0.8em; }
+        .nav-btn:active { opacity: 0.7; }
+        #back-home { background: var(--secondary); margin-bottom: 15px; width: 100%; display: block; }
 
         .hidden { display: none; }
     </style>
@@ -109,14 +114,14 @@
 
 <div class="app-container">
     <div id="mode-screen">
-        <h1 style="color: var(--dark); font-weight: 900; margin-bottom: 20px;">🏯 <ruby>喜名番所<rt>きなばんじょ</rt></ruby><br>アーカイブ</h1>
+        <h1 style="color: var(--dark); font-weight: 900; margin-bottom: 20px; text-align: center;">🏯 <ruby>喜名番所<rt>きなばんじょ</rt></ruby><br>アーカイブ</h1>
         <div class="mode-grid">
             <button class="mode-btn" onclick="setMode('easy')">やさしい<span>ふりがな多め</span></button>
             <button class="mode-btn" onclick="setMode('normal')">ふつう<span>標準解説</span></button>
             <button class="mode-btn" onclick="setMode('real')">リアル<span>専門家レベル</span></button>
-            <button class="mode-btn" onclick="setMode('undergrad')">学部生<span>学術基礎・建築学</span></button>
-            <button class="mode-btn" onclick="setMode('master')">修士<span>地政学・構造解析</span></button>
-            <button class="mode-btn" onclick="setMode('doctor')">博士<span>未解決課題・批判的考察</span></button>
+            <button class="mode-btn" onclick="setMode('undergrad')">学部生<span>学術基礎</span></button>
+            <button class="mode-btn" onclick="setMode('master')">修士<span>専門解析</span></button>
+            <button class="mode-btn" onclick="setMode('doctor')">博士<span>未解決課題</span></button>
         </div>
     </div>
 
@@ -126,13 +131,13 @@
         <div id="content-body"></div>
         
         <div class="interactive-panel" id="interactive-area">
-            <h3 id="panel-title"></h3>
+            <h3 id="panel-title" style="font-size: 1em; margin-bottom: 10px;">🔍 構造解析データ</h3>
             <div id="panel-content"></div>
         </div>
 
         <div class="nav-bar">
-            <button class="nav-btn" onclick="prevContent()">⬅️ 前へ</button>
-            <button class="nav-btn" onclick="nextContent()">次へ ➡️</button>
+            <button id="prevBtn" class="nav-btn" onclick="prevContent()">⬅️ 前へ</button>
+            <button id="nextBtn" class="nav-btn" onclick="nextContent()">次へ ➡️</button>
         </div>
     </div>
 </div>
@@ -147,52 +152,104 @@
             steps: [
                 {
                     header: "ここはなに？",
-                    body: "<ruby>喜名番所<rt>きなばんじょ</rt></ruby>は、むかしの<ruby>役場<rt>やくば</rt></ruby>だよ！<ruby>首里城<rt>しゅりじょう</rt></ruby>に行くペリーさんもここで休んだんだ。",
+                    body: "<ruby>喜名番所<rt>きなばんじょ</rt></ruby>は、むかしの<ruby>役場<rt>やくば</rt></ruby>だよ！<ruby>首里城<rt>しゅりじょう</rt></ruby>へ向かうペリーさんもここで休んだんだ。",
                     panel: "🏠 柱を見て！<br>くぎを一本も使わずに組み立てられているんだよ。パズルみたいだね！",
-                    action: () => updateBars([40, 40, 40])
+                    action: () => updateBars([40, 50, 60])
                 },
                 {
                     header: "ペリーさんが来た！",
-                    body: "アメリカから黒い大きな船でやってきたよ。目的は「お水や食べ物」をわけてもらうことだったんだ。",
-                    panel: "🚢 ペリーさんの船は、石炭を燃やして動く『<ruby>蒸気船<rt>じょうきせん</rt></ruby>』だったんだね。",
-                    action: () => updateBars([20, 80, 20])
+                    body: "アメリカから黒船でやってきたペリー提督（ていとく）は、1853年にここを<ruby>訪<rt>おとず</rt></ruby>れたんだ。",
+                    panel: "🚢 船の燃料（石炭）や、食べ物をわけてもらうのが目的だったんだよ。",
+                    action: () => updateBars([20, 90, 40])
+                }
+            ]
+        },
+        normal: {
+            title: "ふつうコース",
+            steps: [
+                {
+                    header: "行政拠点としての番所",
+                    body: "喜名番所は現在の読谷村役場のような役割を持っていました。地域の統治、情報の伝達、そして宿道の管理を行っていました。",
+                    panel: "🧱 伝統建築：<br>釘を使わずに木を組み合わせる「貫（ぬき）工法」が使われています。",
+                    action: () => updateBars([50, 60, 50])
+                },
+                {
+                    header: "歴史の舞台",
+                    body: "1853年、ペリー一行は首里城へ向かう途中で、喜名番所で休憩し、もてなしを受けたと記録されています。",
+                    panel: "📜 記録：<br>当時の外交における重要な接客拠点でもあったことがわかります。",
+                    action: () => updateBars([30, 40, 80])
+                }
+            ]
+        },
+        real: {
+            title: "リアル：専門家レベル",
+            steps: [
+                {
+                    header: "琉球王国時代の「間切」行政",
+                    body: "読谷山間切（ゆんたんざまぎり）の行政拠点であり、地頭代以下の役人が勤務していました。建物は戦後、当時の資料に基づき忠実に再建されました。",
+                    panel: "🌲 素材特性：<br>柱には白アリに強く、非常に硬い「チャーギ（イヌマキ）」が使用されています。",
+                    action: () => updateBars([80, 70, 90])
+                },
+                {
+                    header: "ペリーの外交戦略",
+                    body: "ペリーは首里城への強行入城を画策する中で、要所である喜名番所を視察し、琉球側の対応をうかがっていました。",
+                    panel: "⚓ 地政学：<br>中継地点としての琉球の価値を米国がどう評価していたかが重要です。",
+                    action: () => updateBars([60, 50, 100])
                 }
             ]
         },
         undergrad: {
-            title: "学部生レベル：地域統治論",
+            title: "学部生：建築・歴史学基礎",
             steps: [
                 {
-                    header: "琉球王国における番所の機能",
-                    body: "番所（Bansho）は王府・首里から派遣された地頭代らが管轄する行政拠点です。戸籍管理、租税徴収、伝達機能を担いました。",
-                    panel: "📐 貫（Nuki）工法の力学的優位性：<br>柱を水平方向に貫通させることで、剛性を高めつつ、地震のエネルギーを吸収・分散させます。",
-                    action: () => updateBars([70, 90, 60])
+                    header: "木造架構構造の力学解析",
+                    body: "貫（ぬき）工法は、柱を水平材でつなぐことで壁に依存せず強度を保つ架構構造です。耐震性と通気性を両立させています。",
+                    panel: "📐 剛性と靭性のバランス：<br>木材の「しなり」を利用した減衰効果を計算に入れた設計思想です。",
+                    action: () => updateBars([90, 80, 70])
+                },
+                {
+                    header: "近世琉球の行政機構",
+                    body: "首里王府による地方統治システムにおける番所の位置付け。間切の行政実務と宿道管理の二重構造を考察します。",
+                    panel: "📊 行政データ：<br>戸籍管理や徴税実務における番所の効率性について。",
+                    action: () => updateBars([70, 60, 50])
+                }
+            ]
+        },
+        master: {
+            title: "修士：構造解析と外交史",
+            steps: [
+                {
+                    header: "伝統木造建築における非線形解析",
+                    body: "仕口（しぐち）や継手の摩擦力が地震時のエネルギー吸収に寄与するメカニズム。現代の限界耐力計算との比較検討を行います。",
+                    panel: "🔬 摩擦減衰シミュレーション：<br>木材の含水率が接合部の剛性に与える影響をモデル化。",
+                    action: () => updateBars([95, 85, 90])
+                },
+                {
+                    header: "19世紀東アジア外交ネットワーク",
+                    body: "琉球・アメリカ間の「琉米修好条約」締結に至るプロセス。喜名番所での『接遇』が外交プロトコルに与えた心理的影響の分析。",
+                    panel: "🛡️ 外交的緩衝：<br>非対称外交における、小国の抵抗と融和の戦術について。",
+                    action: () => updateBars([50, 95, 80])
                 }
             ]
         },
         doctor: {
-            title: "博士課程：批判的歴史考察",
+            title: "博士：未解決課題と批判的考察",
             steps: [
                 {
-                    header: "『接遇』における外交戦術の解体",
-                    body: "ペリー提督の『日本遠征記』と琉球側の史料を対照させると、喜名番所での接待は、王国政府による「時間稼ぎ」と「軍事衝突回避」の高度な政治的駆け引きであったことが分かります。",
-                    panel: "🧪 材質解析の課題：<br>19世紀のチャーギ材におけるシロアリ忌避成分（ピノシルビン等）の濃度と、当時の保存技術の相関を考察。未解決の保存科学的課題を提示します。",
-                    action: () => updateBars([95, 30, 85])
+                    header: "二重朝貢体制下における法的地位の再定義",
+                    body: "万国公法受容期における琉球の主権言説。喜名番所での会談記録に見られる、翻訳上の意図的な『誤読』が国際法上の地位にどう寄与したか。",
+                    panel: "📜 批判的文献読解：<br>一次資料の翻刻における微細な差異が歴史認識をどう変容させるか。",
+                    action: () => updateBars([90, 30, 95])
                 },
                 {
-                    header: "二重朝貢体制下の地政学",
-                    body: "日清両属という特異な立場において、アメリカとの条約調印が、その後の「琉球処分」へどのような法的トリガーを引いたのか。国際法（万国公法）の観点から再定義が必要です。",
-                    panel: "📜 一次資料へのアクセス：<br>喜名番所に関する読谷山間切の古記録を、デジタルアーカイブで解析する際の翻刻精度の問題について。",
-                    action: () => updateBars([10, 100, 40])
+                    header: "保存科学と地域アイデンティティ",
+                    body: "伝統建築の『再現』が持つ政治性。再建された喜名番所が、読谷村の歴史的ナラティブにおいて果たす役割と、その真正性（Authenticity）の議論。",
+                    panel: "🏺 保存科学：<br>21世紀における文化財の『動態保存』の可能性について。",
+                    action: () => updateBars([10, 100, 60])
                 }
             ]
         }
     };
-
-    // データの補完（normal, real, masterなどが選ばれた場合の予備）
-    ['normal', 'real', 'master'].forEach(m => {
-        if(!data[m]) data[m] = { title: m + "レベル", steps: data.undergrad.steps };
-    });
 
     function setMode(mode) {
         currentMode = mode;
@@ -208,20 +265,19 @@
     }
 
     function updateBars(heights) {
-        const area = document.getElementById('panel-content');
-        if (!area.querySelector('.building-canvas')) {
-            const canvas = document.createElement('div');
+        let canvas = document.querySelector('.building-canvas');
+        if (!canvas) {
+            canvas = document.createElement('div');
             canvas.className = 'building-canvas';
-            heights.forEach(() => {
-                const bar = document.createElement('div');
-                bar.className = 'bar';
-                canvas.appendChild(bar);
-            });
-            area.appendChild(canvas);
+            document.getElementById('panel-content').appendChild(canvas);
         }
-        const bars = area.querySelectorAll('.bar');
-        bars.forEach((bar, i) => {
-            bar.style.height = heights[i] + '%';
+        canvas.innerHTML = '';
+        heights.forEach(h => {
+            const bar = document.createElement('div');
+            bar.className = 'bar';
+            bar.style.height = '0%';
+            canvas.appendChild(bar);
+            setTimeout(() => bar.style.height = h + '%', 50);
         });
     }
 
@@ -231,10 +287,14 @@
         
         document.getElementById('content-title').innerText = modeData.title;
         document.getElementById('content-body').innerHTML = `<h3>${step.header}</h3><p>${step.body}</p>`;
-        document.getElementById('panel-title').innerText = "🔍 インタラクティブ解析";
         document.getElementById('panel-content').innerHTML = `<p>${step.panel}</p>`;
         
+        // ボタンの有効・無効切り替え
+        document.getElementById('prevBtn').disabled = (currentStep === 0);
+        document.getElementById('nextBtn').disabled = (currentStep === modeData.steps.length - 1);
+        
         if (step.action) step.action();
+        document.getElementById('main-view').scrollTop = 0;
     }
 
     function nextContent() {
