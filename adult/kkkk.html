@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>喜名番所：多層的歴史考察アーカイブ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+
+        :root {
+            --primary: #FF6B35; --secondary: #F7931E; --accent: #4ECDC4;
+            --dark: #2C3E50; --light: #FFF8F0; --academic: #E5E7EB;
+        }
+
+        body {
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            background: #f0f0f0;
+            overflow: hidden; 
+            height: 100dvh;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        /* --- 鉄壁のルビ設定（漢字の上に固定） --- */
+        ruby {
+            display: inline-block;
+            white-space: nowrap;
+            ruby-position: over;
+            -webkit-ruby-position: before;
+            text-align: center;
+        }
+        rt { font-size: 0.55em; line-height: 1; display: block; margin-bottom: 2px; }
+
+        .app-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, #FFE66D 0%, #A8E063 100%);
+            padding: 10px;
+        }
+
+        /* モード選択画面 */
+        #mode-screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mode-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .mode-btn {
+            background: white; border: 3px solid var(--accent); padding: 15px 5px;
+            border-radius: 15px; cursor: pointer; font-weight: 800; text-align: center;
+            font-size: 0.9em; transition: 0.3s;
+        }
+        .mode-btn span { display: block; font-size: 0.7em; font-weight: 400; color: #666; }
+        .mode-btn.active { background: var(--primary); color: white; border-color: white; }
+
+        /* メインビュー */
+        #main-view {
+            display: none;
+            flex: 1;
+            background: var(--light);
+            border-radius: 25px;
+            padding: 20px;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        h1#content-title { font-family: 'Zen Maru Gothic', serif; color: var(--primary); font-size: 1.4em; margin-bottom: 15px; border-bottom: 3px solid var(--accent); }
+
+        .interactive-panel {
+            background: white; border-radius: 15px; padding: 15px; margin: 15px 0;
+            border: 2px solid var(--academic);
+        }
+
+        /* 建築シミュレーター用 */
+        .building-canvas {
+            width: 100%; height: 120px; background: #eee; margin-top: 10px;
+            display: flex; align-items: flex-end; justify-content: center; gap: 5px;
+            border-radius: 10px; overflow: hidden;
+        }
+        .bar { width: 30px; background: var(--secondary); transition: 0.5s ease-out; }
+
+        /* ナビゲーション */
+        .nav-bar {
+            display: flex; justify-content: space-between; gap: 10px; margin-top: 10px;
+        }
+        .nav-btn {
+            background: var(--dark); color: white; border: none; padding: 12px;
+            border-radius: 50px; flex: 1; font-weight: 700;
+        }
+        #back-home { background: var(--secondary); margin-bottom: 10px; padding: 5px; font-size: 0.8em; }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div id="mode-screen">
+        <h1 style="color: var(--dark); font-weight: 900; margin-bottom: 20px;">🏯 <ruby>喜名番所<rt>きなばんじょ</rt></ruby><br>アーカイブ</h1>
+        <div class="mode-grid">
+            <button class="mode-btn" onclick="setMode('easy')">やさしい<span>ふりがな多め</span></button>
+            <button class="mode-btn" onclick="setMode('normal')">ふつう<span>標準解説</span></button>
+            <button class="mode-btn" onclick="setMode('real')">リアル<span>専門家レベル</span></button>
+            <button class="mode-btn" onclick="setMode('undergrad')">学部生<span>学術基礎・建築学</span></button>
+            <button class="mode-btn" onclick="setMode('master')">修士<span>地政学・構造解析</span></button>
+            <button class="mode-btn" onclick="setMode('doctor')">博士<span>未解決課題・批判的考察</span></button>
+        </div>
+    </div>
+
+    <div id="main-view">
+        <button id="back-home" class="nav-btn" onclick="goHome()">🏠 モード選択に戻る</button>
+        <h1 id="content-title"></h1>
+        <div id="content-body"></div>
+        
+        <div class="interactive-panel" id="interactive-area">
+            <h3 id="panel-title"></h3>
+            <div id="panel-content"></div>
+        </div>
+
+        <div class="nav-bar">
+            <button class="nav-btn" onclick="prevContent()">⬅️ 前へ</button>
+            <button class="nav-btn" onclick="nextContent()">次へ ➡️</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentMode = 'easy';
+    let currentStep = 0;
+
+    const data = {
+        easy: {
+            title: "やさしいコース",
+            steps: [
+                {
+                    header: "ここはなに？",
+                    body: "<ruby>喜名番所<rt>きなばんじょ</rt></ruby>は、むかしの<ruby>役場<rt>やくば</rt></ruby>だよ！<ruby>首里城<rt>しゅりじょう</rt></ruby>に行くペリーさんもここで休んだんだ。",
+                    panel: "🏠 柱を見て！<br>くぎを一本も使わずに組み立てられているんだよ。パズルみたいだね！",
+                    action: () => updateBars([40, 40, 40])
+                },
+                {
+                    header: "ペリーさんが来た！",
+                    body: "アメリカから黒い大きな船でやってきたよ。目的は「お水や食べ物」をわけてもらうことだったんだ。",
+                    panel: "🚢 ペリーさんの船は、石炭を燃やして動く『<ruby>蒸気船<rt>じょうきせん</rt></ruby>』だったんだね。",
+                    action: () => updateBars([20, 80, 20])
+                }
+            ]
+        },
+        undergrad: {
+            title: "学部生レベル：地域統治論",
+            steps: [
+                {
+                    header: "琉球王国における番所の機能",
+                    body: "番所（Bansho）は王府・首里から派遣された地頭代らが管轄する行政拠点です。戸籍管理、租税徴収、伝達機能を担いました。",
+                    panel: "📐 貫（Nuki）工法の力学的優位性：<br>柱を水平方向に貫通させることで、剛性を高めつつ、地震のエネルギーを吸収・分散させます。",
+                    action: () => updateBars([70, 90, 60])
+                }
+            ]
+        },
+        doctor: {
+            title: "博士課程：批判的歴史考察",
+            steps: [
+                {
+                    header: "『接遇』における外交戦術の解体",
+                    body: "ペリー提督の『日本遠征記』と琉球側の史料を対照させると、喜名番所での接待は、王国政府による「時間稼ぎ」と「軍事衝突回避」の高度な政治的駆け引きであったことが分かります。",
+                    panel: "🧪 材質解析の課題：<br>19世紀のチャーギ材におけるシロアリ忌避成分（ピノシルビン等）の濃度と、当時の保存技術の相関を考察。未解決の保存科学的課題を提示します。",
+                    action: () => updateBars([95, 30, 85])
+                },
+                {
+                    header: "二重朝貢体制下の地政学",
+                    body: "日清両属という特異な立場において、アメリカとの条約調印が、その後の「琉球処分」へどのような法的トリガーを引いたのか。国際法（万国公法）の観点から再定義が必要です。",
+                    panel: "📜 一次資料へのアクセス：<br>喜名番所に関する読谷山間切の古記録を、デジタルアーカイブで解析する際の翻刻精度の問題について。",
+                    action: () => updateBars([10, 100, 40])
+                }
+            ]
+        }
+    };
+
+    // データの補完（normal, real, masterなどが選ばれた場合の予備）
+    ['normal', 'real', 'master'].forEach(m => {
+        if(!data[m]) data[m] = { title: m + "レベル", steps: data.undergrad.steps };
+    });
+
+    function setMode(mode) {
+        currentMode = mode;
+        currentStep = 0;
+        document.getElementById('mode-screen').style.display = 'none';
+        document.getElementById('main-view').style.display = 'block';
+        updateContent();
+    }
+
+    function goHome() {
+        document.getElementById('mode-screen').style.display = 'flex';
+        document.getElementById('main-view').style.display = 'none';
+    }
+
+    function updateBars(heights) {
+        const area = document.getElementById('panel-content');
+        if (!area.querySelector('.building-canvas')) {
+            const canvas = document.createElement('div');
+            canvas.className = 'building-canvas';
+            heights.forEach(() => {
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                canvas.appendChild(bar);
+            });
+            area.appendChild(canvas);
+        }
+        const bars = area.querySelectorAll('.bar');
+        bars.forEach((bar, i) => {
+            bar.style.height = heights[i] + '%';
+        });
+    }
+
+    function updateContent() {
+        const modeData = data[currentMode];
+        const step = modeData.steps[currentStep];
+        
+        document.getElementById('content-title').innerText = modeData.title;
+        document.getElementById('content-body').innerHTML = `<h3>${step.header}</h3><p>${step.body}</p>`;
+        document.getElementById('panel-title').innerText = "🔍 インタラクティブ解析";
+        document.getElementById('panel-content').innerHTML = `<p>${step.panel}</p>`;
+        
+        if (step.action) step.action();
+    }
+
+    function nextContent() {
+        if (currentStep < data[currentMode].steps.length - 1) {
+            currentStep++;
+            updateContent();
+        }
+    }
+
+    function prevContent() {
+        if (currentStep > 0) {
+            currentStep--;
+            updateContent();
+        }
+    }
+</script>
+
+</body>
+</html>
