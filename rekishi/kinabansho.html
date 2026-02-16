@@ -19,12 +19,13 @@
             overflow: hidden; height: 100dvh; -webkit-text-size-adjust: 100%;
         }
 
-        /* --- ルビ修正：漢字の上に表示し、熟語が途切れないようにする --- */
+        /* --- ルビ修正：漢字の上に強制表示 --- */
         ruby {
             ruby-position: over;
             -webkit-ruby-position: before;
-            display: inline-block; /* 熟語の途中で改行されるのを防ぐ */
+            display: inline-block; /* 熟語が途中で改行されるのを防ぐ */
             text-align: center;
+            white-space: nowrap;
         }
         rt {
             font-size: 0.5em;
@@ -50,11 +51,12 @@
 
         .info-box { background: white; border-radius: 20px; padding: 15px; margin: 15px 0; border-left: 6px solid var(--secondary); box-shadow: 0 5px 15px var(--shadow); }
         
-        /* 学年選択ボタン */
-        .mode-select { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
-        .mode-btn { background: white; border: 3px solid var(--accent); padding: 15px; border-radius: 20px; cursor: pointer; font-size: 1.1em; font-weight: 800; text-align: center; transition: 0.3s; }
+        /* コース選択 */
+        .mode-select { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
+        .mode-btn { background: white; border: 3px solid var(--accent); padding: 18px; border-radius: 20px; cursor: pointer; font-size: 1.1em; font-weight: 800; text-align: center; transition: 0.3s; }
         .mode-btn:active { background: var(--accent); color: white; }
 
+        /* ナビゲーション */
         .navigation { display: flex; justify-content: space-between; width: 100%; max-width: 900px; margin-top: 15px; gap: 15px; }
         button { background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color: white; border: none; padding: 16px; font-size: 1.1em; border-radius: 50px; cursor: pointer; font-weight: 700; flex: 1; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         button:disabled { opacity: 0.3; }
@@ -63,7 +65,6 @@
         .quiz-option { background: white; border: 3px solid var(--accent); padding: 12px; margin: 10px 0; border-radius: 15px; cursor: pointer; font-size: 1em; display: flex; align-items: center; gap: 10px; }
         .quiz-option.correct { background: #d4edda !important; border-color: #28a745 !important; }
         .quiz-option.incorrect { background: #f8d7da !important; border-color: #dc3545 !important; }
-        .quiz-option.disabled { pointer-events: none; opacity: 0.7; }
         .answer-reveal { background: #fff3cd; border: 3px solid #ffc107; padding: 15px; margin: 15px 0; border-radius: 15px; display: none; }
         .answer-reveal.show { display: block; animation: slideDown 0.4s ease-out; }
 
@@ -78,12 +79,12 @@
             <div class="slide-content active" data-slide="0">
                 <h1>🏯 <ruby>喜名番所<rt>きなばんじょ</rt></ruby>を学ぼう！</h1>
                 <div class="info-box">
-                    <p><ruby>読谷村<rt>よみたんそん</rt></ruby>の歴史ある建物「<ruby>喜名番所<rt>きなばんじょ</rt></ruby>」を学ぼう！コースを選んでね。</p>
+                    <p>今の自分にぴったりのコースを選んでね！</p>
                 </div>
                 <div class="mode-select">
-                    <div class="mode-btn" onclick="startCourse('junior')">🐥 小学生：やさしい解説</div>
-                    <div class="mode-btn" onclick="startCourse('middle')">✏️ 中学生：標準的な歴史</div>
-                    <div class="mode-btn" onclick="startCourse('high')">🎓 高校生：専門的な背景</div>
+                    <div class="mode-btn" onclick="startCourse('junior')">🐥 小学生：やさしい</div>
+                    <div class="mode-btn" onclick="startCourse('middle')">✏️ 中学生：標準</div>
+                    <div class="mode-btn" onclick="startCourse('high')">🎓 高校生：専門的</div>
                 </div>
             </div>
 
@@ -91,76 +92,66 @@
                 <h2>🏛️ <ruby>喜名番所<rt>きなばんじょ</rt></ruby>ってなに？</h2>
                 <div class="info-box">
                     <p><strong><ruby>喜名番所<rt>きなばんじょ</rt></ruby></strong>は、昔の<ruby>役場<rt>やくば</rt></ruby>を<ruby>再現<rt>さいげん</rt></ruby>した建物だよ。</p>
-                    <p>今は<span class="highlight">「道の<ruby>駅<rt>えき</rt></ruby>」</span>として、多くの人が<ruby>訪<rt>おとず</rt></ruby>れるんだ！</p>
+                    <p>今は<span class="highlight">「道の<ruby>駅<rt>えき</rt></ruby>」</span>として有名なんだ！</p>
                 </div>
-                <p class="high-only" style="display:none;"><ruby>琉球王国<rt>りゅうきゅうおうこく</rt></ruby>時代の行政区画である「<ruby>間切<rt>まぎり</rt></ruby>」の役所を<ruby>番所<rt>ばんじょ</rt></ruby>と呼びました。ここは<ruby>読谷山<rt>ゆんたんざ</rt></ruby><ruby>間切<rt>まぎり</rt></ruby>の拠点でした。</p>
+                <p class="high-only" style="display:none;"><ruby>琉球王国<rt>りゅうきゅうおうこく</rt></ruby>時代の行政区画「<ruby>間切<rt>まぎり</rt></ruby>」の拠点であり、宿道（主要道路）沿いの要所として機能していました。</p>
             </div>
 
             <div class="slide-content" data-slide="2">
-                <h2>⚓ なぜペリーは日本に来たの？</h2>
+                <h2>⚓ ペリーが来た「本当の理由」</h2>
                 
                 <div class="junior-only">
-                    <p>アメリカから来たペリー<ruby>提督<rt>ていとく</rt></ruby>には、<strong>２つの大きな目的</strong>があったよ。</p>
+                    <p>アメリカから来たペリー<ruby>提督<rt>ていとく</rt></ruby>には目的があったよ。</p>
                     <ul>
-                        <li>🚢 クジラをとる船のために、<strong>水や食べ物をわけてもらう場所</strong>がほしかった。</li>
-                        <li>🤝 日本と<strong><ruby>貿易<rt>ぼうえき</rt></ruby>（商売）</strong>をして、お互いの国の物を売り買いしたかった。</li>
+                        <li>🚢 クジラをとる船に、<strong>水や食べ物をわけてもらう場所</strong>がほしかった。</li>
+                        <li>🤝 日本と<strong><ruby>貿易<rt>ぼうえき</rt></ruby></strong>（商売）をしたかった。</li>
                     </ul>
                 </div>
 
                 <div class="middle-only" style="display:none;">
-                    <p>1853年、アメリカのペリーが来航した背景には、太平洋航路の拡大がありました。</p>
+                    <p>アメリカの狙いは、太平洋航路の安全確保と補給拠点の獲得でした。</p>
                     <ul>
-                        <li>捕鯨船（クジラをとる船）の<strong><ruby>薪水給与<rt>しんすいきゅうよ</rt></ruby></strong>（水や燃料の補給）の拠点がほしかった。</li>
-                        <li>中国市場との<ruby>貿易<rt>ぼうえき</rt></ruby>を有利に進めるため、日本を中継地点にしたかった。</li>
+                        <li>捕鯨船の<strong><ruby>薪水給与<rt>しんすいきゅうよ</rt></ruby></strong>（燃料や水の補給）の拠点が必要だった。</li>
+                        <li>蒸気船の燃料である<strong>石炭の補給地</strong>として日本を狙った。</li>
                     </ul>
                 </div>
 
                 <div class="high-only" style="display:none;">
-                    <p>19世紀、アメリカは太平洋進出を加速させていました。</p>
+                    <p>19世紀の地政学的戦略に基づいた来航でした。</p>
                     <ul>
-                        <li><strong>捕鯨産業の保護：</strong> 当時、鯨油は照明燃料として不可欠で、北太平洋での捕鯨船の補給地（水・食料）が急務でした。</li>
-                        <li><strong>蒸気船の石炭補給：</strong> 帆船から蒸気船への転換期。中国への航路を確立するため、日本（琉球）を石炭補給の拠点とする必要がありました。</li>
-                        <li><strong>地政学的戦略：</strong> 清との貿易を拡大させるため、太平洋の覇権を握る「中継地」としての日本を開国させる狙いがありました。</li>
+                        <li><strong>捕鯨産業の保護：</strong> 北太平洋で活動する捕鯨船の補給・寄港地を確保。</li>
+                        <li><strong>清への進出拠点：</strong> 清（中国）との貿易を加速させるため、太平洋の覇権を握るための中継地が必要でした。</li>
+                        <li><strong>石炭補給地の確保：</strong> 当時最新の蒸気船にとって、日本（琉球）を石炭供給地点にすることが重要でした。</li>
                     </ul>
                 </div>
             </div>
 
             <div class="slide-content" data-slide="3">
-                <h2>🏯 <ruby>喜名番所<rt>きなばんじょ</rt></ruby>での「もてなし」</h2>
-                <p>1853年6月6日、<ruby>首里城<rt>しゅりじょう</rt></ruby>に向かう途中のペリー一行を、ここ<ruby>喜名番所<rt>きなばんじょ</rt></ruby>で迎えました。</p>
+                <h2>🏯 喜名番所での「もてなし」</h2>
+                <p>1853年、首里城へ向かうペリー一行を喜名番所で迎えました。</p>
                 <div class="info-box">
                     <p class="junior-only">怖い顔をしたペリーさんたちを、村の人たちは精一杯お茶やお菓子でもてなしたんだよ。</p>
-                    <p class="middle-only" style="display:none;">武力衝突を避けるための外交戦略として、丁重な<ruby>接待<rt>せったい</rt></ruby>を行いました。当時の記録には、お茶、タバコ、菓子が振る舞われたとあります。</p>
-                    <p class="high-only" style="display:none;">王国政府は直接の武力行使を避けるため、「接遇」という形で時間稼ぎと緊張緩和を図りました。ペリーの日記にも、この地での休息と<ruby>接待<rt>せったい</rt></ruby>が記録されています。</p>
+                    <p class="middle-only" style="display:none;">武力衝突を避ける外交手段として、お茶やタバコ、菓子を振る舞い緊張を和らげました。</p>
+                    <p class="high-only" style="display:none;">王国政府は直接交渉を避けるため、「接遇」という形で時間稼ぎと緊張緩和を図る外交戦を繰り広げました。</p>
                 </div>
             </div>
 
             <div class="slide-content" data-slide="4">
-                <h2>🏗️ くぎを一本も使わない技術</h2>
-                <p>今の建物は2005年に<ruby>再建<rt>さいけん</rt></ruby>されたものだけど、当時のすごい技術を使っているよ。</p>
-                <ul>
-                    <li><strong><ruby>貫工法<rt>ぬきこうほう</rt></ruby>：</strong> 柱を横木でつないで、くぎを使わずに丈夫にする作り方。</li>
-                    <li><strong>チャーギ：</strong> シロアリに強い「イヌマキ」という木を使っているよ。</li>
-                </ul>
-            </div>
-
-            <div class="slide-content" data-slide="5">
                 <h2>❓ クイズ</h2>
-                <h3 id="quiz-q">ペリーが日本に一番求めていたものは何？</h3>
-                <div class="quiz-option" onclick="handleQuiz(this, true)">1. 船の補給地を確保するため</div>
-                <div class="quiz-option" onclick="handleQuiz(this, false)">2. 観光旅行をしたかったから</div>
-                <div class="quiz-option" onclick="handleQuiz(this, false)">3. 沖縄でお店を開きたかったから</div>
+                <h3 id="quiz-q">ペリーが日本に求めた一番の目的は？</h3>
+                <div class="quiz-option" onclick="handleQuiz(this, true)">A. 船の補給基地をつくるため</div>
+                <div class="quiz-option" onclick="handleQuiz(this, false)">B. 沖縄に旅行に来たかったから</div>
+                <div class="quiz-option" onclick="handleQuiz(this, false)">C. 新しい食べ物を探すため</div>
                 <div class="answer-reveal" id="reveal">
-                    <p><strong>💡 正解は「1. 船の補給地」だよ！</strong></p>
-                    <p>当時は船で長旅をするのに、水や燃料（石炭）がどうしても必要だったんだね。</p>
+                    <p><strong>💡 正解はA！</strong> 石炭や水、食料を補給する場所がどうしても必要だったんだね。</p>
                 </div>
             </div>
 
-            <div class="slide-content" data-slide="6">
-                <h1>🎉 <ruby>学習完了<rt>がくしゅうかんりょう</rt></ruby>！</h1>
+            <div class="slide-content" data-slide="5">
+                <h1>🎉 学習完了！</h1>
                 <div class="info-box" style="text-align:center;">
-                    <p><ruby>喜名番所<rt>きなばんじょ</rt></ruby>の歴史、よくわかったかな？</p>
-                    <p><ruby>読谷村<rt>よみたんそん</rt></ruby>に来たら、ぜひ本物の建物を見てみてね！</p>
+                    <p>喜名番所の歴史、よくわかったかな？</p>
+                    <p>読谷村に来たら、本物の建物を見てみてね！</p>
                 </div>
                 <button onclick="location.reload()" style="margin-top:20px; width:100%;">最初からやり直す 🔄</button>
             </div>
@@ -205,7 +196,7 @@
 
         function handleQuiz(el, isCorrect) {
             const options = el.parentNode.querySelectorAll('.quiz-option');
-            options.forEach(o => o.classList.add('disabled'));
+            options.forEach(o => o.style.pointerEvents = 'none');
             el.classList.add(isCorrect ? 'correct' : 'incorrect');
             document.getElementById('reveal').classList.add('show');
         }
