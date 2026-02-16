@@ -3,76 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>喜名番所を学ぼう！【高校生コース】🏯</title>
+    <title>喜名番所を学ぼう！🏯</title>
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
         :root {
             --primary: #FF6B35; --secondary: #F7931E; --accent: #4ECDC4;
             --dark: #2C3E50; --light: #FFF8F0; --shadow: rgba(0, 0, 0, 0.1);
         }
-
         body {
             font-family: 'M PLUS Rounded 1c', sans-serif;
             background: linear-gradient(135deg, #FFE66D 0%, #A8E063 100%);
             overflow: hidden; height: 100dvh; -webkit-text-size-adjust: 100%;
         }
-
-        /* ルビ：漢字の上に表示し、改行を防止 */
+        /* ルビ：漢字の上に表示 */
         ruby { ruby-position: over; -webkit-ruby-position: before; white-space: nowrap; }
-        rt { font-size: 0.5em; line-height: 1.1; }
+        rt { font-size: 0.55em; line-height: 1; }
 
-        .container { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 15px; }
-
+        .container { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; }
         .slide-outer {
-            background: var(--light); border-radius: 30px; padding: 30px 20px;
-            width: 100%; max-width: 900px; height: 80dvh;
-            overflow-y: auto; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            background: var(--light); border-radius: 30px; padding: 25px 15px; width: 100%; max-width: 900px;
+            height: 78dvh; overflow-y: auto; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
             -webkit-overflow-scrolling: touch;
         }
-
         .slide-content { display: none; }
         .slide-content.active { display: block; animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        h1 { font-family: 'Zen Maru Gothic', serif; font-size: 1.8em; color: var(--primary); text-align: center; margin-bottom: 25px; font-weight: 900; line-height: 1.3; }
-        h2 { font-family: 'Zen Maru Gothic', serif; font-size: 1.5em; color: var(--primary); margin: 20px 0 15px; font-weight: 800; border-bottom: 2px solid var(--accent); padding-bottom: 5px; }
-        h3 { font-size: 1.2em; color: var(--dark); margin: 20px 0 10px; font-weight: 700; }
-        p, li { font-size: 1.05em; line-height: 1.8; color: var(--dark); margin-bottom: 15px; }
+        h1 { font-family: 'Zen Maru Gothic', serif; font-size: 1.7em; color: var(--primary); text-align: center; margin-bottom: 20px; font-weight: 900; line-height: 1.3; }
+        h2 { font-family: 'Zen Maru Gothic', serif; font-size: 1.4em; color: var(--primary); margin: 15px 0; font-weight: 800; border-bottom: 2px solid var(--accent); }
+        p, li { font-size: 1em; line-height: 1.7; color: var(--dark); margin-bottom: 12px; }
 
-        .info-box { background: white; border-radius: 20px; padding: 20px; margin: 20px 0; border-left: 8px solid var(--secondary); box-shadow: 0 5px 15px var(--shadow); }
+        .info-box { background: white; border-radius: 20px; padding: 15px; margin: 15px 0; border-left: 5px solid var(--secondary); }
         
-        /* 3択クイズ */
-        .quiz-option {
-            background: white; border: 3px solid var(--accent); padding: 15px;
-            margin: 12px 0; border-radius: 15px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.3s;
-        }
-        .quiz-option:active { background: #f0f0f0; }
+        /* 学年選択 */
+        .mode-btn { background: white; border: 3px solid var(--accent); padding: 15px; border-radius: 20px; cursor: pointer; font-size: 1em; font-weight: 800; margin-bottom: 10px; text-align: center; }
+        
+        /* クイズ */
+        .quiz-option { background: white; border: 3px solid var(--accent); padding: 12px; margin: 8px 0; border-radius: 15px; cursor: pointer; font-size: 0.95em; }
         .quiz-option.correct { background: #d4edda !important; border-color: #28a745 !important; }
         .quiz-option.incorrect { background: #f8d7da !important; border-color: #dc3545 !important; }
-        .quiz-option.disabled { pointer-events: none; opacity: 0.8; }
-        .answer-reveal { background: #fff3cd; border: 3px solid #ffc107; padding: 15px; margin: 15px 0; border-radius: 15px; display: none; }
-        .answer-reveal.show { display: block; animation: slideDown 0.4s ease-out; }
-        @keyframes slideDown { from { opacity: 0; max-height: 0; } to { opacity: 1; max-height: 1000px; } }
+        .answer-reveal { background: #fff3cd; border: 3px solid #ffc107; padding: 15px; margin: 10px 0; border-radius: 15px; display: none; }
+        .answer-reveal.show { display: block; }
 
-        /* ナビゲーション */
-        .navigation { display: flex; justify-content: space-between; width: 100%; max-width: 900px; margin-top: 20px; gap: 20px; }
-        button {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white; border: none; padding: 16px; font-size: 1.1em;
-            border-radius: 50px; cursor: pointer; font-weight: 700; flex: 1;
-            box-shadow: 0 5px 15px rgba(255,107,53,0.3);
-            touch-action: manipulation;
-        }
+        .navigation { display: flex; justify-content: space-between; width: 100%; max-width: 900px; margin-top: 15px; gap: 10px; }
+        button { background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color: white; border: none; padding: 15px; font-size: 1em; border-radius: 50px; cursor: pointer; font-weight: 700; flex: 1; }
         button:disabled { opacity: 0.3; }
-
-        .progress { text-align: center; margin-top: 15px; font-size: 0.9em; font-weight: bold; }
-        .highlight { background: linear-gradient(transparent 60%, #FFE66D 60%); font-weight: bold; }
-        
-        .timeline { background: white; border-left: 5px solid var(--accent); padding: 15px; margin: 20px 0; border-radius: 10px; }
-        .timeline-item { margin-bottom: 15px; padding-left: 20px; position: relative; }
-        .timeline-item::before { content: '📍'; position: absolute; left: -14px; font-size: 1.2em; }
+        .progress { text-align: center; margin-top: 10px; font-size: 0.8em; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -80,158 +57,115 @@
         <div class="slide-outer" id="slideBox">
             
             <div class="slide-content active" data-slide="0">
-                <h1>🏯 喜名番所を深掘り！<br>高校生・上級コース</h1>
-                <div class="emoji-large" style="font-size: 4em; text-align: center; margin: 20px 0;">🏛️</div>
-                <div class="info-box">
-                    <p>このコースでは、単なる観光地としての喜名番所ではなく、琉球が直面した<ruby>近代<rt>きんだい</rt></ruby>化の<ruby>激動<rt>げきどう</rt></ruby>とその背景について詳しく学びます。</p>
-                    <p>✨ 読谷村の歴史を、より広い視点から考えてみましょう！</p>
-                </div>
+                <h1>🏯 喜名番所を学ぼう！</h1>
+                <div class="info-box"><p>今の自分にぴったりのコースを選んでね。ペリー提督と読谷の歴史を深掘りしよう！</p></div>
+                <div class="mode-btn" onclick="startCourse('junior')">🐥 小学生：やさしい</div>
+                <div class="mode-btn" onclick="startCourse('middle')">✏️ 中学生：標準</div>
+                <div class="mode-btn" onclick="startCourse('high')">🎓 高校生：専門的</div>
             </div>
 
             <div class="slide-content" data-slide="1">
-                <h2>🏛️ 喜名番所：地域の行政拠点</h2>
-                <p>喜名番所は、琉球王国時代における「読谷山間切（ゆんたんざまぎり）」の行政を司る役所（番所）でした。</p>
+                <h2>🏛️ 喜名番所ってどんな場所？</h2>
+                <p>喜名番所（きなばんじょ）は、琉球王国時代に「読谷山間切（ゆんたんざまぎり）」の役所として使われていた建物です。</p>
                 <div class="info-box">
-                    <h3>行政と交通の要所</h3>
-                    <p>番所は現在の役場にあたりますが、同時に首里城から北部へ続く「宿道（しゅくみち）」沿いに位置し、旅人や役人の<ruby>宿舎<rt>しゅくしゃ</rt></ruby>としての役割も兼ね備えていました。</p>
+                    <p class="junior-only">今の市役所や村役場のような、村で一番大事な場所だったんだよ！</p>
+                    <p class="middle-only" style="display:none;">行政機能だけでなく、首里から北部へ向かう役人の宿舎としての役割もありました。</p>
+                    <p class="high-only" style="display:none;">宿道（主要道路）沿いの要所に設置され、地域の統治と情報の伝達、さらには接客拠点としての機能を備えていました。</p>
                 </div>
             </div>
 
             <div class="slide-content" data-slide="2">
-                <h2>⚓ 1853年、ペリー来航の背景</h2>
-                <p>アメリカ東インド艦隊司令長官ペリーが琉球を訪れたのは、単なる偶然ではありません。当時のアメリカには明確な戦略がありました。</p>
-                <ul>
-                    <li><strong>捕鯨船団の支援：</strong> 当時、鯨油は重要な燃料でした。広大な太平洋で活動する捕鯨船には、食料や水の補給地が必要でした。</li>
-                    <li><strong>石炭補給地の確保：</strong> 蒸気船の時代が始まり、中国航路の中継地点として日本（および琉球）を石炭の供給地にする狙いがありました。</li>
-                    <li><strong>東アジア貿易の拡大：</strong> 清（中国）への進出を加速させるため、日本を開国させる必要がありました。</li>
-                </ul>
+                <h2>⚓ なぜペリーは日本に来たの？</h2>
+                <div class="junior-only">
+                    <p>アメリカで使っていた大きな船のために、<strong>水や食べ物をわけてもらう場所</strong>が必要だったんだ。それに、日本と<strong>商売（貿易）</strong>をしたかったんだよ。</p>
+                </div>
+                <div class="middle-only" style="display:none;">
+                    <p>捕鯨船の<strong>薪水給与（しんすいきゅうよ）</strong>や、中国航路を走る蒸気船の<strong>石炭補給</strong>のための拠点確保が主な目的でした。</p>
+                </div>
+                <div class="high-only" style="display:none;">
+                    <p>米国の太平洋戦略に基づき、<strong>捕鯨産業の保護</strong>と清への進出に向けた<strong>地政学的な中継拠点</strong>の確保を狙っていました。また、当時最新の蒸気船のための石炭補給地として日本を「開国」させる必要があったのです。</p>
+                </div>
             </div>
 
             <div class="slide-content" data-slide="3">
-                <h2>🏯 琉球の外交戦略としての接待</h2>
-                <p>1853年6月6日、首里への武力行使を辞さないペリー一行に対し、琉球政府は喜名番所で丁重な接待を行いました。</p>
+                <h2>🏯 喜名番所での「もてなし」</h2>
+                <p>1853年、首里へ向かうペリー一行を喜名番所で迎え、お茶やお菓子を出しました。</p>
                 <div class="info-box">
-                    <p>当時の記録によると、一行にはお茶や菓子、タバコなどが振る舞われました。これは武力衝突を避け、交渉によって平和を守ろうとした琉球王国の苦渋の外交判断でもありました。</p>
+                    <p class="junior-only">怖い顔をしたペリーさんたちを、村の人たちは精一杯おもてなししたんだよ。</p>
+                    <p class="middle-only" style="display:none;">武力衝突を避けるための外交手段として、丁重なもてなしを行い、緊張を緩和させようとしました。</p>
+                    <p class="high-only" style="display:none;">王国政府は直接的な軍事衝突を回避するため、番所等の拠点での「接遇」を外交上の緩衝材として活用する戦略をとりました。</p>
                 </div>
             </div>
 
             <div class="slide-content" data-slide="4">
-                <h2>📜 琉米修好条約の締結</h2>
-                <p>ペリーは浦賀での交渉の裏で、琉球とも直接交渉を進めました。</p>
-                <div class="timeline">
-                    <div class="timeline-item"><strong>1854年3月</strong> 日米和親条約（神奈川）</div>
-                    <div class="timeline-item"><strong>1854年7月</strong> 琉米修好条約（首里）</div>
-                </div>
-                <p>これにより、琉球はアメリカ船舶に対する補給と自由貿易、そしてアメリカ人の保護を約束することとなりました。</p>
+                <h2>🏗️ 釘を一本も使わない建物</h2>
+                <p>現在の建物は当時の技法で再現されています。柱にはシロアリに強い<ruby>チャーギ<rt>イヌマキ</rt></ruby>が使われています。</p>
+                <p class="high-only" style="display:none;">伝統的な「貫（ぬき）工法」により、地震の揺れを逃がす構造になっており、釘を使わずに組み上げられています。</p>
             </div>
 
             <div class="slide-content" data-slide="5">
-                <h2>🏗️ 再建された「伝統」の美</h2>
-                <p>現在の建物は、1853年当時の「読谷山間切番所」を忠実に再現したものです。</p>
-                <div class="info-box">
-                    <ul>
-                        <li><strong>貫（ぬき）工法：</strong> 柱と梁（はり）を組み込み、くぎを一本も使わない耐震性に優れた伝統技法です。</li>
-                        <li><strong>チャーギ（イヌマキ）：</strong> 湿気や白アリに極めて強い高級木材を使用し、沖縄の気候に適応させています。</li>
-                        <li><strong>灰色の瓦：</strong> 王国時代の士族や公共施設のみが許された伝統的な配色です。</li>
-                    </ul>
+                <h2>❓ クイズ</h2>
+                <h3 id="quiz-q">ペリーが日本に求めた一番の目的は？</h3>
+                <div class="quiz-option" onclick="handleQuiz(this, true)">A. 船の補給地を確保するため</div>
+                <div class="quiz-option" onclick="handleQuiz(this, false)">B. 沖縄に旅行に来たかったから</div>
+                <div class="quiz-option" onclick="handleQuiz(this, false)">C. 新しい食べ物を探すため</div>
+                <div class="answer-reveal" id="reveal">
+                    <p><strong>💡 正解はA！</strong> 蒸気船の石炭や、船乗りのための水・食料がどうしても必要だったんだね。</p>
                 </div>
             </div>
 
             <div class="slide-content" data-slide="6">
-                <h2>❓ クイズ1</h2>
-                <h3>ペリーが琉球・日本へ開国を求めた最大の「地政学的」な理由は？</h3>
-                <div class="quiz-option" onclick="handleAns(this, false)">A. 琉球の特産品を独占するため</div>
-                <div class="quiz-option" onclick="handleAns(this, true)">B. 蒸気船の燃料となる石炭の補給地を確保するため</div>
-                <div class="quiz-option" onclick="handleAns(this, false)">C. 観光地としての価値を見出したため</div>
-                <div class="answer-reveal">
-                    <p><strong>💡 解説：</strong> 当時のアメリカは清（中国）との貿易を重視しており、その中継地点で石炭補給ができる拠点を切実に必要としていました。</p>
-                </div>
+                <h1>🎉 クリア！</h1>
+                <div class="emoji-large" style="text-align:center;">🏆</div>
+                <p>喜名番所の歴史を学んでくれてありがとう！読谷村に来たら、ぜひ本物の建物を見てみてね。</p>
+                <button onclick="location.reload()" style="width:100%; margin-top:20px;">もう一度学ぶ 🔄</button>
             </div>
-
-            <div class="slide-content" data-slide="7">
-                <h2>❓ クイズ2</h2>
-                <h3>喜名番所でペリー一行に提供された「もてなし」の背景にある意図は？</h3>
-                <div class="quiz-option" onclick="handleAns(this, false)">A. 早期にアメリカ軍を追い払うため</div>
-                <div class="quiz-option" onclick="handleAns(this, true)">B. 武力衝突を避け、対話による解決を図るための外交手段</div>
-                <div class="quiz-option" onclick="handleAns(this, false)">C. アメリカの食文化を学ぶため</div>
-                <div class="answer-reveal">
-                    <p><strong>💡 解説：</strong> 小国であった琉球は、強力な艦隊を持つペリーに対し、平和的な接待を通じて時間を稼ぎ、緊張を和らげる戦略をとりました。</p>
-                </div>
-            </div>
-
-            <div class="slide-content" data-slide="8">
-                <h2>❓ クイズ3</h2>
-                <h3>喜名番所の建築に使用された、沖縄の気候に強い高級木材の名前は？</h3>
-                <div class="quiz-option" onclick="handleAns(this, true)">A. チャーギ（イヌマキ）</div>
-                <div class="quiz-option" onclick="handleAns(this, false)">B. スギ（杉）</div>
-                <div class="quiz-option" onclick="handleAns(this, false)">C. マツ（琉球松）</div>
-                <div class="answer-reveal">
-                    <p><strong>💡 解説：</strong> チャーギはシロアリに強く非常に硬いため、沖縄の伝統的な木造建築において最も重宝される木材です。</p>
-                </div>
-            </div>
-
-            <div class="slide-content" data-slide="9">
-                <h1>🎉 学習完了！</h1>
-                <div class="emoji-large" style="text-align:center;">📖</div>
-                <div class="info-box">
-                    <p>喜名番所は単なる「道の駅」ではありません。日本の近代化の入り口を支えた歴史の証人です。</p>
-                    <p>次に訪れる時は、ぜひ柱の組み方や屋根の瓦にも注目してみてください！</p>
-                </div>
-                <button onclick="location.reload()" style="width:100%;">もう一度学ぶ 🔄</button>
-            </div>
-
         </div>
 
-        <div class="navigation">
-            <button id="prevBtn" onclick="changeSlide(-1)">⬅️ 前へ</button>
-            <button id="nextBtn" onclick="changeSlide(1)">次へ ➡️</button>
+        <div class="navigation" id="nav-bar" style="display:none;">
+            <button onclick="changeSlide(-1)">⬅️ 前へ</button>
+            <button onclick="changeSlide(1)">次へ ➡️</button>
         </div>
-        <div class="progress" id="progressText">1 / 10</div>
+        <div class="progress" id="prog-text" style="display:none;"></div>
     </div>
 
     <script>
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide-content');
-        const totalSlides = slides.length;
+        let selectedMode = 'junior';
+
+        function startCourse(m) {
+            selectedMode = m;
+            document.querySelectorAll('.junior-only').forEach(el => el.style.display = (m==='junior'?'block':'none'));
+            document.querySelectorAll('.middle-only').forEach(el => el.style.display = (m==='middle'?'block':'none'));
+            document.querySelectorAll('.high-only').forEach(el => el.style.display = (m==='high'?'block':'none'));
+            
+            document.getElementById('nav-bar').style.display = 'flex';
+            document.getElementById('prog-text').style.display = 'block';
+            changeSlide(1);
+        }
 
         function showSlide(n) {
             slides.forEach(s => s.classList.remove('active'));
             currentSlide = n;
             slides[currentSlide].classList.add('active');
-            
-            document.getElementById('prevBtn').disabled = n === 0;
-            document.getElementById('nextBtn').style.display = (n === totalSlides - 1) ? 'none' : 'block';
-            document.getElementById('progressText').innerText = `${n + 1} / ${totalSlides}`;
+            document.getElementById('prog-text').innerText = `${currentSlide} / ${slides.length - 1}`;
             document.getElementById('slideBox').scrollTop = 0;
         }
 
         function changeSlide(d) {
             const next = currentSlide + d;
-            if (next >= 0 && next < totalSlides) {
+            if (next >= 0 && next < slides.length) {
                 showSlide(next);
             }
         }
 
-        function handleAns(el, isCorrect) {
-            const parent = el.parentNode;
-            const options = parent.querySelectorAll('.quiz-option');
-            const reveal = parent.querySelector('.answer-reveal');
-            
-            options.forEach(o => o.classList.add('disabled'));
+        function handleQuiz(el, isCorrect) {
+            const options = el.parentNode.querySelectorAll('.quiz-option');
+            options.forEach(o => o.style.pointerEvents = 'none');
             el.classList.add(isCorrect ? 'correct' : 'incorrect');
-            
-            if (!isCorrect) {
-                options.forEach(o => {
-                    if (o.innerText.startsWith(String.fromCharCode(65 + [...options].indexOf(o))) && isCorrectOption(o)) {
-                        // 正解を表示させる処理を入れる場合はここ
-                    }
-                });
-            }
-            reveal.classList.add('show');
+            document.getElementById('reveal').classList.add('show');
         }
-
-        // 初期化
-        showSlide(0);
     </script>
 </body>
 </html>
