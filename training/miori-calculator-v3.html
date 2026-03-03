@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>みおりの計算コンパス v3</title>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sky:#edf4ff;--b6:#1a6ef0;--r9:#e83030;
+  --grn:#22c55e;--ylw:#f59e0b;--org:#f97316;
+  --ink:#1e293b;--soft:#64748b;--muted:#cbd5e1;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'M PLUS Rounded 1c',sans-serif;background:var(--sky);min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;padding:24px 14px 80px;
+  background-image:radial-gradient(ellipse 60% 40% at 15% 8%,#d0e4ff,transparent 60%),
+    radial-gradient(ellipse 50% 40% at 85% 88%,#ffe8d0,transparent 60%);}
+.hdr{text-align:center;margin-bottom:18px;}
+.hdr h1{font-size:1.7em;font-weight:900;color:var(--ink);}
+.gr{background:linear-gradient(120deg,#1a6ef0,#e83030);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hdr p{font-size:.78em;color:var(--soft);margin-top:4px;}
+.tabs{display:flex;gap:10px;margin-bottom:16px;}
+.tb{flex:1;max-width:155px;padding:10px 16px;border-radius:50px;border:2.5px solid var(--muted);
+  background:#fff;font-family:inherit;font-size:.88em;font-weight:800;color:var(--soft);cursor:pointer;transition:all .2s;}
+.tb.ah{background:linear-gradient(135deg,#1a6ef0,#3b82f6);border-color:transparent;color:#fff;box-shadow:0 4px 14px rgba(26,110,240,.3);}
+.tb.aw{background:linear-gradient(135deg,#f97316,#f59e0b);border-color:transparent;color:#fff;box-shadow:0 4px 14px rgba(249,115,22,.3);}
+.card{background:#fff;border-radius:24px;box-shadow:0 8px 32px rgba(30,41,59,.1);width:100%;max-width:430px;padding:22px 18px 18px;}
+.panel{display:none;}.panel.on{display:block;}
+.slb{font-size:.68em;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--soft);margin-bottom:11px;}
+/* legend */
+.leg{display:flex;gap:10px;margin-bottom:18px;}
+.li{flex:1;border-radius:14px;padding:9px 11px;font-size:.76em;font-weight:700;display:flex;align-items:center;gap:8px;line-height:1.4;}
+.l6{background:#e8f0ff;color:var(--b6);border:2px solid #b0caff;}
+.l9{background:#fff0ee;color:var(--r9);border:2px solid #ffb8b0;}
+.bd{font-size:1.7em;font-weight:900;line-height:1;}
+.d6{color:var(--b6);text-decoration:underline;}
+.d9{color:var(--r9);border-top:2.5px solid var(--r9);display:inline-block;padding-top:2px;}
+/* hiki */
+.parea{background:#f8faff;border-radius:16px;padding:16px;margin-bottom:14px;}
+.plbl{font-size:.72em;color:var(--soft);font-weight:700;margin-bottom:8px;}
+.prow{display:flex;align-items:center;gap:8px;}
+.nb{font-size:1.9em;font-weight:900;color:var(--ink);}
+.nh{font-size:1.9em;font-weight:900;background:#fff3b0;border-radius:8px;padding:1px 5px;color:var(--ink);}
+.op{font-size:1.9em;color:var(--soft);font-weight:700;}
+.ni{width:56px;height:56px;font-size:1.55em;font-weight:900;text-align:center;
+  border:3px solid var(--muted);border-radius:12px;outline:none;background:#fff;color:var(--ink);
+  font-family:inherit;transition:border-color .2s,background .2s;-moz-appearance:textfield;}
+.ni::-webkit-inner-spin-button,.ni::-webkit-outer-spin-button{-webkit-appearance:none;}
+.ni.i6{border-color:var(--b6)!important;background:#e8f0ff;color:var(--b6);}
+.ni.i9{border-color:var(--r9)!important;background:#fff0ee;color:var(--r9);}
+.ni.iw{border-color:var(--ylw)!important;background:#fffbea;}
+.ni.io{border-color:var(--grn)!important;background:#f0fdf4;color:var(--grn);}
+.tlw{display:flex;flex-direction:column;gap:4px;margin-left:8px;}
+.tl{width:13px;height:13px;border-radius:50%;background:#e2e8f0;transition:background .3s,box-shadow .3s;}
+.tl.tr{background:#ef4444;box-shadow:0 0 7px #ef4444;}
+.tl.ty{background:var(--ylw);box-shadow:0 0 7px var(--ylw);}
+.tl.tg{background:var(--grn);box-shadow:0 0 7px var(--grn);}
+.fb{min-height:58px;border-radius:14px;padding:11px 13px;font-size:.83em;font-weight:700;
+  color:var(--ink);line-height:1.6;margin-bottom:14px;border-left:4px solid var(--muted);background:#f8faff;transition:all .25s;}
+.fb.fi{border-color:var(--b6);background:#eef4ff;}
+.fb.fw{border-color:var(--ylw);background:#fffbea;}
+.fb.fo{border-color:var(--grn);background:#f0fdf4;}
+.fb.f6{border-color:var(--b6);background:#e8f0ff;color:var(--b6);}
+.fb.f9{border-color:var(--r9);background:#fff0ee;color:var(--r9);}
+.asec{display:none;}.asec.on{display:block;}
+.albl{font-size:.72em;color:var(--soft);font-weight:700;margin-bottom:7px;}
+.ain{width:64px;height:64px;font-size:1.85em;font-weight:900;text-align:center;
+  border:3px solid var(--muted);border-radius:12px;outline:none;color:var(--ink);
+  font-family:inherit;transition:all .25s;-moz-appearance:textfield;}
+.ain::-webkit-inner-spin-button,.ain::-webkit-outer-spin-button{-webkit-appearance:none;}
+.ain.ao{border-color:var(--grn);background:#f0fdf4;color:var(--grn);}
+.ain.ab{border-color:var(--r9);background:#fff0ee;}
+.star{display:none;font-size:1.4em;text-align:center;margin-top:7px;}.star.on{display:block;}
+.kk{background:#f4f6f9;border-radius:16px;padding:12px;margin-top:14px;}
+.kkt{font-size:.69em;font-weight:800;color:var(--soft);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
+.kkg{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;}
+.ki{background:#fff;border-radius:8px;padding:5px 3px;font-size:.76em;font-weight:700;
+  color:var(--ink);text-align:center;border:1.5px solid transparent;transition:all .2s;}
+.ki.kh{background:#fff3b0;border-color:var(--ylw);transform:scale(1.08);color:#78550a;}
+/* wari */
+.wtitle{font-size:.93em;font-weight:900;color:var(--ink);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.wbadge{font-size:.6em;background:linear-gradient(135deg,#f97316,#f59e0b);color:#fff;border-radius:20px;padding:3px 10px;font-weight:800;}
+.pdots{display:flex;gap:6px;justify-content:center;margin-bottom:12px;}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--muted);transition:all .3s;}
+.dot.done{background:var(--grn);}
+.dot.act{background:var(--org);transform:scale(1.3);}
+
+.hissan-wrap{background:#fffdf5;border-radius:16px;padding:16px 20px 12px;margin-bottom:14px;border:2px solid #fde68a;overflow-x:auto;}
+.hissan-title{font-size:.68em;font-weight:800;color:var(--soft);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+.hg{display:grid;grid-template-columns:44px 12px 20px 44px 44px 44px;font-family:"M PLUS Rounded 1c",sans-serif;font-weight:900;font-size:1.45em;}
+.hg>div{display:flex;align-items:center;justify-content:center;min-height:34px;}
+.hgQe{min-height:38px;border-bottom:3px solid transparent;}
+.hgQ{min-height:38px;border-bottom:3px solid var(--ink);}
+.hgDv{justify-content:flex-end;padding-right:4px;min-height:44px;}
+.hgBr{border-left:3px solid var(--ink);border-top:3px solid var(--ink);border-top-left-radius:5px;min-height:44px;align-self:stretch;}
+.hgDd{border-top:3px solid var(--ink);min-height:44px;}
+.hgN{font-size:.78em;min-height:30px;}
+.hgL{border-bottom:2.5px solid var(--ink);min-height:8px;align-self:flex-end;}
+.hgSp{min-height:5px;}
+.vh{visibility:hidden;}
+.qi{width:38px;height:34px;font-size:inherit;font-weight:900;text-align:center;border:none;border-bottom:3px solid var(--org);background:transparent;outline:none;color:var(--org);font-family:inherit;-moz-appearance:textfield;}
+.qi::-webkit-inner-spin-button,.qi::-webkit-outer-spin-button{-webkit-appearance:none;}
+.qi.qok{border-color:var(--grn);color:var(--grn);}
+.qi.qng{border-color:var(--r9);color:var(--r9);}
+.c-org{color:var(--org);}.c-grn{color:var(--grn);}.c-b6{color:var(--b6);}.c-ylw{color:#b45309;}
+.steps{display:flex;flex-direction:column;gap:6px;}
+.sr{display:flex;align-items:center;gap:8px;padding:8px 11px;border-radius:12px;background:#fff;border:1.5px solid #e2e8f0;font-size:.8em;font-weight:700;transition:opacity .3s,border-color .3s;}
+.sr.locked{opacity:.32;pointer-events:none;}
+.sr.act{border-color:var(--org);background:#fff8f0;}
+.snum{width:20px;height:20px;border-radius:50%;background:var(--org);color:#fff;font-size:.7em;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.snum.sb{background:var(--b6);}
+.sin{width:44px;height:34px;font-size:.93em;font-weight:900;text-align:center;border:2.5px solid var(--muted);border-radius:10px;outline:none;background:#fff;color:var(--ink);font-family:inherit;transition:all .2s;-moz-appearance:textfield;}
+.sin::-webkit-inner-spin-button,.sin::-webkit-outer-spin-button{-webkit-appearance:none;}
+.sin.so{border-color:var(--grn)!important;background:#f0fdf4;color:var(--grn);}
+.sin.sn{border-color:var(--r9)!important;background:#fff0ee;}
+.seq{color:var(--soft);}
+.retry-btn{display:none;margin:14px auto 0;padding:10px 28px;border-radius:50px;border:none;background:linear-gradient(135deg,#f97316,#f59e0b);color:#fff;font-family:inherit;font-size:.9em;font-weight:800;cursor:pointer;box-shadow:0 4px 14px rgba(249,115,22,.35);transition:all .2s;}
+.retry-btn:hover{transform:scale(1.05);}
+.retry-btn.on{display:block;}
+.celebrate{display:none;font-size:1.3em;text-align:center;margin-top:10px;}.celebrate.on{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+.fadein{animation:fadeIn .3s ease-out;}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <h1>🧭 <span class="gr">みおりの計算コンパス</span></h1>
+  <p>まちがいをふせいで、じしんをもって計算しよう！</p>
+</div>
+
+<div class="tabs">
+  <button class="tb ah" id="tb-h" onclick="sw('h')">➖ ひき算</button>
+  <button class="tb"    id="tb-w" onclick="sw('w')">➗ わり算</button>
+</div>
+
+<div class="card">
+
+<!-- ===== ひき算 ===== -->
+<div class="panel on" id="ph">
+  <div class="slb">6と9のみわけかた</div>
+  <div class="leg">
+    <div class="li l6"><span class="bd d6">6</span><span>青🫐<br>おきあがりこぼし</span></div>
+    <div class="li l9"><span class="bd d9">9</span><span>赤🎈<br>ふうせん（上に線）</span></div>
+  </div>
+  <div class="parea">
+    <div class="plbl">もんだい：12 − ？</div>
+    <div class="prow">
+      <span class="nb">1</span><span class="nh">2</span>
+      <span class="op" style="margin:0 6px;">−</span>
+      <input type="number" id="hs" class="ni" placeholder="?" min="0" max="9" oninput="onHS(this)">
+      <div class="tlw">
+        <div class="tl" id="tlr"></div>
+        <div class="tl" id="tly"></div>
+        <div class="tl" id="tlg"></div>
+      </div>
+    </div>
+  </div>
+  <div class="fb" id="hfb">数字を入れてみてね 👀</div>
+  <div class="asec" id="hans">
+    <div class="albl">こたえは？（12 − <span id="han">?</span> ＝）</div>
+    <input type="number" id="hai" class="ain" placeholder="?" oninput="onHA(this)">
+    <div class="star pop" id="hstar">🌟 せいかい！すごい！ 🌟</div>
+  </div>
+  <div class="kk">
+    <div class="kkt">⚡ 7のだん おたすけメモ</div>
+    <div class="kkg" id="kkh">
+      <div class="ki" data-v="7">7×1=<b>7</b></div><div class="ki" data-v="14">7×2=<b>14</b></div><div class="ki" data-v="21">7×3=<b>21</b></div>
+      <div class="ki" data-v="28">7×4=<b>28</b></div><div class="ki" data-v="35">7×5=<b>35</b></div><div class="ki" data-v="42">7×6=<b>42</b></div>
+      <div class="ki" data-v="49">7×7=<b>49</b></div><div class="ki" data-v="56">7×8=<b>56</b></div><div class="ki" data-v="63">7×9=<b>63</b></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== わり算 ===== -->
+<div class="panel" id="pw">
+  <div class="wtitle">わりざん <span class="wbadge">176 ÷ 7</span></div>
+  <div class="pdots">
+    <div class="dot act" id="d1"></div><div class="dot" id="d2"></div>
+    <div class="dot" id="d3"></div><div class="dot" id="d4"></div>
+    <div class="dot" id="d5"></div><div class="dot" id="d6"></div>
+    <div class="dot" id="d7"></div>
+  </div>
+
+  <!-- LIVE 筆算 -->
+  <div class="hissan-wrap">
+    <div class="hissan-title">📝 筆算（ひっさん）</div>
+    <div class="hg">
+      <div></div><div></div><div class="hgQe"></div><div class="hgQe"></div>
+      <div class="hgQ" id="hq1cell"><input type="number" id="q1" class="qi" placeholder="?" min="0" max="9" oninput="onQ1(this)"></div>
+      <div class="hgQ" id="hq2cell" style="border-bottom-color:#e2e8f0;"><input type="number" id="q2" class="qi" placeholder="?" min="0" max="9" oninput="onQ2(this)" disabled style="border-bottom-color:#e2e8f0;color:#cbd5e1;"></div>
+      <div class="hgDv">7</div><div class="hgBr"></div>
+      <div></div>
+      <div class="hgDd">1</div><div class="hgDd"><span class="c-b6">7</span></div><div class="hgDd"><span class="c-b6 d6">6</span></div>
+      <div class="vh"></div><div class="vh"></div>
+      <div class="hgN c-ylw vh" style="justify-content:flex-end;" id="n1x">−</div>
+      <div class="hgN c-ylw vh" id="n1d">1</div>
+      <div class="hgN c-ylw vh" id="n1e">4</div>
+      <div class="vh"></div>
+      <div></div><div></div><div></div>
+      <div class="hgL vh" id="l1d"></div><div class="hgL vh" id="l1e"></div>
+      <div></div>
+      <div class="hgSp"></div><div class="hgSp"></div><div class="hgSp"></div><div class="hgSp"></div><div class="hgSp"></div><div class="hgSp"></div>
+      <div class="vh"></div><div class="vh"></div><div class="vh"></div><div class="vh"></div>
+      <div class="hgN c-grn vh" id="r1d">3</div>
+      <div class="hgN c-b6 vh" id="r1e" style="visibility:hidden;">6</div>
+      <div class="vh"></div><div class="vh"></div><div class="vh"></div>
+      <div class="hgN c-ylw vh" style="justify-content:flex-end;" id="n2x">−</div>
+      <div class="hgN c-ylw vh" id="n2d">3</div>
+      <div class="hgN c-ylw vh" id="n2e">5</div>
+      <div></div><div></div><div></div><div></div>
+      <div class="hgL vh" id="l2d"></div><div class="hgL vh" id="l2e"></div>
+      <div class="hgSp"></div><div class="hgSp"></div><div class="hgSp"></div><div class="hgSp"></div><div class="hgSp"></div><div class="hgSp"></div>
+      <div class="vh"></div><div class="vh"></div><div class="vh"></div><div class="vh"></div><div class="vh"></div>
+      <div class="hgN c-grn vh" style="font-weight:900;" id="fin1">1</div>
+    </div>
+    </div><!-- /hissan-wrap -->
+
+  <div class="fb fi" id="wfb">まず、<strong>17 ÷ 7</strong> を考えよう！<br>7のだんで「17にちかい数」はどれかな？</div>
+
+  <div class="steps">
+    <div class="sr act" id="sr1">
+      <div class="snum">1</div>
+      <span>17 ÷ 7 ＝</span>
+      <span id="sv1" class="c-org" style="font-size:1.1em;font-weight:900;">?</span>
+      <span class="seq" style="font-size:.72em;">← 左の□に入力</span>
+    </div>
+    <div class="sr locked" id="sr2">
+      <div class="snum">2</div>
+      <span>7 × <span id="sq2">?</span> ＝</span>
+      <input type="number" id="si2" class="sin" placeholder="?" min="0" max="99" oninput="onSI2(this)" disabled>
+    </div>
+    <div class="sr locked" id="sr3">
+      <div class="snum">3</div>
+      <span>17 − <span id="sq3">?</span> ＝</span>
+      <input type="number" id="si3" class="sin" placeholder="?" min="0" max="99" oninput="onSI3(this)" disabled>
+      <span class="seq" style="font-size:.7em;">（あまり）</span>
+    </div>
+    <div class="sr locked" id="sr4">
+      <div class="snum sb">4</div>
+      <span>「<span class="c-b6">6</span>」を降ろして →</span>
+      <span class="c-b6" style="font-size:1.15em;font-weight:900;">36</span>
+      <span class="seq" style="font-size:.7em;">（自動）</span>
+    </div>
+    <div class="sr locked" id="sr5">
+      <div class="snum sb">5</div>
+      <span>36 ÷ 7 ＝</span>
+      <span id="sv5" class="c-org" style="font-size:1.1em;font-weight:900;">?</span>
+      <span class="seq" style="font-size:.72em;">← 右の□に入力</span>
+    </div>
+    <div class="sr locked" id="sr6">
+      <div class="snum">6</div>
+      <span>7 × <span id="sq6">?</span> ＝</span>
+      <input type="number" id="si6" class="sin" placeholder="?" min="0" max="99" oninput="onSI6(this)" disabled>
+    </div>
+    <div class="sr locked" id="sr7">
+      <div class="snum">7</div>
+      <span>36 − 35 ＝</span>
+      <input type="number" id="si7" class="sin" placeholder="?" min="0" max="99" oninput="onSI7(this)" disabled>
+      <span class="seq" style="font-size:.7em;">（あまり）</span>
+    </div>
+  </div>
+
+  <button class="retry-btn" id="wretry" onclick="retryWari()">🔄 もう一度チャレンジ！</button>
+  <div class="celebrate" id="wcele">🎉 176 ÷ 7 ＝ <strong>25</strong> あまり <strong>1</strong>！すごい！🎉</div>
+
+  <div class="kk" style="margin-top:14px;">
+    <div class="kkt">⚡ 7のだん おたすけメモ</div>
+    <div class="kkg" id="kkw">
+      <div class="ki" data-v="7">7×1=<b>7</b></div><div class="ki" data-v="14">7×2=<b>14</b></div><div class="ki" data-v="21">7×3=<b>21</b></div>
+      <div class="ki" data-v="28">7×4=<b>28</b></div><div class="ki" data-v="35">7×5=<b>35</b></div><div class="ki" data-v="42">7×6=<b>42</b></div>
+      <div class="ki" data-v="49">7×7=<b>49</b></div><div class="ki" data-v="56">7×8=<b>56</b></div><div class="ki" data-v="63">7×9=<b>63</b></div>
+    </div>
+  </div>
+</div><!-- /pw -->
+
+</div><!-- /card -->
+<script>
+/* ---- utils ---- */
+function show(){for(var i=0;i<arguments.length;i++){var e=document.getElementById(arguments[i]);if(e){e.classList.remove('vh');e.style.visibility='visible';}}}
+function reveal(ids){ids.forEach(function(id){var e=document.getElementById(id);if(!e){return;}e.classList.remove('vh');e.style.visibility='visible';e.classList.add('fin');});}
+function sw(m){
+  document.getElementById('ph').classList.toggle('on',m==='h');
+  document.getElementById('pw').classList.toggle('on',m==='w');
+  document.getElementById('tb-h').className='tb'+(m==='h'?' ah':'');
+  document.getElementById('tb-w').className='tb'+(m==='w'?' aw':'');
+}
+function sfb(id,html,c){var e=document.getElementById(id);e.innerHTML=html;e.className='fb '+(c||'');}
+function hl(gid,v){document.querySelectorAll('#'+gid+' .ki').forEach(function(k){k.classList.toggle('kh',+k.dataset.v===v);});}
+function show(id){var e=document.getElementById(id);e.style.visibility='visible';e.classList.add('fadein');}
+function setDots(cur){for(var i=1;i<=7;i++){var d=document.getElementById('d'+i);d.className='dot'+(i<cur?' done':i===cur?' act':'');}}
+function lockSR(id,lock){
+  var e=document.getElementById(id);
+  e.classList.toggle('locked',lock);
+  e.classList.toggle('act',!lock);
+  var inp=e.querySelector('input');
+  if(inp)inp.disabled=lock;
+}
+
+/* ================================================
+   ひき算
+================================================ */
+function setTL(r,y,g){
+  document.getElementById('tlr').className='tl'+(r?' tr':'');
+  document.getElementById('tly').className='tl'+(y?' ty':'');
+  document.getElementById('tlg').className='tl'+(g?' tg':'');
+}
+function onHS(el){
+  var v=parseInt(el.value);
+  var as=document.getElementById('hans'), st=document.getElementById('hstar');
+  el.className='ni'; as.classList.remove('on'); st.classList.remove('on');
+  hl('kkh',-1);
+  if(el.value===''||isNaN(v)){sfb('hfb','数字を入れてみてね 👀','');setTL(0,0,0);return;}
+  if(v===6){el.className='ni i6';sfb('hfb','「<span style="color:#1a6ef0;font-weight:900;text-decoration:underline;">6</span>」だね！青いおきあがりこぼし🫐<br>しっぽが下についているよ。','f6');}
+  else if(v===9){el.className='ni i9';sfb('hfb','「<span style="color:#e83030;font-weight:900;border-top:2px solid #e83030;display:inline-block;padding-top:2px;">9</span>」だね！赤いふうせん🎈<br>上に線がついているよ。','f9');}
+  if(v>=0&&v<=9){
+    if(2>=v){if(v!==6&&v!==9)sfb('hfb','「2」から「'+v+'」はそのまま引けるよ ✅<br><strong style="color:#22c55e">青信号！</strong> そのままどうぞ🚦','fo');el.classList.add('io');setTL(0,0,1);}
+    else{if(v!==6&&v!==9)sfb('hfb','「2」から「'+v+'」は引けないね 🤔<br><strong style="color:#f59e0b">黄色信号！</strong> お隣から10かりてこよう！<br>「12（'+(10+2)+'）」 − 「'+v+'」を計算するよ','fw');el.classList.add('iw');setTL(0,1,0);}
+    if(v===7)hl('kkh',14);
+    document.getElementById('han').textContent=v;
+    document.getElementById('hai').value=''; document.getElementById('hai').className='ain';
+    st.classList.remove('on'); as.classList.add('on');
+  }
+}
+function onHA(el){
+  var sub=parseInt(document.getElementById('hs').value), ans=parseInt(el.value), cor=12-sub, st=document.getElementById('hstar');
+  if(el.value===''||isNaN(ans)){el.className='ain';st.classList.remove('on');return;}
+  if(ans===cor){el.className='ain ao';st.classList.add('on');sfb('hfb','🎉 せいかい！ 12 − '+sub+' = <strong>'+cor+'</strong> だよ！すごい！','fo');}
+  else if(ans===sub){el.className='ain ab';st.classList.remove('on');sfb('hfb','⚠️ 引く数「'+sub+'」をそのまま書いてない？<br>答えは引いた<em>のこり</em>だよ。もう一度！','fw');}
+  else{el.className='ain ab';st.classList.remove('on');sfb('hfb','うーん、もうちょっと！<br>12 − '+sub+' = ？をもう一度かんがえてみて🤔','fw');}
+}
+
+/* ================================================
+   わり算  176 ÷ 7 = 25 あまり 1
+================================================ */
+function hlW(v){hl('kkw',v);}
+
+function retryWari(){
+  ['n1x','n1d','n1e','l1d','l1e','r1d','r1e','n2x','n2d','n2e','l2d','l2e','fin1'].forEach(function(id){
+    var e=document.getElementById(id);
+    if(!e)return;
+    e.classList.add('vh');
+    e.style.visibility='hidden';
+    e.classList.remove('fin');
+  });
+  var c1=document.getElementById('hq1cell');
+  c1.innerHTML='<input type="number" id="q1" class="qi" placeholder="?" min="0" max="9" oninput="onQ1(this)">';
+  c1.style.borderBottomColor='var(--ink)';
+  var c2=document.getElementById('hq2cell');
+  c2.innerHTML='<input type="number" id="q2" class="qi" placeholder="?" min="0" max="9" oninput="onQ2(this)" disabled style="border-bottom-color:#e2e8f0;color:#cbd5e1;">';
+  c2.style.borderBottomColor='#e2e8f0';
+  for(var i=2;i<=7;i++){lockSR('sr'+i,true);}
+  var sr1=document.getElementById('sr1');
+  sr1.classList.remove('locked');sr1.classList.add('act');
+  ['si2','si3','si6','si7'].forEach(function(id){
+    var e=document.getElementById(id);if(e){e.value='';e.className='sin';}
+  });
+  document.getElementById('sv1').textContent='?';
+  document.getElementById('sv5').textContent='?';
+  document.getElementById('sq2').textContent='?';
+  document.getElementById('sq3').textContent='?';
+  document.getElementById('sq6').textContent='?';
+  setDots(1);
+  wfb('まず <strong>17&#247;7</strong> を考えよう！7のだんで「17にちかい数」は？','fi');
+  document.getElementById('wcele').classList.remove('on');
+  document.getElementById('wretry').classList.remove('on');
+  hlW(-1);
+}
+
+function wfb(h,c){sfb('wfb',h,c);}
+
+/* ① 十の位の商 */
+function onQ1(el){
+  var v=parseInt(el.value);
+  document.getElementById('sv1').textContent=isNaN(v)?'?':v;
+  hlW(-1); el.className='qi';
+  if(el.value===''||isNaN(v)){wfb('まず、<strong>17 ÷ 7</strong> を考えよう！<br>7のだんで「17にちかい数」はどれかな？','fi');return;}
+  hlW(v*7);
+  if(v===2){
+    el.className='qi qok';
+    // 筆算：q1確定（inputをテキストに置き換え）
+    var cell=document.getElementById('hq1cell');
+    cell.innerHTML='<span class="c-grn fadein" style="font-weight:900;">2</span>';
+    cell.style.borderBottomColor='#22c55e';
+    wfb('✅ せいかい！ 17 ÷ 7 = <strong>2</strong> だよ！<br>次は「7 × 2」を計算しよう','fo');
+    document.getElementById('sq2').textContent='2';
+    lockSR('sr1',true); lockSR('sr2',false); setDots(2);
+  } else if(v>2){
+    el.className='qi qng';
+    wfb('「7 × '+v+' = '+v*7+'」は17より大きくなっちゃう！<br>もう少し小さい数にしてみて 🤔','fw');
+  } else {
+    el.className='qi qng';
+    wfb('「7 × '+v+' = '+v*7+'」はまだ17に届くかも？<br>もう少し大きい数も試してみよう 🤔','fw');
+  }
+}
+
+/* ② 7 × 2 = 14 */
+function onSI2(el){
+  var v=parseInt(el.value); el.className='sin';
+  if(el.value===''||isNaN(v))return;
+  if(v===14){
+    el.className='sin so';
+    reveal(['n1x','n1d','n1e','l1d','l1e']);
+    wfb('✅ 7 × 2 = <strong>14</strong> 正解！<br>次は「17 − 14」を計算しよう','fo');
+    document.getElementById('sq3').textContent='14';
+    lockSR('sr2',true); lockSR('sr3',false); setDots(3);
+  } else {
+    el.className='sin sn';
+    wfb('7 × 2 はいくつかな？九九表を見てみて！','fw'); hlW(14);
+  }
+}
+
+/* ③ 17 − 14 = 3 */
+function onSI3(el){
+  var v=parseInt(el.value); el.className='sin';
+  if(el.value===''||isNaN(v))return;
+  if(v===3){
+    el.className='sin so';
+    reveal(['r1d']);
+    wfb('✅ 17 − 14 = <strong>3</strong> 正解！<br>あまりは「3」。次は「6」を降ろすよ🔽','fo');
+    lockSR('sr3',true); lockSR('sr4',false); setDots(4);
+    setTimeout(function(){
+      reveal(['r1e']);
+      lockSR('sr4',true); lockSR('sr5',false);
+      // q2 input を有効化
+      var q2=document.getElementById('q2');
+      q2.disabled=false; q2.style.borderBottomColor='var(--org)'; q2.style.color='var(--org)';
+      var cell2=document.getElementById('hq2cell');
+      cell2.style.borderBottomColor='var(--ink)';
+      wfb('「<span style="color:#1a6ef0">6</span>」を降ろして「<strong style="color:#1a6ef0">36</strong>」になったよ！<br>次は <strong>36 ÷ 7</strong> を考えよう','fi');
+      setDots(5);
+    },1000);
+  } else {
+    el.className='sin sn';
+    wfb('17 − 14 はいくつかな？もう一度！','fw');
+  }
+}
+
+/* ⑤ 一の位の商 */
+function onQ2(el){
+  var v=parseInt(el.value);
+  document.getElementById('sv5').textContent=isNaN(v)?'?':v;
+  hlW(-1); el.className='qi';
+  if(el.value===''||isNaN(v))return;
+  hlW(v*7);
+  if(v===5){
+    el.className='qi qok';
+    var cell=document.getElementById('hq2cell');
+    cell.innerHTML='<span class="c-grn fadein" style="font-weight:900;">5</span>';
+    cell.style.borderBottomColor='#22c55e';
+    wfb('✅ 36 ÷ 7 = <strong>5</strong> 正解！<br>次は「7 × 5」を計算しよう','fo');
+    document.getElementById('sq6').textContent='5';
+    lockSR('sr5',true); lockSR('sr6',false); setDots(6);
+  } else if(v>5){
+    el.className='qi qng';
+    wfb('「7 × '+v+' = '+v*7+'」は36より大きい！もう少し小さく 🤔','fw');
+  } else {
+    el.className='qi qng';
+    wfb('もう少し大きい数も試してみて 🤔','fw');
+  }
+}
+
+/* ⑥ 7 × 5 = 35 */
+function onSI6(el){
+  var v=parseInt(el.value); el.className='sin';
+  if(el.value===''||isNaN(v))return;
+  if(v===35){
+    el.className='sin so';
+    reveal(['n2x','n2d','n2e','l2d','l2e']);
+    wfb('✅ 7 × 5 = <strong>35</strong> 正解！<br>最後は「36 − 35」を計算しよう','fo');
+    lockSR('sr6',true); lockSR('sr7',false); setDots(7);
+  } else {
+    el.className='sin sn';
+    wfb('7 × 5 はいくつかな？九九表を確認！','fw'); hlW(35);
+  }
+}
+
+/* ⑦ 最終あまり */
+function onSI7(el){
+  var v=parseInt(el.value); el.className='sin';
+  if(el.value===''||isNaN(v))return;
+  if(v===1){
+    el.className='sin so';
+    reveal(['fin1']);
+    wfb('🎉 全部できた！ 176 ÷ 7 = <strong>25 あまり 1</strong> だよ！','fo');
+    document.getElementById('wcele').classList.add('on');
+    document.getElementById('wretry').classList.add('on');
+    lockSR('sr7',true);
+    for(var i=1;i<=7;i++){var d=document.getElementById('d'+i);if(d)d.className='dot done';}
+  } else {
+    el.className='sin sn';
+    wfb('36 − 35 はいくつかな？','fw');
+  }
+}
+</script>
+</body>
+</html>
