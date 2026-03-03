@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>もり〜たうんまつり</title>
+
+   <meta name="robots" content="noindex, nofollow" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      /* Brand palette */
+      --bg: #fdfbf5;
+      --text: #3d3d3d;
+      --muted: #555;
+      --brand: #2c5f2d;
+      --brand-2: #97bc62;
+      --accent: #ffc107;
+      --accent-2: #ffb74d;
+      --card: #ffffff;
+      --card-alt: #f8f9fa;
+      --border: #ddd;
+      --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+
+      /* Spacing & radius */
+      --radius-lg: 15px;
+      --radius: 10px;
+      --space-1: 0.5rem;
+      --space-2: 1rem;
+      --space-3: 1.5rem;
+      --space-4: 2rem;
+
+      /* Typography */
+      --h1: clamp(1.8rem, 2.5vw, 2.5rem);
+      --h2: clamp(1.4rem, 2vw, 1.8rem);
+      --h3: clamp(1.2rem, 1.8vw, 1.4rem);
+      --p: 1rem;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', system-ui, -apple-system, Segoe UI, Roboto, 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Yu Gothic', Meiryo, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: var(--space-3) var(--space-2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.7;
+    }
+
+    .container { max-width: 1200px; width: 100%; }
+
+    /* ---------- Utilities ---------- */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      margin-bottom: var(--space-4);
+      box-shadow: var(--shadow);
+    }
+    .card--alt { background: var(--card-alt); }
+
+    .stack { display: grid; gap: var(--space-3); }
+    .cluster { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+
+    .title {
+      display: flex; align-items: center; gap: .8rem; margin: 0 0 var(--space-3) 0; color: var(--brand);
+      font-size: var(--h2); font-weight: 700;
+    }
+
+    .sub-title {
+      display: flex; align-items: center; gap: .6rem; margin: var(--space-3) 0 var(--space-2);
+      border-bottom: 2px solid var(--brand-2); padding-bottom: .5rem; font-weight: 700; color: var(--text);
+    }
+
+    .muted { color: var(--muted); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
+
+    .btn {
+      appearance: none; border: 0; border-radius: 6px; cursor: pointer; font: inherit;
+      padding: 8px 14px; transition: filter .2s ease; box-shadow: var(--shadow);
+    }
+    .btn:focus-visible { outline: 2px solid var(--brand-2); outline-offset: 2px; }
+    .btn--brand { background: var(--brand); color: #fff; }
+    .btn--brand:hover { filter: brightness(1.1); }
+    .btn--accent { background: var(--accent); color: #333; }
+    .btn--accent:hover { filter: brightness(1.05); }
+
+    /* ---------- Header ---------- */
+    header.header { text-align: center; margin-bottom: var(--space-4); }
+    header h1 { font-size: var(--h1); color: var(--brand); font-weight: 700; margin: 0 0 .5rem; }
+    header p { font-size: 1.05rem; color: var(--muted); margin: 0; }
+
+    /* ---------- Grid & Lists ---------- */
+    .grid {
+      display: grid; gap: var(--space-3);
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+
+    .overview-list { list-style: none; padding: 0; margin: 0; }
+    .overview-list li { padding: .6rem 0; border-bottom: 1px solid #f0f0f0; font-size: 1.05rem; }
+    .overview-list li:last-child { border-bottom: 0; }
+    .overview-list strong { color: var(--brand); margin-right: .6rem; }
+
+    .role-card { background: var(--card-alt); border-left: 5px solid var(--brand-2); border-radius: var(--radius); padding: var(--space-3); }
+    .role-card h3 { margin: 0 0 .4rem; color: var(--brand); font-size: var(--h3); display: flex; align-items: center; gap: .5rem; }
+    .role-card p { margin: 0; }
+    .emoji { font-size: 1.4rem; }
+
+    /* ---------- Timeline ---------- */
+    .timeline { position: relative; display: grid; grid-template-columns: repeat(4, minmax(220px, 1fr)); gap: var(--space-3); padding: var(--space-4) 0; }
+    .timeline::before { content: ""; position: absolute; top: 50px; left: 5%; width: 90%; height: 4px; background: var(--brand-2); z-index: 0; }
+
+    .timeline__item { position: relative; min-width: 200px; text-align: center; }
+    .timeline__item::after { content: ""; position: absolute; top: 32px; left: 50%; transform: translateX(-50%); width: 20px; height: 20px; border-radius: 50%; background: #fff; border: 4px solid var(--brand); z-index: 1; }
+
+    .timeline__content { position: relative; margin-top: 50px; text-align: left; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: var(--space-3); border-top: 5px solid var(--brand-2); }
+    .timeline__month { font-size: 1.3rem; font-weight: 700; color: var(--brand); margin: 0 0 .6rem; text-align: center; }
+
+    .timeline__item.is-highlight .timeline__content { border-top-color: var(--accent-2); }
+    .timeline__item.is-highlight .timeline__month { color: #ffa000; }
+    .timeline__item.is-highlight::after { border-color: #ffa000; background: var(--accent-2); }
+
+    .checklist { list-style: none; padding: 0; margin: 0; }
+    .checklist li { margin: .45rem 0; display: flex; align-items: center; gap: .6rem; }
+
+    /* ---------- Summary ---------- */
+    .summary-grid { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); text-align: center; }
+    .summary-card { background: var(--card-alt); padding: var(--space-3); border-radius: var(--radius); }
+    .summary-card h3 { color: var(--brand); margin: 0 0 .4rem; }
+
+    /* ---------- Tables ---------- */
+    table.table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-size: .95rem;
+    }
+    .table-container {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .table th, .table td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; vertical-align: middle; }
+    .table th { background: #f2f2f2; font-weight: 700; }
+    .table tr:nth-child(even) { background: #f9f9f9; }
+    .table .cell-center { text-align: center; width: 40px; }
+
+    /* ---------- Details (accordion) ---------- */
+    .details { display: none; margin-top: var(--space-3); padding-top: var(--space-3); border-top: 1px solid #eee; }
+    .details.is-open { display: block; }
+
+    /* ---------- Modal ---------- */
+    .modal { position: fixed; inset: 0; display: none; align-items: flex-start; justify-content: center; background: rgba(0,0,0,.6); z-index: 1000; padding-top: 60px; }
+    .modal[aria-hidden="false"] { display: flex; }
+
+    .modal__content {
+      position: relative;
+      width: min(700px, 92vw);
+      max-height: 85vh;
+      overflow-y: auto;
+      background: #fff;
+      border: 1px solid #888;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      padding: 30px;
+      animation: fadeIn .25s ease;
+    }
+    .modal__title { margin: 0 0 1rem; font-size: clamp(1.4rem, 4vw, 1.6rem); font-weight: 700; color: var(--brand); }
+
+    .modal__close { position: absolute; top: 10px; right: 14px; font-size: 32px; line-height: 1; background: transparent; border: 0; color: #666; cursor: pointer; }
+    .modal__close:hover { color: #000; }
+
+    @keyframes fadeIn { from{ opacity: 0; transform: scale(.97);} to { opacity: 1; transform: scale(1);} }
+
+    /* ---------- Icons (sprite) ---------- */
+    .icon { inline-size: 24px; block-size: 24px; fill: currentColor; }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 960px) {
+      .timeline {
+        grid-template-columns: 1fr;
+        padding-top: var(--space-2);
+        gap: var(--space-4);
+      }
+      .timeline::before { display: none; }
+      .timeline__item::after { display: none; }
+      .timeline__item { text-align: left; }
+      .timeline__content { margin-top: 0; padding-left: var(--space-2); }
+    }
+
+    @media (max-width: 600px) {
+        body { padding: var(--space-2); }
+        .card { padding: var(--space-3); }
+        .grid { grid-template-columns: 1fr; }
+        .btn { width: 100%; box-sizing: border-box; }
+        .cluster { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+    <symbol id="ic-check" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></symbol>
+    <symbol id="ic-info" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M11,7h2v2h-2V7z M11,11h2v6h-2V11z"/></symbol>
+    <symbol id="ic-people" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></symbol>
+    <symbol id="ic-calendar" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/></symbol>
+    <symbol id="ic-chart" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 10h2v7H7v-7zm4 0h2v7h-2v-7zm4-3h2v10h-2V7z"/></symbol>
+    <symbol id="ic-heart" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></symbol>
+    <symbol id="ic-users" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M16.5 12c1.38 0 2.5-1.12 2.5-2.5S17.88 7 16.5 7s-2.5 1.12-2.5 2.5 1.12 2.5 2.5 2.5zM9 11c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm7.5 3c-1.83 0-5.5.92-5.5 2.75V19h11v-2.25c0-1.83-3.67-2.75-5.5-2.75zM9 13c-2.33 0-7 1.17-7 3.5V19h7v-2.25c0-.85.33-2.34 2.37-3.47C10.5 13.1 9.66 13 9 13z"/></symbol>
+    <symbol id="ic-screen" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H4V4h16v12zM18 6h-5c-1.1 0-2 .9-2 2v2.28c-.6.35-1 .98-1 1.72 0 1.1.9 2 2 2s2-.9 2-2c0-.74-.4-1.38-1-1.72V8h3v8H8V8h2V6H4v12h16V6z"/></symbol>
+  </svg>
+  <div class="container">
+    <header class="header">
+      <h1>もり〜たうんまつり全体像<br> (9月〜12月)</h1>
+      <p class="muted" >子どもが主体的に企画・運営し、多世代で成長を支えるプロジェクト</p>
+    </header>
+
+    <section class="card" aria-labelledby="purpose-title">
+      <h2 id="purpose-title" class="title"><svg class="icon"><use href="#ic-check"/></svg>目的</h2>
+      <p>子どもが主体的にイベントを企画・運営する経験を通して、社会人基礎力（目標設定・役割分担・行動力・発信力・チームワーク等）を育みます。また、地域・家庭・学校・児童センターが「応援団」として関わり、子どもの成長を多世代で支えるコミュニティを形成します。</p>
+    </section>
+
+    <section class="card" aria-labelledby="outline-title">
+      <h2 id="outline-title" class="title"><svg class="icon"><use href="#ic-info"/></svg>イベント概要</h2>
+      <ul class="overview-list">
+        <li><strong>日時:</strong> 11月29日 浦添全体のフェスティバル(本番)</li>
+        <li><strong>場所:</strong> 各児童センターで同時開催、バスで回遊</li>
+        <li><strong>協力団体:</strong> 去年参加した団体を今年も誘致</li>
+      </ul>
+      <h3 class="sub-title"><svg class="icon"><use href="#ic-users"/></svg>アシビナーについて</h3>
+      <ul class="overview-list">
+        <li><strong>位置づけ:</strong> 児童センター内の体験活動重点居場所 / クラブ活動の一環 / もり〜たうんイベントの核</li>
+        <li><strong>予　　算:</strong> アシビナーの支援金を活用</li>
+        <li><strong>参加条件:</strong> アシビナー登録が必要</li>
+        <li><strong>主な活動:</strong> 体験活動、長期休暇中の食事提供</li>
+        <li><strong>メンバー:</strong> 森の子児童センター登録者の9割がアシビナーに登録</li>
+      </ul>
+    </section>
+
+    <section class="card" aria-labelledby="roles-title">
+      <h2 id="roles-title" class="title"><svg class="icon"><use href="#ic-people"/></svg>主体と役割分担</h2>
+      <div class="grid">
+        <article class="role-card"><h3><span class="emoji">🌱</span>琉球のタネ</h3><p>子ども・大人講座（子ども用シート・大人向け勉強会資料）</p></article>
+        <article class="role-card"><h3><span class="emoji">🏫</span>児童センター</h3><p>運営</p></article>
+        <article class="role-card"><h3><span class="emoji">👧👦</span>子どもたち</h3><p>出店</p></article>
+        <article class="role-card"><h3><span class="emoji">👨‍👩‍👧‍👦</span>地域の大人</h3><p>応援団</p></article>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="timeline-title">
+      <h2 id="timeline-title" class="title" style="justify-content:center"><svg class="icon"><use href="#ic-calendar"/></svg>年間の流れと主要イベント</h2>
+      <div class="timeline" role="list">
+        <article class="timeline__item" role="listitem">
+          <div class="timeline__content">
+            <h3 class="timeline__month">🌱 9月<br>企画と提案</h3>
+            <p>得意なことから目標を設定し、協力団体への提案やチラシ配りなど、活動を本格化させます。</p>
+            <div class="cluster">
+                <button class="btn btn--brand js-toggle-details" data-target="#details-sep-tasks" aria-expanded="false">タスクリストを開く</button>
+                <button class="btn btn--accent js-open-modal" data-modal="#modal-sep" aria-haspopup="dialog">タイムテーブル</button>
+            </div>
+            <div id="details-sep-tasks" class="details" hidden>
+              <ul class="checklist">
+                <li><label><input type="checkbox"/>子供たちの得意なことを元に目標設定(社会人基礎力)</label></li>
+                <li><label><input type="checkbox"/>協力団体への提案(子供たちと訪問)</label></li>
+                <li><label><input type="checkbox"/>子ども向け 第1回作戦会議（9/26予定）</label></li>
+                <li><label><input type="checkbox"/>チラシ貼り</label></li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="timeline__item is-highlight" role="listitem">
+          <div class="timeline__content">
+            <h3 class="timeline__month">🌳 10月<br>制作と勉強会</h3>
+            <p>動画作成などのクリエイティブな活動と、多様な勉強会を通じてスキルアップと意識共有を図ります。</p>
+            <div class="cluster">
+                <button class="btn btn--brand js-toggle-details" data-target="#details-oct-tasks" aria-expanded="false">タスクリストを開く</button>
+                <button class="btn btn--accent js-open-modal" data-modal="#modal-oct" aria-haspopup="dialog">タイムテーブル</button>
+            </div>
+            <div id="details-oct-tasks" class="details" hidden>
+              <ul class="checklist">
+                <li><label><input type="checkbox"/>お金の講座(未定)</label></li>
+                <li><label><input type="checkbox"/>第1回もり〜たうんまつり実行委員会</label></li>
+                <li><label><input type="checkbox"/>動画作成:フェスティバル内容紹介、令和9年度全国大会オープニング</label></li>
+                <li><label><input type="checkbox"/>保護者向け説明会·子育て勉強会(大人·地関係者向けに拡大)</label></li>
+                <li><label><input type="checkbox"/>森の子勉強会(ファシリテーターが運営)</label></li>
+                <li><label><input type="checkbox"/>第2回実行委員会(子供不参加、夜開催)</label></li>
+                <li><label><input type="checkbox"/>当日までの準備フロー確認(職員で実施)</label></li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="timeline__item" role="listitem">
+          <div class="timeline__content">
+            <h3 class="timeline__month">🍂 11月<br>最終準備と本番</h3>
+            <p>本番直前のマナー講座を経て、いよいよフェスティバル本番に臨みます。</p>
+            <div class="cluster">
+              <button class="btn btn--brand js-toggle-details" data-target="#details-nov-tasks" aria-expanded="false">タスクリストを開く</button>
+            </div>
+            <div id="details-nov-tasks" class="details" hidden>
+              <ul class="checklist">
+                <li><label><input type="checkbox"/>マナー講座(本番直前、11月上旬)</label></li>
+                <li><label><input type="checkbox"/>11月29日:本番(浦添全体のフェスティバル)</label></li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="timeline__item is-highlight" role="listitem">
+          <div class="timeline__content">
+            <h3 class="timeline__month">🌸 12月<br>振り返りと成果発表</h3>
+            <p>イベントでの経験を多角的に評価し、個々と全体の成長を確認して次へと繋げます。</p>
+            <div class="cluster">
+                <button class="btn btn--brand js-toggle-details" data-target="#details-dec-tasks" aria-expanded="false">タスクリストを開く</button>
+                <button class="btn btn--accent js-open-modal" data-modal="#modal-dec" aria-haspopup="dialog">タイムテーブル</button>
+            </div>
+            <div id="details-dec-tasks" class="details" hidden>
+              <ul class="checklist">
+                <li><label><input type="checkbox"/>振り返り、成果発表(自己評価、グループ評価、大人からの評価)</label></li>
+              </ul>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="viz-title">
+      <h2 id="viz-title" class="title"><svg class="icon"><use href="#ic-chart"/></svg>成果の可視化</h2>
+      <div class="summary-grid">
+        <div class="summary-card">
+          <h3>子ども</h3>
+          <p style="text-align: left;"><button class="btn js-open-modal" data-modal="#modal-goal-sheet">目標シート</button>、MVP、<button class="btn js-open-modal" data-modal="#modal-support-card">応援カード</button>で「できた！」を実感。</p>
+        </div>
+        <div class="summary-card">
+          <h3>大人</h3>
+          <p style="text-align: left;">勉強会とSNS発信で「支える役割」を共有。</p>
+        </div>
+        <div class="summary-card">
+          <h3>地域</h3>
+          <p style="text-align: left;">「地域で育てる祭り」としての一体感を醸成。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="care-title">
+      <h2 id="care-title" class="title"><svg class="icon"><use href="#ic-heart"/></svg>子どもの成長ケア戦略</h2>
+
+      <h3 class="sub-title"><svg class="icon"><use href="#ic-users"/></svg>子供の成長支援</h3>
+      <ul class="overview-list">
+        <li><strong>目標設定:</strong> 社会人基礎力15項目から本人が選択</li>
+        <li><strong>役割分担:</strong> 動画作成、ポスター作成、大人への提案書作成など</li>
+        <li><strong>評価:</strong> 自己評価と他者評価をグループで共有し、客観的な視点を養う</li>
+        <li><strong>連携:</strong> 地域全体で見守る体制を構築</li>
+        <li><strong>関わり:</strong> 変化への気づきと言葉がけを重視</li>
+        <li><strong>可視化:</strong> 玄関に顔写真付きの目標シートを掲示</li>
+      </ul>
+      <h3 class="sub-title"><svg class="icon"><use href="#ic-screen"/></svg>評価制度の検討</h3>
+      <ul class="overview-list">
+        <li><strong>MVP制度:</strong> 言葉のシャワーによる名誉的な評価</li>
+        <li><strong>「良かったね」カード:</strong> 日常的な良い行動を評価・奨励</li>
+        <li><strong>インセンティブ:</strong> 個人ではなくチーム全体で共有する形を検討</li>
+        <li><strong>参加型仕掛け:</strong> 行動経済学を活用した投票ボックス形式</li>
+      </ul>
+    </section>
+
+    <section class="card" aria-labelledby="adults-title">
+      <h2 id="adults-title" class="title"><svg class="icon"><use href="#ic-heart"/></svg>大人(実行委員・地域関係者)の関わり</h2>
+      <ul class="overview-list">
+        <li><strong>「応援団」としての役割:</strong> 子供の成長を見守る役割</li>
+        <li><strong>地域連携勉強会:</strong> 保護者説明会·勉強会への参加(地域全体で子供を育てる場)</li>
+        <li><strong>成長シェアチャット：</strong> オープンチャットでの情報共有(子供の変化をシェア)</li>
+        <li><strong>コミュニケーション研修:</strong> 言葉かけ·引き出し方に関する研修(不安な子の発言支援)</li>
+        <li><strong>学童との連携参加:</strong> 学童の先生も参加(自分の担当児童も参加するため)</li>
+      </ul>
+    </section>
+
+  <section class="card" aria-labelledby="dfs-title">
+    <h2 id="dfs-title" class="title">
+      <svg class="icon"><use href="#ic-screen"/></svg>
+      ファッション企業に学ぶ接客知見
+    </h2>
+    <ul class="overview-list">
+      <li><strong>接客スキル:</strong> 第一印象、感情での判断</li>
+      <li><strong>MVP制度の経験:</strong> 目標設定と評価</li>
+      <li><strong>インセンティブのバランス:</strong> チームインセンティブと個人インセンティブのバランス</li>
+      <li><strong>販売戦略:</strong> 効果的な売り方、売れないものの売り方</li>
+      <li><strong>外国人マネジメントの違い:</strong> フランス、アメリカ、韓国、イギリス、中国</li>
+    </ul>
+  </section>
+  </div>
+
+  <div class="modal" id="modal-sep" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-sep-title">
+    <div class="modal__content">
+      <button class="modal__close" aria-label="閉じる">&times;</button>
+      <h4 id="modal-sep-title" class="modal__title">9月：子ども向け 第1回作戦会議（9/26予定）</h4>
+      <p><strong>目的：</strong>イベント全体を理解し、目標設定と役割分担を行う。</p>
+      <p><strong>対象：</strong>小4以上の実行委員（＋小3サポートメンバー）。</p>
+      <div class="table-container">
+        <table class="table">
+          <thead><tr><th class="cell-center">済</th><th>時間</th><th>内容</th><th>進め方</th></tr></thead>
+          <tbody>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>15:30–15:40</td><td>オープニング・自己紹介</td><td>子ども司会＋大人ファシリサポート</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>15:40–16:00</td><td>もり〜たうんまつりの全体像説明</td><td>大人実行委員がわかりやすく説明</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>16:00–16:20</td><td>社会人基礎力15項目から目標選び</td><td>ワークシート記入＋シェア</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>16:20–16:40</td><td>役割分担の決定（動画・広報・運営など）</td><td>小グループで話し合い</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>16:40–16:50</td><td>目標シートに顔写真＋掲示準備</td><td>視覚化でモチベUP</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>16:50–17:00</td><td>まとめ・次回に向けた宿題</td><td>「協力団体に提案しよう！」の予告</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal-oct" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-oct-title">
+    <div class="modal__content">
+      <button class="modal__close" aria-label="閉じる">&times;</button>
+      <h4 id="modal-oct-title" class="modal__title">10月：大人向け「森の子勉強会」</h4>
+      <p><strong>目的：</strong>地域・保護者・学童の先生など大人が「応援団」として意識を合わせる。</p>
+      <p><strong>対象：</strong>保護者・学童職員・地域住民・自治会・商店会など。</p>
+      <div class="table-container">
+        <table class="table">
+          <thead><tr><th class="cell-center">済</th><th>時間</th><th>内容</th><th>進め方</th></tr></thead>
+          <tbody>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>18:30–18:40</td><td>開会・趣旨説明</td><td>児童センターから挨拶</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>18:40–19:00</td><td>子どもたちの挑戦紹介（動画や写真）</td><td>子ども発表＋補足説明</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>19:00–19:20</td><td>ミニ講座：子どもの主体性を育てる関わり方</td><td>講師＋ファシリ</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>19:20–19:40</td><td>グループワーク：「私にできる応援は？」</td><td>付箋や模造紙を活用</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>19:40–19:50</td><td>発表・共有</td><td>各グループから1分報告</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>19:50–20:00</td><td>まとめ・次回本番に向けた行動宣言</td><td>「応援団カード」に記入</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal-dec" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-dec-title">
+    <div class="modal__content">
+      <button class="modal__close" aria-label="閉じる">&times;</button>
+      <h4 id="modal-dec-title" class="modal__title">12月：子ども向け「振り返り勉強会」</h4>
+      <p><strong>目的：</strong>自己評価＋他者評価を通じて成長を実感し、次の挑戦に繋げる。</p>
+      <p><strong>対象：</strong>参加した子ども全員、大人実行委員もオブザーバー参加。</p>
+      <div class="table-container">
+        <table class="table">
+          <thead><tr><th class="cell-center">済</th><th>時間</th><th>内容</th><th>進め方</th></tr></thead>
+          <tbody>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>15:30–15:40</td><td>オープニング・祭りをふり返る</td><td>写真スライド子ども司会＋動画上映</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>15:40–16:00</td><td>個人ふり返り：目標シート記入</td><td>社会人基礎力シートを活用</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>16:00–16:20</td><td>仲間評価：「良かったねカード」を交換</td><td>子ども同士でメッセージ記入</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>16:20–16:40</td><td>大人からのフィードバック</td><td>学童の先生・保護者が言葉のシャワー</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>16:40–16:50</td><td>MVP発表・花マーク集計</td><td>「名誉的評価」として発表</td></tr>
+            <tr><td class="cell-center"><input type="checkbox"/></td><td>16:50–17:00</td><td>まとめ・来年への期待コメント</td><td>子ども全員から一言発表</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal-goal-sheet" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-goal-title">
+    <div class="modal__content">
+      <button class="modal__close" aria-label="閉じる">&times;</button>
+      <h2 id="modal-goal-title" class="modal__title">目標シート（サンプル）</h2>
+      <div class="card card--alt" style="border:1px solid var(--border)">
+        <h3 style="text-align:center; color: var(--brand); margin-top:0">やってみたいことを見つけよう！</h3>
+        <p><strong>なまえ：</strong>＿＿＿＿＿＿＿＿＿</p>
+        <div class="stack">
+          <div>
+            <h4 class="sub-title" style="border:0">１．このイベントで、どんなことにチャレンジしたい？</h4>
+            <p>☐ 人前で発表する　☐ みんなをまとめる　☐ アイデアを出す</p>
+            <p>☐ 動画をつくる　☐ ポスターをかく　☐ その他（＿＿＿＿＿＿）</p>
+          </div>
+          <div>
+            <h4 class="sub-title" style="border:0">２．そのために、どんな「すごい自分」になりたい？</h4>
+            <p>（例：みんなの意見を上手に聞けるリーダーになる！）</p>
+            <textarea style="width:100%; height:80px; border-radius:5px; border:1px solid #ccc; padding:.5rem; font-family:inherit"></textarea>
+          </div>
+          <div>
+            <h4 class="sub-title" style="border:0">３．応援してくれる大人からのメッセージ</h4>
+            <div style="min-height:60px; border:1px dashed #ccc; border-radius:5px; padding:.5rem"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal-support-card" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-support-title">
+    <div class="modal__content">
+      <button class="modal__close" aria-label="閉じる">&times;</button>
+      <h2 id="modal-support-title" class="modal__title">応援カード（サンプル）</h2>
+      <div class="card" style="background:#fff9c4; border:1px solid #fbc02d">
+        <p><strong>To: </strong>＿＿＿＿＿＿＿＿＿ さん</p>
+        <p>イベントの準備、おつかれさま！</p>
+        <p>あなたが一生懸命＿＿＿＿＿＿＿＿＿している姿を見て、すごいなと思いました。</p>
+        <p>特に、＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿が素敵でした。</p>
+        <br/>
+        <p><strong>From: </strong>＿＿＿＿＿＿＿＿＿ より</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- Modal & Details logic with event delegation and a11y state updates ---
+    const $ = (sel, ctx = document) => ctx.querySelector(sel);
+    const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
+
+    function openModal(modal) {
+      if (!modal) return;
+      modal.setAttribute('aria-hidden', 'false');
+      const closer = $('.modal__close', modal);
+      // save last focused element
+      modal._lastActive = document.activeElement;
+      closer?.focus();
+      // ESC to close
+      modal._escHandler = (e) => { if (e.key === 'Escape') closeModal(modal); };
+      document.addEventListener('keydown', modal._escHandler);
+    }
+
+    function closeModal(modal) {
+      if (!modal) return;
+      modal.setAttribute('aria-hidden', 'true');
+      document.removeEventListener('keydown', modal._escHandler);
+      // restore focus
+      modal._lastActive?.focus?.();
+    }
+
+    document.addEventListener('click', (e) => {
+      const trigger = e.target.closest('.js-open-modal');
+      if (trigger) {
+        e.preventDefault();
+        const sel = trigger.getAttribute('data-modal');
+        openModal($(sel));
+        return;
+      }
+
+      // Close buttons
+      if (e.target.closest('.modal__close')) {
+        const modal = e.target.closest('.modal');
+        closeModal(modal);
+        return;
+      }
+
+      // Click outside content closes
+      const modalEl = e.target.classList.contains('modal') ? e.target : null;
+      if (modalEl) closeModal(modalEl);
+
+      // Toggle details (accordion)
+      const toggler = e.target.closest('.js-toggle-details');
+      if (toggler) {
+        const targetSel = toggler.getAttribute('data-target');
+        const details = $(targetSel);
+        if (!details) return;
+        const willOpen = details.hasAttribute('hidden');
+        details.toggleAttribute('hidden');
+        details.classList.toggle('is-open', willOpen);
+        toggler.setAttribute('aria-expanded', String(willOpen));
+        toggler.textContent = willOpen ? '閉じる' : 'タスクリストを開く';
+      }
+    });
+  </script>
+</body>
+</html>

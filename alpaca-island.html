@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>アルパカ島</title>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --parchment: #F5EDD6;
+  --parchment-dark: #E8D8B0;
+  --parchment-darker: #D4BC87;
+  --scroll-bg: #FBF4E3;
+  --ink-dark: #3D2B1F;
+  --ink-medium: #6B4C35;
+  --ink-light: #9B7B5A;
+  --coral: #E8634A;
+  --coral-dark: #C8432A;
+  --turquoise: #3ABDB5;
+  --turquoise-dark: #2A9D95;
+  --gold: #D4A017;
+  --gold-light: #F0C842;
+  --leaf-green: #5B8A3C;
+  --leaf-dark: #3D6128;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:16px;}
+body{
+  font-family:'Noto Sans JP',sans-serif;
+  background-color:#C8D8A8;
+  background-image:
+    radial-gradient(ellipse at 20% 50%,rgba(91,138,60,.15) 0%,transparent 50%),
+    radial-gradient(ellipse at 80% 20%,rgba(123,184,212,.15) 0%,transparent 50%);
+  min-height:100vh;
+  color:var(--ink-dark);
+}
+
+/* ========== ONBOARDING ========== */
+#screen-onboarding{display:block;}
+#screen-main{display:none;}
+
+/* ========== TOP NAV ========== */
+.top-nav{
+  background:linear-gradient(180deg,#5B8A3C 0%,#4A7230 100%);
+  border-bottom:4px solid #3D6128;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 4px 12px rgba(0,0,0,.3);
+}
+.top-nav-inner{
+  max-width:860px;margin:0 auto;
+  padding:.5rem 1rem;
+  display:flex;align-items:center;gap:.75rem;
+}
+.nav-brand{
+  display:flex;align-items:center;gap:.4rem;
+  font-family:'Klee One',cursive;font-size:1.2rem;font-weight:600;
+  color:#FFF8E7;text-shadow:2px 2px 0 rgba(0,0,0,.3);white-space:nowrap;
+}
+.hud-bar{
+  display:flex;align-items:center;gap:.6rem;
+  background:rgba(0,0,0,.2);border-radius:99px;
+  padding:.25rem .75rem;border:2px solid rgba(255,255,255,.15);
+  margin-left:auto;
+}
+.hud-item{display:flex;align-items:center;gap:3px;color:#FFF8E7;font-size:.8rem;font-weight:600;}
+.hud-item .val{color:#F0C842;}
+.hud-xp-wrap{display:flex;flex-direction:column;gap:2px;}
+.hud-xp-label{font-size:.65rem;color:rgba(255,255,255,.75);}
+.hud-xp-bar{width:100px;height:7px;background:rgba(0,0,0,.3);border-radius:99px;overflow:hidden;border:1px solid rgba(255,255,255,.2);}
+.hud-xp-fill{height:100%;background:linear-gradient(90deg,#F0C842,#FF9F1C);border-radius:99px;transition:width .5s ease;}
+
+/* ========== BOTTOM NAV ========== */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:linear-gradient(180deg,#4A7230 0%,#3D6128 100%);
+  border-top:4px solid #5B8A3C;
+  display:flex;justify-content:space-around;
+  padding:.4rem .25rem calc(.4rem + env(safe-area-inset-bottom));
+  z-index:100;box-shadow:0 -4px 12px rgba(0,0,0,.25);
+}
+.bnav-item{
+  display:flex;flex-direction:column;align-items:center;
+  text-decoration:none;color:rgba(255,255,255,.55);
+  border-radius:10px;padding:.25rem .5rem;
+  transition:all .2s;min-width:52px;position:relative;cursor:pointer;
+}
+.bnav-item .bicon{font-size:1.4rem;}
+.bnav-item .blabel{font-size:.6rem;margin-top:1px;font-family:'Klee One',cursive;}
+.bnav-item.active{color:#F0C842;}
+.bnav-item.active::before{
+  content:'';position:absolute;top:-4px;left:50%;transform:translateX(-50%);
+  width:36px;height:4px;background:#F0C842;border-radius:0 0 4px 4px;
+}
+
+/* ========== CONTENT AREA ========== */
+.content{
+  max-width:860px;margin:0 auto;
+  padding:1rem 1rem calc(1rem + 80px);
+}
+
+/* ========== PAGE SECTIONS ========== */
+.page-section{display:none;}
+.page-section.active{display:block;}
+
+/* ========== SCROLL PANEL (巻物) ========== */
+.scroll-panel{
+  background:var(--scroll-bg);
+  border-radius:18px;
+  box-shadow:0 8px 32px rgba(61,43,31,.15),inset 0 1px 0 rgba(255,255,255,.4);
+  border:3px solid var(--parchment-darker);
+  position:relative;overflow:hidden;
+  margin-bottom:1rem;
+}
+.scroll-panel::before,.scroll-panel::after{
+  content:'';position:absolute;left:0;right:0;height:6px;
+  background:linear-gradient(90deg,var(--parchment-darker) 0%,var(--parchment) 20%,var(--parchment-dark) 40%,var(--parchment) 60%,var(--parchment-dark) 80%,var(--parchment-darker) 100%);
+}
+.scroll-panel::before{top:0;}
+.scroll-panel::after{bottom:0;}
+.scroll-inner{padding:1.25rem;padding-top:calc(1.25rem + 6px);padding-bottom:calc(1.25rem + 6px);}
+.scroll-title{
+  font-family:'Klee One',cursive;font-size:1.25rem;font-weight:600;
+  color:var(--ink-dark);text-align:center;
+  margin-bottom:.75rem;padding-bottom:.5rem;
+  border-bottom:2px dashed var(--parchment-darker);
+}
+
+/* ========== WOOD CARD ========== */
+.wood-card{
+  background:linear-gradient(135deg,#A0724A 0%,#8B5E3C 50%,#9A6B45 100%);
+  border-radius:18px;padding:1.25rem;color:#FFF8E7;
+  box-shadow:4px 4px 0 rgba(61,43,31,.3),inset 0 1px 0 rgba(255,255,255,.1);
+  border:3px solid #6B4228;margin-bottom:1rem;
+}
+
+/* ========== PROGRESS ========== */
+.progress-wrap{margin-bottom:.875rem;}
+.progress-label{display:flex;justify-content:space-between;margin-bottom:3px;font-size:.85rem;font-family:'Klee One',cursive;color:var(--ink-medium);}
+.progress-track{width:100%;height:18px;background:rgba(0,0,0,.1);border-radius:99px;overflow:hidden;border:2px solid rgba(0,0,0,.12);}
+.progress-fill{height:100%;border-radius:99px;transition:width .6s cubic-bezier(.34,1.56,.64,1);position:relative;overflow:hidden;}
+.progress-fill::after{content:'';position:absolute;top:0;left:0;right:0;height:50%;background:rgba(255,255,255,.25);border-radius:99px;}
+.pf-social{background:linear-gradient(90deg,#E8634A,#C8432A);}
+.pf-cultural{background:linear-gradient(90deg,#3ABDB5,#2A9D95);}
+.pf-economic{background:linear-gradient(90deg,#D4A017,#B88A00);}
+
+/* ========== QUEST ITEM ========== */
+.quest-item{
+  background:var(--parchment);border-radius:14px;
+  padding:.875rem;border:2px solid var(--parchment-darker);
+  margin-bottom:.75rem;box-shadow:2px 3px 0 rgba(0,0,0,.1);
+  transition:all .2s;
+}
+.quest-item:last-child{margin-bottom:0;}
+.quest-item:hover{transform:translateY(-2px);box-shadow:3px 5px 0 rgba(0,0,0,.15);}
+.quest-item.done{opacity:.55;}
+.quest-item.locked{opacity:.45;}
+.quest-header{display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem;margin-bottom:.5rem;}
+.quest-title{font-family:'Klee One',cursive;font-size:.95rem;font-weight:600;color:var(--ink-dark);display:flex;align-items:center;gap:.4rem;flex:1;}
+.quest-divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--parchment-darker),transparent);margin:.4rem 0;}
+.quest-reward{display:flex;align-items:center;gap:.3rem;font-size:.78rem;color:var(--gold);font-weight:600;}
+
+/* ========== BUTTONS ========== */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.4rem;
+  padding:.5rem 1.25rem;border:none;cursor:pointer;
+  font-family:'Klee One',cursive;font-size:.9rem;font-weight:600;
+  border-radius:14px;transition:all .15s;text-decoration:none;position:relative;
+}
+.btn-primary{
+  background:linear-gradient(180deg,#E8634A 0%,#C8432A 100%);
+  color:#FFF8E7;border:3px solid #A82A12;
+  box-shadow:0 5px 0 #A82A12,4px 4px 0 rgba(61,43,31,.3);
+  text-shadow:0 1px 2px rgba(0,0,0,.3);
+}
+.btn-primary:hover{transform:translateY(2px);box-shadow:0 3px 0 #A82A12;}
+.btn-primary:active{transform:translateY(5px);box-shadow:0 0 0 #A82A12;}
+.btn-success{
+  background:linear-gradient(180deg,#5B8A3C 0%,#4A7230 100%);
+  color:#FFF8E7;border:3px solid #3D6128;
+  box-shadow:0 5px 0 #3D6128,4px 4px 0 rgba(61,43,31,.3);
+  text-shadow:0 1px 2px rgba(0,0,0,.3);
+}
+.btn-success:hover{transform:translateY(2px);box-shadow:0 3px 0 #3D6128;}
+.btn-secondary{
+  background:linear-gradient(180deg,#C8B090 0%,#A8906A 100%);
+  color:var(--ink-dark);border:3px solid #8B7050;
+  box-shadow:0 4px 0 #8B7050;
+}
+.btn-secondary:hover{transform:translateY(2px);box-shadow:0 2px 0 #8B7050;}
+.btn-gold{
+  background:linear-gradient(180deg,#F0C842 0%,#D4A017 100%);
+  color:var(--ink-dark);border:3px solid #B88A00;
+  box-shadow:0 5px 0 #B88A00,4px 4px 0 rgba(61,43,31,.3);
+}
+.btn-gold:hover{transform:translateY(2px);box-shadow:0 3px 0 #B88A00;}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none !important;box-shadow:0 2px 0 rgba(0,0,0,.2) !important;}
+.btn-sm{padding:.3rem .875rem;font-size:.78rem;}
+.btn-full{width:100%;}
+
+/* ========== BADGE ========== */
+.badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:99px;font-size:.72rem;font-weight:600;font-family:'Klee One',cursive;border:2px solid;}
+.badge-social{background:rgba(232,99,74,.12);color:#C8432A;border-color:rgba(232,99,74,.28);}
+.badge-cultural{background:rgba(58,189,181,.12);color:#2A9D95;border-color:rgba(58,189,181,.28);}
+.badge-economic{background:rgba(212,160,23,.12);color:#9A7000;border-color:rgba(212,160,23,.28);}
+.badge-phase{background:rgba(240,200,66,.15);color:#8A6000;border-color:rgba(212,160,23,.35);}
+
+/* ========== ALERT ========== */
+.alert{padding:.75rem 1rem;border-radius:12px;margin-bottom:.75rem;border:2px solid;font-family:'Klee One',cursive;font-size:.88rem;}
+.alert-info{background:rgba(123,184,212,.15);border-color:rgba(123,184,212,.4);color:#1a6a8a;}
+.alert-warning{background:rgba(212,160,23,.1);border-color:rgba(212,160,23,.3);color:#8a6000;}
+.alert-success{background:rgba(91,138,60,.1);border-color:rgba(91,138,60,.3);color:#3D6128;}
+
+/* ========== FORM ========== */
+.form-group{margin-bottom:.875rem;}
+.form-label{display:block;margin-bottom:.25rem;font-weight:600;color:var(--ink-medium);font-family:'Klee One',cursive;font-size:.88rem;}
+.form-input,.form-select,.form-textarea{
+  width:100%;padding:.55rem .875rem;
+  border:2px solid var(--parchment-darker);border-radius:11px;
+  font-size:.95rem;font-family:'Noto Sans JP',sans-serif;
+  background:var(--scroll-bg);color:var(--ink-dark);
+  transition:all .2s;box-shadow:inset 0 2px 4px rgba(0,0,0,.05);
+}
+.form-input:focus,.form-select:focus,.form-textarea:focus{
+  outline:none;border-color:var(--coral);
+  box-shadow:0 0 0 3px rgba(232,99,74,.15),inset 0 2px 4px rgba(0,0,0,.05);
+}
+.form-textarea{resize:vertical;min-height:90px;}
+
+/* ========== TABS (ミッション用) ========== */
+.tab-row{display:flex;gap:.3rem;margin-bottom:.875rem;background:rgba(0,0,0,.08);padding:4px;border-radius:14px;overflow-x:auto;}
+.tab-btn{
+  padding:.45rem .875rem;border:none;background:transparent;border-radius:10px;
+  cursor:pointer;font-family:'Klee One',cursive;font-size:.82rem;color:var(--ink-medium);
+  transition:all .2s;white-space:nowrap;font-weight:600;
+}
+.tab-btn.active{background:var(--scroll-bg);color:var(--ink-dark);box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.tab-btn:hover:not(.active){background:rgba(255,255,255,.3);color:var(--ink-dark);}
+
+/* ========== CAPITAL DISPLAY ========== */
+.cap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:.75rem;}
+.cap-mini{text-align:center;padding:.6rem .4rem;border-radius:10px;border:2px solid;}
+.cap-mini.social{background:rgba(232,99,74,.1);border-color:rgba(232,99,74,.2);}
+.cap-mini.cultural{background:rgba(58,189,181,.1);border-color:rgba(58,189,181,.2);}
+.cap-mini.economic{background:rgba(212,160,23,.1);border-color:rgba(212,160,23,.2);}
+.cap-lbl{font-size:.65rem;color:var(--ink-light);font-family:'Klee One',cursive;}
+.cap-val{font-size:1.2rem;font-weight:700;font-family:'Klee One',cursive;}
+.cap-mini.social .cap-val{color:var(--coral);}
+.cap-mini.cultural .cap-val{color:var(--turquoise);}
+.cap-mini.economic .cap-val{color:var(--gold);}
+
+/* ========== ONBOARDING ========== */
+.ob-hero{
+  background:linear-gradient(180deg,#7BB8D4 0%,#5B9EC4 100%);
+  border-radius:20px;padding:2rem 1.5rem;text-align:center;
+  color:#FFF8E7;border:4px solid #4A8EB4;
+  box-shadow:4px 4px 0 rgba(61,43,31,.3);
+  margin-bottom:1rem;position:relative;overflow:hidden;
+}
+
+/* ========== NETWORK SVG ========== */
+.network-bg{
+  background:var(--parchment);border-radius:12px;
+  border:2px solid var(--parchment-darker);overflow:hidden;min-height:300px;
+}
+
+/* ========== POINT POPUP ========== */
+.point-popup{
+  position:fixed;top:50%;left:50%;
+  font-family:'Klee One',cursive;font-size:2.2rem;font-weight:600;
+  color:#F0C842;text-shadow:2px 2px 0 rgba(0,0,0,.3),0 0 20px rgba(240,200,66,.5);
+  z-index:9999;pointer-events:none;
+  animation:pointFly 1.2s ease-out forwards;
+}
+@keyframes pointFly{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.3);}
+  40%{opacity:1;transform:translate(-50%,-80%) scale(1.2);}
+  100%{opacity:0;transform:translate(-50%,-150%) scale(.9);}
+}
+.levelup-overlay{
+  position:fixed;inset:0;background:rgba(61,43,31,.85);
+  display:flex;align-items:center;justify-content:center;z-index:9999;
+}
+.levelup-box{
+  background:var(--scroll-bg);border-radius:20px;padding:2rem;text-align:center;
+  border:4px solid var(--gold);box-shadow:0 0 60px rgba(212,160,23,.5);
+  animation:bounceIn .5s cubic-bezier(.34,1.56,.64,1);max-width:300px;
+}
+@keyframes bounceIn{
+  0%{transform:scale(.3);opacity:0;}50%{transform:scale(1.05);}
+  70%{transform:scale(.9);}100%{transform:scale(1);opacity:1;}
+}
+
+/* ========== UTILS ========== */
+.flex{display:flex;}.flex-center{display:flex;align-items:center;justify-content:center;}
+.flex-between{display:flex;align-items:center;justify-content:space-between;}
+.items-center{align-items:center;}.gap-xs{gap:.25rem;}.gap-sm{gap:.5rem;}.gap-md{gap:1rem;}
+.flex-wrap{flex-wrap:wrap;}.flex-1{flex:1;}
+.text-center{text-align:center;}
+.klee{font-family:'Klee One',cursive;}
+.text-xs{font-size:.75rem;}.text-sm{font-size:.875rem;}.text-muted{color:var(--ink-light);}
+.font-bold{font-weight:700;}.font-semibold{font-weight:600;}
+.mb-sm{margin-bottom:.5rem;}.mb-md{margin-bottom:1rem;}.mt-sm{margin-top:.5rem;}.mt-md{margin-top:1rem;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.75rem;}
+
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+@keyframes spin{to{transform:rotate(360deg);}}
+.float{animation:float 3s ease-in-out infinite;}
+.fade-in{animation:fadeIn .4s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+
+@media(max-width:600px){
+  .hud-xp-bar{width:70px;}
+  .grid-3{grid-template-columns:repeat(3,1fr);}
+}
+</style>
+</head>
+<body>
+
+<!-- ========== ONBOARDING SCREEN ========== -->
+<div id="screen-onboarding">
+  <div style="max-width:600px;margin:0 auto;padding:1rem 1rem 2rem;">
+    <div class="ob-hero">
+      <div style="font-size:5rem;margin-bottom:.5rem;" class="float">🦙</div>
+      <h1 class="klee font-bold" style="font-size:1.9rem;color:#FFF8E7;margin-bottom:.4rem;text-shadow:2px 2px 0 rgba(0,0,0,.2);">アルパカ島へようこそ</h1>
+      <p style="color:rgba(255,248,231,.85);font-size:.9rem;">ご縁と信用を育てる社会参加ゲーム</p>
+    </div>
+
+    <div class="scroll-panel">
+      <div class="scroll-inner">
+        <h2 class="scroll-title">📜 ステージ0：夢つむぎミッション</h2>
+        <div class="alert alert-info">🌱 動画を視聴して「信頼のタネ」を獲得しましょう！ <strong>文化資本 +10</strong></div>
+
+        <div class="form-group">
+          <div class="form-label">📹 夢つむぎ動画</div>
+          <div style="padding-bottom:42%;position:relative;background:var(--parchment-dark);border-radius:12px;overflow:hidden;border:3px solid var(--parchment-darker);">
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;">
+              <div style="font-size:3rem;">🎬</div>
+              <p class="klee text-muted" style="font-size:.85rem;">動画プレースホルダー</p>
+            </div>
+          </div>
+          <label style="display:flex;align-items:center;gap:.5rem;margin-top:.75rem;cursor:pointer;font-family:'Klee One',cursive;color:var(--ink-medium);font-size:.9rem;">
+            <input type="checkbox" id="ob-video" style="width:17px;height:17px;accent-color:var(--coral);">
+            動画を視聴しました ✓
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">💭 あなたが島で大切にしたいことは？</label>
+          <select class="form-select" id="ob-answer">
+            <option value="">選択してください</option>
+            <option value="people">🤝 人とのつながり</option>
+            <option value="learning">📚 学びと成長</option>
+            <option value="helping">💖 誰かの役に立つこと</option>
+            <option value="discovery">🌟 新しい発見</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">✨ 小さな行動宣言</label>
+          <textarea class="form-textarea" id="ob-declaration" placeholder="例：毎日一人に「ありがとう」を伝える"></textarea>
+        </div>
+
+        <button class="btn btn-primary btn-full" id="ob-btn" onclick="completeOnboarding()" disabled style="font-size:1rem;padding:.75rem;">
+          🌱 信頼のタネを受け取る
+        </button>
+      </div>
+    </div>
+
+    <div class="scroll-panel">
+      <div class="scroll-inner">
+        <h2 class="scroll-title">🏝️ アルパカ島の3つの力</h2>
+        <div class="grid-3">
+          <div style="text-align:center;padding:.875rem .5rem;background:rgba(232,99,74,.08);border-radius:12px;border:2px solid rgba(232,99,74,.2);">
+            <div style="font-size:2rem;margin-bottom:.3rem;">🤝</div>
+            <div class="klee font-semibold" style="color:var(--coral);font-size:.85rem;margin-bottom:.15rem;">社会関係資本</div>
+            <p style="font-size:.7rem;color:var(--ink-light);">ありがとう・相談・手伝い</p>
+          </div>
+          <div style="text-align:center;padding:.875rem .5rem;background:rgba(58,189,181,.08);border-radius:12px;border:2px solid rgba(58,189,181,.2);">
+            <div style="font-size:2rem;margin-bottom:.3rem;">📚</div>
+            <div class="klee font-semibold" style="color:var(--turquoise);font-size:.85rem;margin-bottom:.15rem;">文化資本</div>
+            <p style="font-size:.7rem;color:var(--ink-light);">読書・歴史・動画視聴</p>
+          </div>
+          <div style="text-align:center;padding:.875rem .5rem;background:rgba(212,160,23,.08);border-radius:12px;border:2px solid rgba(212,160,23,.2);">
+            <div style="font-size:2rem;margin-bottom:.3rem;">💰</div>
+            <div class="klee font-semibold" style="color:var(--gold);font-size:.85rem;margin-bottom:.15rem;">経済資本</div>
+            <p style="font-size:.7rem;color:var(--ink-light);">家事・支出記録・仕事体験</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== MAIN SCREEN ========== -->
+<div id="screen-main">
+  <!-- TOP NAV -->
+  <nav class="top-nav">
+    <div class="top-nav-inner">
+      <div class="nav-brand">🦙 アルパカ島</div>
+      <div class="hud-bar">
+        <div class="hud-item">⭐ Lv.<span class="val" id="hud-lv">1</span></div>
+        <div class="hud-xp-wrap">
+          <span class="hud-xp-label" id="hud-xp-lbl">XP 0%</span>
+          <div class="hud-xp-bar"><div class="hud-xp-fill" id="hud-xp-fill" style="width:0%"></div></div>
+        </div>
+        <div class="hud-item">🪙 <span class="val" id="hud-coins">0</span></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ===== HOME ===== -->
+    <div id="page-home" class="page-section active fade-in">
+      <!-- プレイヤーカード -->
+      <div class="wood-card">
+        <div class="flex-between mb-sm">
+          <div class="flex gap-md items-center">
+            <div id="home-avatar" style="font-size:3.2rem;filter:drop-shadow(2px 2px 0 rgba(0,0,0,.3));">🦙</div>
+            <div>
+              <div class="klee font-bold" style="font-size:1.2rem;color:#FFF8E7;" id="home-name">島太郎</div>
+              <div class="flex gap-sm flex-wrap mt-sm">
+                <span class="badge badge-phase" id="home-phase">⭐ Lv.1 見習い島民</span>
+                <span style="font-size:.72rem;color:rgba(255,248,231,.75);" id="home-streak">🔥 1日連続</span>
+              </div>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:.68rem;color:rgba(255,248,231,.6);margin-bottom:2px;">アルパカ通貨</div>
+            <div class="klee font-bold" style="font-size:1.6rem;color:#F0C842;" id="home-trust">🪙 0</div>
+          </div>
+        </div>
+        <!-- XP -->
+        <div style="margin-bottom:.75rem;">
+          <div class="flex-between mb-sm">
+            <span style="font-size:.7rem;color:rgba(255,248,231,.65);font-family:'Klee One',cursive;">XP</span>
+            <span style="font-size:.7rem;color:rgba(255,248,231,.65);" id="home-xp-pct">0% → 次のフェーズまで</span>
+          </div>
+          <div style="height:12px;background:rgba(0,0,0,.3);border-radius:99px;overflow:hidden;border:2px solid rgba(0,0,0,.2);">
+            <div id="home-xp-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#F0C842,#FF9F1C);border-radius:99px;transition:width .6s ease;position:relative;">
+              <div style="position:absolute;top:0;left:0;right:0;height:50%;background:rgba(255,255,255,.25);border-radius:99px;"></div>
+            </div>
+          </div>
+        </div>
+        <!-- 3資本 -->
+        <div class="cap-grid">
+          <div class="cap-mini social"><div class="cap-lbl">🤝 ご縁</div><div class="cap-val" id="home-social">0</div></div>
+          <div class="cap-mini cultural"><div class="cap-lbl">📚 学び</div><div class="cap-val" id="home-cultural">0</div></div>
+          <div class="cap-mini economic"><div class="cap-lbl">💰 仕事</div><div class="cap-val" id="home-economic">0</div></div>
+        </div>
+      </div>
+
+      <!-- 3資本メーター -->
+      <div class="scroll-panel">
+        <div class="scroll-inner">
+          <h3 class="scroll-title">📊 3つの資本メーター</h3>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>🤝 社会関係資本</span><span style="font-weight:700;color:var(--coral);" id="meter-social">0 / 100</span></div>
+            <div class="progress-track"><div class="progress-fill pf-social" id="bar-social" style="width:0%"></div></div>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>📚 文化資本</span><span style="font-weight:700;color:var(--turquoise);" id="meter-cultural">0 / 100</span></div>
+            <div class="progress-track"><div class="progress-fill pf-cultural" id="bar-cultural" style="width:0%"></div></div>
+          </div>
+          <div class="progress-wrap" style="margin-bottom:0;">
+            <div class="progress-label"><span>💰 経済資本</span><span style="font-weight:700;color:var(--gold);" id="meter-economic">0 / 100</span></div>
+            <div class="progress-track"><div class="progress-fill pf-economic" id="bar-economic" style="width:0%"></div></div>
+          </div>
+          <div id="lock-warn" class="alert alert-warning mt-md" style="margin-bottom:0;display:none;">
+            🔒 社会関係資本が30未満のため、一部の仕事クエストがロックされています
+          </div>
+        </div>
+      </div>
+
+      <!-- 今日のクエスト -->
+      <div class="scroll-panel">
+        <div class="scroll-inner">
+          <div class="flex-between mb-md">
+            <h3 class="scroll-title" style="margin-bottom:0;border-bottom:none;padding-bottom:0;">📜 今日のクエスト</h3>
+            <button onclick="showPage('quests')" style="color:var(--coral);font-size:.82rem;font-family:'Klee One',cursive;background:none;border:none;cursor:pointer;">すべて見る →</button>
+          </div>
+          <div style="border-bottom:2px dashed var(--parchment-darker);margin-bottom:.875rem;"></div>
+          <div id="home-quests"></div>
+        </div>
+      </div>
+
+      <!-- AIメッセージ -->
+      <div class="scroll-panel">
+        <div class="scroll-inner">
+          <h3 class="scroll-title">🦙 島からのメッセージ</h3>
+          <div style="display:flex;gap:.875rem;align-items:flex-start;">
+            <div style="font-size:2.2rem;flex-shrink:0;">🦙</div>
+            <div style="background:var(--parchment-dark);border-radius:14px;padding:.875rem;flex:1;position:relative;font-family:'Klee One',cursive;color:var(--ink-dark);font-size:.88rem;line-height:1.8;border:2px solid var(--parchment-darker);">
+              <div style="position:absolute;left:-10px;top:12px;width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;border-right:10px solid var(--parchment-darker);"></div>
+              <p id="ai-message">今日もよく来てくれましたね！🌱</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== QUESTS ===== -->
+    <div id="page-quests" class="page-section fade-in">
+      <div class="scroll-panel">
+        <div class="scroll-inner">
+          <h1 class="scroll-title">📜 クエスト</h1>
+          <p style="text-align:center;color:var(--ink-light);font-family:'Klee One',cursive;font-size:.85rem;margin-bottom:0;">クエストを達成して資本を育てよう！</p>
+        </div>
+      </div>
+      <div id="q-lock-warn" class="alert alert-warning" style="display:none;">🔒 社会関係資本が30未満のため、一部の経済クエストがロックされています</div>
+      <div class="tab-row">
+        <button class="tab-btn active" onclick="switchQTab('social',this)">🤝 社会関係</button>
+        <button class="tab-btn" onclick="switchQTab('cultural',this)">📚 文化</button>
+        <button class="tab-btn" onclick="switchQTab('economic',this)">💰 経済</button>
+      </div>
+      <div class="scroll-panel"><div class="scroll-inner" id="q-list"></div></div>
+    </div>
+
+    <!-- ===== GROWTH LOG ===== -->
+    <div id="page-log" class="page-section fade-in">
+      <!-- 自己効力感 -->
+      <div class="wood-card">
+        <div class="flex-between mb-sm">
+          <div class="klee font-bold" style="color:#FFF8E7;font-size:1rem;">💪 自己効力感メーター</div>
+          <div class="klee font-bold" style="color:#F0C842;font-size:1.2rem;"><span id="log-efficacy">50</span><span style="font-size:.75rem;color:rgba(255,248,231,.65);">/100</span></div>
+        </div>
+        <div style="height:16px;background:rgba(0,0,0,.3);border-radius:99px;overflow:hidden;border:2px solid rgba(0,0,0,.2);">
+          <div id="log-efficacy-bar" style="height:100%;width:50%;background:linear-gradient(90deg,#3ABDB5,#2A9D95);border-radius:99px;transition:width .6s ease;position:relative;">
+            <div style="position:absolute;top:0;left:0;right:0;height:50%;background:rgba(255,255,255,.2);border-radius:99px;"></div>
+          </div>
+        </div>
+        <p style="font-size:.7rem;color:rgba(255,248,231,.55);margin-top:.4rem;font-family:'Klee One',cursive;">ログを記録するごとに上がります</p>
+      </div>
+
+      <!-- グラフ -->
+      <div class="scroll-panel">
+        <div class="scroll-inner">
+          <h3 class="scroll-title">📊 週次成長グラフ</h3>
+          <canvas id="log-chart" height="160" style="width:100%;border-radius:8px;"></canvas>
+          <div style="display:flex;gap:1rem;justify-content:center;margin-top:.6rem;font-size:.72rem;font-family:'Klee One',cursive;color:var(--ink-light);">
+            <span><span style="display:inline-block;width:9px;height:9px;background:var(--coral);border-radius:2px;margin-right:3px;"></span>社会</span>
+            <span><span style="display:inline-block;width:9px;height:9px;background:var(--turquoise);border-radius:2px;margin-right:3px;"></span>文化</span>
+            <span><span style="display:inline-block;width:9px;height:9px;background:var(--gold);border-radius:2px;margin-right:3px;"></span>経済</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 記録フォーム -->
+      <div class="scroll-panel">
+        <div class="scroll-inner">
+          <h3 class="scroll-title">✨ 今日できたことを記録</h3>
+          <div class="form-group">
+            <label class="form-label">今日できたこと</label>
+            <textarea class="form-textarea" id="log-content" placeholder="例：友達に勇気を出して話しかけることができました"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">資本カテゴリ</label>
+            <select class="form-select" id="log-type">
+              <option value="">選択してください</option>
+              <option value="social">🤝 社会関係資本</option>
+              <option value="cultural">📚 文化資本</option>
+              <option value="economic">💰 経済資本</option>
+            </select>
+          </div>
+          <button class="btn btn-primary btn-full" onclick="addLog()">📝 記録する</button>
+        </div>
+      </div>
+
+      <!-- フィードバック -->
+      <div class="scroll-panel">
+        <div class="scroll-inner">
+          <h3 class="scroll-title">🦙 週次振り返り</h3>
+          <button class="btn btn-gold btn-full mb-md" onclick="genFeedback()">✨ AIフィードバックを生成</button>
+          <div id="log-feedback" style="display:none;background:var(--parchment-dark);border-radius:12px;padding:.875rem;border:2px solid var(--parchment-darker);font-family:'Klee One',cursive;color:var(--ink-dark);line-height:1.8;font-size:.88rem;"></div>
+        </div>
+      </div>
+
+      <!-- 過去のログ -->
+      <div class="scroll-panel">
+        <div class="scroll-inner">
+          <h3 class="scroll-title">📚 過去のログ</h3>
+          <div id="log-list"><p style="text-align:center;color:var(--ink-light);font-family:'Klee One',cursive;padding:.75rem;">まだログがありません</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ENGI MAP ===== -->
+    <div id="page-engi" class="page-section fade-in">
+      <div class="wood-card text-center">
+        <div style="font-size:2.8rem;margin-bottom:.3rem;">👥</div>
+        <div class="klee font-bold" style="font-size:1.8rem;color:#F0C842;" id="engi-count">0</div>
+        <div style="color:rgba(255,248,231,.7);font-family:'Klee One',cursive;font-size:.85rem;">島の仲間</div>
+      </div>
+      <div class="scroll-panel">
+        <div class="scroll-inner">
+          <h3 class="scroll-title">🌐 ご縁ネットワーク</h3>
+          <div class="network-bg"><svg id="engi-svg" width="100%" height="300"></svg></div>
+        </div>
+      </div>
+      <div class="scroll-panel">
+        <div class="scroll-inner">
+          <h3 class="scroll-title">✨ 出会った人を登録</h3>
+          <div class="form-group">
+            <label class="form-label">名前</label>
+            <input type="text" class="form-input" id="engi-name" placeholder="例：田中先生">
+          </div>
+          <div class="form-group">
+            <label class="form-label">出会った場所</label>
+            <input type="text" class="form-input" id="engi-place" placeholder="例：学校、アルパカツアー">
+          </div>
+          <div class="form-group">
+            <label class="form-label">この人から学んだこと</label>
+            <textarea class="form-textarea" id="engi-learned" placeholder="例：困った時は相談してもいいということ"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">カテゴリ</label>
+            <select class="form-select" id="engi-type">
+              <option value="">選択してください</option>
+              <option value="social">🤝 社会関係資本</option>
+              <option value="cultural">📚 文化資本</option>
+              <option value="economic">💰 経済資本</option>
+            </select>
+          </div>
+          <button class="btn btn-primary btn-full" onclick="addEngi()">🤝 登録する (+5pt)</button>
+        </div>
+      </div>
+      <div class="scroll-panel">
+        <div class="scroll-inner">
+          <h3 class="scroll-title">📋 ご縁リスト</h3>
+          <div id="engi-list"><p style="text-align:center;color:var(--ink-light);font-family:'Klee One',cursive;padding:.75rem;">まだご縁がありません</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== PROFILE ===== -->
+    <div id="page-profile" class="page-section fade-in">
+      <div class="wood-card text-center">
+        <div id="prof-avatar" style="font-size:4rem;margin-bottom:.4rem;filter:drop-shadow(2px 2px 0 rgba(0,0,0,.3));">🦙</div>
+        <div class="klee font-bold" style="font-size:1.4rem;color:#FFF8E7;margin-bottom:.25rem;" id="prof-name">島太郎</div>
+        <div style="display:flex;justify-content:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.5rem;">
+          <span class="badge badge-phase" id="prof-phase">⭐ Lv.1 見習い島民</span>
+        </div>
+        <div class="klee" style="font-size:1.3rem;color:#F0C842;" id="prof-trust">🪙 0 アルパカ通貨</div>
+      </div>
+
+      <!-- 名前編集 -->
+      <div class="scroll-panel">
+        <div class="scroll-inner">
+          <h3 class="scroll-title">✏️ 島民証を編集</h3>
+          <div class="form-group">
+            <label class="form-label">ニックネーム</label>
+            <input type="text" class="form-input" id="prof-name-input" maxlength="20">
+          </div>
+          <button class="btn btn-primary btn-full" onclick="saveName()">💾 保存する</button>
+        </div>
+      </div>
+
+      <!-- アバター -->
+      <div class="scroll-panel">
+        <div class="scroll-inner">
+          <h3 class="scroll-title">🦙 アバター選択</h3>
+          <div class="grid-3" id="avatar-grid"></div>
+        </div>
+      </div>
+
+      <!-- 多重知能 -->
+      <div class="scroll-panel">
+        <div class="scroll-inner">
+          <h3 class="scroll-title">🌟 多重知能タイプ診断</h3>
+          <div id="intel-result" style="text-align:center;padding:.75rem;margin-bottom:.75rem;display:none;background:rgba(212,160,23,.1);border-radius:12px;border:2px solid rgba(212,160,23,.3);"></div>
+          <button class="btn btn-gold btn-full" onclick="runDiagnosis()" id="intel-btn">✨ 診断する</button>
+        </div>
+      </div>
+
+      <!-- 実績 -->
+      <div class="scroll-panel">
+        <div class="scroll-inner">
+          <h3 class="scroll-title">📊 累積実績</h3>
+          <div class="grid-3">
+            <div style="text-align:center;padding:.75rem .4rem;background:var(--parchment);border-radius:12px;border:2px solid var(--parchment-darker);">
+              <div style="font-size:1.6rem;font-weight:700;color:var(--coral);font-family:'Klee One',cursive;" id="prof-streak">1</div>
+              <div class="text-xs text-muted">連続ログイン</div>
+            </div>
+            <div style="text-align:center;padding:.75rem .4rem;background:var(--parchment);border-radius:12px;border:2px solid var(--parchment-darker);">
+              <div style="font-size:1.6rem;font-weight:700;color:var(--turquoise);font-family:'Klee One',cursive;" id="prof-missions">0</div>
+              <div class="text-xs text-muted">クエスト達成</div>
+            </div>
+            <div style="text-align:center;padding:.75rem .4rem;background:var(--parchment);border-radius:12px;border:2px solid var(--parchment-darker);">
+              <div style="font-size:1.6rem;font-weight:700;color:var(--gold);font-family:'Klee One',cursive;" id="prof-engi">0</div>
+              <div class="text-xs text-muted">ご縁人数</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 保護者モード -->
+      <div class="scroll-panel">
+        <div class="scroll-inner">
+          <h3 class="scroll-title">👪 保護者共有モード</h3>
+          <div class="flex-between">
+            <span class="klee" style="color:var(--ink-medium);font-size:.9rem;">保護者と成長を共有</span>
+            <label style="position:relative;display:inline-block;width:48px;height:26px;cursor:pointer;">
+              <input type="checkbox" id="parent-toggle" onchange="toggleParent()" style="opacity:0;width:0;height:0;">
+              <span id="parent-track" style="position:absolute;inset:0;background:var(--parchment-darker);border-radius:99px;transition:.3s;"></span>
+              <span id="parent-thumb" style="position:absolute;width:20px;height:20px;background:white;border-radius:50%;top:3px;left:3px;transition:.3s;box-shadow:0 2px 4px rgba(0,0,0,.3);"></span>
+            </label>
+          </div>
+          <div id="parent-msg" style="display:none;" class="alert alert-success mt-md" style="margin-bottom:0;">🔗 共有モードがONです</div>
+        </div>
+      </div>
+
+      <!-- リセット -->
+      <div class="scroll-panel">
+        <div class="scroll-inner">
+          <h3 class="scroll-title">⚠️ データリセット</h3>
+          <p class="text-sm text-muted mb-md klee">全てのデータが削除されます。この操作は元に戻せません。</p>
+          <button class="btn btn-secondary btn-full" onclick="resetAll()">🗑️ データをリセット</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <div class="bnav-item active" onclick="showPage('home')" id="bnav-home">
+      <span class="bicon">🏠</span><span class="blabel">ホーム</span>
+    </div>
+    <div class="bnav-item" onclick="showPage('quests')" id="bnav-quests">
+      <span class="bicon">📜</span><span class="blabel">クエスト</span>
+    </div>
+    <div class="bnav-item" onclick="showPage('log')" id="bnav-log">
+      <span class="bicon">📈</span><span class="blabel">ログ</span>
+    </div>
+    <div class="bnav-item" onclick="showPage('engi')" id="bnav-engi">
+      <span class="bicon">🤝</span><span class="blabel">ご縁</span>
+    </div>
+    <div class="bnav-item" onclick="showPage('profile')" id="bnav-profile">
+      <span class="bicon">🐾</span><span class="blabel">島民証</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// ========== DATA STORE ==========
+const STORE_KEY = 'alpacaIsland_v3';
+
+function loadData() {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY)) || null; } catch(e){ return null; }
+}
+function saveData(d) {
+  localStorage.setItem(STORE_KEY, JSON.stringify(d));
+}
+function initData() {
+  if (!loadData()) resetData(true);
+}
+function resetData(silent) {
+  if (!silent && !confirm('本当にリセットしますか？全てのデータが削除されます。')) return;
+  saveData({
+    user: { name:'島太郎', avatar:'alpaca-1', loginStreak:1, parentShareMode:false, multipleIntelligence:null },
+    capital: { social:0, cultural:0, economic:0 },
+    missions: { completed:[], todayCompleted:[] },
+    growthLogs: [],
+    engi: []
+  });
+  if (!silent) location.reload();
+}
+function getCapital() { return loadData().capital; }
+function updateCapital(type, amount) {
+  const d = loadData();
+  d.capital[type] = Math.max(0, Math.min(100, d.capital[type] + amount));
+  saveData(d);
+}
+function getTrust() { const c = getCapital(); return c.social + c.cultural + c.economic; }
+function getPhase(trust) {
+  const t = trust ?? getTrust();
+  if (t < 50)  return { name:'見習い島民',   level:1, prevXp:0,   nextXp:50  };
+  if (t < 100) return { name:'ご縁ビルダー', level:2, prevXp:50,  nextXp:100 };
+  if (t < 150) return { name:'文化探検家',   level:3, prevXp:100, nextXp:150 };
+  if (t < 200) return { name:'キャリアデザイナー', level:4, prevXp:150, nextXp:200 };
+  return         { name:'島のロールモデル', level:5, prevXp:200, nextXp:300 };
+}
+
+// ========== ONBOARDING ==========
+(function(){
+  const ob = document.getElementById('ob-video');
+  const oa = document.getElementById('ob-answer');
+  const od = document.getElementById('ob-declaration');
+  const btn = document.getElementById('ob-btn');
+  function validate(){ btn.disabled = !(ob.checked && oa.value && od.value.trim()); }
+  ob.addEventListener('change', validate);
+  oa.addEventListener('change', validate);
+  od.addEventListener('input', validate);
+})();
+
+function completeOnboarding() {
+  const video = document.getElementById('ob-video').checked;
+  const answer = document.getElementById('ob-answer').value;
+  const decl = document.getElementById('ob-declaration').value.trim();
+  if (!video || !answer || !decl) { alert('全ての項目を入力してください'); return; }
+  updateCapital('cultural', 10);
+  showPointPopup(10);
+  setTimeout(() => {
+    document.getElementById('screen-onboarding').style.display = 'none';
+    document.getElementById('screen-main').style.display = 'block';
+    showPage('home');
+  }, 1000);
+}
+
+// ========== PAGE SWITCHING ==========
+const PAGES = ['home','quests','log','engi','profile'];
+function showPage(name) {
+  PAGES.forEach(p => {
+    document.getElementById('page-'+p).classList.toggle('active', p === name);
+    const btn = document.getElementById('bnav-'+p);
+    if (btn) btn.classList.toggle('active', p === name);
+  });
+  // ページ固有の初期化
+  if (name === 'home') renderHome();
+  if (name === 'quests') renderQuests('social');
+  if (name === 'log') renderLog();
+  if (name === 'engi') renderEngi();
+  if (name === 'profile') renderProfile();
+  updateHUD();
+  window.scrollTo(0,0);
+}
+
+// ========== HUD ==========
+function updateHUD() {
+  const trust = getTrust();
+  const phase = getPhase(trust);
+  const xpInLv = trust - phase.prevXp;
+  const xpNeed = phase.nextXp - phase.prevXp;
+  const pct = Math.min(100, Math.round(xpInLv / xpNeed * 100));
+  document.getElementById('hud-lv').textContent = phase.level;
+  document.getElementById('hud-xp-fill').style.width = pct + '%';
+  document.getElementById('hud-xp-lbl').textContent = 'XP ' + pct + '%';
+  document.getElementById('hud-coins').textContent = trust;
+}
+
+// ========== HOME ==========
+function renderHome() {
+  const d = loadData();
+  const cap = d.capital;
+  const trust = getTrust();
+  const phase = getPhase(trust);
+  const xpInLv = trust - phase.prevXp;
+  const xpNeed = phase.nextXp - phase.prevXp;
+  const pct = Math.min(100, Math.round(xpInLv / xpNeed * 100));
+
+  document.getElementById('home-avatar').textContent = getAvatarEmoji(d.user.avatar);
+  document.getElementById('home-name').textContent = d.user.name;
+  document.getElementById('home-phase').textContent = '⭐ Lv.' + phase.level + ' ' + phase.name;
+  document.getElementById('home-streak').textContent = '🔥 ' + d.user.loginStreak + '日連続';
+  document.getElementById('home-trust').textContent = '🪙 ' + trust;
+  document.getElementById('home-xp-pct').textContent = pct + '% → 次のフェーズまで';
+  document.getElementById('home-xp-bar').style.width = pct + '%';
+  document.getElementById('home-social').textContent = cap.social;
+  document.getElementById('home-cultural').textContent = cap.cultural;
+  document.getElementById('home-economic').textContent = cap.economic;
+  document.getElementById('meter-social').textContent = cap.social + ' / 100';
+  document.getElementById('meter-cultural').textContent = cap.cultural + ' / 100';
+  document.getElementById('meter-economic').textContent = cap.economic + ' / 100';
+  document.getElementById('bar-social').style.width = cap.social + '%';
+  document.getElementById('bar-cultural').style.width = cap.cultural + '%';
+  document.getElementById('bar-economic').style.width = cap.economic + '%';
+  document.getElementById('lock-warn').style.display = cap.social < 30 ? '' : 'none';
+
+  // 今日のクエスト（ランダム3件）
+  const all = getMissions();
+  const todayIds = d.missions.todayCompleted || [];
+  const pick = shuffle(all).slice(0, 3);
+  document.getElementById('home-quests').innerHTML = pick.map(m => {
+    const done = todayIds.includes(m.id);
+    return `<div class="quest-item ${done ? 'done' : ''}">
+      <div class="quest-header">
+        <div class="quest-title"><span style="font-size:1.25rem;">${m.icon}</span>${m.title}${done ? ' ✅' : ''}</div>
+        <span class="badge badge-${m.type === 'social' ? 'social' : m.type === 'cultural' ? 'cultural' : 'economic'}">+${m.pts}pt</span>
+      </div>
+      <div class="quest-divider"></div>
+      <p style="font-size:.82rem;color:var(--ink-light);margin-bottom:.6rem;">${m.desc}</p>
+      <div class="flex-between">
+        <div class="quest-reward">🪙 ${m.pts} XP ${m.pts*2}</div>
+        ${done
+          ? '<button class="btn btn-secondary btn-sm" disabled>完了済み</button>'
+          : `<button class="btn btn-success btn-sm" onclick="doMission('${m.id}','${m.type}',${m.pts},'${m.title}',true)">完了した！</button>`}
+      </div>
+    </div>`;
+  }).join('');
+
+  // AIメッセージ
+  const strongest = getStrongest(cap);
+  const weakest = getWeakest(cap);
+  document.getElementById('ai-message').innerHTML =
+    `${d.user.name}さん、今日もよく来てくれましたね！<br>特に「<strong>${strongest}</strong>」が伸びています。🌱<br>次は「<strong>${weakest}</strong>」にも挑戦してみましょう！`;
+}
+
+// ========== QUESTS ==========
+let currentQTab = 'social';
+function renderQuests(type) {
+  currentQTab = type || currentQTab;
+  const d = loadData();
+  const cap = d.capital;
+  const locked = cap.social < 30;
+  document.getElementById('q-lock-warn').style.display = locked ? '' : 'none';
+
+  const missions = getMissions().filter(m => m.type === currentQTab);
+  const todayIds = d.missions.todayCompleted || [];
+
+  document.getElementById('q-list').innerHTML = missions.map(m => {
+    const done = todayIds.includes(m.id);
+    const isLocked = currentQTab === 'economic' && m.pts >= 10 && locked;
+    return `<div class="quest-item ${done ? 'done' : ''} ${isLocked ? 'locked' : ''}">
+      <div class="quest-header">
+        <div class="quest-title"><span style="font-size:1.3rem;">${m.icon}</span>${m.title}${isLocked ? ' 🔒' : ''}${done ? ' ✅' : ''}</div>
+        <span class="badge badge-${currentQTab === 'social' ? 'social' : currentQTab === 'cultural' ? 'cultural' : 'economic'}">+${m.pts}pt</span>
+      </div>
+      <div class="quest-divider"></div>
+      <p style="font-size:.82rem;color:var(--ink-light);margin-bottom:.6rem;">${m.desc}</p>
+      <div class="flex-between">
+        <div class="quest-reward">🪙 ${m.pts} XP ${m.pts*2}</div>
+        ${isLocked ? '<button class="btn btn-secondary btn-sm" disabled>🔒 ロック中</button>'
+          : done ? '<button class="btn btn-secondary btn-sm" disabled>完了済み ✅</button>'
+          : `<button class="btn btn-success btn-sm" onclick="doMission('${m.id}','${m.type}',${m.pts},'${m.title}',false)">完了した！</button>`}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function switchQTab(type, el) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderQuests(type);
+}
+
+function doMission(id, type, pts, title, fromHome) {
+  const d = loadData();
+  if (!d.missions.todayCompleted) d.missions.todayCompleted = [];
+  if (d.missions.todayCompleted.includes(id)) return;
+
+  const oldPhase = getPhase();
+  updateCapital(type, pts);
+  const newPhase = getPhase();
+
+  d.missions.completed.push({ id, type, title, pts, at: Date.now() });
+  d.missions.todayCompleted.push(id);
+  saveData(d);
+
+  showPointPopup(pts);
+  if (oldPhase.level < newPhase.level) setTimeout(() => showLevelUp(newPhase.name), 1000);
+
+  setTimeout(() => {
+    if (fromHome) renderHome();
+    else renderQuests();
+    updateHUD();
+  }, 1100);
+}
+
+// ========== GROWTH LOG ==========
+function renderLog() {
+  const d = loadData();
+  const logs = d.growthLogs || [];
+  const eff = logs.length ? logs[logs.length-1].selfEfficacy || 50 : 50;
+  document.getElementById('log-efficacy').textContent = eff;
+  document.getElementById('log-efficacy-bar').style.width = eff + '%';
+
+  // 過去ログ
+  const listEl = document.getElementById('log-list');
+  if (logs.length === 0) {
+    listEl.innerHTML = '<p style="text-align:center;color:var(--ink-light);font-family:\'Klee One\',cursive;padding:.75rem;">まだログがありません。今日できたことを記録してみましょう！</p>';
+  } else {
+    listEl.innerHTML = [...logs].reverse().map(l => `
+      <div class="quest-item">
+        <div class="flex-between mb-sm">
+          <span class="badge badge-${l.capitalType === 'social' ? 'social' : l.capitalType === 'cultural' ? 'cultural' : 'economic'}">${capLabel(l.capitalType)}</span>
+          <span style="font-size:.72rem;color:var(--ink-light);">${fmtDate(l.date)}</span>
+        </div>
+        <p style="font-size:.9rem;color:var(--ink-dark);margin-bottom:.35rem;">${l.content}</p>
+        <div class="flex-between">
+          <span style="font-size:.72rem;color:var(--ink-light);">自己効力感: ${l.selfEfficacy}/100</span>
+          <div style="width:70px;height:5px;background:rgba(0,0,0,.1);border-radius:99px;overflow:hidden;">
+            <div style="height:100%;width:${l.selfEfficacy}%;background:var(--turquoise);border-radius:99px;"></div>
+          </div>
+        </div>
+      </div>`).join('');
+  }
+
+  // グラフ
+  setTimeout(() => drawChart(logs), 80);
+}
+
+function addLog() {
+  const content = document.getElementById('log-content').value.trim();
+  const type = document.getElementById('log-type').value;
+  if (!content || !type) { alert('全ての項目を入力してください'); return; }
+  const d = loadData();
+  const prevEff = d.growthLogs.length ? d.growthLogs[d.growthLogs.length-1].selfEfficacy || 50 : 50;
+  d.growthLogs.push({ id: 'log_'+Date.now(), date: Date.now(), content, capitalType: type, selfEfficacy: Math.min(100, prevEff + 2) });
+  saveData(d);
+  document.getElementById('log-content').value = '';
+  document.getElementById('log-type').value = '';
+  showPointPopup('✓');
+  setTimeout(() => renderLog(), 800);
+}
+
+function genFeedback() {
+  const d = loadData();
+  const logs = d.growthLogs;
+  const cap = d.capital;
+  const fb = document.getElementById('log-feedback');
+  fb.style.display = '';
+  fb.innerHTML = [
+    `今週は${logs.length}件の成長を記録しましたね！素晴らしいです。`,
+    `「${getStrongest(cap)}」が特に伸びています。その調子で！`,
+    `「${getWeakest(cap)}」にも少しずつ挑戦してみると、バランスよく成長できますよ。`,
+    `記録を続けることで、自分の変化がよく見えるようになります。`,
+    `来週も一緒に成長していきましょう！🌱`
+  ].join('<br><br>');
+}
+
+function drawChart(logs) {
+  const canvas = document.getElementById('log-chart');
+  if (!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const w = canvas.offsetWidth;
+  const h = 160;
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
+  canvas.style.height = h + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const labels = [], social = [], cultural = [], economic = [];
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date(); date.setDate(date.getDate() - i);
+    labels.push(`${date.getMonth()+1}/${date.getDate()}`);
+    const dl = logs.filter(l => new Date(l.date).toDateString() === date.toDateString());
+    social.push(dl.filter(l => l.capitalType === 'social').length);
+    cultural.push(dl.filter(l => l.capitalType === 'cultural').length);
+    economic.push(dl.filter(l => l.capitalType === 'economic').length);
+  }
+
+  ctx.fillStyle = '#F5EDD6'; ctx.fillRect(0,0,w,h);
+  const pad = { top:16, bot:34, left:8, right:8 };
+  const gw = (w - pad.left - pad.right) / labels.length;
+  const bw = gw / 4.2;
+  const maxV = Math.max(...social, ...cultural, ...economic, 1);
+  const ch = h - pad.top - pad.bot;
+
+  labels.forEach((lbl, i) => {
+    const x = pad.left + i * gw;
+    const drawBar = (off, val, color) => {
+      const bh = (val / maxV) * ch;
+      const y = pad.top + ch - bh;
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(x+off, y, bw-1, bh, [3,3,0,0]);
+      else ctx.rect(x+off, y, bw-1, bh);
+      ctx.fill();
+    };
+    drawBar(0, social[i], '#E8634A');
+    drawBar(bw, cultural[i], '#3ABDB5');
+    drawBar(bw*2, economic[i], '#D4A017');
+    ctx.fillStyle = '#9B7B5A'; ctx.font = `9px 'Noto Sans JP'`; ctx.textAlign = 'center';
+    ctx.fillText(lbl, x + gw/2, h - 8);
+  });
+}
+
+// ========== ENGI MAP ==========
+function renderEngi() {
+  const d = loadData();
+  const list = d.engi || [];
+  document.getElementById('engi-count').textContent = list.length + '人';
+
+  const listEl = document.getElementById('engi-list');
+  if (list.length === 0) {
+    listEl.innerHTML = '<p style="text-align:center;color:var(--ink-light);font-family:\'Klee One\',cursive;padding:.75rem;">まだご縁がありません</p>';
+  } else {
+    listEl.innerHTML = [...list].reverse().map(e => `
+      <div class="quest-item">
+        <div class="flex-between mb-sm">
+          <h4 class="klee font-semibold" style="color:var(--ink-dark);">${e.name}</h4>
+          <span class="badge badge-${e.capitalType === 'social' ? 'social' : e.capitalType === 'cultural' ? 'cultural' : 'economic'}">${capLabel(e.capitalType)}</span>
+        </div>
+        <p style="font-size:.78rem;color:var(--ink-light);margin-bottom:.3rem;">📍 ${e.place}</p>
+        <p style="font-size:.88rem;color:var(--ink-dark);">${e.learned}</p>
+        <p style="font-size:.7rem;color:var(--ink-light);margin-top:.25rem;">${fmtDate(e.createdAt)}</p>
+      </div>`).join('');
+  }
+  setTimeout(() => drawNetwork(list), 80);
+}
+
+function addEngi() {
+  const name = document.getElementById('engi-name').value.trim();
+  const place = document.getElementById('engi-place').value.trim();
+  const learned = document.getElementById('engi-learned').value.trim();
+  const type = document.getElementById('engi-type').value;
+  if (!name || !place || !learned || !type) { alert('全ての項目を入力してください'); return; }
+  const d = loadData();
+  d.engi.push({ id: 'engi_'+Date.now(), name, place, learned, capitalType: type, createdAt: Date.now() });
+  saveData(d);
+  updateCapital('social', 5);
+  document.getElementById('engi-name').value = '';
+  document.getElementById('engi-place').value = '';
+  document.getElementById('engi-learned').value = '';
+  document.getElementById('engi-type').value = '';
+  showPointPopup(5);
+  setTimeout(() => renderEngi(), 1000);
+}
+
+function drawNetwork(list) {
+  const svg = document.getElementById('engi-svg');
+  if (!svg) return;
+  svg.innerHTML = '';
+  const W = svg.clientWidth || 360, H = 300;
+  const cx = W/2, cy = H/2;
+
+  // グリッド
+  for (let i=0;i<5;i++){
+    const line = svgEl('line',{x1:0,y1:i*60+30,x2:W,y2:i*60+30,stroke:'#D4BC87','stroke-width':'.5'});
+    svg.appendChild(line);
+  }
+
+  // 中央
+  const g = svgEl('g',{});
+  g.appendChild(svgEl('circle',{cx,cy,r:28,fill:'#A0724A',stroke:'#6B4228','stroke-width':3}));
+  const t1 = svgEl('text',{x:cx,y:cy-3,'text-anchor':'middle',fill:'#FFF8E7','font-size':16,'font-weight':'bold'});
+  t1.textContent='🦙'; g.appendChild(t1);
+  const t2 = svgEl('text',{x:cx,y:cy+13,'text-anchor':'middle',fill:'#FFF8E7','font-size':9});
+  t2.textContent='自分'; g.appendChild(t2);
+  svg.appendChild(g);
+
+  const colors = { social:'#E8634A', cultural:'#3ABDB5', economic:'#D4A017' };
+  const sColors = { social:'#A82A12', cultural:'#2A9D95', economic:'#9A7000' };
+
+  list.forEach((e,i) => {
+    const angle = (i * 2 * Math.PI / list.length) - Math.PI/2;
+    const r = Math.min(W,H) * 0.31;
+    const nx = cx + r*Math.cos(angle), ny = cy + r*Math.sin(angle);
+    const line = svgEl('line',{x1:cx,y1:cy,x2:nx,y2:ny,stroke:'#C8B090','stroke-width':1.5,'stroke-dasharray':'4,3'});
+    svg.insertBefore(line, g);
+    const ng = svgEl('g',{style:'cursor:pointer;'});
+    ng.addEventListener('click', () => alert(`${e.name}\n場所: ${e.place}\n学んだこと: ${e.learned}`));
+    ng.appendChild(svgEl('circle',{cx:nx,cy:ny,r:20,fill:colors[e.capitalType]||'#8B5E3C',stroke:sColors[e.capitalType]||'#6B4228','stroke-width':2.5}));
+    const nt = svgEl('text',{x:nx,y:ny+4,'text-anchor':'middle',fill:'#FFF8E7','font-size':9,'font-weight':'bold'});
+    nt.textContent = e.name.slice(0,3); ng.appendChild(nt);
+    const nl = svgEl('text',{x:nx,y:ny+32,'text-anchor':'middle',fill:'#6B4C35','font-size':8});
+    nl.textContent = e.name; ng.appendChild(nl);
+    svg.appendChild(ng);
+  });
+}
+function svgEl(tag, attrs) {
+  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  Object.entries(attrs).forEach(([k,v]) => el.setAttribute(k,v));
+  return el;
+}
+
+// ========== PROFILE ==========
+const AVATARS = [
+  {id:'alpaca-1',e:'🦙',n:'アルパカ'},
+  {id:'alpaca-2',e:'🐑',n:'ヒツジ'},
+  {id:'alpaca-3',e:'🐪',n:'ラクダ'},
+  {id:'alpaca-4',e:'🦌',n:'シカ'},
+  {id:'alpaca-5',e:'🐐',n:'ヤギ'},
+  {id:'alpaca-6',e:'🦊',n:'キツネ'},
+];
+const INTEL = [
+  {type:'言語知能',icon:'📝'},{type:'論理数学知能',icon:'🔢'},{type:'空間知能',icon:'🎨'},
+  {type:'音楽知能',icon:'🎵'},{type:'身体運動知能',icon:'🏃'},{type:'自然知能',icon:'🌿'},
+  {type:'対人知能',icon:'🤝'},{type:'内省知能',icon:'💭'},
+];
+
+function renderProfile() {
+  const d = loadData();
+  const trust = getTrust();
+  const phase = getPhase(trust);
+  document.getElementById('prof-avatar').textContent = getAvatarEmoji(d.user.avatar);
+  document.getElementById('prof-name').textContent = d.user.name;
+  document.getElementById('prof-phase').textContent = '⭐ Lv.'+phase.level+' '+phase.name;
+  document.getElementById('prof-trust').textContent = '🪙 '+trust+' アルパカ通貨';
+  document.getElementById('prof-name-input').value = d.user.name;
+  document.getElementById('prof-streak').textContent = d.user.loginStreak;
+  document.getElementById('prof-missions').textContent = (d.missions.completed||[]).length;
+  document.getElementById('prof-engi').textContent = (d.engi||[]).length;
+
+  // アバターグリッド
+  document.getElementById('avatar-grid').innerHTML = AVATARS.map(a => `
+    <div onclick="selectAvatar('${a.id}')" style="text-align:center;padding:.75rem .4rem;border-radius:12px;border:3px solid ${d.user.avatar===a.id?'var(--gold)':'var(--parchment-darker)'};background:${d.user.avatar===a.id?'rgba(212,160,23,.1)':'var(--parchment)'};cursor:pointer;transition:all .2s;">
+      <div style="font-size:2.2rem;margin-bottom:.2rem;">${a.e}</div>
+      <div class="klee" style="font-size:.72rem;color:var(--ink-medium);">${a.n}</div>
+      ${d.user.avatar===a.id?'<div style="color:var(--gold);font-size:.65rem;margin-top:2px;">✓ 選択中</div>':''}
+    </div>`).join('');
+
+  // 多重知能
+  const ir = document.getElementById('intel-result');
+  const ib = document.getElementById('intel-btn');
+  if (d.user.multipleIntelligence) {
+    const it = INTEL.find(i => i.type === d.user.multipleIntelligence) || INTEL[0];
+    ir.style.display='';
+    ir.innerHTML = `<div style="font-size:2.5rem;margin-bottom:.25rem;">${it.icon}</div><div class="klee font-bold" style="font-size:1.1rem;color:var(--ink-dark);">${it.type}</div>`;
+    ib.textContent = '🔄 再診断する';
+  } else { ir.style.display='none'; }
+
+  // 保護者モード
+  const pToggle = document.getElementById('parent-toggle');
+  const pTrack = document.getElementById('parent-track');
+  const pThumb = document.getElementById('parent-thumb');
+  const pMsg = document.getElementById('parent-msg');
+  pToggle.checked = d.user.parentShareMode;
+  pTrack.style.background = d.user.parentShareMode ? 'var(--leaf-green)' : 'var(--parchment-darker)';
+  pThumb.style.left = d.user.parentShareMode ? '25px' : '3px';
+  pMsg.style.display = d.user.parentShareMode ? '' : 'none';
+}
+
+function saveName() {
+  const name = document.getElementById('prof-name-input').value.trim();
+  if (!name) { alert('ニックネームを入力してください'); return; }
+  const d = loadData(); d.user.name = name; saveData(d);
+  showPointPopup('✓');
+  setTimeout(renderProfile, 500);
+}
+function selectAvatar(id) {
+  const d = loadData(); d.user.avatar = id; saveData(d); renderProfile();
+}
+function runDiagnosis() {
+  const result = INTEL[Math.floor(Math.random()*INTEL.length)].type;
+  const d = loadData(); d.user.multipleIntelligence = result; saveData(d);
+  showPointPopup('✨');
+  setTimeout(renderProfile, 500);
+}
+function toggleParent() {
+  const d = loadData(); d.user.parentShareMode = !d.user.parentShareMode; saveData(d); renderProfile();
+}
+function resetAll() {
+  if (confirm('本当にリセットしますか？全てのデータが削除されます。')) {
+    resetData(true);
+    location.reload();
+  }
+}
+
+// ========== HELPERS ==========
+function getMissions() {
+  return [
+    {id:'m_s_1',type:'social',icon:'🤝',title:'ありがとうを3回伝える',desc:'今日出会った人に感謝の気持ちを伝えましょう',pts:5},
+    {id:'m_s_2',type:'social',icon:'❓',title:'1人に質問してみる',desc:'興味を持ったことを誰かに聞いてみましょう',pts:5},
+    {id:'m_s_3',type:'social',icon:'💖',title:'家族に感謝を伝える',desc:'家族への「ありがとう」を言葉にしてみましょう',pts:5},
+    {id:'m_s_4',type:'social',icon:'🙋',title:'誰かを手伝う',desc:'困っている人を見つけて手助けしましょう',pts:7},
+    {id:'m_s_5',type:'social',icon:'💬',title:'相談する',desc:'信頼できる人に相談してみましょう',pts:7},
+    {id:'m_s_6',type:'social',icon:'👥',title:'新しい人と会話する',desc:'まだ話したことがない人と話してみましょう',pts:10},
+    {id:'m_c_1',type:'cultural',icon:'📖',title:'15分読書',desc:'好きな本を15分間読んでみましょう',pts:5},
+    {id:'m_c_2',type:'cultural',icon:'🏛️',title:'沖縄の歴史を1つ調べる',desc:'インターネットや本で沖縄について学びましょう',pts:5},
+    {id:'m_c_3',type:'cultural',icon:'🎬',title:'職業動画を見る',desc:'いろいろな仕事について学びましょう',pts:5},
+    {id:'m_c_4',type:'cultural',icon:'🌱',title:'夢つむぎ動画視聴',desc:'夢つむぎの動画を見て学びましょう',pts:7},
+    {id:'m_c_5',type:'cultural',icon:'✍️',title:'ワークシートに回答',desc:'学びを深めるワークに取り組みましょう',pts:7},
+    {id:'m_c_6',type:'cultural',icon:'🖼️',title:'博物館・美術館へ行く',desc:'文化施設を訪れて新しい発見をしましょう',pts:10},
+    {id:'m_e_1',type:'economic',icon:'🧹',title:'家事を1つ担当',desc:'掃除や料理など家族の役に立ちましょう',pts:5},
+    {id:'m_e_2',type:'economic',icon:'💵',title:'1日の支出を書き出す',desc:'お金の使い方を振り返ってみましょう',pts:5},
+    {id:'m_e_3',type:'economic',icon:'🎤',title:'仕事インタビュー動画を見る',desc:'働いている人の話を聞いてみましょう',pts:5},
+    {id:'m_e_4',type:'economic',icon:'🛍️',title:'販売体験参加',desc:'アルパカツアーなどで販売を体験しましょう',pts:10},
+    {id:'m_e_5',type:'economic',icon:'👨‍👩‍👧',title:'家族のお手伝い',desc:'家族の仕事を手伝って役に立ちましょう',pts:7},
+    {id:'m_e_6',type:'economic',icon:'💼',title:'アルバイト体験',desc:'実際の仕事を体験してみましょう',pts:15},
+  ];
+}
+function getAvatarEmoji(id) {
+  return {
+    'alpaca-1':'🦙','alpaca-2':'🐑','alpaca-3':'🐪',
+    'alpaca-4':'🦌','alpaca-5':'🐐','alpaca-6':'🦊'
+  }[id] || '🦙';
+}
+function getStrongest(cap) {
+  const arr = [{v:cap.social,l:'社会関係資本'},{v:cap.cultural,l:'文化資本'},{v:cap.economic,l:'経済資本'}];
+  return arr.reduce((a,b)=>b.v>a.v?b:a).l;
+}
+function getWeakest(cap) {
+  const arr = [{v:cap.social,l:'社会関係資本'},{v:cap.cultural,l:'文化資本'},{v:cap.economic,l:'経済資本'}];
+  return arr.reduce((a,b)=>b.v<a.v?b:a).l;
+}
+function capLabel(type) {
+  return {social:'🤝 社会関係',cultural:'📚 文化',economic:'💰 経済'}[type]||type;
+}
+function fmtDate(ts) {
+  const d=new Date(ts);
+  return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
+}
+function shuffle(arr) { return [...arr].sort(()=>Math.random()-.5); }
+
+function showPointPopup(val) {
+  const el = document.createElement('div');
+  el.className = 'point-popup';
+  el.textContent = typeof val === 'number' ? '+' + val + ' 🪙' : val;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1300);
+}
+function showLevelUp(name) {
+  const ov = document.createElement('div');
+  ov.className = 'levelup-overlay';
+  ov.innerHTML = `<div class="levelup-box">
+    <div style="font-size:3.5rem;margin-bottom:.5rem;animation:float 1s ease-in-out infinite;">🎉</div>
+    <div class="klee" style="font-size:1rem;color:var(--ink-light);margin-bottom:.2rem;">レベルアップ！</div>
+    <div class="klee font-bold" style="font-size:1.5rem;color:var(--ink-dark);">${name}</div>
+    <div style="margin-top:.75rem;font-size:1.8rem;">🦙✨</div>
+  </div>`;
+  ov.addEventListener('click', () => ov.remove());
+  document.body.appendChild(ov);
+  setTimeout(() => ov.remove(), 3000);
+}
+// ========== BOOT ==========
+initData();
+const d = loadData();
+// オンボーディング済みならメインへ
+if (localStorage.getItem('alpacaIsland_v3')) {
+  document.getElementById('screen-onboarding').style.display = 'none';
+  document.getElementById('screen-main').style.display = 'block';
+  showPage('home');
+}
+</script>
+</body>
+</html>

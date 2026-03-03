@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>68歳以上の方へ - 朝の危険な習慣</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 10px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 0.95rem;
+            opacity: 0.95;
+            font-weight: normal;
+        }
+
+        .toggle-container {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            background: #f8f9fa;
+            gap: 10px;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            max-width: 160px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            color: #666;
+        }
+
+        .toggle-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ポンチ絵スタイル */
+        .ponchi-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #fff9e6;
+            border-radius: 15px;
+            border: 3px solid #ff6b6b;
+        }
+
+        .ponchi-section h2 {
+            color: #ff6b6b;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ponchi-section .icon {
+            font-size: 2rem;
+        }
+
+        .ponchi-illustration {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .ponchi-character {
+            font-size: 4rem;
+            margin: 10px 0;
+        }
+
+        .ponchi-text {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .ponchi-danger {
+            background: #ffe0e0;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 5px solid #ff6b6b;
+            margin: 15px 0;
+        }
+
+        .ponchi-solution {
+            background: #e0f7fa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 5px solid #4caf50;
+            margin: 15px 0;
+        }
+
+        /* インフォグラフィックスタイル */
+        .info-card {
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 6px solid #667eea;
+        }
+
+        .info-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .info-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .info-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        .info-description {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .info-stats {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            flex: 1;
+            min-width: 120px;
+            background: #ffe0e0;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ff6b6b;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .solution-box {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .solution-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .solution-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .solution-list li {
+            padding: 8px 0 8px 25px;
+            position: relative;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .solution-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4caf50;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .timeline-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            z-index: 2;
+        }
+
+        .timeline-content {
+            flex: 1;
+            padding-bottom: 20px;
+        }
+
+        .timeline-time {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .timeline-text {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .warning-box h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .warning-box p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            background: #f8f9fa;
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 390px) {
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .toggle-btn {
+                font-size: 0.85rem;
+                padding: 10px 15px;
+            }
+
+            .info-number {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
+
+            .info-title {
+                font-size: 1.1rem;
+            }
+
+            .stat-box {
+                min-width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>68歳以上の方へ<br>朝、これだけは絶対にやめてください</h1>
+            <p class="subtitle">真面目に健康に気をつけてきた人ほど危険です</p>
+        </div>
+
+        <div class="toggle-container">
+            <button class="toggle-btn active" onclick="showView('ponchi')">
+                🎨 ポンチ絵
+            </button>
+            <button class="toggle-btn" onclick="showView('infographic')">
+                📊 データ版
+            </button>
+        </div>
+
+        <div class="content">
+            <!-- ポンチ絵ビュー -->
+            <div id="ponchi-view" class="view active">
+                <div class="ponchi-section">
+                    <h2><span class="icon">☀️</span>朝の時間帯が危険な理由</h2>
+                    <div class="ponchi-illustration">
+                        <div class="ponchi-character">😴➡️⚡➡️🚑</div>
+                        <div class="ponchi-text">
+                            <strong>朝6時〜10時</strong>に脳卒中・心筋梗塞が最も多く発生<br>
+                            寝ている間に体は脱水状態に
+                        </div>
+                    </div>
+                    <div class="ponchi-danger">
+                        <strong>⚠️ 危険な組み合わせ</strong><br>
+                        低血圧 + 脱水 + 温度差 + 急な動作 = 命の危険
+                    </div>
+                </div>
+
+                <div class="ponchi-section">
+                    <h2><span class="icon">❌</span>①水も飲まず、いきなり動き出す</h2>
+                    <div class="ponchi-illustration">
+                        <div class="ponchi-character">🛏️➡️🚶‍♂️🌳</div>
+                        <div class="ponchi-text">
+                            起きてすぐ庭仕事やウォーキング<br>
+                            朝ごはん前に掃除や作業
+                        </div>
+                    </div>
+                    <div class="ponchi-danger">
+                        <strong>何が起きるか:</strong><br>
+                        血液ドロドロ + 空腹 = 血圧・血糖値が急変動<br>
+                        脳や心臓への大きな負担
+                    </div>
+                    <div class="ponchi-solution">
+                        <strong>✅ こうしましょう:</strong><br>
+                        まずコップ1杯の白湯か常温水<br>
+                        バナナ半分やヨーグルトを一口でも<br>
+                        それから動き始める
+                    </div>
+                </div>
+
+                <div class="ponchi-section">
+                    <h2><span class="icon">❌</span>②ガバッと勢いよく起きる</h2>
+                    <div class="ponchi-illustration">
+                        <div class="ponchi-character">🛏️💨⬆️😵</div>
+                        <div class="ponchi-text">
+                            目が覚めた瞬間に勢いよく起き上がる
+                        </div>
+                    </div>
+                    <div class="ponchi-danger">
+                        <strong>何が起きるか:</strong><br>
+                        起立性低血圧でクラクラ<br>
+                        転倒や脳卒中の引き金に
+                    </div>
+                    <div class="ponchi-solution">
+                        <strong>✅ 3ステップ起床法:</strong><br>
+                        1️⃣ 布団の中で深呼吸（数回）<br>
+                        2️⃣ 手足を動かして足首を回す<br>
+                        3️⃣ ベッドのふちに座って30秒待つ<br>
+                        それから立ち上がる
+                    </div>
+                </div>
+
+                <div class="ponchi-section">
+                    <h2><span class="icon">❌</span>③冷えたトイレでいきむ</h2>
+                    <div class="ponchi-illustration">
+                        <div class="ponchi-character">🚽❄️😣💥</div>
+                        <div class="ponchi-text">
+                            冬の朝、冷たいトイレで力む<br>
+                            実は高齢者の突然死の多い現場
+                        </div>
+                    </div>
+                    <div class="ponchi-danger">
+                        <strong>何が起きるか:</strong><br>
+                        冷え + 力み = 血圧が急上昇<br>
+                        脳・心臓の血管に大きな負担
+                    </div>
+                    <div class="ponchi-solution">
+                        <strong>✅ こうしましょう:</strong><br>
+                        小さなヒーターや暖房便座を使う<br>
+                        厚手のスリッパ・靴下で足元を温める<br>
+                        便秘をためない（野菜・海藻・水分）
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <h3>🙏 お願い</h3>
+                    <p>
+                        「うちの親、まさにこの生活してる…」と思ったら、<br>
+                        このページを見せてあげてください。<br><br>
+                        一つでも習慣を変えるだけで、<br>
+                        大切な人の命を守れるかもしれません。
+                    </p>
+                </div>
+            </div>
+
+            <!-- インフォグラフィックビュー -->
+            <div id="infographic-view" class="view">
+                <div class="info-card">
+                    <div class="info-stats">
+                        <div class="stat-box">
+                            <span class="stat-number">6-10時</span>
+                            <span class="stat-label">危険な時間帯</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-number">68歳+</span>
+                            <span class="stat-label">特に注意が必要</span>
+                        </div>
+                    </div>
+                    <div class="info-description">
+                        朝の時間帯は脳卒中・心筋梗塞の発生が最も多い時間帯です。寝ている間に血圧が下がり、体が脱水状態になった状態で、起床時に急激な負担がかかります。
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-header">
+                        <div class="info-number">1</div>
+                        <div class="info-title">空腹・水分ゼロで<br>いきなり動き出す</div>
+                    </div>
+                    <div class="info-description">
+                        起床後、何も口にせずに庭仕事・ウォーキング・掃除などを始めることは非常に危険です。夜間に体は約500mlの水分を失い、血液がドロドロの状態になっています。
+                    </div>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-icon">😴</div>
+                            <div class="timeline-content">
+                                <div class="timeline-time">就寝中</div>
+                                <div class="timeline-text">500mlの水分が失われる<br>血液が濃縮される</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-icon">⚡</div>
+                            <div class="timeline-content">
+                                <div class="timeline-time">起床直後</div>
+                                <div class="timeline-text">空腹のまま動き出す<br>血圧・血糖値が急変動</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-icon">⚠️</div>
+                            <div class="timeline-content">
+                                <div class="timeline-time">数分後</div>
+                                <div class="timeline-text">脳や心臓に大きな負担<br>脳卒中・心筋梗塞のリスク</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="solution-box">
+                        <div class="solution-title">✅ 対策</div>
+                        <ul class="solution-list">
+                            <li>起床後すぐにコップ1杯の白湯または常温水を飲む</li>
+                            <li>バナナ半分、ヨーグルト、おにぎり一口など軽く食べる</li>
+                            <li>水分・栄養補給後に活動を始める</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-header">
+                        <div class="info-number">2</div>
+                        <div class="info-title">目覚めた瞬間に<br>「ガバッ」と起きる</div>
+                    </div>
+                    <div class="info-description">
+                        布団から勢いよく起き上がることは、起立性低血圧や転倒、脳卒中の引き金になります。特に寝室と廊下に温度差がある場合は要注意です。
+                    </div>
+                    <div class="solution-box">
+                        <div class="solution-title">✅ 3ステップ起床法</div>
+                        <ul class="solution-list">
+                            <li><strong>ステップ1:</strong> 目が覚めても布団の中で深呼吸を数回行う</li>
+                            <li><strong>ステップ2:</strong> 手足をゆっくり動かし、足首を回したり伸びをする</li>
+                            <li><strong>ステップ3:</strong> ベッドのふちに腰掛けて30秒〜1分ボーッと座る</li>
+                            <li><strong>最後に:</strong> ゆっくりと立ち上がる</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-header">
+                        <div class="info-number">3</div>
+                        <div class="info-title">冷えたトイレで<br>いきむ</div>
+                    </div>
+                    <div class="info-description">
+                        高齢者の突然死の現場として、トイレは非常に多い場所です。冬の朝、冷えたトイレで一気に力むと血圧が急上昇し、脳や心臓の血管に大きな負担がかかります。
+                    </div>
+                    <div class="info-stats">
+                        <div class="stat-box" style="flex: 1; min-width: 100%;">
+                            <span class="stat-number">血圧↑↑</span>
+                            <span class="stat-label">冷え + 力み = 急上昇</span>
+                        </div>
+                    </div>
+                    <div class="solution-box">
+                        <div class="solution-title">✅ 対策</div>
+                        <ul class="solution-list">
+                            <li>トイレに小さなヒーターを設置する</li>
+                            <li>暖房便座を使用する</li>
+                            <li>厚手のスリッパや靴下で足元を冷やさない</li>
+                            <li>日頃から便秘をためない（野菜・海藻・味噌汁・水分摂取）</li>
+                            <li>無理に一気に出そうとしない</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <h3>💝 大切な人の命を守るために</h3>
+                    <p>
+                        真面目に健康管理してきた方ほど、<br>
+                        これらの「朝の習慣」を見落としがちです。<br><br>
+                        一つでも習慣を変えるだけで、<br>
+                        突然の別れを防げるかもしれません。<br><br>
+                        「うちの親、まさにこの生活してる」と<br>
+                        思い当たる方は、今すぐ共有してください。
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>
+                <strong>あの日「もう一つ知っていれば」と悔やんだ家族より</strong><br>
+                同じ思いをする人が一人でも減りますように。
+            </p>
+            <p style="margin-top: 15px; font-size: 0.85rem;">
+                <strong>引用元:</strong><br>
+                <a href="https://www.facebook.com/permalink.php?story_fbid=pfbid05TZfeRef6Hc2UNexpg4qDDGQafMSjk2Fo4EJsU2CoizB5dfjy9yi96ryqWq857nGl&id=100090310931581" 
+                   target="_blank" 
+                   style="color: #667eea; text-decoration: none; word-break: break-all;">
+                    Facebook投稿を見る
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function showView(viewType) {
+            // すべてのビューを非表示
+            document.querySelectorAll('.view').forEach(view => {
+                view.classList.remove('active');
+            });
+            
+            // すべてのボタンの active クラスを削除
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // 選択されたビューを表示
+            if (viewType === 'ponchi') {
+                document.getElementById('ponchi-view').classList.add('active');
+                document.querySelectorAll('.toggle-btn')[0].classList.add('active');
+            } else {
+                document.getElementById('infographic-view').classList.add('active');
+                document.querySelectorAll('.toggle-btn')[1].classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>

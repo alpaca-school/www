@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>土壌の世界 - 三つの土質と土層</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 10px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+            line-height: 1.4;
+        }
+
+        .toggle-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 10px;
+        }
+
+        .toggle-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .toggle-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .toggle-btn:not(.active) {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .content {
+            display: none;
+        }
+
+        .content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ポンチ絵スタイル */
+        .ponchi {
+            padding: 20px;
+        }
+
+        .soil-character {
+            margin-bottom: 40px;
+            padding: 20px;
+            border-radius: 15px;
+            background: #f8f9fa;
+            border: 3px dashed #666;
+        }
+
+        .character-face {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .clay { background: #CD853F; }
+        .sand { background: #F4A460; }
+        .loam { background: #8B4513; }
+
+        .character-name {
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .speech-bubble {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            position: relative;
+            margin: 15px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .speech-bubble:before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 40px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 10px solid white;
+        }
+
+        .trait {
+            margin: 10px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .trait:before {
+            content: '●';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+        }
+
+        /* 土層イラスト */
+        .soil-layers {
+            margin: 30px 0;
+            border: 3px solid #333;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .layer {
+            padding: 20px;
+            position: relative;
+            border-bottom: 2px dashed #666;
+        }
+
+        .layer:last-child {
+            border-bottom: none;
+        }
+
+        .layer-humus { background: linear-gradient(180deg, #8B4513 0%, #654321 100%); color: white; }
+        .layer-topsoil { background: linear-gradient(180deg, #654321 0%, #8B6914 100%); color: white; }
+        .layer-hardpan { background: linear-gradient(180deg, #A9A9A9 0%, #696969 100%); color: white; }
+        .layer-bedrock { background: linear-gradient(180deg, #696969 0%, #2F4F4F 100%); color: white; }
+
+        .layer-title {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .layer-desc {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* インフォグラフィックスタイル */
+        .infographic {
+            padding: 20px;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #667eea;
+        }
+
+        .info-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-icon {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .soil-type-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+            transition: transform 0.3s ease;
+        }
+
+        .soil-type-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .soil-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 15px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .soil-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .characteristics {
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .stat-bar {
+            margin: 15px 0;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .bar-container {
+            background: #e0e0e0;
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.8s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .ph-scale {
+            background: linear-gradient(90deg, #ff6b6b 0%, #ffd93d 50%, #6bcf7f 100%);
+            height: 40px;
+            border-radius: 20px;
+            margin: 20px 0;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .mineral-balance {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .mineral-item {
+            text-align: center;
+            flex: 1;
+            min-width: 80px;
+        }
+
+        .mineral-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 16px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .ca { background: #667eea; }
+        .mg { background: #48c774; }
+        .k { background: #ffb142; }
+        .na { background: #ff6b6b; }
+
+        .note {
+            background: #fff9e6;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #ffb142;
+            margin: 20px 0;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 20px;
+            }
+
+            .toggle-btn {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .character-face, .soil-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 30px;
+            }
+
+            .layer {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌱 土壌の世界<br>三つの土質と土層の仕組み</h1>
+        
+        <div class="toggle-container">
+            <button class="toggle-btn active" onclick="switchView('ponchi')">ポンチ絵</button>
+            <button class="toggle-btn" onclick="switchView('info')">インフォグラフィック</button>
+            <button class="toggle-btn" onclick="switchView('okinawa')">沖縄の土</button>
+        </div>
+
+        <!-- ポンチ絵コンテンツ -->
+        <div id="ponchi" class="content active">
+            <div class="ponchi">
+                <div class="soil-character">
+                    <div class="character-face clay">🏺</div>
+                    <div class="character-name">粘土質くん</div>
+                    <div class="speech-bubble">
+                        <p style="font-weight: bold; margin-bottom: 10px;">ネチネチしてるけど、水分キープは得意だよ!</p>
+                        <div class="trait">触るとネチネチ、細いこよりが作れる</div>
+                        <div class="trait">保水力が高い = 病気に注意!</div>
+                        <div class="trait">保肥力も高い(養分をしっかりキープ)</div>
+                        <div class="trait">田んぼに最適な土質</div>
+                        <div class="trait">1gの粉末粘土の表面積 = 畳500枚分!</div>
+                    </div>
+                </div>
+
+                <div class="soil-character">
+                    <div class="character-face sand">🏖️</div>
+                    <div class="character-name">砂質ちゃん</div>
+                    <div class="speech-bubble">
+                        <p style="font-weight: bold; margin-bottom: 10px;">サラサラ乾燥肌! でも病気には強いの♪</p>
+                        <div class="trait">触るとザラザラ、こよりが作れない</div>
+                        <div class="trait">排水性バツグン = 病気になりにくい!</div>
+                        <div class="trait">保肥力が低い = 堆肥・緑肥が必要</div>
+                        <div class="trait">色は白〜黄色(黄砂みたいな感じ)</div>
+                    </div>
+                </div>
+
+                <div class="soil-character">
+                    <div class="character-face loam">🌳</div>
+                    <div class="character-name">壌土質さん</div>
+                    <div class="speech-bubble">
+                        <p style="font-weight: bold; margin-bottom: 10px;">バランスが良くて万能型です!</p>
+                        <div class="trait">触るとしっとり、太いこよりが作れる</div>
+                        <div class="trait">農家は「山の土」と呼ぶ</div>
+                        <div class="trait">粘土質と砂質の中間 = 万能!</div>
+                        <div class="trait">自然農がしやすい</div>
+                        <div class="trait">森林褐色土、黒ボク土がこれに当たる</div>
+                    </div>
+                </div>
+
+                <h2 style="text-align: center; margin: 40px 0 20px; color: #333; font-size: 22px;">🏔️ 地面の中はこうなっている!</h2>
+                
+                <div class="soil-layers">
+                    <div class="layer layer-humus">
+                        <div class="layer-title">🍂 腐植(葉)土層</div>
+                        <div class="layer-desc">
+                            草や虫の死体が重なる「亡骸の層」。微生物の食べ残しが養分の貯蓄庫に! 新しい死体が上へ上へ積み重なっていくよ。
+                        </div>
+                    </div>
+                    
+                    <div class="layer layer-topsoil">
+                        <div class="layer-title">🌱 作土層(耕土層)</div>
+                        <div class="layer-desc">
+                            植物の根が張れる層。有機物や生物残骸が多く、土壌生物が最も密集している。人力でも掘れる柔らかい層だよ。
+                        </div>
+                    </div>
+                    
+                    <div class="layer layer-hardpan">
+                        <div class="layer-title">⚠️ 耕盤層(グレイ層)</div>
+                        <div class="layer-desc">
+                            トラクターで踏み固められた層。灰色で水はけが悪く、肥料や農薬が残留しやすい。農家は毎年耕して壊すんだ。
+                        </div>
+                    </div>
+                    
+                    <div class="layer layer-bedrock">
+                        <div class="layer-title">🪨 心土層(硬盤層)</div>
+                        <div class="layer-desc">
+                            風化していない岩石質。人力ではどうしようもない層。でも実は微生物が生息している! 極限環境微生物すごい!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="note">
+                    💡 <strong>農家の知恵:</strong> 土の性質に合った作物を選ぶことが、作業量と堆肥の節約につながるよ。まず土を知ることが大切!
+                </div>
+            </div>
+        </div>
+
+        <!-- インフォグラフィックコンテンツ -->
+        <div id="info" class="content">
+            <div class="infographic">
+                <div class="info-card">
+                    <div class="info-title">
+                        <div class="info-icon">🌍</div>
+                        世界の土の色
+                    </div>
+                    <p style="margin-bottom: 15px;">世界には約12種類の土があり、それぞれ色が違う!</p>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
+                        <div style="text-align: center;">
+                            <div style="width: 60px; height: 60px; background: #8B4513; border-radius: 10px; margin: 0 auto 5px;"></div>
+                            <div style="font-size: 12px;">日本: 茶色</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="width: 60px; height: 60px; background: #CD5C5C; border-radius: 10px; margin: 0 auto 5px;"></div>
+                            <div style="font-size: 12px;">アフリカ: 赤</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="width: 60px; height: 60px; background: #F5F5DC; border-radius: 10px; margin: 0 auto 5px;"></div>
+                            <div style="font-size: 12px;">スウェーデン: 白</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="width: 60px; height: 60px; background: #F4A460; border-radius: 10px; margin: 0 auto 5px;"></div>
+                            <div style="font-size: 12px;">中国: 黄色</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">
+                        <div class="info-icon">📊</div>
+                        三つの土質比較
+                    </div>
+                    <div class="comparison-grid">
+                        <div class="soil-type-card">
+                            <div class="soil-icon clay">🏺</div>
+                            <div class="soil-name">粘土質</div>
+                            <div class="stat-bar">
+                                <div class="stat-label">保水力</div>
+                                <div class="bar-container">
+                                    <div class="bar-fill" style="width: 95%;">95%</div>
+                                </div>
+                            </div>
+                            <div class="stat-bar">
+                                <div class="stat-label">保肥力</div>
+                                <div class="bar-container">
+                                    <div class="bar-fill" style="width: 90%;">90%</div>
+                                </div>
+                            </div>
+                            <div class="stat-bar">
+                                <div class="stat-label">排水性</div>
+                                <div class="bar-container">
+                                    <div class="bar-fill" style="width: 30%;">30%</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="soil-type-card">
+                            <div class="soil-icon sand">🏖️</div>
+                            <div class="soil-name">砂質</div>
+                            <div class="stat-bar">
+                                <div class="stat-label">保水力</div>
+                                <div class="bar-container">
+                                    <div class="bar-fill" style="width: 25%;">25%</div>
+                                </div>
+                            </div>
+                            <div class="stat-bar">
+                                <div class="stat-label">保肥力</div>
+                                <div class="bar-container">
+                                    <div class="bar-fill" style="width: 20%;">20%</div>
+                                </div>
+                            </div>
+                            <div class="stat-bar">
+                                <div class="stat-label">排水性</div>
+                                <div class="bar-container">
+                                    <div class="bar-fill" style="width: 95%;">95%</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="soil-type-card">
+                            <div class="soil-icon loam">🌳</div>
+                            <div class="soil-name">壌土質</div>
+                            <div class="stat-bar">
+                                <div class="stat-label">保水力</div>
+                                <div class="bar-container">
+                                    <div class="bar-fill" style="width: 70%;">70%</div>
+                                </div>
+                            </div>
+                            <div class="stat-bar">
+                                <div class="stat-label">保肥力</div>
+                                <div class="bar-container">
+                                    <div class="bar-fill" style="width: 75%;">75%</div>
+                                </div>
+                            </div>
+                            <div class="stat-bar">
+                                <div class="stat-label">排水性</div>
+                                <div class="bar-container">
+                                    <div class="bar-fill" style="width: 65%;">65%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">
+                        <div class="info-icon">⚗️</div>
+                        理想的な鉱物バランス
+                    </div>
+                    <div class="mineral-balance">
+                        <div class="mineral-item">
+                            <div class="mineral-circle ca">Ca<br>67%</div>
+                            <div style="font-size: 14px; font-weight: bold;">カルシウム</div>
+                        </div>
+                        <div class="mineral-item">
+                            <div class="mineral-circle mg">Mg<br>13%</div>
+                            <div style="font-size: 14px; font-weight: bold;">マグネシウム</div>
+                        </div>
+                        <div class="mineral-item">
+                            <div class="mineral-circle k">K<br>2-5%</div>
+                            <div style="font-size: 14px; font-weight: bold;">カリウム</div>
+                        </div>
+                        <div class="mineral-item">
+                            <div class="mineral-circle na">Na<br>&lt;1%</div>
+                            <div style="font-size: 14px; font-weight: bold;">ナトリウム</div>
+                        </div>
+                    </div>
+                    <p style="font-size: 14px; color: #666; margin-top: 15px; text-align: center;">
+                        CaとMgのバランスが保水・保肥能力を決める重要な要因
+                    </p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">
+                        <div class="info-icon">🧪</div>
+                        pH(酸性度)について
+                    </div>
+                    <div class="ph-scale">
+                        <span>酸性 pH4-5</span>
+                        <span>中性 pH6.5</span>
+                        <span>アルカリ pH8+</span>
+                    </div>
+                    <p style="font-size: 14px; line-height: 1.7; margin-bottom: 10px;">
+                        <strong>日本の土は酸性が多い理由:</strong><br>
+                        • 雨が多く、森林が発達している<br>
+                        • 雨水は弱酸性(pH5.6の微炭酸)<br>
+                        • 植物が水素イオンを放出<br>
+                        • 微生物が酸性物質を放出
+                    </p>
+                    <div style="background: #fff3e0; padding: 12px; border-radius: 8px; margin-top: 10px;">
+                        <strong>⚠️ pH4-5になると...</strong><br>
+                        粘土が破壊され、アルミニウムイオンが溶け出し植物に毒性を示す
+                    </div>
+                    <div style="background: #e8f5e9; padding: 12px; border-radius: 8px; margin-top: 10px;">
+                        <strong>✅ 対策植物:</strong> 小麦、トウモロコシ、サトイモ、大豆、大根、ソバ、チャなどはアルミニウム耐性を持つ
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">
+                        <div class="info-icon">♻️</div>
+                        腐植の不思議
+                    </div>
+                    <p style="font-size: 14px; line-height: 1.8;">
+                        • 腐植の半分は<strong>炭素</strong>から構成<br>
+                        • 土壌中の炭素量 = 大気中のCO2の約2倍<br>
+                        • 古い腐植は<strong>数千年〜1万年前</strong>の植物由来<br>
+                        • 縄文時代の植物や焼畑の炭が混ざっている可能性<br>
+                        • 森林の土は「緑のダム」と呼ばれる
+                    </p>
+                    <div style="margin-top: 15px; padding: 12px; background: #e3f2fd; border-radius: 8px;">
+                        <strong>🤔 謎:</strong> なぜ黒ボク土の腐植は分解され尽くさないのか? → まだ研究者も説明できない!
+                    </div>
+                </div>
+
+                <div class="note">
+                    💡 <strong>結論:</strong> 土の性質を知ることが効率的な農業の第一歩。過去に極端な肥料・農薬が使用されていなければ、自然遷移の法則に沿って土は豊かな団粒構造になる!
+                </div>
+            </div>
+        </div>
+
+        <!-- 沖縄の土コンテンツ -->
+        <div id="okinawa" class="content">
+            <div class="infographic">
+                <div class="info-card">
+                    <div class="info-title">
+                        <div class="info-icon">🌺</div>
+                        沖縄の土壌は本土と全く違う!
+                    </div>
+                    <p style="font-size: 14px; line-height: 1.8; margin-bottom: 15px;">
+                        沖縄の土は<strong>火山がない</strong>ため、本土の黒ボク土とは全く異なる成り立ち。サンゴ礁石灰岩・古生代堆積岩・海底泥岩の3つの母材から、性質が正反対の土壌が狭い島の中に共存している。
+                    </p>
+                    <div style="background: #e3f2fd; padding: 15px; border-radius: 10px; margin-top: 10px;">
+                        <strong>📍 特徴:</strong> 年間降水量<strong>約2,040mm</strong>、平均気温<strong>23.1℃</strong>の亜熱帯気候が激しい化学風化と有機物の急速分解を引き起こす
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">
+                        <div class="info-icon">🏝️</div>
+                        沖縄3大土壌の比較
+                    </div>
+                    <div class="comparison-grid">
+                        <div class="soil-type-card">
+                            <div class="soil-icon" style="background: #CD5C5C;">🔴</div>
+                            <div class="soil-name">国頭マージ</div>
+                            <div style="font-size: 13px; color: #666; margin-bottom: 10px;">古生代堆積岩由来</div>
+                            <div class="characteristics">
+                                <strong>色:</strong> 赤色〜黄色<br>
+                                <strong>pH:</strong> 4.0〜5.5（強酸性）<br>
+                                <strong>分布:</strong> 北部55.1%<br>
+                                <strong>適作物:</strong> パイナップル、茶
+                            </div>
+                            <div class="stat-bar">
+                                <div class="stat-label">保肥力</div>
+                                <div class="bar-container">
+                                    <div class="bar-fill" style="width: 20%;">低</div>
+                                </div>
+                            </div>
+                            <div class="stat-bar">
+                                <div class="stat-label">保水力</div>
+                                <div class="bar-container">
+                                    <div class="bar-fill" style="width: 30%;">低</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="soil-type-card">
+                            <div class="soil-icon" style="background: #8B4513;">🟤</div>
+                            <div class="soil-name">島尻マージ</div>
+                            <div style="font-size: 13px; color: #666; margin-bottom: 10px;">サンゴ礁石灰岩由来</div>
+                            <div class="characteristics">
+                                <strong>色:</strong> 黄褐色〜暗赤褐色<br>
+                                <strong>pH:</strong> 5.5〜7.8<br>
+                                <strong>分布:</strong> 南部27.4%<br>
+                                <strong>適作物:</strong> サトウキビ、野菜
+                            </div>
+                            <div class="stat-bar">
+                                <div class="stat-label">保肥力</div>
+                                <div class="bar-container">
+                                    <div class="bar-fill" style="width: 60%;">中</div>
+                                </div>
+                            </div>
+                            <div class="stat-bar">
+                                <div class="stat-label">排水性</div>
+                                <div class="bar-container">
+                                    <div class="bar-fill" style="width: 85%;">良好</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="soil-type-card">
+                            <div class="soil-icon" style="background: #696969;">⚫</div>
+                            <div class="soil-name">ジャーガル</div>
+                            <div style="font-size: 13px; color: #666; margin-bottom: 10px;">海底泥岩由来</div>
+                            <div class="characteristics">
+                                <strong>色:</strong> オリーブ褐色〜灰色<br>
+                                <strong>pH:</strong> 7.0〜8.5+（アルカリ）<br>
+                                <strong>分布:</strong> 南部8.0%<br>
+                                <strong>適作物:</strong> サトウキビ、野菜
+                            </div>
+                            <div class="stat-bar">
+                                <div class="stat-label">保肥力</div>
+                                <div class="bar-container">
+                                    <div class="bar-fill" style="width: 95%;">最高</div>
+                                </div>
+                            </div>
+                            <div class="stat-bar">
+                                <div class="stat-label">排水性</div>
+                                <div class="bar-container">
+                                    <div class="bar-fill" style="width: 15%;">極悪</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">
+                        <div class="info-icon">🌊</div>
+                        赤土流出問題
+                    </div>
+                    <p style="font-size: 14px; line-height: 1.8; margin-bottom: 15px;">
+                        沖縄最大の環境課題の一つ。年間<strong>約27万トン</strong>（2016年）の土壌が海に流出し、サンゴ礁に壊滅的な打撃を与えている。
+                    </p>
+                    <div style="background: #fff3e0; padding: 15px; border-radius: 10px; margin: 15px 0;">
+                        <strong>📊 流出推移:</strong><br>
+                        • 1993年: <strong>52万トン</strong>（条例制定前）<br>
+                        • 2016年: <strong>27万トン</strong>（半減したが目標未達）<br>
+                        • 目標: <strong>16.8万トン</strong>
+                    </div>
+                    <div style="background: #ffebee; padding: 15px; border-radius: 10px; margin: 15px 0;">
+                        <strong>⚠️ 流出源:</strong><br>
+                        • 農地: <strong>84%</strong>（最大の原因）<br>
+                        • 建設現場・開発: 一部<br>
+                        • 米軍訓練場: 一部
+                    </div>
+                    <div style="background: #e8f5e9; padding: 15px; border-radius: 10px;">
+                        <strong>🌱 対策:</strong> グリーンベルト設置、緑肥利用、サンフラワー・プロジェクト（ヒマワリ播種）、沈砂池、クロタラリアなど
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">
+                        <div class="info-icon">🔬</div>
+                        本土の土壌との決定的な違い
+                    </div>
+                    <table style="width: 100%; font-size: 14px; border-collapse: collapse;">
+                        <tr style="background: #f5f5f5;">
+                            <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">項目</th>
+                            <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">沖縄の土壌</th>
+                            <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">本土の土壌</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ddd;"><strong>母材</strong></td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">堆積岩・石灰岩・泥岩</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">火山灰（黒ボク土47%）</td>
+                        </tr>
+                        <tr style="background: #fafafa;">
+                            <td style="padding: 10px; border: 1px solid #ddd;"><strong>pH範囲</strong></td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">4.0〜8.5+（極端）</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">5〜6（概ね酸性）</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ddd;"><strong>有機物</strong></td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">極めて低い</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">黒ボク土は5〜10%+</td>
+                        </tr>
+                        <tr style="background: #fafafa;">
+                            <td style="padding: 10px; border: 1px solid #ddd;"><strong>粘土鉱物</strong></td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">カオリナイト・スメクタイト</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">アロフェン（非晶質）</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ddd;"><strong>アルカリ性土壌</strong></td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">広く存在（pH>7）</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">極めて稀</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">
+                        <div class="info-icon">🌿</div>
+                        緑肥革命 - 化学肥料30%削減でも収量35%アップ!
+                    </div>
+                    <p style="font-size: 14px; line-height: 1.8; margin-bottom: 15px;">
+                        沖縄農業の革新的な取り組み。緑肥を活用することで、化学肥料を減らしながら収量を増やすことに成功している。
+                    </p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                        <div style="background: #e8f5e9; padding: 15px; border-radius: 10px;">
+                            <div style="font-size: 18px; margin-bottom: 5px;">🌱</div>
+                            <strong>クロタラリア</strong><br>
+                            <span style="font-size: 13px;">窒素固定効果が最高<br>収量35%増加</span>
+                        </div>
+                        <div style="background: #fff3e0; padding: 15px; border-radius: 10px;">
+                            <div style="font-size: 18px; margin-bottom: 5px;">🌾</div>
+                            <strong>セスバニア</strong><br>
+                            <span style="font-size: 13px;">10年連用で収量11%増<br>微生物1.7倍</span>
+                        </div>
+                        <div style="background: #e3f2fd; padding: 15px; border-radius: 10px;">
+                            <div style="font-size: 18px; margin-bottom: 5px;">🌿</div>
+                            <strong>ソルガム</strong><br>
+                            <span style="font-size: 13px;">牛糞堆肥1.4トン<br>相当の炭素供給</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">
+                        <div class="info-icon">⚠️</div>
+                        新たな環境問題: PFAS汚染
+                    </div>
+                    <p style="font-size: 14px; line-height: 1.8;">
+                        米軍基地周辺でPFAS（有機フッ素化合物）汚染が深刻化。嘉手納・普天間基地周辺の地下水調査では、44〜46地点中<strong>30〜32地点</strong>で基準値超過。最大で基準値の<strong>42倍</strong>が検出されている。
+                    </p>
+                    <div style="background: #ffebee; padding: 15px; border-radius: 10px; margin-top: 15px;">
+                        <strong>🚨 深刻度:</strong> 普天間基地下流の農地土壌から<strong>11,436 ng/kg</strong>のPFASを検出（日本政府記録の最高値を上回る）
+                    </div>
+                </div>
+
+                <div class="info-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
+                    <div class="info-title" style="color: white;">
+                        <div class="info-icon" style="background: white; color: #667eea;">💡</div>
+                        沖縄の土壌 - まとめ
+                    </div>
+                    <div style="font-size: 14px; line-height: 1.9;">
+                        • <strong>火山がない</strong>ため本土と全く異なる土壌体系<br>
+                        • 強酸性〜強アルカリ性の土壌が<strong>共存</strong><br>
+                        • 赤土流出が<strong>年間27万トン</strong>（サンゴ礁破壊の主因）<br>
+                        • <strong>緑肥革命</strong>で持続可能な農業へ転換中<br>
+                        • PFAS汚染など新たな環境課題も
+                    </div>
+                    <div style="margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 10px;">
+                        <strong>🌺 結論:</strong> 沖縄の土壌は「弱点」を「個性」に変える知恵が必要。土の性質を理解し、適切な作物選択と土壌管理で、多様な亜熱帯農業を実現できる!
+                    </div>
+                </div>
+
+                <div class="note">
+                    🌊 <strong>沖縄の土壌管理のポイント:</strong> pH測定→土壌タイプ判別→適作物選択→緑肥・堆肥による土壌改良→赤土流出防止対策。亜熱帯気候との共生が鍵!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchView(view) {
+            // コンテンツの切り替え
+            document.getElementById('ponchi').classList.remove('active');
+            document.getElementById('info').classList.remove('active');
+            document.getElementById('okinawa').classList.remove('active');
+            document.getElementById(view).classList.add('active');
+
+            // ボタンの切り替え
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // ページ読み込み時にアニメーション
+        window.addEventListener('load', function() {
+            const bars = document.querySelectorAll('.bar-fill');
+            bars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 100);
+            });
+        });
+    </script>
+
+    <footer style="text-align: center; padding: 30px 20px; margin-top: 20px;">
+        <div style="max-width: 800px; margin: 0 auto; background: rgba(255,255,255,0.9); border-radius: 15px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            <div style="font-size: 18px; font-weight: bold; color: #333; margin-bottom: 10px;">
+                📚 参照元
+            </div>
+            <a href="https://www.facebook.com/naturalfarmingpermaculture/posts/pfbid02zmC5zXYQsWJktkaHeJY9rGTGCBZ41CHVANdcc1ScDjfBAhSmkDc6EPPYRJv4ShZol?__cft__[0]=AZYTrsyN0ned3D3MEXjwhqO63wYm_bYLpC1bxCN8vRD9E62SjbSOTo19JB-d8fydirjFxzbSIc5dooSl-QY7swDMJfwVld39GnyG0_X21MC2AP6TBwTzrQXmXvPBf7AZuuoM7clEjaBZuxMLfdv2r4Q37fUmmOc7Q3cNTU_94WT4E2SANfYocPmmv33_8PCprrM&__tn__=%2CO%2CP-R" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               style="display: inline-block; color: #667eea; text-decoration: none; font-size: 16px; padding: 12px 24px; border: 2px solid #667eea; border-radius: 25px; transition: all 0.3s ease; font-weight: bold;">
+                🌿 自然農とパーマカルチャーデザイン
+            </a>
+            <style>
+                footer a:hover {
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+                }
+            </style>
+        </div>
+    </footer>
+</body>
+</html>
