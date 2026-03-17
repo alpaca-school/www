@@ -905,8 +905,7 @@
         </div>
       </div><!-- /hissan-wrap -->
 
-      <div class="fb fi" id="wfb">まず、<strong id="wfb-q">17 ÷ 7</strong> を考えよう！<br><span id="wfb-t">7</span>のだんで「<span
-          id="wfb-d12">17</span>にちかい数」はどれかな？</div>
+      <div class="fb fi" id="wfb">まず、<strong>17 ÷ 7</strong> を考えよう！<br>7のだんで「17にちかい数」はどれかな？</div>
 
       <div class="steps">
         <div class="sr act" id="sr1">
@@ -1010,14 +1009,13 @@
 
     function updWariUI() {
       document.getElementById('wbdg').textContent = wD12 + '' + wD3 + ' ÷ ' + wDivisor;
-      document.getElementById('wfb-q').textContent = wD12 + ' ÷ ' + wDivisor;
-      document.getElementById('wfb-t').textContent = wDivisor;
-      document.getElementById('wfb-d12').textContent = wD12;
 
       document.getElementById('hd-div').textContent = wDivisor;
       document.getElementById('hd-d1').textContent = Math.floor(wD12 / 10);
       document.getElementById('hd-d2').textContent = wD12 % 10;
       document.getElementById('hd-d3').textContent = wD3;
+      var d3El = document.getElementById('hd-d3');
+      d3El.className = 'c-b6' + (wD3 === 6 ? ' d6' : (wD3 === 9 ? ' d9' : ''));
 
       let p1 = wQ1 * wDivisor;
       document.getElementById('n1d').textContent = p1 >= 10 ? Math.floor(p1 / 10) : '';
