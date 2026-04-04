@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>アルパカすく〜る | 地域大学（Community University）モデル</title>
+  <meta name="description" content="地域全体がキャンパス。人生がカリキュラム。6つのブランドを学部に見立てた新しい教育モデル。">
+  <style>
+    :root {
+      --bg-primary: #f8fafc;
+      --text-primary: #1e293b;
+      --brand-alpaca: #22c55e;
+      --brand-tiandaa: #f97316;
+      --brand-mikata: #06b6d4;
+      --brand-news: #eab308;
+      --brand-bungei: #e11d48;
+      --brand-universe: #a855f7;
+      --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--brand-alpaca);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+      color: #0f172a;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: #64748b;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .univ-map {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .faculty-card {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: var(--card-shadow);
+      border-top: 6px solid #ddd;
+      transition: transform 0.3s;
+    }
+
+    .faculty-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .faculty-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+    }
+
+    .faculty-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .faculty-title {
+      font-size: 0.9rem;
+      color: #64748b;
+      margin-bottom: 16px;
+      font-weight: bold;
+    }
+
+    .faculty-desc {
+      font-size: 0.95rem;
+      color: #475569;
+    }
+
+    .concept-box {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      margin-top: 60px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .concept-box h2 {
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .concept-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 32px;
+      text-align: center;
+    }
+
+    .concept-item h3 {
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+
+    .concept-item p {
+      font-size: 0.9rem;
+      color: #64748b;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 80px;
+      padding: 40px 0;
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="badge">Community University Model</div>
+      <h1>学校ではない大学、<br>アルパカすく〜る。</h1>
+      <p class="subtitle">地域そのものが大学、人生そのものがカリキュラム。<br>
+        6つの活動を「学部」として定義した地域学習生態系。</p>
+    </header>
+
+    <div class="univ-map">
+      <!-- Faculty 1 -->
+      <div class="faculty-card" style="border-top-color: var(--brand-tiandaa);">
+        <div class="faculty-icon">🏠</div>
+        <div class="faculty-name">てぃあんだぁクラブ</div>
+        <div class="faculty-title">共同体文化学部</div>
+        <p class="faculty-desc">地域の経験知を再発見し、文化として受け継ぐ基盤。家庭の知恵を社会資産に変える文化運動の中心。</p>
+      </div>
+
+      <!-- Faculty 2 -->
+      <div class="faculty-card" style="border-top-color: var(--brand-mikata);">
+        <div class="faculty-icon">🛡️</div>
+        <div class="faculty-name">子どものMIKATA</div>
+        <div class="faculty-title">地域教育福祉学部</div>
+        <p class="faculty-desc">家庭の困りごとを入口に、地域の知恵で解決の糸口を探る。相談を学びに変える入口の役割。</p>
+      </div>
+
+      <!-- Faculty 3 -->
+      <div class="faculty-card" style="border-top-color: var(--brand-alpaca);">
+        <div class="faculty-icon">🦙</div>
+        <div class="faculty-name">アルパカすく〜る</div>
+        <div class="faculty-title">学習教育学部</div>
+        <p class="faculty-desc">「経験から学ぶ」を実践する学びの場。地域社会そのものを教科書として活用する。</p>
+      </div>
+
+      <!-- Faculty 4 -->
+      <div class="faculty-card" style="border-top-color: var(--brand-news);">
+        <div class="faculty-icon">🐕</div>
+        <div class="faculty-name">わんこNEWS</div>
+        <div class="faculty-title">市民メディア学部</div>
+        <p class="faculty-desc">地域の小さな発見や知恵を記録し、社会へ発信する。地域の知識アーカイブを構築する。</p>
+      </div>
+
+      <!-- Faculty 5 -->
+      <div class="faculty-card" style="border-top-color: var(--brand-bungei);">
+        <div class="faculty-icon">📖</div>
+        <div class="faculty-name">文芸フリマ</div>
+        <div class="faculty-title">文化表現学部</div>
+        <p class="faculty-desc">経験を物語や作品として昇華させる。語る文化を育み、世代を超えて知恵を繋ぐ。</p>
+      </div>
+
+      <!-- Faculty 6 -->
+      <div class="faculty-card" style="border-top-color: var(--brand-universe);">
+        <div class="faculty-icon">🌏</div>
+        <div class="faculty-name">てぃあんだぁクラブuniverse</div>
+        <div class="faculty-title">国際文化・世界拡張学部</div>
+        <p class="faculty-desc">地域で生まれた知恵を世界と共有する。オンラインを通じて多様な地域と接続する拡張の羽。</p>
+      </div>
+    </div>
+
+    <div class="concept-box">
+      <h2>地域大学モデルの3大特徴</h2>
+      <div class="concept-grid">
+        <div class="concept-item">
+          <h3>全員が先生、全員が学生</h3>
+          <p>年齢制限なし。子どもも大人も、自身の経験を語り、他者から学び合う。</p>
+        </div>
+        <div class="concept-item">
+          <h3>地域全体がキャンパス</h3>
+          <p>公民館、畑、工房、そしてオンライン。生活のあらゆる場所が学びの場になる。</p>
+        </div>
+        <div class="concept-item">
+          <h3>人生がカリキュラム</h3>
+          <p>試験のためではなく、より良く生きるための「生きる知恵」が学びの中心。</p>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 琉球のタネ - Community Knowledge Civilization</p>
+    </footer>
+  </div>
+</body>
+
+</html>

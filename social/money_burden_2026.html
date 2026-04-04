@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日本のお金の負担2026〜2036年</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body { margin: 0; padding: 0; background-color: #FFF8F0; font-family: 'Zen Maru Gothic', 'M PLUS Rounded 1c', 'Hiragino Sans', sans-serif; }
+        * { box-sizing: border-box; }
+        
+        .app-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0 16px 80px;
+            background: #FFF8F0;
+            color: #2D3436;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Default (Smartphone / iPhone 12 is 390px) */
+        .app-container {
+            padding: 0 12px 60px;
+        }
+
+        .header-title {
+            font-size: 24px !important;
+        }
+
+        /* Smooth sizing for bubble and flows on mobile */
+        .bubble-wrapper {
+            max-width: 95% !important;
+            font-size: 12px !important;
+        }
+
+        /* PC View */
+        @media (min-width: 768px) {
+            .app-container {
+                max-width: 1100px;
+                padding: 40px;
+            }
+            .grid-container {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+                align-items: stretch;
+            }
+            .grid-container > div {
+                height: auto;
+            }
+            .header-title {
+                font-size: 38px !important;
+                line-height: 1.3 !important;
+                margin-bottom: 20px;
+            }
+            .summary-card {
+                padding: 40px !important;
+            }
+            .toggle-wrapper {
+                margin: 20px auto 40px !important;
+            }
+            .bubble-wrapper {
+                font-size: 14px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel" data-presets="react,env">
+const { useState } = React;
+
+const colors = {
+  bg: "#FFF8F0",
+  card: "#FFFFFF",
+  red: "#FF6B6B",
+  blue: "#4ECDC4",
+  yellow: "#FFE66D",
+  purple: "#A78BFA",
+  orange: "#FB923C",
+  green: "#34D399",
+  pink: "#F472B6",
+  indigo: "#818CF8",
+  text: "#2D3436",
+  sub: "#636E72",
+};
+
+function Card({ label, labelColor, title, children }) {
+  return (
+    <div style={{
+      background: colors.card,
+      borderRadius: 20,
+      padding: "20px",
+      boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+      marginBottom: 20,
+    }}>
+      <span style={{
+        display: "inline-block",
+        fontSize: 11,
+        fontWeight: 700,
+        padding: "4px 12px",
+        borderRadius: 20,
+        marginBottom: 10,
+        color: "white",
+        background: labelColor,
+      }}>{label}</span>
+      <h2 style={{ fontSize: 17, fontWeight: 900, marginBottom: 10, lineHeight: 1.5 }}>{title}</h2>
+      {children}
+    </div>
+  );
+}
+
+function Scene({ bg, children }) {
+  return (
+    <div style={{
+      background: bg || "linear-gradient(180deg, #E8F4FD 0%, #FFF8F0 100%)",
+      borderRadius: 16,
+      minHeight: 160,
+      margin: "12px 0",
+      padding: 16,
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+    }}>
+      {children}
+    </div>
+  );
+}
+
+function Bubble({ children, className }) {
+  return (
+    <div style={{
+      background: "white",
+      borderRadius: 16,
+      padding: "12px 16px",
+      fontSize: 13,
+      fontWeight: 700,
+      lineHeight: 1.6,
+      boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+      /* maxWidth: 290 removed */
+      textAlign: "center",
+      position: "relative",
+      marginTop: 16,
+    }} className="bubble-wrapper">
+      <div style={{
+        position: "absolute",
+        top: -10,
+        left: "50%",
+        transform: "translateX(-50%)",
+        width: 0,
+        height: 0,
+        borderLeft: "10px solid transparent",
+        borderRight: "10px solid transparent",
+        borderBottom: "10px solid white",
+      }} />
+      {children}
+    </div>
+  );
+}
+
+function FlowBox({ emoji, text, border }) {
+  return (
+    <div style={{
+      background: "white",
+      borderRadius: 12,
+      padding: "10px 12px",
+      fontSize: 12,
+      fontWeight: 700,
+      textAlign: "center",
+      boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
+      border: border || "none",
+      minWidth: 68,
+    }}>
+      <div style={{ fontSize: 22, marginBottom: 2 }}>{emoji}</div>
+      {text}
+    </div>
+  );
+}
+
+function Bar({ label, width, color, text }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+      <span style={{ fontSize: 12, fontWeight: 700, minWidth: 70, textAlign: "right" }}>{label}</span>
+      <div style={{ flex: 1, height: 28, background: "#F0EBE3", borderRadius: 14, overflow: "hidden" }}>
+        <div style={{
+          width,
+          height: "100%",
+          borderRadius: 14,
+          background: color,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-end",
+          paddingRight: 10,
+          fontSize: 11,
+          fontWeight: 700,
+          color: "white",
+          transition: "width 1s ease",
+          minWidth: 40,
+        }}>{text}</div>
+      </div>
+    </div>
+  );
+}
+
+function StatBox({ num, numColor, label }) {
+  return (
+    <div style={{
+      background: "#F8F5F0",
+      borderRadius: 14,
+      padding: 14,
+      textAlign: "center",
+      flex: 1,
+    }}>
+      <div style={{ fontSize: 22, fontWeight: 900, color: numColor, lineHeight: 1.2 }}>{num}</div>
+      <div style={{ fontSize: 11, color: colors.sub, marginTop: 4, lineHeight: 1.4 }}>{label}</div>
+    </div>
+  );
+}
+
+function TLItem({ year, text, even }) {
+  const dotColor = even ? colors.red : colors.blue;
+  return (
+    <div style={{ position: "relative", marginBottom: 16, paddingLeft: 16 }}>
+      <div style={{
+        position: "absolute",
+        left: -20,
+        top: 6,
+        width: 12,
+        height: 12,
+        borderRadius: "50%",
+        border: `3px solid ${dotColor}`,
+        background: "white",
+      }} />
+      <div style={{ fontSize: 12, fontWeight: 900, color: dotColor }}>{year}</div>
+      <div style={{ fontSize: 12, color: colors.sub, lineHeight: 1.6, marginTop: 2 }}>{text}</div>
+    </div>
+  );
+}
+
+function Timeline({ children }) {
+  return (
+    <div style={{
+      position: "relative",
+      paddingLeft: 24,
+      margin: "14px 0",
+    }}>
+      <div style={{
+        position: "absolute",
+        left: 8,
+        top: 0,
+        bottom: 0,
+        width: 3,
+        background: `linear-gradient(180deg, ${colors.blue}, ${colors.red})`,
+        borderRadius: 2,
+      }} />
+      {children}
+    </div>
+  );
+}
+
+function Desc({ children }) {
+  return <p style={{ fontSize: 13, lineHeight: 1.8, color: colors.sub }}>{children}</p>;
+}
+
+function R({ color, children }) {
+  return <span style={{ color, fontWeight: 700 }}>{children}</span>;
+}
+
+function MiniCard({ emoji, title, desc, color }) {
+  return (
+    <div style={{
+      background: "white",
+      borderRadius: 14,
+      padding: 14,
+      boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+      borderLeft: `4px solid ${color}`,
+      marginBottom: 10,
+    }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+        <span style={{ fontSize: 22 }}>{emoji}</span>
+        <span style={{ fontSize: 13, fontWeight: 900 }}>{title}</span>
+      </div>
+      <div style={{ fontSize: 12, lineHeight: 1.7, color: colors.sub }}>{desc}</div>
+    </div>
+  );
+}
+
+function HighlightBox({ bg, children }) {
+  return (
+    <div style={{
+      background: bg || "#F0FDFB",
+      borderRadius: 14,
+      padding: 14,
+      margin: "12px 0",
+    }}>
+      {children}
+    </div>
+  );
+}
+
+// ============================
+// メインコンポーネント
+// ============================
+function App() {
+  const [mode, setMode] = useState("ponchi");
+  const isPonchi = mode === "ponchi";
+
+  return (
+    <div className="app-container">
+      <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet" />
+
+      {/* ヘッダー */}
+      <div style={{ textAlign: "center", padding: "28px 0 16px" }}>
+        <h1 className="header-title" style={{
+          fontSize: 22,
+          fontWeight: 900,
+          lineHeight: 1.5,
+          background: "linear-gradient(135deg, #FF6B6B, #A78BFA)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+        }}>🇯🇵 日本のお金の負担<br />2026〜2036年</h1>
+        <p style={{ fontSize: 13, color: colors.sub, marginTop: 6, lineHeight: 1.6 }}>
+          これから10年で、わたしたちの<br />お金の負担はどう変わる？
+        </p>
+      </div>
+
+      {/* トグル */}
+      <div style={{
+        display: "flex",
+        justifyContent: "center",
+        margin: "16px 0 20px",
+        position: "sticky",
+        top: 8,
+        zIndex: 100,
+      }}>
+        <div style={{
+          display: "flex",
+          background: "#E8E0D8",
+          borderRadius: 30,
+          padding: 4,
+          boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+        }}>
+          {["ponchi", "info"].map((m) => (
+            <button
+              key={m}
+              onClick={() => setMode(m)}
+              style={{
+                padding: "10px 20px",
+                border: "none",
+                borderRadius: 26,
+                fontFamily: "inherit",
+                fontSize: 14,
+                fontWeight: 700,
+                cursor: "pointer",
+                transition: "all 0.3s ease",
+                background: mode === m ? "white" : "transparent",
+                color: mode === m ? colors.text : colors.sub,
+                boxShadow: mode === m ? "0 2px 8px rgba(0,0,0,0.12)" : "none",
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+              }}
+            >
+              <span style={{ fontSize: 18 }}>{m === "ponchi" ? "🎨" : "📊"}</span>
+              {m === "ponchi" ? "ポンチ絵" : "インフォグラフィック"}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid-container">
+      {/* ===== セクション1: 全体像 ===== */}
+      {isPonchi ? (
+        <Card label="全体のおはなし" labelColor={colors.red} title="なぜ負担がふえるの？ 🤔">
+          <Scene bg="linear-gradient(180deg, #FFEAA7 0%, #FFF8F0 100%)">
+            <div style={{ display: "flex", gap: 16, justifyContent: "center", marginBottom: 12 }}>
+              {[["👴👵", "高齢者が増加"], ["🛡️", "防衛力の強化"], ["🌱", "環境問題への対応"]].map(([e, t]) => (
+                <div key={t} style={{ textAlign: "center" }}>
+                  <div style={{ fontSize: 36 }}>{e}</div>
+                  <div style={{ fontSize: 11, fontWeight: 700, marginTop: 4 }}>{t}</div>
+                </div>
+              ))}
+            </div>
+            <Bubble>この<R color={colors.red}>3つの大きな課題</R>にお金が必要！<br />だから国民の負担が増えていくんだ</Bubble>
+          </Scene>
+          <Desc>日本は「お年寄りが増える」「国を守る力を強くする」「地球を守る」という3つの大きな課題をかかえていて、そのためにお金が必要なんだ。</Desc>
+        </Card>
+      ) : (
+        <Card label="概要" labelColor={colors.red} title="負担増の3つの原因">
+          <div style={{ display: "flex", gap: 10, margin: "14px 0" }}>
+            <StatBox num="36%" numColor={colors.red} label={"2036年の\n高齢者の割合"} />
+            <StatBox num="2倍" numColor={colors.purple} label={"防衛費の\n増額目標"} />
+          </div>
+          <Bar label="少子高齢化" width="90%" color={colors.red} text="深刻" />
+          <Bar label="防衛費" width="70%" color={colors.purple} text="拡大" />
+          <Bar label="脱炭素(GX)" width="60%" color={colors.green} text="推進" />
+          <Desc>この3つの課題に対応するため、2026年から10年間で国民の負担が段階的に増えていきます。</Desc>
+        </Card>
+      )}
+
+      {/* ===== セクション2: 子育て支援金 ===== */}
+      {isPonchi ? (
+        <Card label="2026年4月スタート" labelColor={colors.blue} title="👶 子ども・子育て支援金って？">
+          <Scene bg="linear-gradient(180deg, #DFE6E9 0%, #FFF8F0 100%)">
+            <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
+              <FlowBox emoji="💰" text="みんなの給料" />
+              <span style={{ fontSize: 20, color: colors.red }}>→</span>
+              <FlowBox emoji="🏥" text="健康保険に上乗せ" border={`2px solid ${colors.blue}`} />
+              <span style={{ fontSize: 20, color: colors.red }}>→</span>
+              <FlowBox emoji="👶" text="子育て支援に使う" border={`2px solid ${colors.yellow}`} />
+            </div>
+            <Bubble>健康保険のお金に<R color={colors.blue}>上乗せ</R>して集めるよ！<br />子どもがいない人も払うんだ</Bubble>
+          </Scene>
+          <Desc>2026年4月から、毎月の健康保険料に上乗せして「子ども・子育て支援金」が集められるよ。児童手当の拡大や育休の充実に使われるけど、子どもがいない人も払うことになるんだ。</Desc>
+        </Card>
+      ) : (
+        <Card label="2026年4月〜" labelColor={colors.blue} title="子ども・子育て支援金">
+          <Desc>医療保険に上乗せして徴収。段階的に増額予定。</Desc>
+          <div style={{ marginTop: 14 }}>
+            <Bar label="年収200万" width="20%" color={colors.blue} text="~150円/月" />
+            <Bar label="年収400万" width="40%" color={colors.blue} text="~350円/月" />
+            <Bar label="年収600万" width="55%" color={colors.blue} text="~500円/月" />
+            <Bar label="年収800万" width="70%" color={colors.blue} text="~650円/月" />
+            <Bar label="年収1000万" width="90%" color={colors.blue} text="~850円/月" />
+          </div>
+          <Desc>※ 被用者保険（会社員）の場合の目安。国保や後期高齢者も別途徴収されます。</Desc>
+        </Card>
+      )}
+
+      {/* ===== セクション3: 社会保険料 ===== */}
+      {isPonchi ? (
+        <Card label="じわじわ上がる" labelColor={colors.purple} title="📈 社会保険料のアップ">
+          <Scene bg="linear-gradient(180deg, #E8D5F5 0%, #FFF8F0 100%)">
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, width: "100%", marginBottom: 8 }}>
+              {[
+                { emoji: "😊", label: "2020年ごろ", value: "約30%", vColor: colors.blue, sub: "会社と折半" },
+                { emoji: "😰", label: "2030年ごろ", value: "約32%超", vColor: colors.red, sub: "さらに上がる？" },
+              ].map((d) => (
+                <div key={d.label} style={{
+                  background: "white", borderRadius: 14, padding: 14, textAlign: "center",
+                  boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
+                }}>
+                  <div style={{ fontSize: 32 }}>{d.emoji}</div>
+                  <div style={{ fontSize: 11, color: colors.sub }}>{d.label}</div>
+                  <div style={{ fontSize: 18, fontWeight: 900, color: d.vColor, marginTop: 4 }}>{d.value}</div>
+                  <div style={{ fontSize: 11, color: colors.sub }}>{d.sub}</div>
+                </div>
+              ))}
+            </div>
+            <Bubble>給料から引かれる額が<br /><R color={colors.red}>だんだん増えていく</R>んだ…</Bubble>
+          </Scene>
+          <Desc>健康保険・介護保険・年金保険──給料から天引きされる社会保険料は、高齢者が増えるにつれてどんどん上がっていくよ。特に介護保険料は大幅アップの見通し。</Desc>
+        </Card>
+      ) : (
+        <Card label="トレンド" labelColor={colors.purple} title="社会保険料率の推移">
+          <Timeline>
+            <TLItem year="2024年" text="介護保険料率 約1.6%（全国平均）" />
+            <TLItem year="2026年" text="子育て支援金の上乗せ開始＋介護保険料さらに上昇" even />
+            <TLItem year="2027年" text="高齢者医療の窓口負担見直し（2割→拡大）" />
+            <TLItem year="2028〜30年" text="年金保険料の上限引き上げ検討・介護保険の範囲拡大" even />
+            <TLItem year="2033〜36年" text="GX賦課金・炭素税が本格化、トリプル負担増" />
+          </Timeline>
+          <Desc>社会保険料の負担率は年々上昇し、手取り収入が減る傾向が続きます。</Desc>
+        </Card>
+      )}
+
+      {/* ===== セクション4: 防衛費と税金 ===== */}
+      {isPonchi ? (
+        <Card label="税金もふえる" labelColor={colors.orange} title="🛡️ 防衛費と増税のはなし">
+          <Scene bg="linear-gradient(180deg, #FFECD2 0%, #FFF8F0 100%)">
+            <div style={{ fontSize: 48, marginBottom: 8 }}>🛡️💴</div>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
+              <FlowBox emoji="🏢" text="法人税UP" border={`2px solid ${colors.orange}`} />
+              <FlowBox emoji="🚬" text="たばこ税UP" border={`2px solid ${colors.orange}`} />
+              <FlowBox emoji="💰" text="所得税に上乗せ" border={`2px solid ${colors.orange}`} />
+            </div>
+            <Bubble>国を守るために<R color={colors.orange}>年間5兆円</R>を<br />追加で用意する計画だよ</Bubble>
+          </Scene>
+          <Desc>防衛費をGDP比2%に引き上げるため、法人税・たばこ税・所得税（復興特別所得税の転用）が段階的に増えるよ。会社にかかる税金が上がると、お給料にも影響するかも。</Desc>
+        </Card>
+      ) : (
+        <Card label="防衛財源" labelColor={colors.orange} title="防衛力強化のための増税">
+          <div style={{ display: "flex", gap: 10, margin: "14px 0" }}>
+            <StatBox num="約5兆円" numColor={colors.orange} label={"年間の\n追加防衛費"} />
+            <StatBox num="GDP 2%" numColor={colors.orange} label={"防衛費の\n目標水準"} />
+          </div>
+          <Bar label="法人税" width="50%" color={colors.orange} text="+4〜4.5%" />
+          <Bar label="たばこ税" width="40%" color={colors.orange} text="段階増" />
+          <Bar label="所得税" width="30%" color={colors.orange} text="復興税転用" />
+          <Desc>復興特別所得税の一部（税率1%分）が防衛財源に振り替えられ、復興税は延長されます。</Desc>
+        </Card>
+      )}
+
+      {/* ===== セクション5: GX ===== */}
+      {isPonchi ? (
+        <Card label="地球を守るお金" labelColor={colors.green} title="🌍 GX（脱炭素）にかかるお金">
+          <Scene bg="linear-gradient(180deg, #D5F5E3 0%, #FFF8F0 100%)">
+            <div style={{ fontSize: 42, marginBottom: 8 }}>🏭 → 🌱</div>
+            <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
+              <FlowBox emoji="⚡" text={<>GX賦課金<br /><span style={{ fontSize: 10, color: colors.sub }}>電気代に上乗せ</span></>} border={`2px solid ${colors.green}`} />
+              <FlowBox emoji="🏭" text={<>炭素税<br /><span style={{ fontSize: 10, color: colors.sub }}>CO₂燃料に課税</span></>} border={`2px solid ${colors.green}`} />
+            </div>
+            <Bubble>電気代やガソリン代が<br /><R color={colors.green}>じわじわ上がる</R>かも！</Bubble>
+          </Scene>
+          <Desc>地球温暖化を止めるために、電気代にGX賦課金が上乗せされたり、CO₂を出す燃料への税金（炭素税）が上がったりするよ。2028年ごろから段階的にスタート予定。</Desc>
+        </Card>
+      ) : (
+        <Card label="GX政策" labelColor={colors.green} title="脱炭素にかかる負担">
+          <Timeline>
+            <TLItem year="2028年ごろ" text="GX賦課金スタート。電気料金に上乗せ" />
+            <TLItem year="2028〜30年" text="炭素に対する賦課金（カーボンプライシング）導入" even />
+            <TLItem year="2033年〜" text="排出量取引制度（GX-ETS）本格稼働" />
+            <TLItem year="2035〜36年" text="炭素税の税率引き上げ。電気代・ガソリン代にさらなる影響" even />
+          </Timeline>
+          <div style={{ display: "flex", gap: 10, margin: "14px 0" }}>
+            <StatBox num="20兆円" numColor={colors.green} label={"GX移行債の\n発行規模"} />
+            <StatBox num="2050年" numColor={colors.green} label={"カーボン\nニュートラル目標"} />
+          </div>
+        </Card>
+      )}
+
+      </div>
+
+      {/* ===== 中間まとめ ===== */}
+      <div style={{
+        background: "linear-gradient(135deg, #FF6B6B 0%, #A78BFA 100%)",
+        borderRadius: 20,
+        padding: "24px 20px",
+        color: "white",
+        textAlign: "center",
+        boxShadow: "0 4px 24px rgba(167,139,250,0.3)",
+        marginBottom: 20,
+      }}>
+        <h2 style={{ fontSize: 18, fontWeight: 900, marginBottom: 8 }}>
+          {isPonchi ? "📌 まとめ：10年間の負担増" : "📊 負担増の全体像"}
+        </h2>
+        {isPonchi ? (
+          <>
+            <div style={{ display: "flex", justifyContent: "center", gap: 16, margin: "16px 0" }}>
+              {[["👶", "子育て支援金"], ["🏥", "社会保険料UP"], ["🛡️", "防衛増税"], ["🌱", "GX賦課金"]].map(([e, t]) => (
+                <div key={t}>
+                  <div style={{ fontSize: 32 }}>{e}</div>
+                  <div style={{ fontSize: 11 }}>{t}</div>
+                </div>
+              ))}
+            </div>
+            <p style={{ fontSize: 13, lineHeight: 1.8, color: "rgba(255,255,255,0.9)" }}>
+              これらが合わさって、わたしたちの<strong>手取りのお金が減っていく</strong>時代が始まるよ。<br />
+              大切なのは、<strong>なぜこのお金が必要なのか</strong>を知ること！
+            </p>
+          </>
+        ) : (
+          <>
+            <div style={{ fontSize: 42, fontWeight: 900, margin: "12px 0", textShadow: "0 2px 10px rgba(0,0,0,0.15)" }}>
+              年間10〜20万円
+            </div>
+            <p style={{ fontSize: 13, lineHeight: 1.8, color: "rgba(255,255,255,0.9)" }}>
+              平均的な世帯（年収500万円）で、<br />2030年代半ばには年間10〜20万円程度の<br />追加負担が見込まれます
+            </p>
+            <div style={{ marginTop: 16, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+              {[
+                ["🏥 +5〜8万", "社会保険料・支援金"],
+                ["🛡️ +2〜4万", "防衛関連増税"],
+                ["⚡ +2〜5万", "GX賦課金・炭素税"],
+                ["💡 +1〜3万", "電気代・その他"],
+              ].map(([n, l]) => (
+                <div key={l} style={{ background: "rgba(255,255,255,0.2)", borderRadius: 12, padding: 10 }}>
+                  <div style={{ fontSize: 18, fontWeight: 900 }}>{n}</div>
+                  <div style={{ fontSize: 10, marginTop: 2 }}>{l}</div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* ============================================ */}
+      {/* ===== 後半：サバイブ術 ===== */}
+      {/* ============================================ */}
+      <div style={{
+        textAlign: "center",
+        margin: "32px 0 20px",
+      }}>
+        <div style={{
+          display: "inline-block",
+          background: "linear-gradient(135deg, #4ECDC4, #34D399)",
+          borderRadius: 16,
+          padding: "12px 24px",
+          boxShadow: "0 4px 16px rgba(78,205,196,0.3)",
+        }}>
+          <span style={{ fontSize: 20 }}>💪</span>
+          <span style={{ fontSize: 16, fontWeight: 900, color: "white", marginLeft: 8 }}>負担増をのりきるサバイブ術！</span>
+        </div>
+      </div>
+
+      <div className="grid-container">
+      {/* ===== サバイブ1: 人的資本 ===== */}
+      {isPonchi ? (
+        <Card label="サバイブ術①" labelColor={colors.pink} title="📚 スキルアップでお金を増やそう！">
+          <Scene bg="linear-gradient(180deg, #FCE4EC 0%, #FFF8F0 100%)">
+            <div style={{ display: "flex", gap: 12, justifyContent: "center", marginBottom: 8 }}>
+              {[["🧑‍💻", "IT"], ["🏥", "医療"], ["👩‍🍳", "介護"]].map(([e, t]) => (
+                <div key={t} style={{ textAlign: "center" }}>
+                  <div style={{ fontSize: 36 }}>{e}</div>
+                  <div style={{ fontSize: 10, fontWeight: 700, marginTop: 2 }}>{t}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, justifyContent: "center", marginBottom: 8 }}>
+              <FlowBox emoji="🎓" text="資格を取る！" border={`2px solid ${colors.pink}`} />
+              <span style={{ fontSize: 20, color: colors.pink }}>→</span>
+              <FlowBox emoji="💰" text={<>国が<R color={colors.pink}>最大80%</R><br />お金を出してくれる</>} border={`2px solid ${colors.pink}`} />
+            </div>
+            <Bubble>
+              「教育訓練給付金」で資格取得の費用を<br />
+              <R color={colors.pink}>最大192万円</R>もらえるんだ！<br />
+              お給料が5%上がればさらにお得に✨
+            </Bubble>
+          </Scene>
+          <Desc>お金を守る一番の方法は「稼ぐ力」を上げること！国がスキルアップを応援してくれる制度があるよ。IT・医療・介護の資格を目指すとき、費用の最大80%が戻ってくるんだ。</Desc>
+        </Card>
+      ) : (
+        <Card label="対策①" labelColor={colors.pink} title="人的資本の最大化：教育訓練給付">
+          <div style={{ display: "flex", gap: 10, margin: "14px 0" }}>
+            <StatBox num="最大80%" numColor={colors.pink} label={"受講費用の\n給付率"} />
+            <StatBox num="192万円" numColor={colors.pink} label={"給付の\n上限額"} />
+          </div>
+          <MiniCard
+            emoji="🎓"
+            title="専門実践教育訓練給付金"
+            color={colors.pink}
+            desc="IT・医療・介護などの専門資格取得で受講費用の最大80%（年間上限64万円）をハローワークから支給。2026年4月から賃金5%UPで給付率80%の特例が本格化。"
+          />
+          <MiniCard
+            emoji="📖"
+            title="教育訓練支援給付金"
+            color={colors.pink}
+            desc="45歳未満で離職し専門訓練を受ける場合、失業保険の日額60%相当を訓練期間中に受給可能。学習に専念できる環境を支援。"
+          />
+        </Card>
+      )}
+
+      {/* ===== サバイブ2: 働き方 ===== */}
+      {isPonchi ? (
+        <Card label="サバイブ術②" labelColor={colors.indigo} title="⏰ 「106万円の壁」がなくなる！">
+          <Scene bg="linear-gradient(180deg, #E8EAF6 0%, #FFF8F0 100%)">
+            <div style={{ textAlign: "center", marginBottom: 8 }}>
+              <div style={{ fontSize: 36 }}>🧱💥</div>
+              <div style={{ fontSize: 13, fontWeight: 900, marginTop: 4 }}>
+                2026年10月〜「106万円の壁」が消える！
+              </div>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, width: "100%", marginBottom: 8 }}>
+              <div style={{
+                background: "white", borderRadius: 14, padding: 14, textAlign: "center",
+                boxShadow: "0 2px 6px rgba(0,0,0,0.06)", border: `2px solid ${colors.blue}`,
+              }}>
+                <div style={{ fontSize: 28 }}>🕐</div>
+                <div style={{ fontSize: 12, fontWeight: 900, marginTop: 4 }}>週20時間未満</div>
+                <div style={{ fontSize: 11, color: colors.sub, marginTop: 2 }}>社会保険なし</div>
+                <div style={{ fontSize: 11, color: colors.blue, fontWeight: 700 }}>手取りキープ</div>
+              </div>
+              <div style={{
+                background: "white", borderRadius: 14, padding: 14, textAlign: "center",
+                boxShadow: "0 2px 6px rgba(0,0,0,0.06)", border: `2px solid ${colors.green}`,
+              }}>
+                <div style={{ fontSize: 28 }}>💪</div>
+                <div style={{ fontSize: 12, fontWeight: 900, marginTop: 4 }}>年収125万円以上</div>
+                <div style={{ fontSize: 11, color: colors.sub, marginTop: 2 }}>社会保険に加入</div>
+                <div style={{ fontSize: 11, color: colors.green, fontWeight: 700 }}>将来の年金UP!</div>
+              </div>
+            </div>
+            <Bubble>
+              これからは「<R color={colors.indigo}>いくら稼ぐか</R>」より<br />
+              「<R color={colors.indigo}>週何時間働くか</R>」がポイント！
+            </Bubble>
+          </Scene>
+          <Desc>2026年10月から年収の壁がなくなって、「週20時間」がカギになるよ。20時間以上なら年収125万円を目指すと、保険料を払っても手取りが増え、将来の年金も増えるんだ！</Desc>
+        </Card>
+      ) : (
+        <Card label="対策②" labelColor={colors.indigo} title="「106万円の壁」撤廃への対応">
+          <HighlightBox bg="#EEF2FF">
+            <div style={{ fontSize: 13, fontWeight: 900, marginBottom: 6 }}>
+              2026年10月〜 判断基準が変わる
+            </div>
+            <div style={{ fontSize: 12, color: colors.sub, lineHeight: 1.7 }}>
+              「年収」→「週の労働時間」が新しい基準に
+            </div>
+          </HighlightBox>
+          <div style={{ display: "flex", gap: 10, margin: "14px 0" }}>
+            <StatBox num="週20h" numColor={colors.indigo} label={"社会保険加入の\n境界線"} />
+            <StatBox num="125万円" numColor={colors.green} label={"損益分岐点\n（年収）"} />
+          </div>
+          <MiniCard
+            emoji="🕐"
+            title="回避策：週20時間未満に抑える"
+            color={colors.indigo}
+            desc="手取り減少を避けるには労働契約を週20時間未満に。ただし将来の年金は増えない。"
+          />
+          <MiniCard
+            emoji="💪"
+            title="攻めの戦略：125万円以上を目指す"
+            color={colors.green}
+            desc="週20時間以上で年収125万円超なら、保険料を払っても手取り増＋将来の厚生年金も増加。長期的なセーフティネット強化に。"
+          />
+        </Card>
+      )}
+
+      {/* ===== サバイブ3: コスト削減・減免 ===== */}
+      {isPonchi ? (
+        <Card label="サバイブ術③" labelColor={colors.blue} title="🏠 もらえるお金・減らせるお金">
+          <Scene bg="linear-gradient(180deg, #E0F7FA 0%, #FFF8F0 100%)">
+            <div style={{ fontSize: 36, marginBottom: 4 }}>🎁✨</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, width: "100%", maxWidth: 280 }}>
+              {[
+                { emoji: "🔥", text: "給湯器の買い替えに5〜17万円補助！", color: colors.orange },
+                { emoji: "🏥", text: "医療費の年間上限で負担をおさえる", color: colors.blue },
+                { emoji: "💴", text: "自治体から3〜7万円の給付金も", color: colors.green },
+              ].map((item) => (
+                <div key={item.text} style={{
+                  background: "white", borderRadius: 12, padding: "10px 14px",
+                  display: "flex", alignItems: "center", gap: 10,
+                  boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
+                  borderLeft: `4px solid ${item.color}`,
+                }}>
+                  <span style={{ fontSize: 22 }}>{item.emoji}</span>
+                  <span style={{ fontSize: 12, fontWeight: 700, lineHeight: 1.4 }}>{item.text}</span>
+                </div>
+              ))}
+            </div>
+            <Bubble>
+              負担が増えても<R color={colors.blue}>もらえる制度</R>がたくさん！<br />
+              知らないと損しちゃうよ
+            </Bubble>
+          </Scene>
+          <Desc>低所得の世帯には、電気代の補助、医療費の上限、自治体からの給付金など、負担をやわらげる制度がたくさんあるよ。「知ること」が一番のサバイブ術！</Desc>
+        </Card>
+      ) : (
+        <Card label="対策③" labelColor={colors.blue} title="コスト削減と公的減免の活用">
+          <MiniCard
+            emoji="🔥"
+            title="GX補助金でエネルギーコスト抑制"
+            color={colors.orange}
+            desc="高効率給湯器（エコジョーズ等）交換で5〜17万円の補助。賃貸でも利用可能。2026年1〜3月は電気・ガス料金の直接支援も。"
+          />
+          <MiniCard
+            emoji="🏥"
+            title="医療費の「年間上限」を活用"
+            color={colors.blue}
+            desc="2026年8月〜高額療養費の上限見直し。住民税非課税世帯・年収200万未満は多数回該当額引き下げ＋「外来年間上限」で年間負担増なし。"
+          />
+          <MiniCard
+            emoji="💴"
+            title="自治体給付金＋給付付き税額控除"
+            color={colors.green}
+            desc="2026年度も物価高騰対策給付金（3〜7万円程度）の可能性。2027年以降は「給付付き税額控除」導入検討で低所得層の負担軽減の柱に。"
+          />
+        </Card>
+      )}
+
+      {/* ===== サバイブ4: 税制メリット ===== */}
+      {isPonchi ? (
+        <Card label="サバイブ術④" labelColor="#FFB300" title="💡 税金がゼロになる？お得な制度">
+          <Scene bg="linear-gradient(180deg, #FFF9C4 0%, #FFF8F0 100%)">
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, width: "100%", marginBottom: 8 }}>
+              <div style={{
+                background: "white", borderRadius: 14, padding: 14, textAlign: "center",
+                boxShadow: "0 2px 6px rgba(0,0,0,0.06)", border: "2px solid #FFD93D",
+              }}>
+                <div style={{ fontSize: 32 }}>🆓</div>
+                <div style={{ fontSize: 12, fontWeight: 900, marginTop: 4 }}>178万円の壁</div>
+                <div style={{ fontSize: 11, color: colors.sub, marginTop: 2 }}>年収178万以下なら</div>
+                <div style={{ fontSize: 14, fontWeight: 900, color: colors.red, marginTop: 2 }}>所得税ゼロ！</div>
+              </div>
+              <div style={{
+                background: "white", borderRadius: 14, padding: 14, textAlign: "center",
+                boxShadow: "0 2px 6px rgba(0,0,0,0.06)", border: "2px solid #FFD93D",
+              }}>
+                <div style={{ fontSize: 32 }}>👦</div>
+                <div style={{ fontSize: 12, fontWeight: 900, marginTop: 4 }}>こどもNISA</div>
+                <div style={{ fontSize: 11, color: colors.sub, marginTop: 2 }}>年60万・生涯600万</div>
+                <div style={{ fontSize: 14, fontWeight: 900, color: colors.green, marginTop: 2 }}>非課税で貯金！</div>
+              </div>
+            </div>
+            <Bubble>
+              <R color="#FFB300">178万円以下</R>なら所得税がかからない！<br />
+              こどもNISAで子供の将来に備えよう
+            </Bubble>
+          </Scene>
+          <Desc>2026年から所得税がかからないラインが178万円に上がるよ。また「こどもNISA」で年60万円まで税金なしで子どもの教育資金を準備できるようになるんだ。</Desc>
+        </Card>
+      ) : (
+        <Card label="対策④" labelColor="#FFB300" title="税制メリットの活用">
+          <div style={{ display: "flex", gap: 10, margin: "14px 0" }}>
+            <StatBox num="178万円" numColor="#FFB300" label={"新・所得税\n課税最低限"} />
+            <StatBox num="60万円/年" numColor={colors.green} label={"こどもNISA\n年間投資枠"} />
+          </div>
+          <MiniCard
+            emoji="🆓"
+            title="178万円の壁で所得税ゼロ"
+            color="#FFB300"
+            desc="2026年から基礎控除引き上げにより、年収178万円以下は所得税負担がゼロに。"
+          />
+          <MiniCard
+            emoji="👦"
+            title="こどもNISA（2026年度創設）"
+            color={colors.green}
+            desc="年間60万円・生涯600万円の非課税枠。少額からでも子どもの教育資金を税金なしで準備可能。"
+          />
+        </Card>
+      )}
+
+      </div>
+
+      {/* ===== 最終まとめ ===== */}
+      <div style={{
+        background: "linear-gradient(135deg, #4ECDC4 0%, #34D399 100%)",
+        borderRadius: 20,
+        padding: "24px 20px",
+        color: "white",
+        textAlign: "center",
+        boxShadow: "0 4px 24px rgba(52,211,153,0.3)",
+        marginBottom: 20,
+      }}>
+        <h2 style={{ fontSize: 18, fontWeight: 900, marginBottom: 12 }}>
+          {isPonchi ? "🔑 一番大事なサバイブ術" : "🔑 最も有効な自衛策"}
+        </h2>
+        {isPonchi ? (
+          <>
+            <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 16 }}>
+              <div style={{
+                background: "rgba(255,255,255,0.2)", borderRadius: 14, padding: "12px 16px", flex: 1,
+              }}>
+                <div style={{ fontSize: 32 }}>📚</div>
+                <div style={{ fontSize: 13, fontWeight: 900, marginTop: 4 }}>スキルアップ</div>
+                <div style={{ fontSize: 11, marginTop: 2, color: "rgba(255,255,255,0.85)" }}>教育訓練給付で<br />収入UP！</div>
+              </div>
+              <div style={{
+                background: "rgba(255,255,255,0.2)", borderRadius: 14, padding: "12px 16px", flex: 1,
+              }}>
+                <div style={{ fontSize: 32 }}>💪</div>
+                <div style={{ fontSize: 13, fontWeight: 900, marginTop: 4 }}>しっかり働く</div>
+                <div style={{ fontSize: 11, marginTop: 2, color: "rgba(255,255,255,0.85)" }}>社会保険に入って<br />将来の年金UP！</div>
+              </div>
+            </div>
+            <p style={{ fontSize: 13, lineHeight: 1.8, color: "rgba(255,255,255,0.9)" }}>
+              「<strong>学んで稼ぐ力を上げる</strong>」＋「<strong>社会保険を味方にする</strong>」<br />
+              この2つが最強のサバイブ術だよ！💪
+            </p>
+          </>
+        ) : (
+          <>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 16 }}>
+              <div style={{ background: "rgba(255,255,255,0.2)", borderRadius: 12, padding: 12 }}>
+                <div style={{ fontSize: 22, fontWeight: 900 }}>📚 教育訓練</div>
+                <div style={{ fontSize: 11, marginTop: 4, lineHeight: 1.5 }}>給付金で収入の<br />底上げを図る</div>
+              </div>
+              <div style={{ background: "rgba(255,255,255,0.2)", borderRadius: 12, padding: 12 }}>
+                <div style={{ fontSize: 22, fontWeight: 900 }}>💪 社保加入</div>
+                <div style={{ fontSize: 11, marginTop: 4, lineHeight: 1.5 }}>厚生年金で<br />将来の年金を積み増す</div>
+              </div>
+            </div>
+            <p style={{ fontSize: 13, lineHeight: 1.8, color: "rgba(255,255,255,0.9)" }}>
+              労働を通じた自衛策が最も有効。<br />
+              「スキルアップ」×「社会保険をフル活用」が<br />
+              負担増時代を生き抜くカギです。
+            </p>
+          </>
+        )}
+      </div>
+
+      <p style={{ textAlign: "center", fontSize: 11, color: "#B2BEC3", padding: "20px 0", lineHeight: 1.6 }}>
+        ※ 金額は概算であり、今後の法改正や経済状況により変動します。<br />
+        中学生向けにわかりやすく簡略化した内容です。
+      </p>
+    </div>
+  );
+}
+
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
