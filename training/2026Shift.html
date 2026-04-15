@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>週間スケジュール管理表</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+–bg: #0f1117;
+–surface: #1a1d27;
+–surface2: #222633;
+–border: #2a2e3d;
+–text: #e8eaf0;
+–text-dim: #8b90a0;
+–accent1: #ff6b6b;
+–accent1-bg: rgba(255,107,107,0.12);
+–accent2: #4ecdc4;
+–accent2-bg: rgba(78,205,196,0.12);
+–accent3: #ffd93d;
+–accent3-bg: rgba(255,217,61,0.12);
+–hour-line: rgba(255,255,255,0.04);
+–now-line: #ff6b6b;
+–slot-radius: 6px;
+}
+
+html { font-size: 14px; }
+body {
+font-family: ‘Noto Sans JP’, sans-serif;
+background: var(–bg);
+color: var(–text);
+min-height: 100dvh;
+overflow-x: hidden;
+}
+
+/* ── Header ── */
+.app-header {
+position: sticky;
+top: 0;
+z-index: 100;
+background: rgba(15,17,23,0.92);
+backdrop-filter: blur(12px);
+border-bottom: 1px solid var(–border);
+padding: 12px 16px;
+}
+.app-header h1 {
+font-size: 1.1rem;
+font-weight: 600;
+letter-spacing: 0.02em;
+}
+.app-header .subtitle {
+font-size: 0.72rem;
+color: var(–text-dim);
+margin-top: 2px;
+font-family: ‘JetBrains Mono’, monospace;
+}
+
+/* ── Controls ── */
+.controls {
+display: flex;
+gap: 8px;
+padding: 10px 16px;
+overflow-x: auto;
+-webkit-overflow-scrolling: touch;
+scrollbar-width: none;
+}
+.controls::-webkit-scrollbar { display: none; }
+
+.ctrl-btn {
+flex-shrink: 0;
+padding: 6px 14px;
+border-radius: 20px;
+border: 1px solid var(–border);
+background: var(–surface);
+color: var(–text-dim);
+font-size: 0.78rem;
+font-weight: 500;
+cursor: pointer;
+transition: all 0.2s;
+font-family: inherit;
+}
+.ctrl-btn:active { transform: scale(0.96); }
+.ctrl-btn.active {
+border-color: var(–accent2);
+color: var(–accent2);
+background: var(–accent2-bg);
+}
+
+.person-tabs {
+display: flex;
+gap: 6px;
+padding: 6px 16px 10px;
+}
+.person-tab {
+flex: 1;
+padding: 8px 4px;
+border-radius: 8px;
+border: 1.5px solid var(–border);
+background: var(–surface);
+color: var(–text-dim);
+font-size: 0.8rem;
+font-weight: 600;
+text-align: center;
+cursor: pointer;
+transition: all 0.25s;
+font-family: inherit;
+position: relative;
+}
+.person-tab:active { transform: scale(0.97); }
+.person-tab[data-person=“0”].active {
+border-color: var(–accent1);
+color: var(–accent1);
+background: var(–accent1-bg);
+box-shadow: 0 0 12px rgba(255,107,107,0.15);
+}
+.person-tab[data-person=“1”].active {
+border-color: var(–accent2);
+color: var(–accent2);
+background: var(–accent2-bg);
+box-shadow: 0 0 12px rgba(78,205,196,0.15);
+}
+.person-tab[data-person=“2”].active {
+border-color: var(–accent3);
+color: var(–accent3);
+background: var(–accent3-bg);
+box-shadow: 0 0 12px rgba(255,217,61,0.15);
+}
+.person-tab .dot {
+display: inline-block;
+width: 7px; height: 7px;
+border-radius: 50%;
+margin-right: 4px;
+vertical-align: middle;
+}
+.person-tab[data-person=“0”] .dot { background: var(–accent1); }
+.person-tab[data-person=“1”] .dot { background: var(–accent2); }
+.person-tab[data-person=“2”] .dot { background: var(–accent3); }
+
+/* ── Week Nav ── */
+.week-nav {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 6px 16px 10px;
+}
+.week-nav button {
+width: 36px; height: 36px;
+border-radius: 50%;
+border: 1px solid var(–border);
+background: var(–surface);
+color: var(–text);
+font-size: 1.1rem;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+transition: all 0.2s;
+}
+.week-nav button:active { transform: scale(0.92); background: var(–surface2); }
+.week-label {
+font-size: 0.82rem;
+font-weight: 500;
+color: var(–text-dim);
+font-family: ‘JetBrains Mono’, monospace;
+}
+
+/* ── Schedule Grid ── */
+.schedule-wrapper {
+overflow-x: auto;
+-webkit-overflow-scrolling: touch;
+padding: 0 0 80px;
+}
+.schedule-grid {
+display: grid;
+grid-template-columns: 42px repeat(7, minmax(100px, 1fr));
+min-width: 780px;
+position: relative;
+}
+
+/* Day headers */
+.day-header {
+text-align: center;
+padding: 8px 4px;
+border-bottom: 1px solid var(–border);
+position: sticky;
+top: 0;
+z-index: 10;
+background: rgba(15,17,23,0.95);
+backdrop-filter: blur(8px);
+}
+.day-header .dow {
+font-size: 0.7rem;
+font-weight: 600;
+color: var(–text-dim);
+text-transform: uppercase;
+letter-spacing: 0.08em;
+}
+.day-header .date-num {
+font-size: 1rem;
+font-weight: 700;
+margin-top: 2px;
+font-family: ‘JetBrains Mono’, monospace;
+}
+.day-header.today .date-num {
+background: var(–accent1);
+color: #fff;
+width: 28px; height: 28px;
+border-radius: 50%;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+}
+.day-header.sun { color: var(–accent1); }
+.day-header.sat { color: #6ea8fe; }
+.corner-header {
+border-bottom: 1px solid var(–border);
+position: sticky;
+top: 0;
+z-index: 11;
+background: rgba(15,17,23,0.95);
+}
+
+/* Time column */
+.time-col {
+position: relative;
+}
+.time-label {
+position: absolute;
+right: 6px;
+font-size: 0.62rem;
+font-family: ‘JetBrains Mono’, monospace;
+color: var(–text-dim);
+transform: translateY(-50%);
+line-height: 1;
+}
+
+/* Day columns */
+.day-col {
+position: relative;
+border-left: 1px solid var(–border);
+}
+.hour-line {
+position: absolute;
+left: 0; right: 0;
+height: 1px;
+background: var(–hour-line);
+}
+.half-hour-line {
+position: absolute;
+left: 0; right: 0;
+height: 1px;
+background: var(–hour-line);
+opacity: 0.5;
+}
+
+/* Event blocks */
+.event-block {
+position: absolute;
+left: 3px; right: 3px;
+border-radius: var(–slot-radius);
+padding: 4px 6px;
+font-size: 0.68rem;
+font-weight: 500;
+line-height: 1.3;
+overflow: hidden;
+cursor: pointer;
+transition: transform 0.15s, box-shadow 0.15s;
+z-index: 5;
+border-left: 3px solid;
+}
+.event-block:active {
+transform: scale(0.97);
+}
+.event-block .ev-title {
+font-weight: 600;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+.event-block .ev-time {
+font-size: 0.6rem;
+opacity: 0.7;
+margin-top: 1px;
+font-family: ‘JetBrains Mono’, monospace;
+}
+
+/* Person colors */
+.event-block.person-0 {
+background: var(–accent1-bg);
+border-left-color: var(–accent1);
+color: var(–accent1);
+}
+.event-block.person-1 {
+background: var(–accent2-bg);
+border-left-color: var(–accent2);
+color: var(–accent2);
+}
+.event-block.person-2 {
+background: var(–accent3-bg);
+border-left-color: var(–accent3);
+color: var(–accent3);
+}
+
+/* Now line */
+.now-indicator {
+position: absolute;
+left: 0; right: 0;
+height: 2px;
+background: var(–now-line);
+z-index: 8;
+box-shadow: 0 0 8px rgba(255,107,107,0.5);
+}
+.now-indicator::before {
+content: ‘’;
+position: absolute;
+left: -4px; top: -3px;
+width: 8px; height: 8px;
+border-radius: 50%;
+background: var(–now-line);
+}
+
+/* ── Modal ── */
+.modal-overlay {
+position: fixed;
+inset: 0;
+background: rgba(0,0,0,0.7);
+z-index: 200;
+display: none;
+align-items: flex-end;
+justify-content: center;
+animation: fadeIn 0.2s;
+}
+.modal-overlay.show { display: flex; }
+
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+.modal {
+background: var(–surface);
+border-radius: 16px 16px 0 0;
+width: 100%;
+max-width: 500px;
+max-height: 85dvh;
+overflow-y: auto;
+padding: 20px;
+animation: slideUp 0.3s cubic-bezier(0.16,1,0.3,1);
+}
+.modal-handle {
+width: 36px; height: 4px;
+background: var(–border);
+border-radius: 2px;
+margin: 0 auto 16px;
+}
+.modal h2 {
+font-size: 1rem;
+font-weight: 600;
+margin-bottom: 16px;
+}
+.form-group {
+margin-bottom: 14px;
+}
+.form-group label {
+display: block;
+font-size: 0.72rem;
+color: var(–text-dim);
+margin-bottom: 5px;
+font-weight: 500;
+}
+.form-group input, .form-group select {
+width: 100%;
+padding: 10px 12px;
+border-radius: 8px;
+border: 1px solid var(–border);
+background: var(–bg);
+color: var(–text);
+font-size: 0.85rem;
+font-family: inherit;
+outline: none;
+transition: border-color 0.2s;
+}
+.form-group input:focus, .form-group select:focus {
+border-color: var(–accent2);
+}
+.form-row {
+display: flex;
+gap: 10px;
+}
+.form-row .form-group { flex: 1; }
+
+.modal-actions {
+display: flex;
+gap: 10px;
+margin-top: 18px;
+}
+.btn-primary {
+flex: 1;
+padding: 12px;
+border-radius: 10px;
+border: none;
+background: var(–accent2);
+color: #0f1117;
+font-size: 0.85rem;
+font-weight: 700;
+cursor: pointer;
+font-family: inherit;
+transition: opacity 0.2s;
+}
+.btn-primary:active { opacity: 0.85; }
+.btn-secondary {
+flex: 1;
+padding: 12px;
+border-radius: 10px;
+border: 1px solid var(–border);
+background: transparent;
+color: var(–text-dim);
+font-size: 0.85rem;
+font-weight: 500;
+cursor: pointer;
+font-family: inherit;
+}
+.btn-delete {
+padding: 12px;
+border-radius: 10px;
+border: 1px solid rgba(255,107,107,0.3);
+background: rgba(255,107,107,0.1);
+color: var(–accent1);
+font-size: 0.85rem;
+font-weight: 500;
+cursor: pointer;
+font-family: inherit;
+min-width: 60px;
+}
+
+/* ── Preset chips ── */
+.preset-section {
+margin-bottom: 14px;
+}
+.preset-section .label {
+font-size: 0.7rem;
+color: var(–text-dim);
+margin-bottom: 6px;
+font-weight: 500;
+}
+.preset-chips {
+display: flex;
+flex-wrap: wrap;
+gap: 6px;
+}
+.preset-chip {
+padding: 5px 10px;
+border-radius: 16px;
+border: 1px solid var(–border);
+background: var(–surface2);
+color: var(–text);
+font-size: 0.7rem;
+font-weight: 500;
+cursor: pointer;
+font-family: inherit;
+transition: all 0.2s;
+}
+.preset-chip:active { transform: scale(0.95); }
+.preset-chip.selected {
+border-color: var(–accent2);
+background: var(–accent2-bg);
+color: var(–accent2);
+}
+
+/* ── View toggle ── */
+.view-toggle {
+display: flex;
+gap: 0;
+padding: 4px 16px 8px;
+}
+.view-btn {
+flex: 1;
+padding: 7px;
+border: 1px solid var(–border);
+background: var(–surface);
+color: var(–text-dim);
+font-size: 0.72rem;
+font-weight: 500;
+cursor: pointer;
+font-family: inherit;
+transition: all 0.2s;
+}
+.view-btn:first-child { border-radius: 8px 0 0 8px; }
+.view-btn:last-child { border-radius: 0 8px 8px 0; }
+.view-btn:not(:first-child) { border-left: none; }
+.view-btn.active {
+background: var(–accent2-bg);
+color: var(–accent2);
+border-color: var(–accent2);
+}
+
+/* ── Summary ── */
+.summary-panel {
+padding: 16px;
+display: none;
+}
+.summary-panel.show { display: block; }
+.summary-card {
+background: var(–surface);
+border-radius: 10px;
+border: 1px solid var(–border);
+padding: 14px;
+margin-bottom: 10px;
+}
+.summary-card h3 {
+font-size: 0.82rem;
+font-weight: 600;
+margin-bottom: 8px;
+display: flex;
+align-items: center;
+gap: 6px;
+}
+.summary-card h3 .dot {
+width: 8px; height: 8px;
+border-radius: 50%;
+}
+.summary-item {
+display: flex;
+justify-content: space-between;
+padding: 5px 0;
+font-size: 0.75rem;
+border-bottom: 1px solid var(–hour-line);
+}
+.summary-item:last-child { border-bottom: none; }
+.summary-item .day { color: var(–text-dim); }
+.summary-hours {
+font-family: ‘JetBrains Mono’, monospace;
+font-weight: 600;
+}
+
+/* ── FAB ── */
+.fab {
+position: fixed;
+bottom: 24px;
+right: 20px;
+width: 52px; height: 52px;
+border-radius: 50%;
+background: var(–accent2);
+color: #0f1117;
+border: none;
+font-size: 1.6rem;
+font-weight: 300;
+cursor: pointer;
+box-shadow: 0 4px 20px rgba(78,205,196,0.4);
+z-index: 50;
+display: flex;
+align-items: center;
+justify-content: center;
+transition: transform 0.2s;
+}
+.fab:active { transform: scale(0.9); }
+
+/* ── Responsive ── */
+@media (max-width: 500px) {
+.schedule-grid {
+grid-template-columns: 36px repeat(7, minmax(80px, 1fr));
+min-width: 620px;
+}
+}
+</style>
+
+</head>
+<body>
+
+<div class="app-header">
+  <h1>📋 バーチカル週間スケジュール</h1>
+  <div class="subtitle">3人分 管理表</div>
+</div>
+
+<div class="person-tabs" id="personTabs"></div>
+
+<div class="view-toggle">
+  <button class="view-btn active" data-view="grid" onclick="switchView('grid')">週間グリッド</button>
+  <button class="view-btn" data-view="summary" onclick="switchView('summary')">サマリー</button>
+</div>
+
+<div class="week-nav">
+  <button onclick="changeWeek(-1)">‹</button>
+  <span class="week-label" id="weekLabel"></span>
+  <button onclick="changeWeek(1)">›</button>
+</div>
+
+<div id="gridView">
+  <div class="schedule-wrapper">
+    <div class="schedule-grid" id="scheduleGrid"></div>
+  </div>
+</div>
+
+<div class="summary-panel" id="summaryView"></div>
+
+<button class="fab" onclick="openModal()">＋</button>
+
+<!-- Modal -->
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2 id="modalTitle">予定を追加</h2>
+
+```
+<div class="form-group">
+  <label>担当者</label>
+  <select id="evPerson"></select>
+</div>
+
+<div class="preset-section">
+  <div class="label">プリセット（タップで入力）</div>
+  <div class="preset-chips" id="presetChips"></div>
+</div>
+
+<div class="form-group">
+  <label>タイトル</label>
+  <input type="text" id="evTitle" placeholder="例：泊夜間">
+</div>
+
+<div class="form-group">
+  <label>曜日</label>
+  <select id="evDay">
+    <option value="1">月曜</option>
+    <option value="2">火曜</option>
+    <option value="3">水曜</option>
+    <option value="4">木曜</option>
+    <option value="5">金曜</option>
+    <option value="6">土曜</option>
+    <option value="0">日曜</option>
+  </select>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <label>開始</label>
+    <input type="time" id="evStart" value="09:00">
+  </div>
+  <div class="form-group">
+    <label>終了</label>
+    <input type="time" id="evEnd" value="17:00">
+  </div>
+</div>
+
+<div class="form-group">
+  <label>メモ</label>
+  <input type="text" id="evMemo" placeholder="任意メモ">
+</div>
+
+<div class="modal-actions">
+  <button class="btn-secondary" onclick="closeModal()">キャンセル</button>
+  <button class="btn-delete" id="btnDelete" style="display:none" onclick="deleteEvent()">削除</button>
+  <button class="btn-primary" onclick="saveEvent()">保存</button>
+</div>
+```
+
+  </div>
+</div>
+
+<script>
+// ── State ──
+const PEOPLE = [
+  { name: 'Aさん', color: 0 },
+  { name: 'Bさん', color: 1 },
+  { name: 'Cさん', color: 2 }
+];
+
+const PRESETS = [
+  { title: '泊夜間', day: 1, start: '18:00', end: '21:00', note: '月曜 18-21時' },
+  { title: '泊夜間', day: 5, start: '18:00', end: '22:00', note: '金曜 18-22時' },
+  { title: '就学支援センター', day: 1, start: '09:30', end: '12:30', note: '月曜 9:30-12:30' },
+  { title: '就学支援センター', day: 1, start: '09:30', end: '15:30', note: '月曜 9:30-15:30' },
+  { title: '就学支援センター', day: 2, start: '09:30', end: '12:30', note: '火曜 9:30-12:30' },
+  { title: '就学支援センター', day: 2, start: '09:30', end: '15:30', note: '火曜 9:30-15:30' },
+  { title: '就学支援センター', day: 3, start: '09:30', end: '12:30', note: '水曜 9:30-12:30' },
+  { title: '就学支援センター', day: 3, start: '09:30', end: '15:30', note: '水曜 9:30-15:30' },
+  { title: '豊見城高校', day: 1, start: '09:00', end: '13:00', note: '月曜 9-13時' },
+  { title: '豊見城高校', day: 5, start: '09:00', end: '13:00', note: '金曜 9-13時' },
+];
+
+let events = JSON.parse(localStorage.getItem('schedEvents3') || '[]');
+let activePerson = -1; // -1 = show all
+let currentWeekStart = getMonday(new Date());
+let editingId = null;
+const HOUR_H = 48; // px per hour
+const START_HOUR = 7;
+const END_HOUR = 23;
+const DOW_JA = ['日','月','火','水','木','金','土'];
+
+function getMonday(d) {
+  const dt = new Date(d);
+  const day = dt.getDay();
+  const diff = dt.getDate() - day + (day === 0 ? -6 : 1);
+  dt.setDate(diff);
+  dt.setHours(0,0,0,0);
+  return dt;
+}
+
+function saveAll() {
+  localStorage.setItem('schedEvents3', JSON.stringify(events));
+}
+
+// ── Person Tabs ──
+function renderPersonTabs() {
+  const c = document.getElementById('personTabs');
+  let html = `<div class="person-tab ${activePerson===-1?'active':''}" data-person="-1" 
+    style="${activePerson===-1?'border-color:var(--accent2);color:var(--accent2);background:var(--accent2-bg);':''}"
+    onclick="setActivePerson(-1)">全員</div>`;
+  PEOPLE.forEach((p,i) => {
+    html += `<div class="person-tab ${activePerson===i?'active':''}" data-person="${i}" onclick="setActivePerson(${i})">
+      <span class="dot"></span>${p.name}
+    </div>`;
+  });
+  c.innerHTML = html;
+}
+
+function setActivePerson(idx) {
+  activePerson = idx;
+  renderPersonTabs();
+  renderGrid();
+  renderSummary();
+}
+
+// ── Week Nav ──
+function updateWeekLabel() {
+  const s = currentWeekStart;
+  const e = new Date(s);
+  e.setDate(e.getDate() + 6);
+  document.getElementById('weekLabel').textContent =
+    `${s.getMonth()+1}/${s.getDate()} — ${e.getMonth()+1}/${e.getDate()}`;
+}
+
+function changeWeek(dir) {
+  currentWeekStart.setDate(currentWeekStart.getDate() + dir * 7);
+  updateWeekLabel();
+  renderGrid();
+}
+
+// ── Grid ──
+function renderGrid() {
+  const grid = document.getElementById('scheduleGrid');
+  const totalH = (END_HOUR - START_HOUR) * HOUR_H;
+  const today = new Date();
+
+  // Corner
+  let html = `<div class="corner-header"></div>`;
+
+  // Day headers
+  for (let d = 0; d < 7; d++) {
+    const date = new Date(currentWeekStart);
+    date.setDate(date.getDate() + d);
+    const isToday = date.toDateString() === today.toDateString();
+    const dow = date.getDay();
+    const cls = isToday ? 'today' : (dow === 0 ? 'sun' : (dow === 6 ? 'sat' : ''));
+    html += `<div class="day-header ${cls}">
+      <div class="dow">${DOW_JA[dow]}</div>
+      <div class="date-num">${date.getDate()}</div>
+    </div>`;
+  }
+
+  // Time column
+  html += `<div class="time-col" style="height:${totalH}px; position:relative;">`;
+  for (let h = START_HOUR; h <= END_HOUR; h++) {
+    const top = (h - START_HOUR) * HOUR_H;
+    html += `<div class="time-label" style="top:${top}px">${h}:00</div>`;
+  }
+  html += `</div>`;
+
+  // Day columns
+  for (let d = 0; d < 7; d++) {
+    const date = new Date(currentWeekStart);
+    date.setDate(date.getDate() + d);
+    const dow = date.getDay();
+
+    html += `<div class="day-col" style="height:${totalH}px;">`;
+
+    // Hour lines
+    for (let h = START_HOUR; h <= END_HOUR; h++) {
+      const top = (h - START_HOUR) * HOUR_H;
+      html += `<div class="hour-line" style="top:${top}px"></div>`;
+      if (h < END_HOUR) {
+        html += `<div class="half-hour-line" style="top:${top + HOUR_H/2}px"></div>`;
+      }
+    }
+
+    // Now indicator
+    if (date.toDateString() === today.toDateString()) {
+      const nowMin = today.getHours() * 60 + today.getMinutes();
+      const startMin = START_HOUR * 60;
+      if (nowMin >= startMin && nowMin <= END_HOUR * 60) {
+        const top = ((nowMin - startMin) / 60) * HOUR_H;
+        html += `<div class="now-indicator" style="top:${top}px"></div>`;
+      }
+    }
+
+    // Events for this day
+    const dayEvents = events.filter(ev => {
+      if (activePerson !== -1 && ev.person !== activePerson) return false;
+      return ev.day === dow;
+    });
+
+    dayEvents.forEach(ev => {
+      const [sh, sm] = ev.start.split(':').map(Number);
+      const [eh, em] = ev.end.split(':').map(Number);
+      const startMin = sh * 60 + sm;
+      const endMin = eh * 60 + em;
+      const topPx = ((startMin - START_HOUR * 60) / 60) * HOUR_H;
+      const heightPx = ((endMin - startMin) / 60) * HOUR_H;
+
+      html += `<div class="event-block person-${ev.person}" 
+        style="top:${topPx}px; height:${heightPx}px;"
+        onclick="openEditModal('${ev.id}')">
+        <div class="ev-title">${ev.title}</div>
+        <div class="ev-time">${ev.start}–${ev.end}</div>
+        ${ev.memo ? `<div style="font-size:0.58rem;opacity:0.6;margin-top:1px;">${ev.memo}</div>` : ''}
+      </div>`;
+    });
+
+    html += `</div>`;
+  }
+
+  grid.innerHTML = html;
+}
+
+// ── Summary ──
+function renderSummary() {
+  const panel = document.getElementById('summaryView');
+  const colors = ['var(--accent1)','var(--accent2)','var(--accent3)'];
+  let html = '';
+
+  PEOPLE.forEach((p, pi) => {
+    if (activePerson !== -1 && activePerson !== pi) return;
+    const personEvents = events.filter(e => e.person === pi);
+
+    // Group by day
+    const byDay = {};
+    personEvents.forEach(ev => {
+      if (!byDay[ev.day]) byDay[ev.day] = [];
+      byDay[ev.day].push(ev);
+    });
+
+    let totalMin = 0;
+    let items = '';
+    [1,2,3,4,5,6,0].forEach(d => {
+      if (!byDay[d]) return;
+      byDay[d].forEach(ev => {
+        const [sh,sm] = ev.start.split(':').map(Number);
+        const [eh,em] = ev.end.split(':').map(Number);
+        const dur = (eh*60+em) - (sh*60+sm);
+        totalMin += dur;
+        const hrs = Math.floor(dur/60);
+        const mins = dur % 60;
+        items += `<div class="summary-item">
+          <span class="day">${DOW_JA[d]}</span>
+          <span>${ev.title}</span>
+          <span>${ev.start}–${ev.end}</span>
+          <span class="summary-hours">${hrs}h${mins>0?mins+'m':''}</span>
+        </div>`;
+      });
+    });
+
+    const totalH = Math.floor(totalMin/60);
+    const totalM = totalMin % 60;
+
+    html += `<div class="summary-card">
+      <h3><span class="dot" style="background:${colors[pi]}"></span>${p.name}
+        <span style="margin-left:auto;font-size:0.75rem;font-family:'JetBrains Mono',monospace;color:${colors[pi]}">
+          週計 ${totalH}h${totalM>0?totalM+'m':''}
+        </span>
+      </h3>
+      ${items || '<div style="font-size:0.75rem;color:var(--text-dim);padding:8px 0;">予定なし</div>'}
+    </div>`;
+  });
+
+  panel.innerHTML = html;
+}
+
+// ── View Switch ──
+function switchView(v) {
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.toggle('active', b.dataset.view === v));
+  document.getElementById('gridView').style.display = v === 'grid' ? 'block' : 'none';
+  document.getElementById('summaryView').classList.toggle('show', v === 'summary');
+  if (v === 'summary') renderSummary();
+}
+
+// ── Modal ──
+function openModal() {
+  editingId = null;
+  document.getElementById('modalTitle').textContent = '予定を追加';
+  document.getElementById('evPerson').value = activePerson === -1 ? '0' : String(activePerson);
+  document.getElementById('evTitle').value = '';
+  document.getElementById('evDay').value = '1';
+  document.getElementById('evStart').value = '09:00';
+  document.getElementById('evEnd').value = '17:00';
+  document.getElementById('evMemo').value = '';
+  document.getElementById('btnDelete').style.display = 'none';
+  clearPresetSelection();
+  document.getElementById('modalOverlay').classList.add('show');
+}
+
+function openEditModal(id) {
+  const ev = events.find(e => e.id === id);
+  if (!ev) return;
+  editingId = id;
+  document.getElementById('modalTitle').textContent = '予定を編集';
+  document.getElementById('evPerson').value = String(ev.person);
+  document.getElementById('evTitle').value = ev.title;
+  document.getElementById('evDay').value = String(ev.day);
+  document.getElementById('evStart').value = ev.start;
+  document.getElementById('evEnd').value = ev.end;
+  document.getElementById('evMemo').value = ev.memo || '';
+  document.getElementById('btnDelete').style.display = 'block';
+  clearPresetSelection();
+  document.getElementById('modalOverlay').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('show');
+}
+
+function closeModalOutside(e) {
+  if (e.target === e.currentTarget) closeModal();
+}
+
+function saveEvent() {
+  const person = parseInt(document.getElementById('evPerson').value);
+  const title = document.getElementById('evTitle').value.trim();
+  const day = parseInt(document.getElementById('evDay').value);
+  const start = document.getElementById('evStart').value;
+  const end = document.getElementById('evEnd').value;
+  const memo = document.getElementById('evMemo').value.trim();
+
+  if (!title) { alert('タイトルを入力してください'); return; }
+  if (start >= end) { alert('終了時間は開始時間より後にしてください'); return; }
+
+  if (editingId) {
+    const idx = events.findIndex(e => e.id === editingId);
+    if (idx !== -1) {
+      events[idx] = { ...events[idx], person, title, day, start, end, memo };
+    }
+  } else {
+    events.push({
+      id: 'ev_' + Date.now() + '_' + Math.random().toString(36).slice(2,6),
+      person, title, day, start, end, memo
+    });
+  }
+
+  saveAll();
+  closeModal();
+  renderGrid();
+  renderSummary();
+}
+
+function deleteEvent() {
+  if (!editingId) return;
+  if (!confirm('この予定を削除しますか？')) return;
+  events = events.filter(e => e.id !== editingId);
+  saveAll();
+  closeModal();
+  renderGrid();
+  renderSummary();
+}
+
+// ── Presets ──
+function renderPresets() {
+  const c = document.getElementById('presetChips');
+  c.innerHTML = PRESETS.map((p, i) =>
+    `<button class="preset-chip" data-idx="${i}" onclick="applyPreset(${i})">${p.title}（${p.note}）</button>`
+  ).join('');
+}
+
+function applyPreset(idx) {
+  const p = PRESETS[idx];
+  document.getElementById('evTitle').value = p.title;
+  document.getElementById('evDay').value = String(p.day);
+  document.getElementById('evStart').value = p.start;
+  document.getElementById('evEnd').value = p.end;
+  // Highlight selected
+  document.querySelectorAll('.preset-chip').forEach((c,i) => c.classList.toggle('selected', i === idx));
+}
+
+function clearPresetSelection() {
+  document.querySelectorAll('.preset-chip').forEach(c => c.classList.remove('selected'));
+}
+
+// ── Person select ──
+function renderPersonSelect() {
+  const sel = document.getElementById('evPerson');
+  sel.innerHTML = PEOPLE.map((p,i) => `<option value="${i}">${p.name}</option>`).join('');
+}
+
+// ── Init ──
+function init() {
+  renderPersonSelect();
+  renderPersonTabs();
+  renderPresets();
+  updateWeekLabel();
+  renderGrid();
+  renderSummary();
+
+  // Update now indicator every minute
+  setInterval(() => renderGrid(), 60000);
+}
+
+init();
+</script>
+
+</body>
+</html>
