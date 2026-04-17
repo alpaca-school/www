@@ -1,817 +1,362 @@
 <!DOCTYPE html>
-
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>中小企業省力化投資補助金｜受給リスクと利権構造</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 :root {
-–bg: #1a1410;
-–bg-card: #2a1f18;
-–bg-warn: #3d2418;
-–accent: #d4915d;
-–accent-bright: #f4b06b;
-–danger: #e85d4e;
-–money: #d4af37;
-–text: #f0e6d8;
-–text-sub: #b8a890;
-–border: #4a3828;
+  /* ダークモード（標準）- くらくサポートのディープグリーンベース */
+  --bg: #0a120a;
+  --bg-card: rgba(25, 35, 25, 0.82);
+  --bg-warn: #2d1a10;
+  --accent: #4CAF50;
+  --accent-bright: #81c784;
+  --sub: #6d4c41;
+  --danger: #e85d4e;
+  --money: #d4af37;
+  --text: #f0fdf4;
+  --text-sub: #b1c3b1;
+  --border: #2d3e2d;
+  --glass: blur(12px);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f8faf8;
+    --bg-card: #ffffff;
+    --bg-warn: #fff5f2;
+    --accent: #388e3c;
+    --accent-bright: #4CAF50;
+    --sub: #6d4c41;
+    --danger: #d32f2f;
+    --money: #b8860b;
+    --text: #1a1c1a;
+    --text-sub: #5f635f;
+    --border: #e0e6e0;
+  }
 }
 
 body {
-font-family: “Hiragino Sans”, “Hiragino Kaku Gothic ProN”, “Yu Gothic”, sans-serif;
-background: var(–bg);
-color: var(–text);
-line-height: 1.7;
-padding: 0;
-min-height: 100vh;
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  padding: 0;
+  min-height: 100vh;
+  transition: background 0.3s, color 0.3s;
 }
 
-.container { max-width: 100%; padding: 16px 14px 80px; }
+.container { max-width: 600px; margin: 0 auto; padding: 16px 16px 80px; }
 
 header {
-text-align: center;
-padding: 24px 12px 18px;
-border-bottom: 2px solid var(–border);
-margin-bottom: 20px;
+  text-align: center;
+  padding: 30px 12px 20px;
+  margin-bottom: 24px;
+}
+
+.brand-logo {
+  height: 52px;
+  margin-bottom: 18px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
 }
 
 header .badge {
-display: inline-block;
-background: var(–danger);
-color: white;
-font-size: 10px;
-padding: 3px 10px;
-border-radius: 10px;
-margin-bottom: 10px;
-letter-spacing: 1px;
-font-weight: bold;
+  display: inline-block;
+  background: var(--danger);
+  color: white;
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+  font-weight: bold;
+  box-shadow: 0 2px 10px rgba(232, 93, 78, 0.3);
 }
 
 h1 {
-font-size: 20px;
-line-height: 1.4;
-color: var(–accent-bright);
-margin-bottom: 6px;
+  font-size: 22px;
+  line-height: 1.4;
+  color: var(--accent);
+  margin-bottom: 8px;
+  font-weight: 800;
 }
 
 header .sub {
-font-size: 12px;
-color: var(–text-sub);
+  font-size: 13px;
+  color: var(--text-sub);
 }
 
 /* タブ切替 */
 .tabs {
-display: flex;
-background: var(–bg-card);
-border-radius: 12px;
-padding: 4px;
-margin-bottom: 20px;
-position: sticky;
-top: 8px;
-z-index: 100;
-box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-border: 1px solid var(–border);
+  display: flex;
+  background: var(--bg-card);
+  border-radius: 50px;
+  padding: 5px;
+  margin-bottom: 24px;
+  position: sticky;
+  top: 10px;
+  z-index: 100;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  border: 1px solid var(--border);
+  backdrop-filter: var(--glass);
 }
 
 .tab {
-flex: 1;
-padding: 12px 8px;
-text-align: center;
-cursor: pointer;
-border-radius: 8px;
-font-size: 13px;
-font-weight: bold;
-color: var(–text-sub);
-transition: all 0.3s;
-user-select: none;
+  flex: 1;
+  padding: 12px 8px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 40px;
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--text-sub);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .tab.active {
-background: var(–accent);
-color: var(–bg);
+  background: var(--accent);
+  color: white;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
 }
 
-.view { display: none; animation: fadeIn 0.4s; }
+.view { display: none; animation: slideIn 0.5s ease; }
 .view.active { display: block; }
 
-@keyframes fadeIn {
-from { opacity: 0; transform: translateY(10px); }
-to { opacity: 1; transform: translateY(0); }
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* ====== 共通カード ====== */
 .card {
-background: var(–bg-card);
-border: 1px solid var(–border);
-border-radius: 14px;
-padding: 18px 16px;
-margin-bottom: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 24px 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  backdrop-filter: var(--glass);
 }
 
 .card-title {
-font-size: 15px;
-color: var(–accent-bright);
-margin-bottom: 12px;
-padding-bottom: 8px;
-border-bottom: 1px dashed var(–border);
-display: flex;
-align-items: center;
-gap: 8px;
+  font-size: 16px;
+  color: var(--accent);
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
 }
 
 .card-title .num {
-background: var(–accent);
-color: var(–bg);
-width: 24px;
-height: 24px;
-border-radius: 50%;
-display: flex;
-align-items: center;
-justify-content: center;
-font-size: 12px;
-flex-shrink: 0;
+  background: var(--accent);
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
 }
 
 /* ====== ポンチ絵モード ====== */
 .ponchi-scene {
-background: var(–bg-card);
-border: 1px solid var(–border);
-border-radius: 14px;
-padding: 20px 14px;
-margin-bottom: 18px;
-position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 24px 16px;
+  margin-bottom: 20px;
 }
 
 .scene-title {
-text-align: center;
-font-size: 14px;
-color: var(–accent-bright);
-margin-bottom: 16px;
-padding-bottom: 8px;
-border-bottom: 1px solid var(–border);
+  text-align: center;
+  font-size: 15px;
+  color: var(--accent);
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  font-weight: bold;
 }
 
-.scene-svg {
-width: 100%;
-height: auto;
-display: block;
-margin: 0 auto;
-}
-
-.scene-caption {
-margin-top: 12px;
-font-size: 12px;
-color: var(–text-sub);
-text-align: center;
-line-height: 1.6;
-}
-
-.scene-detail {
-margin-top: 14px;
-padding: 12px;
-background: rgba(0,0,0,0.25);
-border-radius: 8px;
-font-size: 12px;
-line-height: 1.7;
-}
-
-.scene-detail strong {
-color: var(–accent-bright);
-}
+.scene-svg { width: 100%; height: auto; max-width: 350px; display: block; margin: 0 auto; }
+.scene-caption { margin-top: 15px; font-size: 13px; color: var(--text-sub); text-align: center; line-height: 1.6; }
+.scene-detail { margin-top: 16px; padding: 14px; background: rgba(0,0,0,0.1); border-radius: 16px; font-size: 13px; line-height: 1.8; border: 1px solid var(--border); }
+.scene-detail strong { color: var(--accent-bright); }
 
 /* ====== インフォグラフィックモード ====== */
-.stat-grid {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 10px;
-margin-bottom: 16px;
+.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+.stat-box { background: var(--bg-card); border: 2px solid var(--border); border-radius: 20px; padding: 18px 10px; text-align: center; }
+.stat-box.danger { border-color: var(--danger); background: var(--bg-warn); }
+.stat-box.money { border-color: var(--money); }
+.stat-num { font-size: 26px; font-weight: 800; color: var(--accent); line-height: 1.1; margin-bottom: 5px; }
+.stat-box.danger .stat-num { color: var(--danger); }
+.stat-box.money .stat-num { color: var(--money); }
+.stat-label { font-size: 11px; color: var(--text-sub); font-weight: bold; }
+
+.table-wrapper { overflow-x: auto; margin-top: 10px; border-radius: 12px; border: 1px solid var(--border); }
+.info-table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 320px; }
+.info-table th { background: rgba(76, 175, 80, 0.1); color: var(--accent); padding: 12px 10px; text-align: left; font-weight: 800; }
+.info-table td { padding: 12px 10px; border-top: 1px solid var(--border); vertical-align: middle; }
+
+.bar-row { margin-bottom: 15px; }
+.bar-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; }
+.bar-track { background: rgba(0,0,0,0.2); height: 20px; border-radius: 10px; overflow: hidden; }
+.bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-bright)); border-radius: 10px; }
+.bar-fill.danger { background: linear-gradient(90deg, var(--danger), #ff8a80); }
+
+.formula { background: rgba(0,0,0,0.2); border: 2px dashed var(--accent); border-radius: 16px; padding: 20px; text-align: center; color: var(--accent); font-weight: bold; }
+.formula .big { font-size: 22px; color: var(--danger); font-weight: 800; display: block; margin: 5px 0; }
+
+.conclusion { background: linear-gradient(135deg, var(--bg-warn), var(--bg-card)); border: 3px solid var(--danger); border-radius: 24px; padding: 24px 20px; }
+.conclusion-title { color: var(--danger); font-size: 18px; font-weight: 800; text-align: center; margin-bottom: 12px; }
+
+/* iPhone 12 (390px) 最適化 */
+@media (max-width: 400px) {
+  .container { padding: 12px 12px 60px; }
+  h1 { font-size: 19px; }
+  .stat-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .stat-num { font-size: 22px; }
+  .card { padding: 20px 14px; }
+  .tab { font-size: 12px; padding: 10px 4px; }
 }
 
-.stat-box {
-background: var(–bg-card);
-border: 1px solid var(–border);
-border-radius: 10px;
-padding: 14px 10px;
-text-align: center;
-}
-
-.stat-box.danger { border-color: var(–danger); background: var(–bg-warn); }
-.stat-box.money { border-color: var(–money); }
-
-.stat-num {
-font-size: 24px;
-font-weight: bold;
-color: var(–accent-bright);
-line-height: 1.1;
-margin-bottom: 4px;
-}
-
-.stat-box.danger .stat-num { color: var(–danger); }
-.stat-box.money .stat-num { color: var(–money); }
-
-.stat-label {
-font-size: 10px;
-color: var(–text-sub);
-line-height: 1.4;
-}
-
-/* テーブル */
-.info-table {
-width: 100%;
-border-collapse: collapse;
-font-size: 11px;
-margin-top: 10px;
-}
-
-.info-table th {
-background: rgba(212, 145, 93, 0.15);
-color: var(–accent-bright);
-padding: 8px 6px;
-text-align: left;
-font-weight: bold;
-border-bottom: 1px solid var(–border);
-}
-
-.info-table td {
-padding: 8px 6px;
-border-bottom: 1px solid var(–border);
-vertical-align: top;
-}
-
-.info-table tr:last-child td { border-bottom: none; }
-
-/* バーグラフ */
-.bar-row {
-margin-bottom: 12px;
-}
-
-.bar-label {
-display: flex;
-justify-content: space-between;
-font-size: 11px;
-margin-bottom: 4px;
-}
-
-.bar-label .num { color: var(–accent-bright); font-weight: bold; }
-
-.bar-track {
-background: rgba(0,0,0,0.3);
-height: 18px;
-border-radius: 9px;
-overflow: hidden;
-position: relative;
-}
-
-.bar-fill {
-height: 100%;
-background: linear-gradient(90deg, var(–accent), var(–accent-bright));
-border-radius: 9px;
-transition: width 1s;
-}
-
-.bar-fill.danger {
-background: linear-gradient(90deg, var(–danger), #ff7b6b);
-}
-
-/* リスト */
-.risk-list {
-list-style: none;
-}
-
-.risk-list li {
-padding: 8px 0 8px 22px;
-position: relative;
-font-size: 12px;
-line-height: 1.6;
-border-bottom: 1px dashed rgba(74, 56, 40, 0.5);
-}
-
-.risk-list li:last-child { border-bottom: none; }
-
-.risk-list li::before {
-content: “⚠”;
-position: absolute;
-left: 0;
-top: 8px;
-color: var(–danger);
-}
-
-/* 計算式 */
-.formula {
-background: rgba(0,0,0,0.4);
-border: 1px dashed var(–accent);
-border-radius: 8px;
-padding: 14px 10px;
-margin: 12px 0;
-text-align: center;
-font-size: 12px;
-line-height: 1.8;
-color: var(–accent-bright);
-}
-
-.formula .big {
-font-size: 16px;
-color: var(–danger);
-font-weight: bold;
-}
-
-/* 結論ボックス */
-.conclusion {
-background: linear-gradient(135deg, var(–bg-warn), var(–bg-card));
-border: 2px solid var(–danger);
-border-radius: 14px;
-padding: 18px 14px;
-margin-top: 24px;
-}
-
-.conclusion-title {
-color: var(–danger);
-font-size: 15px;
-font-weight: bold;
-margin-bottom: 10px;
-text-align: center;
-}
-
-.conclusion-text {
-font-size: 12px;
-line-height: 1.8;
-}
-
-/* フローダイアグラム用 */
-.flow-arrow {
-text-align: center;
-color: var(–accent);
-font-size: 20px;
-margin: 4px 0;
-}
-
-.flow-box {
-background: rgba(0,0,0,0.25);
-border: 1px solid var(–border);
-border-radius: 8px;
-padding: 10px;
-text-align: center;
-font-size: 12px;
-}
-
-.flow-box.actor { border-color: var(–accent); color: var(–accent-bright); }
-.flow-box.money { border-color: var(–money); color: var(–money); }
-.flow-box.victim { border-color: var(–danger); color: var(–danger); }
-
-footer {
-text-align: center;
-margin-top: 30px;
-padding: 16px;
-font-size: 10px;
-color: var(–text-sub);
-border-top: 1px solid var(–border);
-}
+footer { text-align: center; padding: 40px 16px; font-size: 11px; color: var(--text-sub); border-top: 1px solid var(--border); line-height: 1.8; }
 </style>
-
 </head>
 <body>
 <div class="container">
 
 <header>
+  <img src="./img/f001bc9a-3775-4929-a7ce-d0fcc9496393.png" alt="くらくサポート ロゴ" class="brand-logo">
   <div class="badge">構造的リスク分析</div>
-  <h1>中小企業省力化投資補助金<br>「黄金の枷」の正体</h1>
+  <h1>中小企業省力化補助金<br>「黄金の枷」の正体</h1>
   <div class="sub">受給リスクと利権構造の多層的調査</div>
 </header>
 
 <div class="tabs">
   <div class="tab active" onclick="switchTab('ponchi')">🎨 ポンチ絵</div>
-  <div class="tab" onclick="switchTab('info')">📊 インフォグラフィック</div>
+  <div class="tab" onclick="switchTab('info')">📊 インフォ</div>
 </div>
 
 <!-- ============ ポンチ絵モード ============ -->
-
 <div id="ponchi" class="view active">
-
-  <!-- シーン1: 補助金エコシステム全体図 -->
-
   <div class="ponchi-scene">
     <div class="scene-title">① 補助金ピラミッドの全体像</div>
     <svg class="scene-svg" viewBox="0 0 320 280" xmlns="http://www.w3.org/2000/svg">
-      <!-- ピラミッド -->
-      <polygon points="160,20 60,250 260,250" fill="none" stroke="#d4915d" stroke-width="2"/>
-      <line x1="110" y1="135" x2="210" y2="135" stroke="#d4915d" stroke-width="1" stroke-dasharray="3,3"/>
-      <line x1="85" y1="195" x2="235" y2="195" stroke="#d4915d" stroke-width="1" stroke-dasharray="3,3"/>
-
-```
-  <!-- 国 -->
-  <text x="160" y="55" font-size="11" fill="#f4b06b" text-anchor="middle" font-weight="bold">🏛️ 国（予算1000億円）</text>
-  
-  <!-- 事務局・大手 -->
-  <text x="160" y="100" font-size="10" fill="#d4af37" text-anchor="middle" font-weight="bold">事務局コンソーシアム</text>
-  <text x="160" y="115" font-size="9" fill="#d4af37" text-anchor="middle">全中・TOPPAN・博報堂</text>
-  
-  <!-- 工業会 -->
-  <text x="160" y="160" font-size="10" fill="#d4af37" text-anchor="middle" font-weight="bold">工業会（カタログ登録）</text>
-  <text x="160" y="175" font-size="9" fill="#d4af37" text-anchor="middle">JARA・JFEA・FOOMA等</text>
-  
-  <!-- ベンダー -->
-  <text x="160" y="218" font-size="10" fill="#d4af37" text-anchor="middle" font-weight="bold">ITベンダー・販売店</text>
-  
-  <!-- 中小企業 -->
-  <text x="160" y="245" font-size="10" fill="#e85d4e" text-anchor="middle" font-weight="bold">中小企業（受給者）</text>
-  <text x="160" y="263" font-size="8" fill="#e85d4e" text-anchor="middle">▼ リスクと事務負担を背負う ▼</text>
-  
-  <!-- 矢印（金の流れ） -->
-  <path d="M 50 70 Q 30 150 50 230" stroke="#d4af37" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
-  <text x="20" y="155" font-size="9" fill="#d4af37" text-anchor="middle" transform="rotate(-90 20 155)">公的資金</text>
-  
-  <defs>
-    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-      <polygon points="0 0, 6 3, 0 6" fill="#d4af37"/>
-    </marker>
-  </defs>
-</svg>
-<div class="scene-caption">補助金は上から下へ流れるが、各層が「手数料」「委託費」「キックバック」を抜き取る構造</div>
-```
-
+      <polygon points="160,20 60,250 260,250" fill="none" stroke="#4CAF50" stroke-width="3"/>
+      <line x1="110" y1="135" x2="210" y2="135" stroke="#4CAF50" stroke-width="1" stroke-dasharray="4,4"/>
+      <line x1="85" y1="195" x2="235" y2="195" stroke="#4CAF50" stroke-width="1" stroke-dasharray="4,4"/>
+      <text x="160" y="55" font-size="12" fill="#81c784" text-anchor="middle" font-weight="bold">🏛️ 国</text>
+      <text x="160" y="100" font-size="11" fill="#d4af37" text-anchor="middle" font-weight="bold">事務局</text>
+      <text x="160" y="160" font-size="11" fill="#d4af37" text-anchor="middle" font-weight="bold">工業会</text>
+      <text x="160" y="218" font-size="11" fill="#d4af37" text-anchor="middle" font-weight="bold">ITベンダー</text>
+      <text x="160" y="250" font-size="12" fill="#e85d4e" text-anchor="middle" font-weight="bold">中小企業</text>
+      <path d="M 50 70 Q 30 150 50 230" stroke="#d4af37" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="#d4af37"/></marker>
+      </defs>
+    </svg>
+    <div class="scene-caption">補助金は上から流れるが、各層が「利権」を抜き取るピラミッド構造なのだ。</div>
   </div>
 
-  <!-- シーン2: 賃上げの罠 -->
-
   <div class="ponchi-scene">
-    <div class="scene-title">② 賃上げの罠（時限爆弾）</div>
+    <div class="scene-title">② 賃上げの罠（隠れた義務）</div>
     <svg class="scene-svg" viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
-      <!-- 中小企業 -->
-      <rect x="20" y="80" width="80" height="60" rx="6" fill="#2a1f18" stroke="#e85d4e" stroke-width="2"/>
-      <text x="60" y="105" font-size="10" fill="#f0e6d8" text-anchor="middle">中小企業</text>
-      <text x="60" y="125" font-size="20" text-anchor="middle">😰</text>
-
-```
-  <!-- 補助金 -->
-  <rect x="130" y="20" width="80" height="40" rx="6" fill="#d4af37" opacity="0.3" stroke="#d4af37" stroke-width="2"/>
-  <text x="170" y="38" font-size="10" fill="#d4af37" text-anchor="middle" font-weight="bold">補助金</text>
-  <text x="170" y="52" font-size="10" fill="#d4af37" text-anchor="middle">1000万円</text>
-  
-  <!-- 義務 -->
-  <rect x="220" y="80" width="85" height="60" rx="6" fill="#3d2418" stroke="#e85d4e" stroke-width="2"/>
-  <text x="262" y="100" font-size="9" fill="#e85d4e" text-anchor="middle" font-weight="bold">義務</text>
-  <text x="262" y="115" font-size="8" fill="#f0e6d8" text-anchor="middle">5年連続賃上げ</text>
-  <text x="262" y="128" font-size="8" fill="#f0e6d8" text-anchor="middle">CAGR 3.5%</text>
-  
-  <!-- 爆弾 -->
-  <circle cx="170" cy="170" r="28" fill="#e85d4e"/>
-  <text x="170" y="178" font-size="24" text-anchor="middle">💣</text>
-  <text x="170" y="208" font-size="9" fill="#e85d4e" text-anchor="middle" font-weight="bold">未達なら全額返還</text>
-  
-  <!-- 矢印 -->
-  <path d="M 100 110 L 130 50" stroke="#d4af37" stroke-width="1.5" fill="none" marker-end="url(#a2)"/>
-  <path d="M 210 50 L 240 80" stroke="#e85d4e" stroke-width="1.5" fill="none" marker-end="url(#a3)"/>
-  <path d="M 170 145 L 170 145" stroke="#e85d4e" stroke-width="1.5" stroke-dasharray="3,3"/>
-  
-  <defs>
-    <marker id="a2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-      <polygon points="0 0, 6 3, 0 6" fill="#d4af37"/>
-    </marker>
-    <marker id="a3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-      <polygon points="0 0, 6 3, 0 6" fill="#e85d4e"/>
-    </marker>
-  </defs>
-</svg>
-<div class="scene-detail">
-  <strong>給与支給総額には役員報酬も含まれる</strong>。経営悪化で役員報酬を据え置いただけで、目標未達となり返還リスクが発生する。柔軟な財務調整を阻害する仕組み。
-</div>
-```
-
+      <rect x="20" y="80" width="80" height="60" rx="15" fill="rgba(255,255,255,0.05)" stroke="#e85d4e" stroke-width="2"/>
+      <text x="60" y="115" font-size="24" text-anchor="middle">😰</text>
+      <rect x="130" y="20" width="80" height="40" rx="10" fill="#4CAF50" opacity="0.4" stroke="#4CAF50" stroke-width="2"/>
+      <text x="170" y="45" font-size="12" fill="#4CAF50" text-anchor="middle" font-weight="bold">補助金</text>
+      <rect x="220" y="80" width="85" height="60" rx="15" fill="rgba(255,0,0,0.1)" stroke="#e85d4e" stroke-width="2"/>
+      <text x="262" y="115" font-size="10" fill="#e85d4e" text-anchor="middle" font-weight="bold">5年連続賃上げ</text>
+      <circle cx="170" cy="170" r="30" fill="#e85d4e"/>
+      <text x="170" y="180" font-size="30" text-anchor="middle">💣</text>
+    </svg>
+    <div class="scene-detail"><strong>役員報酬も給与に含まれる</strong>のだ。経営が悪化しても賃下げができず、未達なら原則全額返還のハイリスクなのだ！</div>
   </div>
 
-  <!-- シーン3: カタログ登録ビジネス -->
-
   <div class="ponchi-scene">
-    <div class="scene-title">③ 工業会のカタログ登録ビジネス</div>
+    <div class="scene-title">③ カタログ登録手数料ビジネス</div>
     <svg class="scene-svg" viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
-      <!-- メーカー -->
-      <rect x="20" y="20" width="80" height="50" rx="6" fill="#2a1f18" stroke="#d4915d" stroke-width="2"/>
-      <text x="60" y="40" font-size="10" fill="#f0e6d8" text-anchor="middle">メーカー</text>
-      <text x="60" y="58" font-size="16" text-anchor="middle">🏭</text>
-
-```
-  <!-- 工業会（ゲートキーパー） -->
-  <rect x="115" y="80" width="90" height="70" rx="6" fill="#3d2418" stroke="#d4af37" stroke-width="2.5"/>
-  <text x="160" y="100" font-size="11" fill="#d4af37" text-anchor="middle" font-weight="bold">工業会</text>
-  <text x="160" y="116" font-size="9" fill="#f0e6d8" text-anchor="middle">ゲートキーパー</text>
-  <text x="160" y="135" font-size="20" text-anchor="middle">🚪💰</text>
-  
-  <!-- カタログ -->
-  <rect x="220" y="20" width="80" height="50" rx="6" fill="#2a1f18" stroke="#d4915d" stroke-width="2"/>
-  <text x="260" y="40" font-size="10" fill="#f0e6d8" text-anchor="middle">カタログ</text>
-  <text x="260" y="58" font-size="16" text-anchor="middle">📖</text>
-  
-  <!-- 手数料 -->
-  <rect x="20" y="180" width="280" height="50" rx="6" fill="rgba(212, 175, 55, 0.15)" stroke="#d4af37" stroke-width="1" stroke-dasharray="4,2"/>
-  <text x="160" y="200" font-size="10" fill="#d4af37" text-anchor="middle" font-weight="bold">手数料収入（補助金対象外）</text>
-  <text x="160" y="218" font-size="9" fill="#f0e6d8" text-anchor="middle">登録・証明書発行・再発行ごとに徴収</text>
-  
-  <!-- 矢印 -->
-  <path d="M 100 50 L 115 100" stroke="#d4915d" stroke-width="1.5" fill="none" marker-end="url(#a4)"/>
-  <text x="95" y="80" font-size="8" fill="#d4af37">申請+手数料</text>
-  
-  <path d="M 205 100 L 220 50" stroke="#d4915d" stroke-width="1.5" fill="none" marker-end="url(#a5)"/>
-  <text x="220" y="85" font-size="8" fill="#d4af37">登録</text>
-  
-  <path d="M 160 150 L 160 175" stroke="#d4af37" stroke-width="2" fill="none" marker-end="url(#a6)"/>
-  
-  <defs>
-    <marker id="a4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="#d4915d"/></marker>
-    <marker id="a5" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="#d4915d"/></marker>
-    <marker id="a6" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="#d4af37"/></marker>
-  </defs>
-</svg>
-<div class="scene-detail">
-  カタログ掲載は最終的に<strong>約3万件</strong>に達する見込み。一件ごとに手数料が発生し、業界団体の安定収益源となっている。一般事業者は直接カテゴリ提案できない。
-</div>
-```
-
+      <rect x="115" y="80" width="90" height="70" rx="15" fill="rgba(109, 76, 65, 0.1)" stroke="#d4af37" stroke-width="3"/>
+      <text x="160" y="110" font-size="12" fill="#d4af37" text-anchor="middle" font-weight="bold">工業会</text>
+      <text x="160" y="135" font-size="24" text-anchor="middle">💰</text>
+      <path d="M 100 50 L 115 100" stroke="#4CAF50" stroke-width="2" marker-end="url(#a4)"/>
+      <path d="M 205 100 L 220 50" stroke="#4CAF50" stroke-width="2" marker-end="url(#a5)"/>
+      <defs>
+        <marker id="a4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="#4CAF50"/></marker>
+        <marker id="a5" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="#4CAF50"/></marker>
+      </defs>
+    </svg>
+    <div class="scene-detail">カタログ掲載1件につき数千円〜数万円の手数料が発生。業界団体の安定した収益源になっているのだ。</div>
   </div>
-
-  <!-- シーン4: 5年間の事務負担 -->
-
-  <div class="ponchi-scene">
-    <div class="scene-title">④ 5年間続く「見えないコスト」</div>
-    <svg class="scene-svg" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg">
-      <!-- タイムライン -->
-      <line x1="30" y1="100" x2="290" y2="100" stroke="#d4915d" stroke-width="2"/>
-
-```
-  <!-- 年マーカー -->
-  <g>
-    <circle cx="30" cy="100" r="8" fill="#d4af37"/>
-    <text x="30" y="125" font-size="9" fill="#f0e6d8" text-anchor="middle">受給</text>
-    <text x="30" y="138" font-size="14" text-anchor="middle">😊</text>
-  </g>
-  
-  <g>
-    <circle cx="95" cy="100" r="6" fill="#d4915d"/>
-    <text x="95" y="125" font-size="9" fill="#f0e6d8" text-anchor="middle">1年</text>
-    <text x="95" y="85" font-size="8" fill="#e85d4e" text-anchor="middle">📋報告</text>
-  </g>
-  
-  <g>
-    <circle cx="160" cy="100" r="6" fill="#d4915d"/>
-    <text x="160" y="125" font-size="9" fill="#f0e6d8" text-anchor="middle">3年</text>
-    <text x="160" y="85" font-size="8" fill="#e85d4e" text-anchor="middle">📋報告</text>
-    <text x="160" y="148" font-size="14" text-anchor="middle">😐</text>
-  </g>
-  
-  <g>
-    <circle cx="290" cy="100" r="8" fill="#e85d4e"/>
-    <text x="290" y="125" font-size="9" fill="#f0e6d8" text-anchor="middle">5年</text>
-    <text x="290" y="85" font-size="8" fill="#e85d4e" text-anchor="middle">📋報告</text>
-    <text x="290" y="148" font-size="14" text-anchor="middle">😫</text>
-  </g>
-  
-  <!-- 義務リスト -->
-  <text x="160" y="180" font-size="10" fill="#e85d4e" text-anchor="middle" font-weight="bold">毎年: 効果報告 + 賃上げ実績 + 財産管理</text>
-</svg>
-<div class="scene-detail">
-  補助事業終了後も<strong>最大5年間の効果報告義務</strong>。法定耐用年数まで設備の処分・売却・移転には事務局承認が必要。経営判断の自由度が大幅に低下する。
-</div>
-```
-
-  </div>
-
-  <!-- シーン5: 不正の構造 -->
-
-  <div class="ponchi-scene">
-    <div class="scene-title">⑤ キックバックの闇</div>
-    <svg class="scene-svg" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg">
-      <!-- 中小企業 -->
-      <rect x="20" y="70" width="80" height="60" rx="6" fill="#2a1f18" stroke="#d4915d" stroke-width="2"/>
-      <text x="60" y="92" font-size="10" fill="#f0e6d8" text-anchor="middle">中小企業</text>
-      <text x="60" y="115" font-size="20" text-anchor="middle">🤝</text>
-
-```
-  <!-- ベンダー -->
-  <rect x="220" y="70" width="80" height="60" rx="6" fill="#2a1f18" stroke="#d4915d" stroke-width="2"/>
-  <text x="260" y="92" font-size="10" fill="#f0e6d8" text-anchor="middle">ITベンダー</text>
-  <text x="260" y="115" font-size="20" text-anchor="middle">🤝</text>
-  
-  <!-- 補助金 -->
-  <text x="160" y="40" font-size="10" fill="#d4af37" text-anchor="middle">💰 補助金（公金）</text>
-  <path d="M 160 50 L 160 65" stroke="#d4af37" stroke-width="1.5" stroke-dasharray="3,3"/>
-  
-  <!-- 表向きの取引 -->
-  <path d="M 100 90 L 220 90" stroke="#d4915d" stroke-width="1.5" marker-end="url(#a7)"/>
-  <text x="160" y="84" font-size="8" fill="#d4915d" text-anchor="middle">水増し請求</text>
-  
-  <!-- キックバック -->
-  <path d="M 220 115 L 100 115" stroke="#e85d4e" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#a8)"/>
-  <text x="160" y="130" font-size="8" fill="#e85d4e" text-anchor="middle">💸 裏でキックバック</text>
-  
-  <!-- 警告 -->
-  <text x="160" y="170" font-size="10" fill="#e85d4e" text-anchor="middle" font-weight="bold">⚠ 過去のIT導入補助金で約9.5億円の不正</text>
-  <text x="160" y="186" font-size="9" fill="#f0e6d8" text-anchor="middle">事務局の事後チェックは形骸化</text>
-  
-  <defs>
-    <marker id="a7" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="#d4915d"/></marker>
-    <marker id="a8" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="#e85d4e"/></marker>
-  </defs>
-</svg>
-<div class="scene-detail">
-  会計検査院の指摘では、事務局は不正の疑義を把握していたにも関わらず<strong>立ち入り調査を一度も実施せず</strong>。実績報告の<strong>約80%に不備や未達</strong>が判明。
-</div>
-```
-
-  </div>
-
 </div>
 
 <!-- ============ インフォグラフィックモード ============ -->
-
 <div id="info" class="view">
-
-  <!-- 主要数値 -->
-
   <div class="stat-grid">
-    <div class="stat-box money">
-      <div class="stat-num">1000億</div>
-      <div class="stat-label">予算規模（2023補正）</div>
-    </div>
-    <div class="stat-box money">
-      <div class="stat-num">約3万件</div>
-      <div class="stat-label">想定カタログ掲載数</div>
-    </div>
-    <div class="stat-box danger">
-      <div class="stat-num">5年</div>
-      <div class="stat-label">効果報告義務期間</div>
-    </div>
-    <div class="stat-box danger">
-      <div class="stat-num">3.5%</div>
-      <div class="stat-label">年平均賃上げ要件CAGR</div>
-    </div>
-    <div class="stat-box danger">
-      <div class="stat-num">+30円</div>
-      <div class="stat-label">最低賃金上乗せ要件</div>
-    </div>
-    <div class="stat-box danger">
-      <div class="stat-num">9.5億</div>
-      <div class="stat-label">過去の不正額（IT補助金）</div>
-    </div>
+    <div class="stat-box money"><div class="stat-num">1000億</div><div class="stat-label">予算規模</div></div>
+    <div class="stat-box money"><div class="stat-num">3万件</div><div class="stat-label">カタログ数</div></div>
+    <div class="stat-box danger"><div class="stat-num">5年</div><div class="stat-label">報告期間</div></div>
+    <div class="stat-box danger"><div class="stat-num">3.5%</div><div class="stat-label">賃上げ要件</div></div>
   </div>
-
-  <!-- 賃上げ要件 -->
 
   <div class="card">
     <div class="card-title"><span class="num">1</span>賃上げ要件の構造</div>
-    <table class="info-table">
-      <tr>
-        <th>項目</th>
-        <th>要件</th>
-      </tr>
-      <tr>
-        <td>1人当たり給与</td>
-        <td>CAGR <strong style="color:#e85d4e">+3.5%以上</strong></td>
-      </tr>
-      <tr>
-        <td>事業場内最低賃金</td>
-        <td>都道府県別最賃 <strong style="color:#e85d4e">+30円以上</strong></td>
-      </tr>
-      <tr>
-        <td>大幅賃上げ特例</td>
-        <td>給与総額<strong style="color:#e85d4e">+6.0%</strong>かつ<br>最賃<strong style="color:#e85d4e">+45〜50円</strong></td>
-      </tr>
-      <tr>
-        <td>給与の定義</td>
-        <td>役員報酬・賞与・諸手当を<strong style="color:#e85d4e">全て含む</strong></td>
-      </tr>
-    </table>
+    <div class="table-wrapper">
+      <table class="info-table">
+        <tr><th>項目</th><th>要件</th></tr>
+        <tr><td>給与CAGR</td><td><strong style="color:var(--danger)">+3.5%以上</strong></td></tr>
+        <tr><td>最低賃金</td><td>最賃 <strong style="color:var(--danger)">+30円以上</strong></td></tr>
+        <tr><td>給与の定義</td><td>役員報酬・賞与を<strong style="color:var(--danger)">全て含む</strong></td></tr>
+      </table>
+    </div>
   </div>
 
-  <!-- 返還ペナルティ -->
-
   <div class="card">
-    <div class="card-title"><span class="num">2</span>返還ペナルティの計算</div>
+    <div class="card-title"><span class="num">2</span>返還ペナルティ</div>
     <div class="formula">
       返還額 = 補助金額 ×<br>
       <span class="big">(目標値 − 実績値) ÷ 目標値</span>
     </div>
-    <p style="font-size:12px; line-height:1.7;">
-      例：補助金1000万円、目標CAGR 4%、実績3%<br>
-      → 未達率25% → <strong style="color:#e85d4e">250万円返還</strong><br>
-      ゼロ成長・マイナス成長は<strong style="color:#e85d4e">原則全額返還</strong>
-    </p>
+    <p style="font-size:12px; margin-top:10px; opacity:0.8;">※ゼロ成長・マイナス成長は原則全額返還なのだ。</p>
   </div>
 
-  <!-- 工業会の手数料 -->
-
   <div class="card">
-    <div class="card-title"><span class="num">3</span>工業会の手数料収入</div>
-    <table class="info-table">
-      <tr>
-        <th>団体</th>
-        <th>非会員</th>
-        <th>会員</th>
-      </tr>
-      <tr>
-        <td>日本ロボット工業会<br>(JARA)</td>
-        <td>5,000円</td>
-        <td>3,000円</td>
-      </tr>
-      <tr>
-        <td>日本厨房工業会<br>(JFEA)</td>
-        <td>9,900円</td>
-        <td>3,300円</td>
-      </tr>
-      <tr>
-        <td>日本食品機械工業会<br>(FOOMA)</td>
-        <td>16,500円</td>
-        <td>3,300〜<br>5,500円</td>
-      </tr>
-    </table>
-    <p style="font-size:11px; color:var(--text-sub); margin-top:10px;">
-      ※すべて補助金対象外。メーカー全額負担。再発行も同額。
-    </p>
-  </div>
-
-  <!-- 事務局構造 -->
-
-  <div class="card">
-    <div class="card-title"><span class="num">4</span>事務局運営コンソーシアム</div>
-    <div class="flow-box actor" style="margin-bottom:8px;">
-      🏛️ 全国中小企業団体中央会（主幹事）
-    </div>
-    <div class="flow-arrow">＋</div>
-    <div class="flow-box money" style="margin-bottom:8px;">
-      📄 TOPPAN株式会社
-    </div>
-    <div class="flow-arrow">＋</div>
-    <div class="flow-box money">
-      📢 博報堂
-    </div>
-    <p style="font-size:11px; margin-top:12px; color:var(--text-sub);">
-      システム構築維持費、広告宣伝費、審査人件費として巨額の公的資金が流入。中小企業の財務・投資データも収集される。
-    </p>
-  </div>
-
-  <!-- リスク一覧 -->
-
-  <div class="card">
-    <div class="card-title"><span class="num">5</span>受給企業の主要リスク</div>
-    <ul class="risk-list">
-      <li>役員報酬を据え置いただけで返還リスク発生</li>
-      <li>5年間の効果報告事務（人件費の隠れコスト）</li>
-      <li>法定耐用年数まで設備の処分・移転に承認必要</li>
-      <li>毎年3月の最低賃金判定で1年でも未達なら年割り返還</li>
-      <li>カタログ価格が市場実勢価格と乖離している可能性</li>
-      <li>悪質ベンダーによるキックバック誘引リスク</li>
-    </ul>
-  </div>
-
-  <!-- 不正の実態 -->
-
-  <div class="card">
-    <div class="card-title"><span class="num">6</span>監査の実態</div>
+    <div class="card-title"><span class="num">3</span>監査と不正の実態</div>
     <div class="bar-row">
-      <div class="bar-label">
-        <span>不適切支出（IT導入補助金）</span>
-        <span class="num">9.5億円</span>
-      </div>
+      <div class="bar-label"><span>不確定支出（IT補助金）</span><span>9.5億円</span></div>
       <div class="bar-track"><div class="bar-fill danger" style="width:95%;"></div></div>
     </div>
     <div class="bar-row">
-      <div class="bar-label">
-        <span>実績報告の不備・未達率</span>
-        <span class="num">約80%</span>
-      </div>
+      <div class="bar-label"><span>実績報告の不備・未達率</span><span>約80%</span></div>
       <div class="bar-track"><div class="bar-fill danger" style="width:80%;"></div></div>
     </div>
-    <div class="bar-row">
-      <div class="bar-label">
-        <span>事務局の立ち入り調査実施率</span>
-        <span class="num">0%</span>
-      </div>
-      <div class="bar-track"><div class="bar-fill danger" style="width:1%;"></div></div>
-    </div>
   </div>
-
-  <!-- 結論 -->
 
   <div class="conclusion">
     <div class="conclusion-title">⚠ 結論</div>
-    <div class="conclusion-text">
-      補助金は「打ち出の小槌」ではなく、国との<strong style="color:var(--accent-bright)">「成果連動型融資」</strong>に近い性質を持つ。受給判断の前に必ず確認すべきは：
+    <div class="conclusion-text" style="font-size: 14px; line-height: 1.8;">
+      補助金は「打ち出の小槌」ではなく、国との**成果連動型契約**に近いのだ。受給前に必ず以下の3点をチェックせよ：
       <br><br>
       ① 賃上げの持続可能性<br>
-      ② 5年分の事務負担コスト<br>
-      ③ ベンダー価格の透明性<br>
-      <br>
-      この3点を冷徹に評価せよ。
+      ② 5年分の事務負担負担（人件費）<br>
+      ③ ベンダー価格の妥当性
     </div>
   </div>
-
 </div>
 
 <footer>
   出典: 中小企業庁、会計検査院、各業界団体公表資料<br>
-  作成: 2026年4月｜分析資料（参考）
+  一般社団法人くらくサポート 分析資料（2026年4月）
 </footer>
 
 </div>
@@ -820,7 +365,7 @@ border-top: 1px solid var(–border);
   function switchTab(name) {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    event.target.classList.add('active');
+    event.currentTarget.classList.add('active');
     document.getElementById(name).classList.add('active');
     window.scrollTo({top: 0, behavior: 'smooth'});
   }
