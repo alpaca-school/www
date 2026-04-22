@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ウコンの植え付けガイド｜読谷村・4月下旬版</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Kaisei+Decol:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f5efe0;
+    --bg2:#ebe2cb;
+    --ink:#2a1f14;
+    --leaf:#3d6b2e;
+    --leaf-dk:#1f4418;
+    --leaf-lt:#8bb569;
+    --soil:#6b4423;
+    --soil-lt:#a0774a;
+    --turmeric:#d97a0e;
+    --turmeric-dk:#a8560a;
+    --sun:#e8b94a;
+    --sky:#a8c8d8;
+    --paper:#fdf8ea;
+    --accent:#c23b22;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Zen Kaku Gothic New',sans-serif;
+    font-size:14px;
+    line-height:1.65;
+    overflow-x:hidden;
+  }
+  body{
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(216,184,100,.15) 0, transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(139,181,105,.12) 0, transparent 45%);
+    background-attachment:fixed;
+    min-height:100vh;
+    padding-bottom:80px;
+  }
+  /* 和紙テクスチャ */
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    background-image:
+      repeating-linear-gradient(0deg,rgba(107,68,35,.015) 0 1px,transparent 1px 3px),
+      repeating-linear-gradient(90deg,rgba(107,68,35,.015) 0 1px,transparent 1px 3px);
+    pointer-events:none;
+    z-index:0;
+  }
+  .wrap{
+    max-width:390px;
+    margin:0 auto;
+    position:relative;
+    z-index:1;
+  }
+  /* ヘッダー */
+  header{
+    padding:24px 20px 16px;
+    border-bottom:1px dashed rgba(42,31,20,.25);
+    position:relative;
+  }
+  .kanji-mark{
+    font-family:'Kaisei Decol',serif;
+    font-size:11px;
+    letter-spacing:.3em;
+    color:var(--turmeric-dk);
+    margin-bottom:6px;
+  }
+  h1{
+    font-family:'Shippori Mincho',serif;
+    font-weight:800;
+    font-size:26px;
+    line-height:1.3;
+    letter-spacing:.02em;
+    color:var(--ink);
+  }
+  h1 .leaf-accent{
+    color:var(--leaf);
+    font-size:30px;
+  }
+  .subtitle{
+    font-size:12px;
+    color:var(--leaf-dk);
+    margin-top:8px;
+    font-weight:500;
+  }
+  .meta{
+    display:flex;
+    gap:8px;
+    margin-top:12px;
+    flex-wrap:wrap;
+  }
+  .meta span{
+    font-size:10px;
+    padding:3px 8px;
+    background:var(--paper);
+    border:1px solid var(--soil-lt);
+    border-radius:2px;
+    color:var(--soil);
+    letter-spacing:.05em;
+  }
+  /* トグル */
+  .toggle-wrap{
+    position:sticky;
+    top:0;
+    background:var(--bg);
+    padding:12px 20px;
+    z-index:50;
+    border-bottom:1px solid rgba(42,31,20,.1);
+    box-shadow:0 4px 12px rgba(107,68,35,.08);
+  }
+  .toggle{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    background:var(--paper);
+    border:2px solid var(--ink);
+    border-radius:2px;
+    overflow:hidden;
+    position:relative;
+  }
+  .toggle button{
+    padding:10px 8px;
+    background:transparent;
+    border:none;
+    font-family:'Shippori Mincho',serif;
+    font-weight:700;
+    font-size:13px;
+    color:var(--ink);
+    cursor:pointer;
+    transition:color .3s;
+    position:relative;
+    z-index:2;
+  }
+  .toggle::before{
+    content:"";
+    position:absolute;
+    top:0;left:0;
+    width:50%;
+    height:100%;
+    background:var(--ink);
+    transition:transform .35s cubic-bezier(.6,.05,.3,1);
+    z-index:1;
+  }
+  .toggle.mode-info::before{transform:translateX(100%)}
+  .toggle button.active{color:var(--paper)}
+  .toggle button small{
+    display:block;
+    font-size:9px;
+    font-family:'Zen Kaku Gothic New',sans-serif;
+    letter-spacing:.2em;
+    margin-top:2px;
+    font-weight:400;
+    opacity:.7;
+  }
+  /* ビュー切替 */
+  .view{display:none;padding:20px 16px 40px;}
+  .view.active{display:block;animation:fadeUp .5s ease-out}
+  @keyframes fadeUp{
+    from{opacity:0;transform:translateY(12px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+
+/* =========================
+ポンチ絵ビュー
+========================= */
+.ponchi-section{
+margin-bottom:28px;
+padding:18px 14px;
+background:var(–paper);
+border-radius:3px;
+border:1px solid rgba(42,31,20,.15);
+box-shadow:3px 3px 0 rgba(42,31,20,.08);
+position:relative;
+}
+.ponchi-section::before{
+content:””;
+position:absolute;
+top:8px;right:8px;
+width:18px;height:18px;
+border-top:2px solid var(–turmeric);
+border-right:2px solid var(–turmeric);
+}
+.ponchi-num{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+width:36px;height:36px;
+background:var(–turmeric);
+color:var(–paper);
+font-family:‘Kaisei Decol’,serif;
+font-size:18px;
+font-weight:700;
+border-radius:50%;
+margin-bottom:10px;
+box-shadow:2px 2px 0 var(–ink);
+}
+.ponchi-title{
+font-family:‘Shippori Mincho’,serif;
+font-size:19px;
+font-weight:800;
+line-height:1.35;
+margin-bottom:4px;
+color:var(–ink);
+}
+.ponchi-sub{
+font-size:11px;
+color:var(–soil);
+margin-bottom:14px;
+font-style:italic;
+}
+.sketch-box{
+background:linear-gradient(180deg,#fefbf0 0%, #f8f0d8 100%);
+border:1.5px solid var(–ink);
+border-radius:4px;
+padding:14px 10px;
+margin:12px 0;
+position:relative;
+min-height:120px;
+}
+.sketch-box svg{
+width:100%;
+height:auto;
+display:block;
+}
+.sketch-caption{
+font-size:11px;
+text-align:center;
+font-family:‘Shippori Mincho’,serif;
+color:var(–soil);
+margin-top:6px;
+font-weight:500;
+}
+.handwrite{
+font-family:‘Kaisei Decol’,serif;
+font-size:13px;
+line-height:1.7;
+color:var(–ink);
+padding:10px 4px;
+position:relative;
+}
+.handwrite strong{
+background:linear-gradient(transparent 60%, rgba(232,185,74,.5) 60%);
+padding:0 2px;
+font-weight:700;
+}
+.bubble{
+background:#fff8df;
+border:1.5px solid var(–ink);
+border-radius:14px;
+padding:10px 12px;
+margin:10px 4px;
+font-size:12px;
+position:relative;
+font-family:‘Kaisei Decol’,serif;
+}
+.bubble::before{
+content:””;
+position:absolute;
+bottom:-8px;left:28px;
+width:12px;height:12px;
+background:#fff8df;
+border-right:1.5px solid var(–ink);
+border-bottom:1.5px solid var(–ink);
+transform:rotate(45deg);
+}
+.bubble.tip{
+background:#e8f4dd;
+border-color:var(–leaf-dk);
+}
+.bubble.tip::before{background:#e8f4dd;border-color:var(–leaf-dk)}
+.arrow-down{
+text-align:center;
+font-size:22px;
+color:var(–turmeric);
+margin:6px 0;
+}
+/* ガイド／メモ */
+.washi-memo{
+background:repeating-linear-gradient(
+transparent 0,
+transparent 22px,
+rgba(194,59,34,.15) 22px,
+rgba(194,59,34,.15) 23px
+),#fdf8ea;
+border-left:4px solid var(–accent);
+padding:12px 14px;
+font-family:‘Kaisei Decol’,serif;
+font-size:12.5px;
+line-height:23px;
+margin:10px 0;
+color:var(–ink);
+}
+.washi-memo b{color:var(–accent)}
+
+/* 選択肢カード（A/B） */
+.choice-card{
+border:2px solid var(–ink);
+border-radius:4px;
+padding:14px;
+margin:14px 0;
+background:var(–paper);
+position:relative;
+}
+.choice-card.a{background:linear-gradient(135deg,#f4f8e8 0%,#fdf8ea 100%)}
+.choice-card.b{background:linear-gradient(135deg,#fdeede 0%,#fdf8ea 100%)}
+.choice-label{
+position:absolute;
+top:-12px;left:12px;
+background:var(–ink);
+color:var(–paper);
+padding:3px 10px;
+font-family:‘Kaisei Decol’,serif;
+font-size:12px;
+font-weight:700;
+border-radius:2px;
+}
+.choice-title{
+font-family:‘Shippori Mincho’,serif;
+font-size:16px;
+font-weight:800;
+margin:4px 0 10px;
+line-height:1.4;
+}
+
+/* =========================
+インフォグラフィックビュー
+========================= */
+.info-hero{
+background:linear-gradient(135deg,var(–leaf-dk) 0%, var(–leaf) 50%, var(–turmeric) 100%);
+color:var(–paper);
+padding:22px 18px;
+border-radius:4px;
+margin-bottom:20px;
+position:relative;
+overflow:hidden;
+}
+.info-hero::before{
+content:“鬱金”;
+position:absolute;
+right:-10px;bottom:-30px;
+font-family:‘Shippori Mincho’,serif;
+font-size:120px;
+font-weight:800;
+opacity:.1;
+line-height:1;
+color:#fff;
+}
+.info-hero .badge{
+display:inline-block;
+font-size:10px;
+letter-spacing:.25em;
+padding:3px 8px;
+background:rgba(255,255,255,.2);
+border:1px solid rgba(255,255,255,.4);
+border-radius:2px;
+margin-bottom:10px;
+}
+.info-hero h2{
+font-family:‘Shippori Mincho’,serif;
+font-size:22px;
+font-weight:800;
+line-height:1.3;
+position:relative;
+z-index:2;
+}
+.info-hero .stat-row{
+display:grid;
+grid-template-columns:1fr 1fr 1fr;
+gap:8px;
+margin-top:14px;
+position:relative;
+z-index:2;
+}
+.stat-box{
+background:rgba(255,255,255,.12);
+border:1px solid rgba(255,255,255,.3);
+padding:8px 6px;
+text-align:center;
+border-radius:3px;
+}
+.stat-box .num{
+font-family:‘Shippori Mincho’,serif;
+font-size:20px;
+font-weight:800;
+display:block;
+line-height:1.1;
+}
+.stat-box .lbl{
+font-size:9px;
+letter-spacing:.1em;
+opacity:.9;
+margin-top:2px;
+display:block;
+}
+
+/* タイムラインステップ */
+.timeline{
+position:relative;
+padding-left:32px;
+margin:24px 0;
+}
+.timeline::before{
+content:””;
+position:absolute;
+left:14px;top:10px;bottom:10px;
+width:2px;
+background:linear-gradient(180deg,var(–turmeric) 0%, var(–leaf) 100%);
+}
+.tl-item{
+position:relative;
+margin-bottom:18px;
+background:var(–paper);
+border-radius:4px;
+padding:12px 14px;
+box-shadow:0 2px 8px rgba(107,68,35,.1);
+}
+.tl-item::before{
+content:attr(data-num);
+position:absolute;
+left:-32px;top:10px;
+width:28px;height:28px;
+background:var(–ink);
+color:var(–paper);
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-family:‘Shippori Mincho’,serif;
+font-weight:800;
+font-size:13px;
+border:3px solid var(–bg);
+}
+.tl-item h3{
+font-family:‘Shippori Mincho’,serif;
+font-size:15px;
+font-weight:800;
+margin-bottom:6px;
+color:var(–leaf-dk);
+}
+.tl-item .detail{
+font-size:12px;
+line-height:1.7;
+color:var(–ink);
+}
+.tl-item .detail b{
+color:var(–turmeric-dk);
+}
+
+/* データカード */
+.data-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin:16px 0;
+}
+.data-card{
+background:var(–paper);
+padding:12px 10px;
+border-radius:4px;
+border-top:3px solid var(–turmeric);
+box-shadow:0 2px 6px rgba(107,68,35,.08);
+}
+.data-card .icon{
+font-size:22px;
+margin-bottom:4px;
+}
+.data-card .label{
+font-size:10px;
+color:var(–soil);
+font-weight:500;
+letter-spacing:.05em;
+}
+.data-card .value{
+font-family:‘Shippori Mincho’,serif;
+font-size:14px;
+font-weight:800;
+color:var(–ink);
+margin-top:2px;
+line-height:1.3;
+}
+
+/* 比較テーブル */
+.compare{
+background:var(–paper);
+border-radius:4px;
+overflow:hidden;
+margin:18px 0;
+border:1px solid rgba(42,31,20,.15);
+}
+.compare-head{
+display:grid;
+grid-template-columns:80px 1fr 1fr;
+background:var(–ink);
+color:var(–paper);
+font-family:‘Shippori Mincho’,serif;
+font-weight:700;
+font-size:12px;
+}
+.compare-head > div{padding:8px 6px;text-align:center;border-right:1px solid rgba(255,255,255,.15)}
+.compare-row{
+display:grid;
+grid-template-columns:80px 1fr 1fr;
+font-size:11px;
+border-bottom:1px solid rgba(42,31,20,.08);
+}
+.compare-row:last-child{border-bottom:none}
+.compare-row > div{padding:10px 8px;border-right:1px dashed rgba(42,31,20,.1)}
+.compare-row .key{
+background:#faf3e0;
+font-family:‘Shippori Mincho’,serif;
+font-weight:700;
+color:var(–leaf-dk);
+font-size:11.5px;
+display:flex;
+align-items:center;
+}
+
+/* 月次カレンダー */
+.calendar{
+display:grid;
+grid-template-columns:repeat(9,1fr);
+gap:2px;
+margin:16px 0;
+background:var(–paper);
+padding:10px 8px;
+border-radius:4px;
+border:1px solid rgba(42,31,20,.15);
+}
+.cal-month{
+text-align:center;
+font-size:10px;
+padding:3px 0;
+font-family:‘Shippori Mincho’,serif;
+font-weight:700;
+color:var(–soil);
+}
+.cal-bar{
+grid-column:1/-1;
+display:grid;
+grid-template-columns:repeat(9,1fr);
+gap:2px;
+margin-top:4px;
+}
+.cal-bar span{
+height:22px;
+border-radius:2px;
+font-size:8.5px;
+color:var(–paper);
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:700;
+letter-spacing:.05em;
+}
+
+/* セクションタイトル */
+.info-section-title{
+font-family:‘Shippori Mincho’,serif;
+font-weight:800;
+font-size:18px;
+margin:24px 0 8px;
+color:var(–ink);
+position:relative;
+padding-left:14px;
+}
+.info-section-title::before{
+content:””;
+position:absolute;
+left:0;top:50%;
+width:6px;height:6px;
+background:var(–turmeric);
+transform:translateY(-50%) rotate(45deg);
+}
+.info-section-title small{
+font-family:‘Zen Kaku Gothic New’,sans-serif;
+font-size:10px;
+font-weight:500;
+color:var(–soil);
+display:block;
+letter-spacing:.15em;
+margin-top:2px;
+}
+
+/* 注意ボックス */
+.note-box{
+background:linear-gradient(90deg,rgba(232,185,74,.2),rgba(232,185,74,.05));
+border-left:4px solid var(–sun);
+padding:10px 12px;
+margin:12px 0;
+font-size:12px;
+line-height:1.7;
+border-radius:0 3px 3px 0;
+}
+.note-box b{color:var(–turmeric-dk)}
+.note-box .ttl{
+font-family:‘Shippori Mincho’,serif;
+font-weight:800;
+color:var(–turmeric-dk);
+font-size:13px;
+display:block;
+margin-bottom:4px;
+}
+
+/* フッター */
+footer{
+text-align:center;
+padding:20px 16px 8px;
+font-size:10px;
+color:var(–soil);
+letter-spacing:.1em;
+border-top:1px dashed rgba(42,31,20,.2);
+margin-top:24px;
+}
+footer .mark{
+font-family:‘Shippori Mincho’,serif;
+font-size:14px;
+color:var(–leaf-dk);
+margin-bottom:6px;
+font-weight:700;
+}
+
+@media (max-width:360px){
+.wrap{max-width:100%}
+h1{font-size:22px}
+.info-hero h2{font-size:19px}
+}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="kanji-mark">鬱　金　栽　培　覚　書</div>
+    <h1>ウコンの<br>植え付けガイド<span class="leaf-accent">🌱</span></h1>
+    <div class="subtitle">読谷村・4月下旬スタート版</div>
+    <div class="meta">
+      <span>🌡 熱帯植物</span>
+      <span>🌴 沖縄の気候</span>
+      <span>📅 収穫 11〜12月</span>
+    </div>
+  </header>
+
+  <div class="toggle-wrap">
+    <div class="toggle mode-ponchi" id="toggle">
+      <button class="active" data-mode="ponchi">ポンチ絵<small>SKETCH</small></button>
+      <button data-mode="info">インフォ<small>INFOGRAPHIC</small></button>
+    </div>
+  </div>
+
+  <!-- ========= ポンチ絵ビュー ========= -->
+
+  <section class="view active" id="view-ponchi">
+
+```
+<div class="bubble tip">
+  <b>🌱 今、芽が出てる＝絶好のタイミング！</b><br>
+  このまま放っておくと親の養分を使い切っちゃう。早めに土へ植えてあげよう。
+</div>
+
+<!-- STEP 1 -->
+<div class="ponchi-section">
+  <div class="ponchi-num">一</div>
+  <h2 class="ponchi-title">植え付けの準備</h2>
+  <div class="ponchi-sub">〜 塊を分けて、切り口を乾かす 〜</div>
+
+  <div class="sketch-box">
+    <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg">
+      <!-- 大きな塊 -->
+      <ellipse cx="60" cy="90" rx="35" ry="22" fill="#d4a574" stroke="#2a1f14" stroke-width="1.5"/>
+      <ellipse cx="55" cy="82" rx="28" ry="15" fill="#e0b887" stroke="#2a1f14" stroke-width="1"/>
+      <!-- 芽 -->
+      <path d="M 45 70 Q 42 55 48 48 Q 54 55 50 70" fill="#8bb569" stroke="#1f4418" stroke-width="1.2"/>
+      <path d="M 65 65 Q 68 48 74 43 Q 78 52 72 65" fill="#8bb569" stroke="#1f4418" stroke-width="1.2"/>
+      <!-- 矢印 -->
+      <path d="M 110 90 L 145 90" stroke="#a8560a" stroke-width="2" marker-end="url(#arr)"/>
+      <defs>
+        <marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L9,3 z" fill="#a8560a"/>
+        </marker>
+      </defs>
+      <!-- カッター -->
+      <rect x="115" y="55" width="25" height="5" fill="#888" stroke="#2a1f14" stroke-width="1"/>
+      <polygon points="140,55 155,55 148,60 140,60" fill="#ccc" stroke="#2a1f14" stroke-width="1"/>
+      <text x="122" y="52" font-family="serif" font-size="9" fill="#2a1f14">分割</text>
+      <!-- 分けた塊 -->
+      <ellipse cx="180" cy="75" rx="18" ry="13" fill="#e0b887" stroke="#2a1f14" stroke-width="1.2"/>
+      <path d="M 175 65 Q 173 55 178 50 Q 183 56 180 65" fill="#8bb569" stroke="#1f4418" stroke-width="1"/>
+      <path d="M 185 62 Q 188 52 193 49 Q 195 58 190 63" fill="#8bb569" stroke="#1f4418" stroke-width="1"/>
+      <ellipse cx="230" cy="95" rx="18" ry="13" fill="#e0b887" stroke="#2a1f14" stroke-width="1.2"/>
+      <path d="M 225 85 Q 223 75 228 70 Q 233 76 230 85" fill="#8bb569" stroke="#1f4418" stroke-width="1"/>
+      <path d="M 235 82 Q 238 72 243 69 Q 245 78 240 83" fill="#8bb569" stroke="#1f4418" stroke-width="1"/>
+      <ellipse cx="270" cy="75" rx="15" ry="11" fill="#e0b887" stroke="#2a1f14" stroke-width="1.2"/>
+      <path d="M 266 67 Q 264 58 269 55 Q 273 60 271 67" fill="#8bb569" stroke="#1f4418" stroke-width="1"/>
+      <!-- 太陽と日陰マーク -->
+      <text x="170" y="135" font-family="serif" font-size="10" fill="#a8560a" font-weight="bold">半日陰で乾燥 →</text>
+      <text x="220" y="148" font-family="serif" font-size="14" fill="#6b4423">💧✖</text>
+    </svg>
+    <div class="sketch-caption">大きな塊 → 2〜3芽ずつに分割 → 切り口を乾かす</div>
+  </div>
+
+  <div class="handwrite">
+    ✦ 1つあたり <strong>50〜100g</strong> が目安<br>
+    ✦ 小さく分けすぎると成長が弱くなる<br>
+    ✦ 分割後は <strong>半日ほど日陰で乾燥</strong>（腐敗防止）
+  </div>
+</div>
+
+<div class="arrow-down">▼</div>
+
+<!-- STEP 2 -->
+<div class="ponchi-section">
+  <div class="ponchi-num">二</div>
+  <h2 class="ponchi-title">植え付け方法</h2>
+  <div class="ponchi-sub">〜 深さ・株間・向き 〜</div>
+
+  <div class="sketch-box">
+    <svg viewBox="0 0 300 170" xmlns="http://www.w3.org/2000/svg">
+      <!-- 空 -->
+      <rect x="0" y="0" width="300" height="70" fill="#e8f0f5" opacity=".5"/>
+      <!-- 土 -->
+      <rect x="0" y="70" width="300" height="100" fill="#8b6340" opacity=".3"/>
+      <path d="M 0 70 Q 75 65 150 70 T 300 70" stroke="#6b4423" stroke-width="1.5" fill="none"/>
+      <!-- 定規 左側 -->
+      <line x1="25" y1="70" x2="25" y2="110" stroke="#c23b22" stroke-width="1.5" stroke-dasharray="3,2"/>
+      <text x="30" y="92" font-family="serif" font-size="10" fill="#c23b22" font-weight="bold">5〜10cm</text>
+      <!-- ウコン塊 -->
+      <ellipse cx="80" cy="108" rx="14" ry="9" fill="#d4a574" stroke="#2a1f14" stroke-width="1.2"/>
+      <path d="M 76 102 Q 74 90 79 85 Q 84 92 82 102" fill="#8bb569" stroke="#1f4418" stroke-width="1"/>
+      <path d="M 85 100 Q 88 88 93 84 Q 95 94 90 100" fill="#8bb569" stroke="#1f4418" stroke-width="1"/>
+      <!-- 株間矢印 -->
+      <line x1="94" y1="130" x2="186" y2="130" stroke="#1f4418" stroke-width="1.5" marker-start="url(#arr2)" marker-end="url(#arr2)"/>
+      <defs>
+        <marker id="arr2" markerWidth="10" markerHeight="10" refX="5" refY="3" orient="auto">
+          <path d="M0,3 L6,0 L6,6 z" fill="#1f4418"/>
+        </marker>
+      </defs>
+      <text x="110" y="145" font-family="serif" font-size="10" fill="#1f4418" font-weight="bold">30cm以上（地植え）</text>
+      <!-- 2つ目 -->
+      <ellipse cx="200" cy="108" rx="14" ry="9" fill="#d4a574" stroke="#2a1f14" stroke-width="1.2"/>
+      <path d="M 196 102 Q 194 90 199 85 Q 204 92 202 102" fill="#8bb569" stroke="#1f4418" stroke-width="1"/>
+      <path d="M 205 100 Q 208 88 213 84 Q 215 94 210 100" fill="#8bb569" stroke="#1f4418" stroke-width="1"/>
+      <!-- 芽の向き矢印 -->
+      <text x="140" y="40" font-family="serif" font-size="11" fill="#a8560a" font-weight="bold">芽は上向きに ↑</text>
+      <!-- 太陽 -->
+      <circle cx="260" cy="30" r="15" fill="#e8b94a" stroke="#a8560a" stroke-width="1.5"/>
+      <line x1="260" y1="8" x2="260" y2="13" stroke="#a8560a" stroke-width="1.5"/>
+      <line x1="260" y1="47" x2="260" y2="52" stroke="#a8560a" stroke-width="1.5"/>
+      <line x1="238" y1="30" x2="243" y2="30" stroke="#a8560a" stroke-width="1.5"/>
+      <line x1="277" y1="30" x2="282" y2="30" stroke="#a8560a" stroke-width="1.5"/>
+    </svg>
+    <div class="sketch-caption">深さ5〜10cm・芽は上向き・株間は贅沢に</div>
+  </div>
+
+  <div class="washi-memo">
+    <b>◎プランターなら</b><br>
+    大型のものに1〜2株が目安。20L以上の深型、10号（直径30cm）以上の鉢が理想。
+  </div>
+</div>
+
+<div class="arrow-down">▼</div>
+
+<!-- STEP 3 -->
+<div class="ponchi-section">
+  <div class="ponchi-num">三</div>
+  <h2 class="ponchi-title">管理のポイント</h2>
+  <div class="ponchi-sub">〜 水やり・日当たり・追肥と土寄せ 〜</div>
+
+  <div class="sketch-box">
+    <svg viewBox="0 0 300 170" xmlns="http://www.w3.org/2000/svg">
+      <!-- じょうろ -->
+      <path d="M 30 30 L 55 30 L 60 55 L 25 55 Z" fill="#a8c8d8" stroke="#2a1f14" stroke-width="1.5"/>
+      <path d="M 55 35 L 75 30 L 78 45 L 60 48" fill="#a8c8d8" stroke="#2a1f14" stroke-width="1.5"/>
+      <circle cx="76" cy="32" r="2" fill="#2a1f14"/>
+      <circle cx="79" cy="37" r="1.5" fill="#2a1f14"/>
+      <!-- 水滴 -->
+      <path d="M 72 50 Q 70 55 72 58 Q 74 55 72 50" fill="#5a9ab5"/>
+      <path d="M 80 55 Q 78 60 80 63 Q 82 60 80 55" fill="#5a9ab5"/>
+      <path d="M 88 50 Q 86 55 88 58 Q 90 55 88 50" fill="#5a9ab5"/>
+      <!-- 育ったウコン -->
+      <ellipse cx="140" cy="140" rx="30" ry="15" fill="#6b4423" opacity=".4"/>
+      <path d="M 140 140 Q 135 120 132 100 Q 138 90 142 100 Q 148 120 145 140 Z" fill="#8bb569" stroke="#1f4418" stroke-width="1.2"/>
+      <path d="M 140 140 Q 120 125 110 115 Q 115 105 125 112 Q 135 125 140 140 Z" fill="#3d6b2e" stroke="#1f4418" stroke-width="1.2"/>
+      <path d="M 140 140 Q 160 125 170 115 Q 165 105 155 112 Q 145 125 140 140 Z" fill="#8bb569" stroke="#1f4418" stroke-width="1.2"/>
+      <path d="M 140 140 Q 130 115 120 100 Q 128 85 135 95 Q 140 115 140 140 Z" fill="#3d6b2e" stroke="#1f4418" stroke-width="1.2"/>
+      <!-- 肥料の袋 -->
+      <rect x="210" y="90" width="45" height="55" fill="#d97a0e" stroke="#2a1f14" stroke-width="1.5"/>
+      <text x="215" y="108" font-family="serif" font-size="9" fill="#fff" font-weight="bold">追肥</text>
+      <text x="215" y="122" font-family="serif" font-size="8" fill="#fff">7月・9月</text>
+      <path d="M 232 145 L 232 155 L 225 160 M 232 155 L 240 160" stroke="#2a1f14" stroke-width="1" fill="none"/>
+      <circle cx="228" cy="160" r="2" fill="#6b4423"/>
+      <circle cx="238" cy="162" r="2" fill="#6b4423"/>
+      <!-- 太陽 -->
+      <circle cx="260" cy="30" r="14" fill="#e8b94a" stroke="#a8560a" stroke-width="1.5"/>
+      <text x="253" y="34" font-family="serif" font-size="10" fill="#a8560a" font-weight="bold">☀</text>
+      <text x="220" y="55" font-family="serif" font-size="9" fill="#a8560a">日当たり◎</text>
+    </svg>
+    <div class="sketch-caption">水・日光・夏の追肥＆土寄せ → 立派なウコンに</div>
+  </div>
+
+  <div class="handwrite">
+    💧 <strong>植え付け直後</strong> はたっぷり水やり<br>
+    💧 その後は表面が乾いたら → 芽が出たら通常運転<br>
+    ☀ 日当たりの良い場所<br>
+    🌿 <strong>7〜9月</strong> にグングン成長。追肥＋土寄せで根茎に土を被せる
+  </div>
+</div>
+
+<div class="arrow-down">▼</div>
+
+<!-- 読谷 A/B -->
+<h2 class="info-section-title" style="margin-top:30px">読谷スタイル 選べる2通り<small>STYLE CHOICE</small></h2>
+
+<div class="choice-card a">
+  <div class="choice-label">Ａ 地植え</div>
+  <div class="choice-title">広々と大きく<br>育てたいなら</div>
+  <div class="sketch-box" style="min-height:100px">
+    <svg viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg">
+      <!-- 高畝 -->
+      <path d="M 20 90 Q 80 60 150 60 Q 220 60 280 90 L 280 100 L 20 100 Z" fill="#8b6340" stroke="#2a1f14" stroke-width="1.5"/>
+      <path d="M 20 90 Q 80 60 150 60 Q 220 60 280 90" stroke="#6b4423" stroke-width="1" fill="none"/>
+      <!-- ウコン -->
+      <g transform="translate(80,60)">
+        <path d="M 0 0 Q -5 -15 -3 -25" stroke="#1f4418" stroke-width="1" fill="none"/>
+        <ellipse cx="-3" cy="-25" rx="8" ry="4" fill="#8bb569" stroke="#1f4418"/>
+        <path d="M 0 0 Q 5 -18 8 -28" stroke="#1f4418" stroke-width="1" fill="none"/>
+        <ellipse cx="8" cy="-28" rx="8" ry="4" fill="#3d6b2e" stroke="#1f4418"/>
+      </g>
+      <g transform="translate(150,60)">
+        <path d="M 0 0 Q -5 -18 -3 -30" stroke="#1f4418" stroke-width="1" fill="none"/>
+        <ellipse cx="-3" cy="-30" rx="9" ry="4" fill="#8bb569" stroke="#1f4418"/>
+        <path d="M 0 0 Q 5 -20 8 -32" stroke="#1f4418" stroke-width="1" fill="none"/>
+        <ellipse cx="8" cy="-32" rx="9" ry="4" fill="#3d6b2e" stroke="#1f4418"/>
+      </g>
+      <g transform="translate(220,60)">
+        <path d="M 0 0 Q -5 -15 -3 -25" stroke="#1f4418" stroke-width="1" fill="none"/>
+        <ellipse cx="-3" cy="-25" rx="8" ry="4" fill="#8bb569" stroke="#1f4418"/>
+      </g>
+      <!-- 草マルチ -->
+      <line x1="40" y1="85" x2="50" y2="88" stroke="#c2a050" stroke-width="1"/>
+      <line x1="60" y1="82" x2="70" y2="85" stroke="#c2a050" stroke-width="1"/>
+      <line x1="100" y1="78" x2="110" y2="82" stroke="#c2a050" stroke-width="1"/>
+      <line x1="180" y1="78" x2="190" y2="82" stroke="#c2a050" stroke-width="1"/>
+      <line x1="240" y1="85" x2="250" y2="88" stroke="#c2a050" stroke-width="1"/>
+      <!-- 注釈 -->
+      <text x="60" y="20" font-family="serif" font-size="10" fill="#a8560a" font-weight="bold">↓ 高畝で水はけUP</text>
+      <text x="180" y="105" font-family="serif" font-size="9" fill="#6b4423">株間40〜50cm</text>
+    </svg>
+  </div>
+  <div class="handwrite" style="font-size:12px;padding:6px 4px">
+    ✦ 赤土（島尻マジ）なら <strong>高畝</strong> にする<br>
+    ✦ 元肥として完熟堆肥を混ぜる<br>
+    ✦ 株間 <strong>40〜50cm</strong>（1m以上に育つ）<br>
+    ✦ 株元に <strong>草マルチ</strong> で乾燥対策＋微生物豊かに
+  </div>
+</div>
+
+<div class="choice-card b">
+  <div class="choice-label">Ｂ プランター</div>
+  <div class="choice-title">手軽に管理<br>したいなら</div>
+  <div class="sketch-box" style="min-height:100px">
+    <svg viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg">
+      <!-- プランター -->
+      <path d="M 80 40 L 230 40 L 220 100 L 90 100 Z" fill="#c4845a" stroke="#2a1f14" stroke-width="1.5"/>
+      <rect x="78" y="35" width="154" height="8" fill="#a0774a" stroke="#2a1f14" stroke-width="1.5"/>
+      <!-- 土 -->
+      <path d="M 92 50 L 228 50 L 220 95 L 95 95 Z" fill="#6b4423" opacity=".7"/>
+      <!-- 鉢底石 -->
+      <circle cx="110" cy="92" r="2.5" fill="#999" stroke="#2a1f14" stroke-width=".5"/>
+      <circle cx="130" cy="94" r="2" fill="#999" stroke="#2a1f14" stroke-width=".5"/>
+      <circle cx="155" cy="93" r="2.5" fill="#999" stroke="#2a1f14" stroke-width=".5"/>
+      <circle cx="180" cy="94" r="2" fill="#999" stroke="#2a1f14" stroke-width=".5"/>
+      <circle cx="205" cy="92" r="2.5" fill="#999" stroke="#2a1f14" stroke-width=".5"/>
+      <!-- ウコン -->
+      <g transform="translate(140,50)">
+        <path d="M 0 0 Q -8 -20 -5 -35" stroke="#1f4418" stroke-width="1.2" fill="none"/>
+        <ellipse cx="-5" cy="-35" rx="10" ry="5" fill="#8bb569" stroke="#1f4418"/>
+        <path d="M 0 0 Q 8 -22 12 -38" stroke="#1f4418" stroke-width="1.2" fill="none"/>
+        <ellipse cx="12" cy="-38" rx="11" ry="5" fill="#3d6b2e" stroke="#1f4418"/>
+        <path d="M 0 0 Q -3 -25 0 -40" stroke="#1f4418" stroke-width="1.2" fill="none"/>
+        <ellipse cx="0" cy="-40" rx="10" ry="5" fill="#8bb569" stroke="#1f4418"/>
+      </g>
+      <!-- すのこ -->
+      <rect x="75" y="100" width="160" height="4" fill="#c4845a" stroke="#2a1f14" stroke-width="1"/>
+      <line x1="95" y1="100" x2="95" y2="104" stroke="#2a1f14" stroke-width=".5"/>
+      <line x1="120" y1="100" x2="120" y2="104" stroke="#2a1f14" stroke-width=".5"/>
+      <line x1="150" y1="100" x2="150" y2="104" stroke="#2a1f14" stroke-width=".5"/>
+      <line x1="180" y1="100" x2="180" y2="104" stroke="#2a1f14" stroke-width=".5"/>
+      <line x1="205" y1="100" x2="205" y2="104" stroke="#2a1f14" stroke-width=".5"/>
+      <!-- 注釈 -->
+      <text x="40" y="20" font-family="serif" font-size="10" fill="#a8560a" font-weight="bold">20L以上／10号〜</text>
+      <text x="15" y="70" font-family="serif" font-size="9" fill="#6b4423">ウォーター</text>
+      <text x="15" y="80" font-family="serif" font-size="9" fill="#6b4423">スペース</text>
+      <path d="M 45 65 L 85 50" stroke="#6b4423" stroke-width="1" fill="none" marker-end="url(#arr3)"/>
+      <defs>
+        <marker id="arr3" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L7,3 z" fill="#6b4423"/>
+        </marker>
+      </defs>
+      <text x="240" y="108" font-family="serif" font-size="9" fill="#6b4423">↑ すのこ</text>
+    </svg>
+  </div>
+  <div class="handwrite" style="font-size:12px;padding:6px 4px">
+    ✦ <strong>20L以上の深型 / 10号（30cm）以上</strong><br>
+    ✦ 1鉢に1〜2株まで（欲張らない）<br>
+    ✦ 土寄せ分、最初は <strong>縁から5〜10cm低め</strong> に土を入れる<br>
+    ✦ 夏は朝夕2回たっぷり水やり<br>
+    ✦ 真夏のコンクリ床は熱すぎ → <strong>すのこ</strong> で浮かせる
+  </div>
+</div>
+
+<div class="bubble" style="margin-top:18px">
+  <b>🌾 裏技：</b> 株元に藁や枯れ草を少し敷くと、水分蒸発を防いで水やりの手間がラクになるよ。
+</div>
+
+<div class="washi-memo" style="margin-top:20px">
+  <b>◉ 読谷の4月下旬は「最高のスタートライン」</b><br>
+  強い日差し・適度な湿度 ─ 熱帯植物のウコンが最も好む環境。<br>
+  収穫は <b>11〜12月</b>、葉が枯れ始める頃。自家製ウコンの香りは格別です。
+</div>
+```
+
+  </section>
+
+  <!-- ========= インフォグラフィックビュー ========= -->
+
+  <section class="view" id="view-info">
+
+```
+<!-- ヒーロー -->
+<div class="info-hero">
+  <span class="badge">YOMITAN · APRIL 2026</span>
+  <h2>4月の読谷で<br>ウコンを植える</h2>
+  <div class="stat-row">
+    <div class="stat-box">
+      <span class="num">50-100<small style="font-size:10px">g</small></span>
+      <span class="lbl">分割サイズ</span>
+    </div>
+    <div class="stat-box">
+      <span class="num">5-10<small style="font-size:10px">cm</small></span>
+      <span class="lbl">植え付け深さ</span>
+    </div>
+    <div class="stat-box">
+      <span class="num">11-12<small style="font-size:10px">月</small></span>
+      <span class="lbl">収穫時期</span>
+    </div>
+  </div>
+</div>
+
+<!-- 工程タイムライン -->
+<h2 class="info-section-title">3ステップの工程<small>PLANTING PROCESS</small></h2>
+
+<div class="timeline">
+  <div class="tl-item" data-num="1">
+    <h3>植え付けの準備</h3>
+    <div class="detail">
+      大きな塊は <b>2〜3芽ずつ</b> に分割（50〜100g目安）。小さく分けすぎると成長が弱くなる。分割後は <b>半日ほど日陰で乾燥</b> させて腐敗を防ぐ。
+    </div>
+  </div>
+  <div class="tl-item" data-num="2">
+    <h3>植え付け</h3>
+    <div class="detail">
+      肥沃で水はけの良い土に、<b>土を5〜10cm被せる深さ</b> で植える。芽は上向きに。地植えは <b>株間30cm以上</b>（読谷なら40〜50cm推奨）、プランターは大型に1〜2株。
+    </div>
+  </div>
+  <div class="tl-item" data-num="3">
+    <h3>管理と収穫</h3>
+    <div class="detail">
+      直後はたっぷり水やり。芽が出るまでは表面が乾いたら程度。<b>7〜9月に追肥＋土寄せ</b>。日当たりの良い場所で、葉が枯れ始める <b>11〜12月に収穫</b>。
+    </div>
+  </div>
+</div>
+
+<!-- 基本データ -->
+<h2 class="info-section-title">基本スペック<small>KEY DATA</small></h2>
+<div class="data-grid">
+  <div class="data-card">
+    <div class="icon">🌡</div>
+    <div class="label">植え付け適期</div>
+    <div class="value">4月<br>（沖縄は早め可）</div>
+  </div>
+  <div class="data-card">
+    <div class="icon">☀</div>
+    <div class="label">日当たり</div>
+    <div class="value">日向を好む</div>
+  </div>
+  <div class="data-card">
+    <div class="icon">💧</div>
+    <div class="label">水やり（夏）</div>
+    <div class="value">朝夕2回<br>たっぷり</div>
+  </div>
+  <div class="data-card">
+    <div class="icon">📏</div>
+    <div class="label">草丈（最大）</div>
+    <div class="value">1m以上</div>
+  </div>
+  <div class="data-card">
+    <div class="icon">🌿</div>
+    <div class="label">追肥時期</div>
+    <div class="value">7月・9月</div>
+  </div>
+  <div class="data-card">
+    <div class="icon">🏮</div>
+    <div class="label">収穫の合図</div>
+    <div class="value">葉が枯れ<br>始める頃</div>
+  </div>
+</div>
+
+<!-- 地植えvsプランター比較 -->
+<h2 class="info-section-title">地植え vs プランター<small>COMPARISON</small></h2>
+
+<div class="compare">
+  <div class="compare-head">
+    <div>項目</div>
+    <div>地植え</div>
+    <div>プランター</div>
+  </div>
+  <div class="compare-row">
+    <div class="key">規模</div>
+    <div>1m以上に大きく育つ</div>
+    <div>手軽／移動可</div>
+  </div>
+  <div class="compare-row">
+    <div class="key">株間<br>サイズ</div>
+    <div>40〜50cm<br>風通し確保</div>
+    <div>20L以上<br>10号（30cm）〜</div>
+  </div>
+  <div class="compare-row">
+    <div class="key">土作り</div>
+    <div>完熟堆肥＋<br><b>高畝</b>（赤土対策）</div>
+    <div>野菜培養土<br>＋鉢底石</div>
+  </div>
+  <div class="compare-row">
+    <div class="key">水分<br>管理</div>
+    <div>草マルチで<br>乾燥対策</div>
+    <div>夏は朝夕2回<br>乾きやすい</div>
+  </div>
+  <div class="compare-row">
+    <div class="key">置き方<br>注意</div>
+    <div>風通しを<br>贅沢に確保</div>
+    <div>コンクリ床は<br><b>すのこ</b>で浮かす</div>
+  </div>
+  <div class="compare-row">
+    <div class="key">1鉢<br>（1区画）</div>
+    <div>—</div>
+    <div>1〜2株まで</div>
+  </div>
+</div>
+
+<!-- 年間カレンダー -->
+<h2 class="info-section-title">年間カレンダー<small>ANNUAL CYCLE</small></h2>
+
+<div class="calendar">
+  <div class="cal-month">4月</div>
+  <div class="cal-month">5月</div>
+  <div class="cal-month">6月</div>
+  <div class="cal-month">7月</div>
+  <div class="cal-month">8月</div>
+  <div class="cal-month">9月</div>
+  <div class="cal-month">10月</div>
+  <div class="cal-month">11月</div>
+  <div class="cal-month">12月</div>
+  <div class="cal-bar">
+    <span style="background:#d97a0e">植</span>
+    <span style="background:#8bb569;grid-column:span 2">梅雨／発芽</span>
+    <span style="background:#3d6b2e;grid-column:span 3">成長期／追肥・土寄せ</span>
+    <span style="background:#8bb569">成熟</span>
+    <span style="background:#c23b22;grid-column:span 2">収穫</span>
+  </div>
+</div>
+
+<div class="note-box">
+  <span class="ttl">⚠ 沖縄ならではの3つの注意点</span>
+  <b>①梅雨（5-6月）</b>：雑草はこまめに抜いて株元へ（草マルチ化）<br>
+  <b>②夏の土寄せ（8月〜）</b>：露出した根茎に土を被せる＝大きなウコンのコツ<br>
+  <b>③台風</b>：ウコンは比較的風に強い。倒れても折れてなければ自力で復活
+</div>
+
+<!-- 読谷特有のKEY -->
+<h2 class="info-section-title">読谷村のキーポイント<small>LOCAL INSIGHT</small></h2>
+
+<div class="data-grid">
+  <div class="data-card" style="border-top-color:var(--leaf);grid-column:span 2">
+    <div class="icon">🌴</div>
+    <div class="label">沖縄4月下旬の評価</div>
+    <div class="value" style="font-size:13px;color:var(--leaf-dk)">
+      熱帯植物ウコンにとって<br>
+      <b style="color:var(--turmeric-dk)">「最高に心地よい」スタートライン</b>
+    </div>
+  </div>
+  <div class="data-card" style="border-top-color:var(--accent)">
+    <div class="icon">🟫</div>
+    <div class="label">赤土対策</div>
+    <div class="value" style="font-size:12px">
+      島尻マジ→<br>高畝で水はけUP
+    </div>
+  </div>
+  <div class="data-card" style="border-top-color:var(--sun)">
+    <div class="icon">🔆</div>
+    <div class="label">強い日差し</div>
+    <div class="value" style="font-size:12px">
+      草マルチで<br>土壌を守る
+    </div>
+  </div>
+</div>
+
+<div class="note-box" style="border-left-color:var(--leaf);background:linear-gradient(90deg,rgba(139,181,105,.2),rgba(139,181,105,.05))">
+  <span class="ttl" style="color:var(--leaf-dk)">🌾 裏技メモ</span>
+  プランター栽培なら、株元に <b>藁や枯れ草</b> を少し敷くと水分蒸発を防げる。水やりの手間がラクになり、土壌微生物も豊かになる。
+</div>
+```
+
+  </section>
+
+  <footer>
+    <div class="mark">鬱金 · 2026.04 · 読谷</div>
+    ウコン栽培覚書 — for iPhone 12
+  </footer>
+
+</div>
+
+<script>
+  const toggle=document.getElementById('toggle');
+  const buttons=toggle.querySelectorAll('button');
+  const views={
+    ponchi:document.getElementById('view-ponchi'),
+    info:document.getElementById('view-info')
+  };
+  buttons.forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const mode=btn.dataset.mode;
+      buttons.forEach(b=>b.classList.toggle('active',b===btn));
+      toggle.classList.remove('mode-ponchi','mode-info');
+      toggle.classList.add('mode-'+mode);
+      Object.entries(views).forEach(([k,v])=>{
+        v.classList.toggle('active',k===mode);
+      });
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  });
+</script>
+
+</body>
+</html>
