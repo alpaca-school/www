@@ -3,8 +3,15 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="ウコンの植え付けガイド（読谷村・4月下旬版）。ポンチ絵とインフォグラフィックの切り替え式。iPhone 12対応。">
+<meta name="theme-color" content="#3d6b2e">
+<meta property="og:title" content="ウコンの植え付けガイド｜読谷村・4月下旬版">
+<meta property="og:description" content="沖縄・読谷村で4月下旬にウコンを植え付けるための完全ガイド。ポンチ絵／インフォグラフィック切替式。">
+<meta property="og:type" content="article">
 <title>ウコンの植え付けガイド｜読谷村・4月下旬版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Kaisei+Decol:wght@700&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -55,6 +62,9 @@
     margin:0 auto;
     position:relative;
     z-index:1;
+    background:var(--bg);
+    box-shadow:0 0 40px rgba(42,31,20,.1);
+    min-height:100vh;
   }
   /* ヘッダー */
   header{
@@ -1123,24 +1133,38 @@ h1{font-size:22px}
 </div>
 
 <script>
-  const toggle=document.getElementById('toggle');
-  const buttons=toggle.querySelectorAll('button');
-  const views={
-    ponchi:document.getElementById('view-ponchi'),
-    info:document.getElementById('view-info')
-  };
-  buttons.forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      const mode=btn.dataset.mode;
-      buttons.forEach(b=>b.classList.toggle('active',b===btn));
-      toggle.classList.remove('mode-ponchi','mode-info');
-      toggle.classList.add('mode-'+mode);
-      Object.entries(views).forEach(([k,v])=>{
-        v.classList.toggle('active',k===mode);
+(function(){
+  'use strict';
+  function init(){
+    var toggle=document.getElementById('toggle');
+    if(!toggle)return;
+    var buttons=toggle.querySelectorAll('button');
+    var views={
+      ponchi:document.getElementById('view-ponchi'),
+      info:document.getElementById('view-info')
+    };
+    Array.prototype.forEach.call(buttons,function(btn){
+      btn.addEventListener('click',function(){
+        var mode=btn.getAttribute('data-mode');
+        Array.prototype.forEach.call(buttons,function(b){
+          b.classList.toggle('active',b===btn);
+        });
+        toggle.classList.remove('mode-ponchi','mode-info');
+        toggle.classList.add('mode-'+mode);
+        Object.keys(views).forEach(function(k){
+          if(views[k])views[k].classList.toggle('active',k===mode);
+        });
+        try{window.scrollTo({top:0,behavior:'smooth'});}
+        catch(e){window.scrollTo(0,0);}
       });
-      window.scrollTo({top:0,behavior:'smooth'});
     });
-  });
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',init);
+  }else{
+    init();
+  }
+})();
 </script>
 
 </body>
