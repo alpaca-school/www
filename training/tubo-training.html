@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<title>養老のツボ 探機 — 目疲労ノ経穴ヲ視ル</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sumi:#161310;          /* 墨 */
+    --sumi-2:#221d18;
+    --washi:#ece4d2;         /* 和紙 */
+    --washi-soft:#d8cdb3;
+    --shu:#c5392b;           /* 朱 */
+    --shu-deep:#8e2218;
+    --kincha:#b08545;        /* 金茶 */
+    --moegi:#7a8c4f;         /* 萌黄 */
+    --gold:#d4a64a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;overflow:hidden;background:var(--sumi);color:var(--washi);font-family:"Shippori Mincho",serif}
+
+/* 和紙風背景(待機画面) */
+body::before{
+content:””;position:fixed;inset:0;pointer-events:none;z-index:0;
+background:
+radial-gradient(circle at 20% 10%, rgba(197,57,43,.08), transparent 40%),
+radial-gradient(circle at 80% 90%, rgba(212,166,74,.06), transparent 50%);
+}
+
+#app{position:relative;width:100vw;height:100vh;height:100dvh;overflow:hidden}
+
+/* カメラ映像 */
+#video{
+position:absolute;inset:0;width:100%;height:100%;
+object-fit:cover;transform:scaleX(-1);background:#000;
+opacity:0;transition:opacity .6s ease;
+}
+#video.live{opacity:1}
+#overlay{
+position:absolute;inset:0;width:100%;height:100%;
+transform:scaleX(-1);pointer-events:none;
+}
+
+/* 上部バー */
+.topbar{
+position:absolute;top:0;left:0;right:0;z-index:10;
+padding:14px 18px calc(14px) 18px;
+padding-top:calc(env(safe-area-inset-top,0) + 12px);
+display:flex;align-items:center;justify-content:space-between;
+background:linear-gradient(180deg,rgba(22,19,16,.78),rgba(22,19,16,0));
+}
+.brand{display:flex;align-items:center;gap:10px}
+.seal{
+width:34px;height:34px;border-radius:6px;
+background:var(–shu);color:var(–washi);
+display:grid;place-items:center;font-weight:800;
+font-family:“Shippori Mincho”,serif;font-size:18px;
+box-shadow:0 0 0 1.5px var(–washi) inset, 0 4px 14px rgba(197,57,43,.4);
+letter-spacing:-1px;
+}
+.title{
+line-height:1.05;
+}
+.title .jp{font-size:15px;font-weight:800;letter-spacing:.06em}
+.title .sub{font-size:10px;color:var(–washi-soft);letter-spacing:.25em;margin-top:2px}
+
+.status{
+font-family:“Klee One”,sans-serif;font-size:11px;
+color:var(–washi-soft);
+background:rgba(0,0,0,.4);
+padding:6px 10px;border-radius:999px;
+border:1px solid rgba(236,228,210,.18);
+display:flex;align-items:center;gap:6px;
+backdrop-filter:blur(8px);
+}
+.dot{width:6px;height:6px;border-radius:50%;background:#888;transition:background .3s}
+.dot.on{background:var(–moegi);box-shadow:0 0 8px var(–moegi)}
+.dot.warn{background:var(–gold)}
+
+/* 起動前カバー */
+.cover{
+position:absolute;inset:0;z-index:20;
+background:
+radial-gradient(ellipse at 50% 30%, rgba(197,57,43,.15), transparent 60%),
+linear-gradient(160deg,#1a1612 0%,#0e0b08 100%);
+display:flex;flex-direction:column;align-items:center;justify-content:center;
+padding:40px 28px;text-align:center;
+transition:opacity .5s ease,visibility .5s ease;
+}
+.cover.hide{opacity:0;visibility:hidden}
+.cover .frame{
+border:1px solid rgba(236,228,210,.25);
+padding:38px 26px 30px;
+position:relative;max-width:340px;width:100%;
+background:rgba(22,19,16,.4);backdrop-filter:blur(6px);
+}
+.cover .frame::before,.cover .frame::after{
+content:””;position:absolute;width:18px;height:18px;
+border:2px solid var(–shu);
+}
+.cover .frame::before{top:-2px;left:-2px;border-right:none;border-bottom:none}
+.cover .frame::after{bottom:-2px;right:-2px;border-left:none;border-top:none}
+
+.cover h1{
+font-size:28px;font-weight:800;letter-spacing:.08em;
+margin-bottom:6px;
+}
+.cover h1 .ru{font-size:11px;display:block;color:var(–kincha);letter-spacing:.4em;margin-bottom:8px;font-weight:400}
+.cover .desc{
+font-family:“Klee One”,sans-serif;font-size:13px;line-height:1.8;
+color:var(–washi-soft);margin:18px 0 24px;
+}
+.cover .desc em{color:var(–shu);font-style:normal;font-weight:600}
+
+.start-btn{
+appearance:none;border:none;cursor:pointer;
+background:var(–shu);color:var(–washi);
+font-family:“Shippori Mincho”,serif;font-weight:800;
+font-size:16px;letter-spacing:.3em;padding:14px 32px;
+border-radius:2px;position:relative;
+box-shadow:0 6px 24px rgba(197,57,43,.4),0 0 0 1px var(–washi) inset;
+transition:transform .15s ease,box-shadow .15s ease;
+}
+.start-btn:active{transform:translateY(1px);box-shadow:0 3px 12px rgba(197,57,43,.5),0 0 0 1px var(–washi) inset}
+.start-btn::before{content:“開”;margin-right:8px}
+
+.cover .note{
+margin-top:18px;font-size:10px;color:var(–washi-soft);opacity:.6;
+font-family:“Klee One”,sans-serif;letter-spacing:.1em;
+}
+
+/* ツボ情報パネル */
+.panel{
+position:absolute;left:0;right:0;bottom:0;z-index:10;
+padding:16px 16px calc(16px + env(safe-area-inset-bottom,0));
+background:linear-gradient(0deg,rgba(22,19,16,.92) 0%,rgba(22,19,16,.7) 60%,transparent 100%);
+}
+.legend{
+display:flex;gap:8px;overflow-x:auto;padding-bottom:10px;
+scrollbar-width:none;
+}
+.legend::-webkit-scrollbar{display:none}
+.chip{
+flex-shrink:0;
+padding:8px 12px;border-radius:2px;
+background:rgba(236,228,210,.06);
+border:1px solid rgba(236,228,210,.18);
+font-family:“Shippori Mincho”,serif;font-size:12px;
+color:var(–washi-soft);
+display:flex;align-items:center;gap:8px;
+cursor:pointer;transition:all .2s ease;
+}
+.chip.active{
+background:var(–shu);color:var(–washi);
+border-color:var(–shu);
+box-shadow:0 4px 14px rgba(197,57,43,.35);
+}
+.chip .swatch{
+width:10px;height:10px;border-radius:50%;
+box-shadow:0 0 0 1.5px rgba(255,255,255,.4) inset;
+}
+
+.info{
+background:rgba(28,23,19,.92);
+border:1px solid rgba(212,166,74,.3);
+border-radius:4px;padding:14px 16px;
+backdrop-filter:blur(10px);
+position:relative;
+}
+.info::before{
+content:””;position:absolute;top:8px;left:8px;
+width:14px;height:14px;
+border-top:1px solid var(–gold);border-left:1px solid var(–gold);
+}
+.info::after{
+content:””;position:absolute;bottom:8px;right:8px;
+width:14px;height:14px;
+border-bottom:1px solid var(–gold);border-right:1px solid var(–gold);
+}
+.info .head{
+display:flex;align-items:baseline;gap:10px;margin-bottom:6px;
+}
+.info .name{
+font-size:20px;font-weight:800;letter-spacing:.08em;
+color:var(–washi);
+}
+.info .romaji{
+font-family:“Klee One”,sans-serif;font-size:11px;
+color:var(–gold);letter-spacing:.2em;
+}
+.info .effect{
+font-family:“Klee One”,sans-serif;font-size:13px;
+color:var(–washi-soft);line-height:1.7;
+}
+.info .howto{
+font-size:11px;color:var(–kincha);margin-top:8px;
+font-family:“Klee One”,sans-serif;line-height:1.6;
+border-top:1px dashed rgba(212,166,74,.3);padding-top:8px;
+}
+
+/* スイッチカメラボタン */
+.switch-cam{
+position:absolute;right:14px;bottom:calc(220px + env(safe-area-inset-bottom,0));
+z-index:11;
+width:46px;height:46px;border-radius:50%;
+background:rgba(22,19,16,.7);
+border:1px solid rgba(236,228,210,.25);
+color:var(–washi);font-size:20px;
+display:grid;place-items:center;
+backdrop-filter:blur(8px);cursor:pointer;
+}
+
+/* スキャンライン */
+@keyframes scan{
+0%{transform:scaleX(-1) translateY(0)}
+100%{transform:scaleX(-1) translateY(100vh)}
+}
+.scanline{
+position:absolute;left:0;right:0;height:2px;
+background:linear-gradient(90deg,transparent,var(–shu) 50%,transparent);
+opacity:.6;pointer-events:none;z-index:5;
+animation:scan 3s linear infinite;display:none;
+}
+.scanline.on{display:block}
+
+/* ガイド枠 */
+.guide-text{
+position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+z-index:6;color:var(–washi);text-align:center;
+font-family:“Shippori Mincho”,serif;
+pointer-events:none;
+text-shadow:0 2px 12px rgba(0,0,0,.8);
+}
+.guide-text.hide{display:none}
+.guide-text .big{font-size:18px;letter-spacing:.15em;font-weight:600;margin-bottom:8px}
+.guide-text .small{font-size:11px;color:var(–washi-soft);font-family:“Klee One”,sans-serif;letter-spacing:.1em}
+.guide-text .ico{font-size:32px;margin-bottom:10px;display:block}
+</style>
+
+</head>
+<body>
+
+<div id="app">
+  <!-- 起動前カバー -->
+  <div class="cover" id="cover">
+    <div class="frame">
+      <h1>
+        <span class="ru">YOUROU — TSUBO TANKI</span>
+        養老 探機
+      </h1>
+      <p class="desc">
+        手を翳せば、目疲労に効く<em>経穴</em>が浮かぶ。<br>
+        養老穴を中心に、合谷・労宮・<br>少沢・中渚など、目に効くツボを<br>AIが手の構造から推定し示します。
+      </p>
+      <button class="start-btn" id="startBtn">始</button>
+      <p class="note">※ カメラ使用許可が必要です</p>
+    </div>
+  </div>
+
+<video id="video" playsinline autoplay muted></video>
+<canvas id="overlay"></canvas>
+
+  <div class="scanline" id="scanline"></div>
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="seal">養</div>
+      <div class="title">
+        <div class="jp">養老 探機</div>
+        <div class="sub">EYE・FATIGUE TSUBO</div>
+      </div>
+    </div>
+    <div class="status" id="status">
+      <span class="dot" id="dot"></span>
+      <span id="statusText">準備中</span>
+    </div>
+  </div>
+
+  <div class="guide-text hide" id="guide">
+    <span class="ico">✋</span>
+    <div class="big">手の甲をカメラへ</div>
+    <div class="small">小指側・手首をしっかり映してください</div>
+  </div>
+
+<button class="switch-cam" id="switchCam" style="display:none" title="カメラ切替">⟳</button>
+
+  <div class="panel" id="panel" style="display:none">
+    <div class="legend" id="legend"></div>
+    <div class="info" id="info">
+      <div class="head">
+        <div class="name" id="tsuboName">養老</div>
+        <div class="romaji" id="tsuboRomaji">YOUROU</div>
+      </div>
+      <div class="effect" id="tsuboEffect">老眼・かすみ目・肩こりの特効穴。手首の小指側、尺骨の出っ張りの内側のくぼみ。</div>
+      <div class="howto" id="tsuboHowto">親指で3〜5秒、ゆっくり押す × 5回。深呼吸しながら。</div>
+    </div>
+  </div>
+</div>
+
+<!-- MediaPipe Hands -->
+
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/hands.js" crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3.1675466862/camera_utils.js" crossorigin="anonymous"></script>
+
+<script>
+/* =========================================================
+   ツボ定義(目の疲れに効くもの中心)
+   位置はMediaPipe Hands の21点ランドマークから推定
+   ========================================================= */
+const TSUBO = [
+  {
+    id:'yourou', name:'養老', romaji:'YOUROU', color:'#c5392b',
+    effect:'老眼・かすみ目・肩こりの特効穴。「老いを養う」の名の通り眼精疲労に最も効く。',
+    howto:'親指で3〜5秒、ゆっくり押す × 5回。深呼吸しながら。',
+    /* 手首(0)から小指側(17)へ伸びる線上、手首寄り少し上 */
+    pos:(L)=>{
+      const a=L[0], b=L[17];
+      // 手首より小指側少し外、手の甲側
+      return {
+        x: a.x + (b.x-a.x)*0.18,
+        y: a.y + (b.y-a.y)*0.18 - (b.y-a.y)*0.05,
+      };
+    }
+  },
+  {
+    id:'goukoku', name:'合谷', romaji:'GOUKOKU', color:'#d4a64a',
+    effect:'万能のツボ。目の充血・頭痛・肩こりに。指先までスッと抜ける感覚。',
+    howto:'反対の親指と人差し指で挟むように、5秒押して離すを5回。',
+    /* 親指(2)と人差し指(5)の付け根の間 */
+    pos:(L)=>{
+      const a=L[2], b=L[5];
+      return { x:(a.x+b.x)/2, y:(a.y+b.y)/2 };
+    }
+  },
+  {
+    id:'roukyu', name:'労宮', romaji:'ROUKYU', color:'#7a8c4f',
+    effect:'手のひらの中央。心労・眼の奥の疲れ・自律神経の乱れに。',
+    howto:'反対の親指でゆっくり円を描く × 30秒。',
+    /* 手のひら中央(中指MCP=9と手首=0の中間) */
+    pos:(L)=>{
+      const a=L[0], b=L[9];
+      return { x:a.x+(b.x-a.x)*0.55, y:a.y+(b.y-a.y)*0.55 };
+    }
+  },
+  {
+    id:'shoutaku', name:'少沢', romaji:'SHOUTAKU', color:'#b08545',
+    effect:'小指の爪の生え際(外側)。目の充血・かすみ・頭痛に即効性あり。',
+    howto:'爪の角を反対の親指の爪で5秒挟む × 5回。',
+    /* 小指先端(20) */
+    pos:(L)=>{
+      const a=L[19], b=L[20];
+      return { x:b.x+(b.x-a.x)*0.15, y:b.y+(b.y-a.y)*0.15 };
+    }
+  },
+  {
+    id:'chuusho', name:'中渚', romaji:'CHUUSHO', color:'#8e2218',
+    effect:'薬指と小指の付け根の間のくぼみ。デジタル疲れの目に。',
+    howto:'反対の親指で骨の間を押し込む × 5秒 × 5回。',
+    /* 薬指MCP(13)と小指MCP(17)の中間、少し手首寄り */
+    pos:(L)=>{
+      const a=L[13], b=L[17], w=L[0];
+      const m={x:(a.x+b.x)/2, y:(a.y+b.y)/2};
+      return { x:m.x+(w.x-m.x)*0.12, y:m.y+(w.y-m.y)*0.12 };
+    }
+  }
+];
+
+/* ============== DOM ============== */
+const video = document.getElementById('video');
+const canvas = document.getElementById('overlay');
+const ctx = canvas.getContext('2d');
+const cover = document.getElementById('cover');
+const startBtn = document.getElementById('startBtn');
+const statusText = document.getElementById('statusText');
+const dot = document.getElementById('dot');
+const guide = document.getElementById('guide');
+const panel = document.getElementById('panel');
+const legend = document.getElementById('legend');
+const scanline = document.getElementById('scanline');
+const switchCamBtn = document.getElementById('switchCam');
+const tsuboName = document.getElementById('tsuboName');
+const tsuboRomaji = document.getElementById('tsuboRomaji');
+const tsuboEffect = document.getElementById('tsuboEffect');
+const tsuboHowto = document.getElementById('tsuboHowto');
+
+let activeId = 'yourou';
+let lastLandmarks = null;
+let cameraInstance = null;
+let hands = null;
+let useFront = false; // 背面カメラ既定
+
+/* レジェンド生成 */
+TSUBO.forEach(t=>{
+  const c = document.createElement('div');
+  c.className = 'chip' + (t.id===activeId?' active':'');
+  c.dataset.id = t.id;
+  c.innerHTML = `<span class="swatch" style="background:${t.color}"></span>${t.name}`;
+  c.addEventListener('click', ()=>{
+    activeId = t.id;
+    [...legend.children].forEach(x=>x.classList.toggle('active', x.dataset.id===t.id));
+    showInfo(t);
+  });
+  legend.appendChild(c);
+});
+showInfo(TSUBO[0]);
+
+function showInfo(t){
+  tsuboName.textContent = t.name;
+  tsuboRomaji.textContent = t.romaji;
+  tsuboEffect.textContent = t.effect;
+  tsuboHowto.textContent = t.howto;
+}
+
+/* ============== 描画 ============== */
+function resizeCanvas(){
+  const w = video.videoWidth || window.innerWidth;
+  const h = video.videoHeight || window.innerHeight;
+  canvas.width = w;
+  canvas.height = h;
+}
+window.addEventListener('resize', resizeCanvas);
+
+function drawMarkers(landmarks){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  if(!landmarks) return;
+
+  const W = canvas.width, H = canvas.height;
+  // 正規化座標を実座標に
+  const L = landmarks.map(p=>({ x:p.x*W, y:p.y*H }));
+
+  // 手の輪郭(うっすら)
+  ctx.strokeStyle = 'rgba(236,228,210,0.25)';
+  ctx.lineWidth = 1.5;
+  const SKEL = [
+    [0,1,2,3,4],[0,5,6,7,8],[5,9,10,11,12],
+    [9,13,14,15,16],[13,17,18,19,20],[0,17]
+  ];
+  SKEL.forEach(chain=>{
+    ctx.beginPath();
+    chain.forEach((i,k)=>{
+      const p=L[i];
+      if(k===0) ctx.moveTo(p.x,p.y);
+      else ctx.lineTo(p.x,p.y);
+    });
+    ctx.stroke();
+  });
+
+  // 各ツボを描画
+  TSUBO.forEach(t=>{
+    const p = t.pos(L);
+    const isActive = t.id===activeId;
+    const r = isActive ? 18 : 9;
+
+    // パルスリング(active)
+    if(isActive){
+      const pulse = (Math.sin(Date.now()/300)+1)/2; // 0..1
+      ctx.beginPath();
+      ctx.arc(p.x,p.y, r + 8 + pulse*10, 0, Math.PI*2);
+      ctx.strokeStyle = t.color + '80';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+
+    // 中心丸
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,r,0,Math.PI*2);
+    ctx.fillStyle = t.color;
+    ctx.globalAlpha = isActive ? 0.95 : 0.7;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // 白フチ
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,r,0,Math.PI*2);
+    ctx.strokeStyle = '#ece4d2';
+    ctx.lineWidth = isActive ? 2.5 : 1.5;
+    ctx.stroke();
+
+    // 内側点
+    ctx.beginPath();
+    ctx.arc(p.x,p.y, isActive?4:2, 0, Math.PI*2);
+    ctx.fillStyle = '#ece4d2';
+    ctx.fill();
+
+    // ラベル(activeのみ詳細、それ以外は名前小さく)
+    ctx.save();
+    // canvas は scaleX(-1) で表示されるのでテキストは反転して書く
+    ctx.translate(p.x, p.y);
+    ctx.scale(-1,1);
+    ctx.font = isActive ? 'bold 18px "Shippori Mincho", serif' : '13px "Shippori Mincho", serif';
+    ctx.textAlign = 'center';
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = 'rgba(22,19,16,0.85)';
+    ctx.fillStyle = '#ece4d2';
+    const label = t.name;
+    const offsetY = -r - 8;
+    ctx.strokeText(label, 0, offsetY);
+    ctx.fillText(label, 0, offsetY);
+    ctx.restore();
+  });
+}
+
+/* アニメーションループ(ランドマークが古くても描画は継続) */
+function loop(){
+  if(lastLandmarks){
+    drawMarkers(lastLandmarks);
+  }
+  requestAnimationFrame(loop);
+}
+
+/* ============== MediaPipe ============== */
+function setupHands(){
+  hands = new Hands({
+    locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/${file}`
+  });
+  hands.setOptions({
+    maxNumHands: 1,
+    modelComplexity: 1,
+    minDetectionConfidence: 0.6,
+    minTrackingConfidence: 0.5
+  });
+  hands.onResults(onResults);
+}
+
+function onResults(results){
+  if(results.multiHandLandmarks && results.multiHandLandmarks.length>0){
+    lastLandmarks = results.multiHandLandmarks[0];
+    setStatus('検出中', 'on');
+    guide.classList.add('hide');
+  } else {
+    lastLandmarks = null;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    setStatus('手を映してください', 'warn');
+    guide.classList.remove('hide');
+  }
+}
+
+function setStatus(text, state){
+  statusText.textContent = text;
+  dot.className = 'dot' + (state ? ' '+state : '');
+}
+
+/* ============== カメラ起動 ============== */
+async function startCamera(){
+  setStatus('カメラ起動中…', 'warn');
+  try{
+    if(cameraInstance){ try{cameraInstance.stop()}catch(e){} }
+    if(video.srcObject){
+      video.srcObject.getTracks().forEach(t=>t.stop());
+      video.srcObject = null;
+    }
+
+    const constraints = {
+      video: {
+        facingMode: useFront ? 'user' : { ideal:'environment' },
+        width: { ideal: 1280 },
+        height: { ideal: 720 }
+      },
+      audio: false
+    };
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    video.srcObject = stream;
+    await video.play();
+    video.classList.add('live');
+    resizeCanvas();
+    scanline.classList.add('on');
+    setTimeout(()=>scanline.classList.remove('on'), 1800);
+
+    // MediaPipe Camera utility
+    cameraInstance = new Camera(video, {
+      onFrame: async () => {
+        if(hands) await hands.send({image: video});
+      },
+      width: video.videoWidth,
+      height: video.videoHeight
+    });
+    cameraInstance.start();
+
+    panel.style.display = 'block';
+    switchCamBtn.style.display = 'grid';
+    guide.classList.remove('hide');
+    setStatus('手を映してください', 'warn');
+  }catch(err){
+    console.error(err);
+    setStatus('カメラ起動失敗', 'warn');
+    alert('カメラを起動できませんでした。\n設定でカメラ権限を許可し、HTTPS環境でお試しください。\n\n' + err.message);
+  }
+}
+
+/* ============== イベント ============== */
+startBtn.addEventListener('click', async ()=>{
+  cover.classList.add('hide');
+  setupHands();
+  loop();
+  await startCamera();
+});
+
+switchCamBtn.addEventListener('click', async ()=>{
+  useFront = !useFront;
+  await startCamera();
+});
+
+video.addEventListener('loadedmetadata', resizeCanvas);
+</script>
+
+</body>
+</html>
