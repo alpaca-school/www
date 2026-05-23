@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>沖縄文芸フリマ実験プロトタイプ設計</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Zen+Maru+Gothic:wght@400;500;700;900&family=M+PLUS+1+Code:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d1117;
+  --bg-card: #161b22;
+  --bg-card-alt: #1c2333;
+  --surface: #21262d;
+  --border: #30363d;
+  --text: #e6edf3;
+  --text-dim: #8b949e;
+  --text-muted: #6e7681;
+  --accent: #f0883e;
+  --accent-glow: rgba(240,136,62,0.25);
+  --cyan: #56d4dd;
+  --cyan-glow: rgba(86,212,221,0.2);
+  --green: #3fb950;
+  --green-glow: rgba(63,185,80,0.15);
+  --purple: #bc8cff;
+  --purple-glow: rgba(188,140,255,0.15);
+  --pink: #f778ba;
+  --red: #f85149;
+  --yellow: #e3b341;
+  --font-body: 'Zen Kaku Gothic New', sans-serif;
+  --font-display: 'Zen Maru Gothic', sans-serif;
+  --font-code: 'M PLUS 1 Code', monospace;
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { font-size:15px; scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  line-height:1.7;
+}
+
+/* ─── HEADER ─── */
+.site-header {
+  position:sticky; top:0; z-index:100;
+  background: rgba(13,17,23,0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom:1px solid var(--border);
+  padding:12px 16px;
+}
+.header-inner {
+  max-width:800px; margin:0 auto;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.header-badge {
+  display:flex; align-items:center; gap:8px;
+  font-family:var(--font-display); font-weight:700; font-size:0.85rem;
+  color:var(--accent);
+}
+.header-badge .emoji { font-size:1.3rem; }
+.header-module {
+  font-size:0.7rem; color:var(--cyan);
+  background:var(--cyan-glow); border:1px solid rgba(86,212,221,0.3);
+  padding:2px 8px; border-radius:20px;
+  font-family:var(--font-code);
+}
+
+/* ─── MODE TOGGLE ─── */
+.mode-toggle-wrap {
+  position:sticky; top:52px; z-index:99;
+  background: rgba(13,17,23,0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding:10px 16px;
+  border-bottom:1px solid var(--border);
+}
+.mode-toggle {
+  max-width:800px; margin:0 auto;
+  display:flex; gap:4px;
+  background:var(--surface); border-radius:12px; padding:3px;
+}
+.mode-btn {
+  flex:1; border:none; padding:10px 6px;
+  border-radius:10px; cursor:pointer;
+  font-family:var(--font-display); font-weight:700; font-size:0.85rem;
+  background:transparent; color:var(--text-dim);
+  transition:all .3s ease;
+  display:flex; align-items:center; justify-content:center; gap:6px;
+}
+.mode-btn.active {
+  background: linear-gradient(135deg, var(--accent), #d4722e);
+  color:#fff;
+  box-shadow:0 2px 12px var(--accent-glow);
+}
+.mode-btn:not(.active):hover { color:var(--text); background:rgba(255,255,255,0.05); }
+
+/* ─── MAIN ─── */
+.main { max-width:800px; margin:0 auto; padding:0 12px 60px; }
+
+/* ─── HERO ─── */
+.hero {
+  padding:32px 16px 24px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.hero::before {
+  content:''; position:absolute; top:-60px; left:50%; transform:translateX(-50%);
+  width:300px; height:300px;
+  background:radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+  pointer-events:none;
+}
+.hero-title {
+  font-family:var(--font-display); font-weight:900;
+  font-size:1.6rem; line-height:1.4;
+  background:linear-gradient(135deg, var(--accent), var(--yellow), var(--cyan));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+  position:relative;
+}
+.hero-sub {
+  margin-top:10px; font-size:0.82rem; color:var(--text-dim);
+  line-height:1.6;
+}
+.hero-tags {
+  display:flex; flex-wrap:wrap; gap:6px; justify-content:center;
+  margin-top:14px;
+}
+.hero-tag {
+  font-size:0.7rem; padding:3px 10px; border-radius:20px;
+  font-family:var(--font-code); font-weight:600;
+}
+.hero-tag.polygon { background:var(--purple-glow); color:var(--purple); border:1px solid rgba(188,140,255,0.3); }
+.hero-tag.module { background:var(--green-glow); color:var(--green); border:1px solid rgba(63,185,80,0.3); }
+.hero-tag.period { background:var(--cyan-glow); color:var(--cyan); border:1px solid rgba(86,212,221,0.3); }
+
+/* ─── SECTIONS ─── */
+.section { margin-top:28px; }
+.section-label {
+  font-family:var(--font-code); font-size:0.65rem; color:var(--accent);
+  text-transform:uppercase; letter-spacing:2px; margin-bottom:6px;
+  padding-left:4px;
+}
+.section-title {
+  font-family:var(--font-display); font-weight:900; font-size:1.2rem;
+  margin-bottom:14px; padding-left:4px;
+  display:flex; align-items:center; gap:8px;
+}
+
+/* ─── CARDS ─── */
+.card {
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:18px 16px;
+  margin-bottom:12px;
+  position:relative;
+  overflow:hidden;
+}
+.card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+}
+.card.accent-top::before { background:linear-gradient(90deg, var(--accent), var(--yellow)); }
+.card.cyan-top::before { background:linear-gradient(90deg, var(--cyan), var(--green)); }
+.card.purple-top::before { background:linear-gradient(90deg, var(--purple), var(--pink)); }
+.card.green-top::before { background:linear-gradient(90deg, var(--green), var(--cyan)); }
+
+.card-title {
+  font-family:var(--font-display); font-weight:700; font-size:0.95rem;
+  margin-bottom:8px; display:flex; align-items:center; gap:8px;
+}
+.card-desc { font-size:0.82rem; color:var(--text-dim); line-height:1.7; }
+
+/* ─── PONCHI-E (ビジュアルモード) ─── */
+.ponchie { display:block; }
+.info-mode { display:none; }
+
+/* Architecture Diagram */
+.arch-diagram {
+  position:relative; padding:20px 8px;
+}
+.arch-flow {
+  display:flex; flex-direction:column; gap:0; align-items:center;
+}
+.arch-node {
+  width:100%; max-width:340px;
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:14px 16px;
+  text-align:center;
+  position:relative;
+  z-index:2;
+}
+.arch-node .node-icon { font-size:1.6rem; margin-bottom:4px; }
+.arch-node .node-label {
+  font-family:var(--font-display); font-weight:700; font-size:0.85rem;
+}
+.arch-node .node-detail {
+  font-size:0.72rem; color:var(--text-dim); margin-top:2px;
+}
+.arch-node.highlight {
+  border-color:var(--accent);
+  box-shadow:0 0 20px var(--accent-glow);
+}
+.arch-node.highlight-cyan {
+  border-color:var(--cyan);
+  box-shadow:0 0 20px var(--cyan-glow);
+}
+.arch-node.highlight-purple {
+  border-color:var(--purple);
+  box-shadow:0 0 20px var(--purple-glow);
+}
+.arch-node.highlight-green {
+  border-color:var(--green);
+  box-shadow:0 0 20px var(--green-glow);
+}
+.arch-arrow {
+  width:2px; height:28px;
+  background: linear-gradient(to bottom, var(--accent), transparent);
+  position:relative; z-index:1;
+}
+.arch-arrow::after {
+  content:'▼'; position:absolute; bottom:-8px; left:50%; transform:translateX(-50%);
+  font-size:0.6rem; color:var(--accent);
+}
+
+/* Token Visual */
+.token-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:10px;
+}
+.token-card {
+  background:var(--bg-card-alt);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:14px 12px;
+  text-align:center;
+  transition:transform .2s;
+}
+.token-card:active { transform:scale(0.97); }
+.token-card .tk-icon { font-size:1.8rem; margin-bottom:4px; }
+.token-card .tk-name {
+  font-family:var(--font-display); font-weight:700; font-size:0.78rem;
+}
+.token-card .tk-amount {
+  font-family:var(--font-code); font-size:1.1rem; font-weight:600;
+  color:var(--accent); margin-top:2px;
+}
+.token-card .tk-purpose {
+  font-size:0.65rem; color:var(--text-dim); margin-top:4px;
+}
+.token-card.full-width { grid-column:1/-1; }
+
+/* AI Pipeline Visual */
+.pipeline {
+  display:flex; flex-direction:column; gap:0;
+}
+.pipe-layer {
+  display:flex; align-items:stretch; gap:0;
+}
+.pipe-num {
+  width:40px; min-height:80px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  position:relative;
+}
+.pipe-num .num {
+  width:28px; height:28px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-code); font-weight:600; font-size:0.75rem;
+  position:relative; z-index:2;
+}
+.pipe-num .line {
+  position:absolute; top:0; bottom:0; width:2px; left:50%; transform:translateX(-50%);
+  z-index:1;
+}
+.pipe-layer:first-child .pipe-num .line { top:50%; }
+.pipe-layer:last-child .pipe-num .line { bottom:50%; height:50%; top:0; }
+.pipe-content {
+  flex:1; padding:10px 12px;
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  margin:5px 0;
+}
+.pipe-content .pipe-title {
+  font-family:var(--font-display); font-weight:700; font-size:0.82rem;
+  display:flex; align-items:center; gap:6px;
+}
+.pipe-content .pipe-desc {
+  font-size:0.72rem; color:var(--text-dim); margin-top:3px;
+}
+.pipe-content .pipe-threshold {
+  margin-top:6px; display:inline-block;
+  font-family:var(--font-code); font-size:0.68rem;
+  padding:2px 8px; border-radius:6px;
+}
+
+.layer1 .num { background:var(--green); color:#000; }
+.layer1 .line { background:var(--green); }
+.layer1 .pipe-threshold { background:var(--green-glow); color:var(--green); }
+.layer2 .num { background:var(--cyan); color:#000; }
+.layer2 .line { background:var(--cyan); }
+.layer2 .pipe-threshold { background:var(--cyan-glow); color:var(--cyan); }
+.layer3 .num { background:var(--purple); color:#000; }
+.layer3 .line { background:var(--purple); }
+.layer3 .pipe-threshold { background:var(--purple-glow); color:var(--purple); }
+.layer4 .num { background:var(--red); color:#fff; }
+.layer4 .line { background:var(--red); }
+.layer4 .pipe-threshold { background:rgba(248,81,73,0.15); color:var(--red); }
+
+/* Score Table Visual */
+.score-bar-list { display:flex; flex-direction:column; gap:8px; }
+.score-item {
+  display:flex; align-items:center; gap:10px;
+}
+.score-range {
+  font-family:var(--font-code); font-size:0.7rem; color:var(--text-dim);
+  width:70px; text-align:right; flex-shrink:0;
+}
+.score-bar-wrap { flex:1; height:26px; background:var(--surface); border-radius:6px; overflow:hidden; position:relative; }
+.score-bar {
+  height:100%; border-radius:6px;
+  display:flex; align-items:center; justify-content:flex-end; padding-right:8px;
+  font-family:var(--font-code); font-size:0.68rem; font-weight:600; color:#fff;
+  transition: width 1s ease;
+}
+.score-label {
+  font-size:0.7rem; color:var(--text-dim); width:72px; flex-shrink:0;
+}
+
+/* Timeline */
+.timeline { padding-left:20px; border-left:2px solid var(--border); }
+.tl-item {
+  position:relative; padding:0 0 20px 20px;
+}
+.tl-item::before {
+  content:''; position:absolute; left:-7px; top:4px;
+  width:12px; height:12px; border-radius:50%;
+  border:2px solid var(--accent); background:var(--bg);
+}
+.tl-item.active::before {
+  background:var(--accent);
+  box-shadow:0 0 8px var(--accent-glow);
+}
+.tl-item.future::before { border-color:var(--text-muted); }
+.tl-date {
+  font-family:var(--font-code); font-size:0.7rem; color:var(--accent);
+}
+.tl-title {
+  font-family:var(--font-display); font-weight:700; font-size:0.85rem;
+  margin-top:2px;
+}
+.tl-desc { font-size:0.72rem; color:var(--text-dim); margin-top:2px; }
+
+/* User Flow Visual */
+.flow-steps { display:flex; flex-direction:column; gap:0; }
+.flow-step {
+  display:flex; gap:12px; align-items:flex-start;
+}
+.flow-step-icon {
+  width:44px; height:44px; border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.3rem; flex-shrink:0;
+  position:relative; z-index:2;
+}
+.flow-step-body { flex:1; padding-bottom:16px; border-left:2px dashed var(--border); padding-left:14px; margin-left:-23px; padding-top:2px; }
+.flow-step:last-child .flow-step-body { border-left-color:transparent; }
+.flow-step-body .fs-title {
+  font-family:var(--font-display); font-weight:700; font-size:0.82rem;
+}
+.flow-step-body .fs-desc { font-size:0.72rem; color:var(--text-dim); margin-top:2px; }
+
+.flow-step-icon.step-blue { background:var(--cyan-glow); border:1px solid rgba(86,212,221,0.3); }
+.flow-step-icon.step-orange { background:var(--accent-glow); border:1px solid rgba(240,136,62,0.3); }
+.flow-step-icon.step-green { background:var(--green-glow); border:1px solid rgba(63,185,80,0.3); }
+.flow-step-icon.step-purple { background:var(--purple-glow); border:1px solid rgba(188,140,255,0.3); }
+
+/* Token Stage Roadmap */
+.stage-cards { display:flex; flex-direction:column; gap:10px; }
+.stage-card {
+  background:var(--bg-card-alt);
+  border-left:3px solid;
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  padding:14px 14px;
+}
+.stage-card .st-year {
+  font-family:var(--font-code); font-size:0.68rem; font-weight:600;
+}
+.stage-card .st-title {
+  font-family:var(--font-display); font-weight:700; font-size:0.88rem;
+  margin-top:2px;
+}
+.stage-card .st-desc { font-size:0.72rem; color:var(--text-dim); margin-top:4px; line-height:1.6; }
+.stage-card.s1 { border-color:var(--green); }
+.stage-card.s1 .st-year { color:var(--green); }
+.stage-card.s2 { border-color:var(--cyan); }
+.stage-card.s2 .st-year { color:var(--cyan); }
+.stage-card.s3 { border-color:var(--purple); }
+.stage-card.s3 .st-year { color:var(--purple); }
+.stage-card.s4 { border-color:var(--pink); }
+.stage-card.s4 .st-year { color:var(--pink); }
+
+/* Security Visual */
+.trust-zones {
+  display:flex; flex-direction:column; gap:0; align-items:center;
+}
+.trust-zone {
+  width:100%; max-width:340px;
+  border-radius:var(--radius-sm);
+  padding:14px 14px;
+  text-align:center;
+}
+.trust-zone.untrusted {
+  background:rgba(248,81,73,0.08);
+  border:1px dashed var(--red);
+}
+.trust-zone.trusted {
+  background:rgba(63,185,80,0.08);
+  border:1px solid var(--green);
+}
+.trust-gate {
+  width:100%; max-width:340px;
+  padding:10px;
+  text-align:center;
+  font-family:var(--font-code); font-size:0.72rem;
+  color:var(--yellow);
+}
+.trust-gate .gate-icon { font-size:1.4rem; }
+.tz-title {
+  font-family:var(--font-display); font-weight:700; font-size:0.82rem;
+  margin-bottom:6px;
+}
+.tz-items {
+  font-size:0.72rem; color:var(--text-dim); line-height:1.8;
+}
+
+/* ─── INFOGRAPHIC MODE ─── */
+.info-section {
+  margin-bottom:20px;
+}
+.info-section h3 {
+  font-family:var(--font-display); font-weight:900; font-size:1rem;
+  margin-bottom:10px; padding-bottom:6px;
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:8px;
+}
+.info-section p, .info-section li {
+  font-size:0.82rem; color:var(--text-dim); line-height:1.8;
+}
+.info-section ul { padding-left:18px; }
+.info-section li { margin-bottom:4px; }
+.info-table {
+  width:100%; border-collapse:collapse; margin:10px 0;
+  font-size:0.75rem;
+}
+.info-table th {
+  background:var(--surface); padding:8px 10px;
+  text-align:left; font-weight:700; font-family:var(--font-display);
+  border-bottom:2px solid var(--accent);
+  color:var(--text);
+  position:sticky; top:0;
+}
+.info-table td {
+  padding:8px 10px; border-bottom:1px solid var(--border);
+  color:var(--text-dim); vertical-align:top;
+}
+.info-table tr:hover td { background:rgba(255,255,255,0.02); }
+.code-block {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:12px 14px;
+  font-family:var(--font-code); font-size:0.72rem;
+  line-height:1.6; color:var(--cyan);
+  overflow-x:auto; margin:10px 0;
+  white-space:pre-wrap; word-break:break-all;
+}
+.endpoint-row {
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:10px 12px; margin-bottom:8px;
+  display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+}
+.method-badge {
+  font-family:var(--font-code); font-size:0.68rem; font-weight:600;
+  padding:2px 8px; border-radius:4px;
+}
+.method-badge.get { background:var(--green-glow); color:var(--green); }
+.method-badge.post { background:var(--accent-glow); color:var(--accent); }
+.ep-path {
+  font-family:var(--font-code); font-size:0.75rem; color:var(--text);
+}
+.ep-desc { font-size:0.7rem; color:var(--text-dim); width:100%; margin-top:2px; }
+
+/* ─── NAV DOTS ─── */
+.section-nav {
+  position:fixed; right:6px; top:50%; transform:translateY(-50%);
+  z-index:90; display:flex; flex-direction:column; gap:8px;
+}
+.nav-dot {
+  width:6px; height:6px; border-radius:50%;
+  background:var(--text-muted); cursor:pointer;
+  transition:all .2s;
+}
+.nav-dot.active { background:var(--accent); transform:scale(1.5); }
+
+/* ─── FOOTER ─── */
+.site-footer {
+  text-align:center; padding:24px 16px;
+  border-top:1px solid var(--border);
+  font-size:0.7rem; color:var(--text-muted);
+  line-height:1.8;
+}
+.footer-name { font-family:var(--font-display); font-weight:700; color:var(--text-dim); }
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(16px); }
+  to { opacity:1; transform:translateY(0); }
+}
+.section { animation: fadeUp .5s ease both; }
+.section:nth-child(2) { animation-delay:.05s; }
+.section:nth-child(3) { animation-delay:.1s; }
+.section:nth-child(4) { animation-delay:.15s; }
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:var(--bg); }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:4px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-badge">
+      <span class="emoji">🦙</span>
+      <span>文芸フリマ実験設計</span>
+    </div>
+    <div class="header-module">Module 6</div>
+  </div>
+</header>
+
+<!-- MODE TOGGLE -->
+<div class="mode-toggle-wrap">
+  <div class="mode-toggle">
+    <button class="mode-btn active" id="btnPonchie" onclick="switchMode('ponchie')">
+      🎨 ポンチ絵
+    </button>
+    <button class="mode-btn" id="btnInfo" onclick="switchMode('info')">
+      📊 インフォグラフィック
+    </button>
+  </div>
+</div>
+
+<main class="main">
+
+<!-- HERO -->
+<div class="hero">
+  <h1 class="hero-title">沖縄文芸フリマ<br>実験プロトタイプ設計</h1>
+  <p class="hero-sub">知識・スキル・文化をトークン化し<br>リアルタイムで価値流通させるシステム</p>
+  <div class="hero-tags">
+    <span class="hero-tag polygon">Polygon Testnet</span>
+    <span class="hero-tag module">人生科 Module 6</span>
+    <span class="hero-tag period">2026年8月〜12月</span>
+  </div>
+</div>
+
+<!-- ══════════ ポンチ絵モード ══════════ -->
+<div class="ponchie" id="ponchieView">
+
+  <!-- 1. システム全体像 -->
+  <div class="section" id="sec-arch">
+    <div class="section-label">Part 1</div>
+    <div class="section-title">🏗️ システム全体像</div>
+    <div class="card accent-top">
+      <div class="arch-diagram">
+        <div class="arch-flow">
+          <div class="arch-node highlight">
+            <div class="node-icon">👤</div>
+            <div class="node-label">参加者の行為</div>
+            <div class="node-detail">出品登録 / SNS投稿 / 推薦</div>
+          </div>
+          <div class="arch-arrow"></div>
+          <div class="arch-node">
+            <div class="node-icon">📱</div>
+            <div class="node-label">QRコードスキャン</div>
+            <div class="node-detail">1行為 = 1QR（nonce付き）</div>
+          </div>
+          <div class="arch-arrow"></div>
+          <div class="arch-node highlight-cyan">
+            <div class="node-icon">🤖</div>
+            <div class="node-label">AI判定エンジン（4層）</div>
+            <div class="node-detail">本人確認 → 真正性 → 孤立スコア → リスク</div>
+          </div>
+          <div class="arch-arrow"></div>
+          <div class="arch-node highlight-purple">
+            <div class="node-icon">⛓️</div>
+            <div class="node-label">スマートコントラクト</div>
+            <div class="node-detail">mintTokens() → Polygon記録</div>
+          </div>
+          <div class="arch-arrow"></div>
+          <div class="arch-node highlight-green">
+            <div class="node-icon">🎖️</div>
+            <div class="node-label">トークン獲得</div>
+            <div class="node-detail">3〜5秒で発行完了</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. AI判定パイプライン -->
+  <div class="section" id="sec-ai">
+    <div class="section-label">Part 2</div>
+    <div class="section-title">🧠 AI判定 4層パイプライン</div>
+    <div class="card cyan-top">
+      <div class="pipeline">
+        <div class="pipe-layer layer1">
+          <div class="pipe-num"><div class="line"></div><div class="num">1</div></div>
+          <div class="pipe-content">
+            <div class="pipe-title">🔐 本人確認</div>
+            <div class="pipe-desc">ウォレット署名（ECDSA）+ 生体認証 + デバイスID検証</div>
+            <span class="pipe-threshold">閾値: ≥ 0.95</span>
+          </div>
+        </div>
+        <div class="pipe-layer layer2">
+          <div class="pipe-num"><div class="line"></div><div class="num">2</div></div>
+          <div class="pipe-content">
+            <div class="pipe-title">✅ 真正性判定</div>
+            <div class="pipe-desc">新規性検査 / SNS実績 / 推薦元信用 / 位置情報確認</div>
+            <span class="pipe-threshold">閾値: ≥ 0.85</span>
+          </div>
+        </div>
+        <div class="pipe-layer layer3">
+          <div class="pipe-num"><div class="line"></div><div class="num">3</div></div>
+          <div class="pipe-content">
+            <div class="pipe-title">📊 孤立スコア</div>
+            <div class="pipe-desc">社会的関与（40%）＋ コミュニティ貢献（30%）＋ 信用蓄積（30%）</div>
+            <span class="pipe-threshold">乗数: 1.0x 〜 2.0x</span>
+          </div>
+        </div>
+        <div class="pipe-layer layer4">
+          <div class="pipe-num"><div class="line"></div><div class="num">4</div></div>
+          <div class="pipe-content">
+            <div class="pipe-title">🚨 リスク検出</div>
+            <div class="pipe-desc">短時間多数スキャン / 同一デバイス大量アカウント / 不可能な位置変化</div>
+            <span class="pipe-threshold">閾値: &lt; 0.7 で承認</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. トークン種別 -->
+  <div class="section" id="sec-token">
+    <div class="section-label">Part 3</div>
+    <div class="section-title">🪙 5種のトークン</div>
+    <div class="card purple-top">
+      <div class="token-grid">
+        <div class="token-card">
+          <div class="tk-icon">🎫</div>
+          <div class="tk-name">参加トークン</div>
+          <div class="tk-amount">10</div>
+          <div class="tk-purpose">出品・来場・イベント参加</div>
+        </div>
+        <div class="token-card">
+          <div class="tk-icon">📢</div>
+          <div class="tk-name">発信トークン</div>
+          <div class="tk-amount">15</div>
+          <div class="tk-purpose">SNS投稿・レビュー</div>
+        </div>
+        <div class="token-card">
+          <div class="tk-icon">⭐</div>
+          <div class="tk-name">被推薦トークン</div>
+          <div class="tk-amount">20</div>
+          <div class="tk-purpose">他者からの推薦</div>
+        </div>
+        <div class="token-card">
+          <div class="tk-icon">🤝</div>
+          <div class="tk-name">応援トークン</div>
+          <div class="tk-amount">25</div>
+          <div class="tk-purpose">相互扶助・サポート</div>
+        </div>
+        <div class="token-card full-width">
+          <div class="tk-icon">🛡️</div>
+          <div class="tk-name">確認トークン</div>
+          <div class="tk-amount">5</div>
+          <div class="tk-purpose">AI判定合格・完全透明性達成</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. 孤立スコア -->
+  <div class="section" id="sec-score">
+    <div class="section-label">Part 4</div>
+    <div class="section-title">📈 孤立スコア乗数</div>
+    <div class="card green-top">
+      <div class="score-bar-list">
+        <div class="score-item">
+          <div class="score-range">0.8-1.0</div>
+          <div class="score-bar-wrap"><div class="score-bar" style="width:20%;background:var(--text-muted);">1.0x</div></div>
+          <div class="score-label">新規参加者</div>
+        </div>
+        <div class="score-item">
+          <div class="score-range">1.0-1.3</div>
+          <div class="score-bar-wrap"><div class="score-bar" style="width:35%;background:var(--green);">1.1x</div></div>
+          <div class="score-label">活動初期</div>
+        </div>
+        <div class="score-item">
+          <div class="score-range">1.3-1.6</div>
+          <div class="score-bar-wrap"><div class="score-bar" style="width:55%;background:var(--cyan);">1.3x</div></div>
+          <div class="score-label">定常参加</div>
+        </div>
+        <div class="score-item">
+          <div class="score-range">1.6-1.8</div>
+          <div class="score-bar-wrap"><div class="score-bar" style="width:75%;background:var(--purple);">1.5x</div></div>
+          <div class="score-label">常連</div>
+        </div>
+        <div class="score-item">
+          <div class="score-range">1.8-2.0</div>
+          <div class="score-bar-wrap"><div class="score-bar" style="width:100%;background:linear-gradient(90deg,var(--accent),var(--yellow));">2.0x</div></div>
+          <div class="score-label">コアメンバー</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. ユーザーフロー -->
+  <div class="section" id="sec-flow">
+    <div class="section-label">Part 5</div>
+    <div class="section-title">🚶 ユーザーフロー</div>
+    <div class="card accent-top">
+      <div class="flow-steps">
+        <div class="flow-step">
+          <div class="flow-step-icon step-blue">📲</div>
+          <div class="flow-step-body">
+            <div class="fs-title">1. アプリ登録 & ウォレット設定</div>
+            <div class="fs-desc">MetaMask/Phantom接続＋生体認証設定</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-icon step-orange">🎟️</div>
+          <div class="flow-step-body">
+            <div class="fs-title">2. 会場でQRコード受取</div>
+            <div class="fs-desc">出品用の紙QR＋SNS投稿用のアプリ内QR</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-icon step-green">📷</div>
+          <div class="flow-step-body">
+            <div class="fs-title">3. QRスキャン & 生体認証</div>
+            <div class="fs-desc">カメラ起動→スキャン→指紋/顔認証トリガー</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-icon step-purple">🤖</div>
+          <div class="flow-step-body">
+            <div class="fs-title">4. AI 4層判定（自動）</div>
+            <div class="fs-desc">本人確認0.98 → 真正性0.88 → 孤立1.5x → リスク0.12</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-icon step-orange">⛓️</div>
+          <div class="flow-step-body">
+            <div class="fs-title">5. ブロックチェーン記録</div>
+            <div class="fs-desc">基本10個 × 孤立1.5x = 15トークン獲得（3.2秒）</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-icon step-green">🎖️</div>
+          <div class="flow-step-body">
+            <div class="fs-title">6. トークン確認 & 利用開始</div>
+            <div class="fs-desc">提携商店で使用・教育プラットフォーム解放</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. トークン価値化ロードマップ -->
+  <div class="section" id="sec-stage">
+    <div class="section-label">Part 6</div>
+    <div class="section-title">🗺️ 価値化ロードマップ</div>
+    <div class="stage-cards">
+      <div class="stage-card s1">
+        <div class="st-year">2026年9月〜</div>
+        <div class="st-title">Stage 1：地域クレジット化</div>
+        <div class="st-desc">1トークン＝100円相当。沖縄市内の提携商店で使用可能。地域経済循環を促進。</div>
+      </div>
+      <div class="stage-card s2">
+        <div class="st-year">2026年10月〜</div>
+        <div class="st-title">Stage 2：教育投資化</div>
+        <div class="st-desc">トークンを子どもの塾代・教育サービスに充当。「自分の知識」→「次世代教育」への転換。</div>
+      </div>
+      <div class="stage-card s3">
+        <div class="st-year">2027年〜</div>
+        <div class="st-title">Stage 3：信用スコア化</div>
+        <div class="st-desc">トークン保有量→ローン金利優遇・仕事紹介優先。「貧困層でも信用がある」を実現。</div>
+      </div>
+      <div class="stage-card s4">
+        <div class="st-year">2030年〜</div>
+        <div class="st-title">Stage 4：福祉投票権化</div>
+        <div class="st-desc">トークン保有→福祉予算配分を投票。「支援を受けた人が福祉を決める側に」。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. セキュリティ -->
+  <div class="section" id="sec-security">
+    <div class="section-label">Part 7</div>
+    <div class="section-title">🔒 ゼロトラスト・セキュリティ</div>
+    <div class="card purple-top">
+      <div class="trust-zones">
+        <div class="trust-zone untrusted">
+          <div class="tz-title" style="color:var(--red);">❌ 外部（信頼できない）</div>
+          <div class="tz-items">
+            QRペイロード / ウォレット署名<br>
+            デバイスID / APIリクエスト
+          </div>
+        </div>
+        <div class="trust-gate">
+          <div class="gate-icon">⚡</div>
+          <div>厳格な検証ゲートウェイ<br>署名検証 / ペイロード検証 / 時刻チェック</div>
+        </div>
+        <div class="trust-zone trusted">
+          <div class="tz-title" style="color:var(--green);">✅ 内部（信頼できる）</div>
+          <div class="tz-items">
+            AI判定結果 / トークン発行決定<br>
+            ブロックチェーン記録 / ウォレット状態
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. タイムライン -->
+  <div class="section" id="sec-timeline">
+    <div class="section-label">Part 8</div>
+    <div class="section-title">📅 実装タイムライン</div>
+    <div class="card accent-top">
+      <div class="timeline">
+        <div class="tl-item active">
+          <div class="tl-date">2026年5月中旬</div>
+          <div class="tl-title">統合仕様書完成</div>
+          <div class="tl-desc">本ドキュメントの確定</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">2026年5月下旬〜6月</div>
+          <div class="tl-title">Polygon Testnet デプロイ</div>
+          <div class="tl-desc">スマートコントラクト動作確認</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">2026年6月下旬</div>
+          <div class="tl-title">アプリ β版リリース</div>
+          <div class="tl-desc">iOS/Android 実機テスト（30人）</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">2026年7月</div>
+          <div class="tl-title">オペレーター訓練</div>
+          <div class="tl-desc">運営体制構築・FAQ整備</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">2026年8月</div>
+          <div class="tl-title">🎪 文芸フリマ実験開始</div>
+          <div class="tl-desc">100〜200スキャン実績確認</div>
+        </div>
+        <div class="tl-item future">
+          <div class="tl-date">2026年9月</div>
+          <div class="tl-title">結果分析・改善</div>
+          <div class="tl-desc">ガス費用・レスポンス時間・エラー率検証</div>
+        </div>
+        <div class="tl-item future">
+          <div class="tl-date">2026年10月〜12月</div>
+          <div class="tl-title">Stripe本格運用</div>
+          <div class="tl-desc">有料メンバーシップ販売開始</div>
+        </div>
+        <div class="tl-item future">
+          <div class="tl-date">2027年春</div>
+          <div class="tl-title">Solana Mainnet 移行</div>
+          <div class="tl-desc">本格運用（ガス費用 &lt;¥1/tx）</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /ponchieView -->
+
+
+<!-- ══════════ インフォグラフィックモード ══════════ -->
+<div class="info-mode" id="infoView">
+
+  <!-- 1. システム概要 -->
+  <div class="section info-section">
+    <h3>📋 1. システム概要</h3>
+    <p>「知識・スキル・文化」をトークン化し、QRコードスキャン経由でブロックチェーン上に自動記録するシステム。参加者の出品登録・SNS投稿・推薦などの「参加行為」がリアルタイムでトークン化されます。</p>
+    <div style="margin-top:12px;">
+      <table class="info-table">
+        <tr><th>項目</th><th>内容</th></tr>
+        <tr><td>対象時期</td><td>2026年8月〜12月</td></tr>
+        <tr><td>ブロックチェーン</td><td>Polygon Testnet（2026）→ Solana Mainnet（2027〜）</td></tr>
+        <tr><td>参加者層</td><td>出品者・購入者・運営スタッフ（推定100-200名）</td></tr>
+        <tr><td>処理時間</td><td>QRスキャン後 3〜5秒でトークン発行</td></tr>
+        <tr><td>人生科モジュール</td><td>Module 6 - 価値流通の実装実験</td></tr>
+      </table>
+    </div>
+    <p style="margin-top:10px;">主要な特徴として、ゼロトラスト検証（AI自動判定）、即座性（3〜5秒）、透明性（改ざん不可能な記録）、オフライン対応（事後同期設計）があります。</p>
+  </div>
+
+  <!-- 2. ステークホルダー -->
+  <div class="section info-section">
+    <h3>👥 2. ステークホルダーと役割</h3>
+    <table class="info-table">
+      <tr><th>役割</th><th>責務</th><th>例</th></tr>
+      <tr><td>参加者</td><td>QRスキャン・行為の実行・トークン獲得</td><td>出品者、来場者</td></tr>
+      <tr><td>AI判定エンジン</td><td>本人確認・真正性判定・スコア計算</td><td>外部MLサービス</td></tr>
+      <tr><td>スマートコントラクト</td><td>トークン発行記録・改ざん防止</td><td>Polygon コントラクト</td></tr>
+      <tr><td>APIサーバー</td><td>リクエスト処理・判定統合</td><td>Node.js/Express</td></tr>
+      <tr><td>モバイルアプリ</td><td>QRスキャン・ローカル認証</td><td>React Native</td></tr>
+      <tr><td>オペレーター</td><td>監視・トラブル対応</td><td>運営チーム</td></tr>
+    </table>
+  </div>
+
+  <!-- 3. QRコード仕様 -->
+  <div class="section info-section">
+    <h3>📱 3. QRコード仕様</h3>
+    <p>各行為に対して一意のQRコードが生成されます。ペイロードにはイベントID、行為種別、nonce（使い捨て）、AI判定要件、コントラクトアドレスが含まれます。</p>
+    <div class="code-block">{
+  "event_id": "furima_2026_okinawa",
+  "action_type": "item_registration|sns_post|...",
+  "nonce": "abc123def456...",
+  "required_ai_checks": [
+    "identity_verification",
+    "authenticity_check",
+    "isolation_score_adjustment",
+    "risk_detection"
+  ]
+}</div>
+    <table class="info-table">
+      <tr><th>項目</th><th>仕様</th></tr>
+      <tr><td>使用回数</td><td>1QRコード = 1度のみスキャン可</td></tr>
+      <tr><td>有効期間</td><td>生成から30日間</td></tr>
+      <tr><td>配布形態</td><td>オンライン（アプリ内）/ 紙プリント / ハイブリッド</td></tr>
+    </table>
+  </div>
+
+  <!-- 4. APIエンドポイント -->
+  <div class="section info-section">
+    <h3>🔌 4. 主要APIエンドポイント</h3>
+    <div class="endpoint-row">
+      <span class="method-badge post">POST</span>
+      <span class="ep-path">/api/v1/scan-qr</span>
+      <span class="ep-desc">QRスキャン処理・トークン発行の中核エンドポイント</span>
+    </div>
+    <div class="endpoint-row">
+      <span class="method-badge get">GET</span>
+      <span class="ep-path">/api/v1/user/{id}/tokens</span>
+      <span class="ep-desc">ユーザーの現在トークン残高取得</span>
+    </div>
+    <div class="endpoint-row">
+      <span class="method-badge get">GET</span>
+      <span class="ep-path">/api/v1/user/{id}/isolation-score</span>
+      <span class="ep-desc">孤立スコア確認</span>
+    </div>
+    <div class="endpoint-row">
+      <span class="method-badge get">GET</span>
+      <span class="ep-path">/api/v1/transaction/{tx_hash}</span>
+      <span class="ep-desc">ブロックチェーン記録確認</span>
+    </div>
+    <div class="endpoint-row">
+      <span class="method-badge post">POST</span>
+      <span class="ep-path">/api/v1/offline-sync</span>
+      <span class="ep-desc">オフライン時の記録同期</span>
+    </div>
+    <div class="endpoint-row">
+      <span class="method-badge post">POST</span>
+      <span class="ep-path">/api/v1/support-ticket</span>
+      <span class="ep-desc">判定失敗時のサポートチケット作成</span>
+    </div>
+  </div>
+
+  <!-- 5. AI判定詳細 -->
+  <div class="section info-section">
+    <h3>🧠 5. AI判定エンジン詳細</h3>
+    <table class="info-table">
+      <tr><th>レイヤー</th><th>判定内容</th><th>閾値</th></tr>
+      <tr><td>Layer 1: 本人確認</td><td>ウォレット署名（ECDSA）・生体認証・デバイスID・過去行動パターン</td><td>≥ 0.95</td></tr>
+      <tr><td>Layer 2: 真正性</td><td>新規性検査・SNSアカウント実績・推薦元信用・位置情報</td><td>≥ 0.85</td></tr>
+      <tr><td>Layer 3: 孤立スコア</td><td>社会的関与(40%) + コミュニティ貢献(30%) + 信用蓄積(30%)</td><td>1.0x〜2.0x</td></tr>
+      <tr><td>Layer 4: リスク検出</td><td>短時間多数スキャン・同一デバイス大量アカウント・不可能な位置変化</td><td>&lt; 0.7</td></tr>
+    </table>
+    <p style="margin-top:10px;"><strong>孤立スコア計算例:</strong></p>
+    <div class="code-block">社会的関与度 = 0.8 × 0.4 = 0.32
+コミュニティ貢献 = 0.6 × 0.3 = 0.18
+信用蓄積度 = 0.9 × 0.3 = 0.27
+─────────────────────
+合計倍率 = 1.0 + 0.77 = 1.77x
+→ 基本10トークン × 1.77 = 17.7トークン</div>
+  </div>
+
+  <!-- 6. トークンシステム -->
+  <div class="section info-section">
+    <h3>🪙 6. トークンシステム詳細</h3>
+    <table class="info-table">
+      <tr><th>トークン名</th><th>獲得行為</th><th>基本量</th><th>目的</th></tr>
+      <tr><td>🎫 参加トークン</td><td>出品登録・来場・イベント参加</td><td>10</td><td>参加促進</td></tr>
+      <tr><td>📢 発信トークン</td><td>SNS投稿・レビュー・コンテンツ作成</td><td>15</td><td>情報流通促進</td></tr>
+      <tr><td>⭐ 被推薦トークン</td><td>他者から推薦される</td><td>20</td><td>評判形成</td></tr>
+      <tr><td>🤝 応援トークン</td><td>相互扶助（他者をサポート）</td><td>25</td><td>コミュニティ形成</td></tr>
+      <tr><td>🛡️ 確認トークン</td><td>AI判定合格・完全透明性達成</td><td>5</td><td>信用の可視化</td></tr>
+    </table>
+    <h3 style="margin-top:16px;">📈 孤立スコア乗数テーブル</h3>
+    <table class="info-table">
+      <tr><th>スコア範囲</th><th>倍率</th><th>社会的地位</th></tr>
+      <tr><td>0.8〜1.0</td><td>1.0x</td><td>新規参加者</td></tr>
+      <tr><td>1.0〜1.3</td><td>1.1x</td><td>活動初期</td></tr>
+      <tr><td>1.3〜1.6</td><td>1.3x</td><td>定常参加</td></tr>
+      <tr><td>1.6〜1.8</td><td>1.5x</td><td>常連</td></tr>
+      <tr><td>1.8〜2.0</td><td>2.0x</td><td>コアメンバー</td></tr>
+    </table>
+  </div>
+
+  <!-- 7. 価値化ステージ -->
+  <div class="section info-section">
+    <h3>🗺️ 7. トークン価値化ステージ</h3>
+    <table class="info-table">
+      <tr><th>時期</th><th>ステージ</th><th>内容</th></tr>
+      <tr><td>2026年9月〜</td><td>地域クレジット化</td><td>1トークン=100円相当、沖縄市内の提携商店で使用可能</td></tr>
+      <tr><td>2026年10月〜</td><td>教育投資化</td><td>トークン→子どもの塾代・教育サービスに充当</td></tr>
+      <tr><td>2027年〜</td><td>信用スコア化</td><td>トークン保有量→ローン金利優遇・仕事紹介優先度</td></tr>
+      <tr><td>2030年〜</td><td>福祉投票権化</td><td>トークン保有→福祉予算配分を投票できる権利</td></tr>
+    </table>
+  </div>
+
+  <!-- 8. スマートコントラクト -->
+  <div class="section info-section">
+    <h3>⛓️ 8. スマートコントラクト設計</h3>
+    <p>主要な3つの関数と、ロールベースアクセス制御で構成されます。</p>
+    <div class="code-block">// トークン発行
+mintTokens(address, amount, actionType, timestamp)
+  → onlyMinter / noReentrancy
+
+// 孤立スコア更新
+updateIsolationScoreMultiplier(address, newMultiplier)
+  → onlyOracle / 100-200 (1.0x-2.0x)
+
+// 二重使用防止
+validateActionId(actionId)
+  → usedActionIds mapping</div>
+    <table class="info-table">
+      <tr><th>ロール</th><th>権限</th><th>例</th></tr>
+      <tr><td>Owner</td><td>ロール付与・初期設定</td><td>法人代表</td></tr>
+      <tr><td>Minter</td><td>mintTokens() 実行</td><td>APIサーバー</td></tr>
+      <tr><td>Oracle</td><td>スコア更新</td><td>AI判定エンジン</td></tr>
+      <tr><td>Pauser</td><td>緊急停止</td><td>セキュリティチーム</td></tr>
+    </table>
+    <p style="margin-top:10px;"><strong>ガス費用:</strong> Polygon Testnet &lt;¥50/tx → Solana Mainnet &lt;¥1/tx（2027〜）</p>
+  </div>
+
+  <!-- 9. セキュリティ -->
+  <div class="section info-section">
+    <h3>🔒 9. セキュリティモデル</h3>
+    <p>ゼロトラスト原則に基づき、全ての外部入力を「信頼できない」と仮定し、複数層の検証を通過した後のみ内部状態を変更します。</p>
+    <table class="info-table">
+      <tr><th>検証対象</th><th>検証方法</th></tr>
+      <tr><td>QRペイロード</td><td>JSON schema + nonce チェック</td></tr>
+      <tr><td>ウォレット署名</td><td>ECDSA 暗号検証</td></tr>
+      <tr><td>タイムスタンプ</td><td>UTC ±3分ウィンドウ</td></tr>
+      <tr><td>デバイスID</td><td>事前登録チェック</td></tr>
+      <tr><td>二重使用</td><td>usedActionIds mapping</td></tr>
+      <tr><td>権限分離</td><td>onlyMinter / onlyOracle</td></tr>
+    </table>
+  </div>
+
+  <!-- 10. テストシナリオ -->
+  <div class="section info-section">
+    <h3>🧪 10. テストシナリオ</h3>
+    <p><strong>正常系テスト:</strong></p>
+    <table class="info-table">
+      <tr><th>#</th><th>テスト項目</th><th>成功条件</th></tr>
+      <tr><td>T-01</td><td>QRスキャン→トークン発行完了</td><td>3秒以内</td></tr>
+      <tr><td>T-02</td><td>孤立スコア高→1.5倍発行</td><td>正確に15個</td></tr>
+      <tr><td>T-03</td><td>オフライン→復帰時同期</td><td>全3段階完了</td></tr>
+      <tr><td>T-04</td><td>複数ユーザー同時スキャン</td><td>並行エラーなし</td></tr>
+    </table>
+    <p style="margin-top:12px;"><strong>異常系テスト:</strong></p>
+    <table class="info-table">
+      <tr><th>#</th><th>テスト項目</th><th>期待結果</th></tr>
+      <tr><td>E-01</td><td>同一QR二重スキャン</td><td>2回目で拒否</td></tr>
+      <tr><td>E-02</td><td>改ざんQRペイロード</td><td>rejected</td></tr>
+      <tr><td>E-03</td><td>署名不正</td><td>トークン発行なし</td></tr>
+      <tr><td>E-04</td><td>デバイスID未登録</td><td>スキャン拒否</td></tr>
+    </table>
+    <p style="margin-top:12px;"><strong>負荷テスト:</strong></p>
+    <table class="info-table">
+      <tr><th>#</th><th>テスト項目</th><th>目標値</th></tr>
+      <tr><td>L-01</td><td>同時100スキャン/分</td><td>レスポンス≤5秒</td></tr>
+      <tr><td>L-02</td><td>ピーク時ガス費用</td><td>≤¥50/tx</td></tr>
+      <tr><td>L-03</td><td>AI判定応答時間</td><td>≤1秒/request</td></tr>
+    </table>
+  </div>
+
+  <!-- 11. オフライン対応 -->
+  <div class="section info-section">
+    <h3>📡 11. オフライン対応</h3>
+    <p>沖縄のインターネット環境を想定し、オフライン時はローカル（SQLite）に一時記録し、復帰時に自動同期を行います。</p>
+    <div class="code-block">【オフライン時】
+QRスキャン → ローカル一時記録（SQLite）
+→ UI: 「同期保留中」表示
+
+【復帰時】
+① ローカル記録をAPI送信
+② 重複チェック（処理済みならスキップ）
+③ ブロックチェーンに記録
+④ 「✅ 同期完了」通知</div>
+    <p style="margin-top:8px;">QRスキャンが不可能な場合は「手動報告フォーム」から入力し、オペレーターがAI判定を手動トリガーします。</p>
+  </div>
+
+  <!-- 12. 実装タイムライン -->
+  <div class="section info-section">
+    <h3>📅 12. 実装タイムライン</h3>
+    <table class="info-table">
+      <tr><th>時期</th><th>マイルストーン</th><th>完了条件</th></tr>
+      <tr><td>5月中旬</td><td>統合仕様書完成</td><td>本仕様書確定</td></tr>
+      <tr><td>5月下旬〜6月</td><td>Polygon Testnet デプロイ</td><td>コントラクト動作確認</td></tr>
+      <tr><td>6月下旬</td><td>アプリ β版リリース</td><td>実機テスト（30人）</td></tr>
+      <tr><td>7月</td><td>オペレーター訓練</td><td>運営体制構築</td></tr>
+      <tr><td>8月</td><td>文芸フリマ実験開始</td><td>100〜200スキャン確認</td></tr>
+      <tr><td>9月</td><td>結果分析・改善</td><td>各種指標検証</td></tr>
+      <tr><td>10月〜12月</td><td>Stripe本格運用</td><td>有料メンバーシップ販売</td></tr>
+      <tr><td>2027年春</td><td>Solana Mainnet移行</td><td>ガス費用&lt;¥1/tx</td></tr>
+    </table>
+  </div>
+
+  <!-- 13. Stripe統合 -->
+  <div class="section info-section">
+    <h3>💳 13. Stripe統合・有料メンバーシップ</h3>
+    <table class="info-table">
+      <tr><th>コース</th><th>月額</th><th>主な内容</th></tr>
+      <tr><td>基本コース</td><td>¥4,980</td><td>全編アクセス・コード例・AI設計書</td></tr>
+      <tr><td>プロフェッショナル</td><td>¥9,980</td><td>基本＋質問フォーム・デプロイガイド</td></tr>
+      <tr><td>企業導入</td><td>要相談</td><td>専任サポート・カスタマイズ相談</td></tr>
+    </table>
+  </div>
+
+</div><!-- /infoView -->
+
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-name">設計責任者：佐渡山 要</div>
+  人生科プロジェクト統括<br>
+  🦙 アルパカすく〜る / 沖縄ルネサンス<br>
+  v1.0 ─ 2026-05-08
+</footer>
+
+<script>
+function switchMode(mode) {
+  const ponchie = document.getElementById('ponchieView');
+  const info = document.getElementById('infoView');
+  const btnP = document.getElementById('btnPonchie');
+  const btnI = document.getElementById('btnInfo');
+
+  if (mode === 'ponchie') {
+    ponchie.style.display = 'block';
+    info.style.display = 'none';
+    btnP.classList.add('active');
+    btnI.classList.remove('active');
+  } else {
+    ponchie.style.display = 'none';
+    info.style.display = 'block';
+    btnP.classList.remove('active');
+    btnI.classList.add('active');
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
