@@ -56,6 +56,109 @@
       padding: 20px 16px 80px;
     }
 
+    /* ===== 認証フォーム ===== */
+    .auth-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      z-index: 9999;
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .auth-overlay.show {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .auth-form-container {
+      background: var(--paper);
+      border: 2.5px solid var(--ink);
+      padding: 40px 24px;
+      max-width: 320px;
+      width: 90%;
+      box-shadow: 8px 8px 0 var(--ink);
+      text-align: center;
+    }
+
+    .auth-form-container h2 {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 18px;
+      font-weight: 800;
+      margin: 0 0 8px;
+      color: var(--ink);
+    }
+
+    .auth-form-container p {
+      font-size: 12px;
+      color: var(--ink-soft);
+      margin: 0 0 28px;
+      line-height: 1.6;
+    }
+
+    .auth-input-wrap {
+      margin-bottom: 16px;
+    }
+
+    .auth-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid var(--ink);
+      background: white;
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-size: 14px;
+      color: var(--ink);
+      box-sizing: border-box;
+    }
+
+    .auth-input::placeholder {
+      color: var(--ink-soft);
+    }
+
+    .auth-input:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(200, 71, 43, 0.2);
+    }
+
+    .auth-btn {
+      width: 100%;
+      padding: 12px 14px;
+      background: var(--ink);
+      color: var(--paper);
+      border: none;
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 3px 3px 0 var(--ink);
+    }
+
+    .auth-btn:hover {
+      background: var(--accent);
+      box-shadow: 4px 4px 0 var(--accent);
+    }
+
+    .auth-error {
+      display: none;
+      background: #ffebee;
+      border: 1.5px solid #c8472b;
+      color: #c8472b;
+      padding: 10px 12px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      border-radius: 4px;
+    }
+
+    .auth-error.show {
+      display: block;
+    }
+
     /* ===== ヘッダー ===== */
     .hero {
       text-align: center;
@@ -933,6 +1036,21 @@
 </head>
 
 <body>
+  <!-- 認証オーバーレイ -->
+  <div class="auth-overlay" id="authOverlay">
+    <div class="auth-form-container">
+      <h2>🔐 アクセス認証</h2>
+      <p>提案書を表示するには<br>パスワードを入力してください</p>
+      <div class="auth-error" id="authError">パスワードが正しくありません</div>
+      <form id="authForm" onsubmit="handleAuth(event)">
+        <div class="auth-input-wrap">
+          <input type="password" id="authPassword" class="auth-input" placeholder="パスワード" autocomplete="off">
+        </div>
+        <button type="submit" class="auth-btn">認証する</button>
+      </form>
+    </div>
+  </div>
+
   <div class="container">
 
     <!-- ヘッダー -->
@@ -1368,6 +1486,33 @@
   </div>
 
   <script>
+    // 認証チェック
+    function checkAuth() {
+      const isAuthenticated = sessionStorage.getItem('auth_7f8a9b2c');
+      if (!isAuthenticated) {
+        document.getElementById('authOverlay').classList.add('show');
+      }
+    }
+
+    // 認証処理
+    function handleAuth(event) {
+      event.preventDefault();
+      const password = document.getElementById('authPassword').value;
+      const correctPassword = 'yarukigenkikouki';
+      const errorElement = document.getElementById('authError');
+
+      if (password === correctPassword) {
+        sessionStorage.setItem('auth_7f8a9b2c', 'true');
+        document.getElementById('authOverlay').classList.remove('show');
+        document.getElementById('authPassword').value = '';
+        errorElement.classList.remove('show');
+      } else {
+        errorElement.classList.add('show');
+        document.getElementById('authPassword').value = '';
+      }
+    }
+
+    // トグル切替
     const btns = document.querySelectorAll('.toggle-btn');
     const views = document.querySelectorAll('.view');
 
@@ -1386,6 +1531,9 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     });
+
+    // ページ読み込み時に認証チェック
+    window.addEventListener('DOMContentLoaded', checkAuth);
   </script>
 </body>
 
