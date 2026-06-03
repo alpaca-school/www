@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>てぃあんだぁクラブ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ── サイト準拠カラー変数 ── */
+:root {
+  --bg:       #fdfefb;
+  --txt:      #5a524c;
+  --txt-m:    #8c8b85;
+  --acc:      rgb(185,208,139);   /* 鶯色系グリーン */
+  --acc-d:    rgb(120,158,72);    /* アクセントダーク */
+  --acc-dd:   rgb(80,115,40);     /* ボタン押下 */
+  --hi:       #f2e6b6;            /* ハイライト黄 */
+  --info-bg:  #f7faf4;
+  --card-bg:  #ffffff;
+  --sh:       0 4px 12px rgba(0,0,0,0.08);
+  --r:        16px;
+  --safe-b:   env(safe-area-inset-bottom,0px);
+  --orange:   #ff9f43;            /* お問い合わせボタン */
+}
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--bg);color:var(--txt);font-family:'Zen Maru Gothic',sans-serif;font-size:14px;line-height:1.7;overflow:hidden;-webkit-text-size-adjust:100%}
+
+/* ── SHELL ── */
+#app{max-width:390px;margin:0 auto;height:100dvh;display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
+
+/* ── TOPBAR ── */
+#topbar{
+  flex-shrink:0;
+  background:var(--acc);
+  padding:12px 16px 10px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;overflow:hidden;
+  border-bottom:3px solid var(--acc-d);
+}
+#topbar::after{
+  content:'てぃあんだぁ';
+  position:absolute;right:-6px;top:0;
+  font-size:38px;color:rgba(255,255,255,0.18);
+  pointer-events:none;white-space:nowrap;font-weight:700;
+}
+.tb-logo{display:flex;align-items:center;gap:10px}
+.tb-logo-img{
+  width:38px;height:38px;border-radius:50%;
+  object-fit:cover;border:2px solid rgba(255,255,255,0.6);
+  flex-shrink:0;background:var(--acc-d);
+}
+.tb-left h1{font-size:15px;font-weight:700;color:#fff;line-height:1.3}
+.tb-left span{font-size:9px;color:rgba(255,255,255,0.75);letter-spacing:.07em;display:block;margin-top:1px}
+.tb-right{
+  width:34px;height:34px;background:rgba(255,255,255,0.22);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:17px;cursor:pointer;transition:background .2s;flex-shrink:0;
+}
+.tb-right:active{background:rgba(255,255,255,0.38)}
+
+/* ── SCROLL ── */
+#sa{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
+#sa::-webkit-scrollbar{display:none}
+
+/* ── SCREEN ── */
+.sc{display:none;padding-bottom:20px;animation:fu .25s ease}
+.sc.on{display:block}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── HERO ── */
+.hero{position:relative;overflow:hidden}
+.hero-img-wrap{position:relative;height:200px;background:var(--acc-d)}
+.hero-img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.72)}
+.hero-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(80,115,40,.88) 0%,rgba(80,115,40,.3) 55%,transparent 100%);
+  display:flex;flex-direction:column;justify-content:flex-end;padding:18px;
+}
+.hero-overlay h2{font-size:21px;font-weight:700;color:#fff;line-height:1.5;margin-bottom:5px}
+.hero-overlay h2 em{font-style:normal;color:var(--hi)}
+.hero-overlay p{font-size:11px;color:rgba(255,255,255,.75);line-height:1.8}
+
+/* ── INTRO BOX ── */
+.intro-box{
+  margin:14px 14px 0;
+  background:var(--info-bg);border:1px solid var(--acc);
+  border-radius:var(--r);padding:14px 16px;
+  box-shadow:var(--sh);
+}
+.intro-box p{font-size:13px;color:var(--txt);line-height:1.85}
+.intro-box strong{color:var(--acc-dd)}
+
+/* ── SECTION ── */
+.sec{padding:18px 14px 0}
+.sec-lbl{
+  font-size:10px;letter-spacing:.12em;font-weight:700;
+  color:var(--acc-d);margin-bottom:10px;
+  display:flex;align-items:center;gap:6px;
+}
+.sec-lbl::after{content:'';flex:1;height:2px;background:var(--acc);border-radius:1px}
+
+/* ── SERVICE CARD ── */
+.svc-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.svc-card{
+  background:var(--card-bg);border-radius:var(--r);
+  box-shadow:var(--sh);padding:14px 10px;
+  cursor:pointer;transition:transform .15s;text-align:center;
+  border-top:4px solid var(--acc);
+}
+.svc-card:active{transform:scale(.97)}
+.svc-icon{font-size:26px;margin-bottom:5px;display:block}
+.svc-title{font-size:12px;font-weight:700;color:var(--acc-dd);line-height:1.4}
+.svc-sub{font-size:10px;color:var(--txt-m);margin-top:2px;line-height:1.5}
+
+/* ── CARD ── */
+.card{
+  background:var(--card-bg);border-radius:var(--r);
+  padding:13px 15px;margin-bottom:9px;
+  box-shadow:var(--sh);cursor:pointer;transition:transform .15s;
+}
+.card:active{transform:scale(.98)}
+.card-row{display:flex;align-items:center;gap:11px}
+.ci{
+  width:40px;height:40px;border-radius:11px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+}
+.ci.g{background:rgba(185,208,139,.2)}
+.ci.y{background:rgba(242,230,182,.5)}
+.ci.o{background:rgba(255,159,67,.15)}
+.ci.s{background:var(--info-bg)}
+.card-info{flex:1;min-width:0}
+.card-title{font-size:13px;font-weight:700;color:var(--txt);margin-bottom:2px}
+.card-sub{font-size:11px;color:var(--txt-m);line-height:1.5}
+.card-arr{font-size:16px;color:var(--acc);flex-shrink:0}
+
+/* ── EVENT CARD ── */
+.ev-card{
+  background:linear-gradient(135deg,var(--acc),var(--acc-d));
+  border-radius:var(--r);padding:15px;margin-bottom:9px;
+  color:#fff;cursor:pointer;transition:transform .15s;
+}
+.ev-card:active{transform:scale(.98)}
+.ev-badge{
+  font-size:10px;letter-spacing:.07em;
+  background:rgba(255,255,255,.22);
+  display:inline-block;padding:2px 8px;border-radius:10px;margin-bottom:7px;
+}
+.ev-card h3{font-size:15px;font-weight:700;margin-bottom:6px}
+.ev-meta{display:flex;gap:10px;flex-wrap:wrap}
+.ev-meta span{font-size:11px;opacity:.88}
+.ev-btn{
+  margin-top:11px;
+  background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.38);
+  color:#fff;font-size:12px;font-weight:700;
+  padding:7px 16px;border-radius:20px;cursor:pointer;
+  display:inline-block;font-family:'Zen Maru Gothic',sans-serif;
+  transition:background .15s;
+}
+.ev-btn:active{background:rgba(255,255,255,.35)}
+
+/* ── RELATED SITES ── */
+.rel-sites{display:flex;flex-direction:column;gap:8px}
+.rel-a{
+  display:flex;align-items:center;gap:10px;
+  background:var(--card-bg);border:1px solid #ddd;
+  border-radius:12px;padding:11px 13px;
+  text-decoration:none;transition:transform .15s;
+}
+.rel-a:active{transform:scale(.97)}
+.rel-ico{font-size:20px;width:34px;text-align:center;flex-shrink:0}
+.rel-info{flex:1;min-width:0}
+.rel-title{font-size:13px;font-weight:700;color:var(--acc-dd)}
+.rel-sub{font-size:10px;color:var(--txt-m)}
+.rel-arr{font-size:14px;color:#ccc}
+
+/* ── ANSIN ── */
+.ansin-hero{
+  background:linear-gradient(160deg,var(--acc-dd),var(--acc-d));
+  padding:22px 18px 26px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.ansin-hero::before{content:'🤲';position:absolute;right:10px;bottom:-8px;font-size:78px;opacity:.1;pointer-events:none}
+.ansin-hero h2{font-size:19px;font-weight:700;color:#fff;margin-bottom:5px}
+.ansin-hero p{font-size:11px;color:rgba(255,255,255,.72);line-height:1.8}
+
+.stamp-wrap{margin:14px 14px 0;background:var(--card-bg);border-radius:var(--r);padding:15px;box-shadow:var(--sh);border-top:4px solid var(--acc)}
+.stamp-ttl{font-size:12px;font-weight:700;color:var(--txt);margin-bottom:3px}
+.stamp-sub{font-size:11px;color:var(--txt-m);margin-bottom:11px}
+.stamps{display:flex;flex-direction:column;gap:7px}
+.sbtn{
+  display:flex;align-items:center;gap:9px;
+  padding:10px 12px;border-radius:11px;
+  border:1.5px solid #e8ede0;background:var(--info-bg);
+  cursor:pointer;transition:all .18s;
+  font-family:'Zen Maru Gothic',sans-serif;
+  font-size:12px;color:var(--txt);text-align:left;
+}
+.sbtn .si{font-size:17px}
+.sbtn.sel{background:rgba(185,208,139,.25);border-color:var(--acc-d);color:var(--acc-dd);font-weight:700}
+.sbtn:active{transform:scale(.97)}
+.stamp-ok{
+  margin-top:11px;background:var(--acc);color:#fff;border:none;
+  width:100%;padding:12px;border-radius:11px;
+  font-size:13px;font-weight:700;cursor:pointer;
+  font-family:'Zen Maru Gothic',sans-serif;transition:opacity .15s;display:none;
+}
+.stamp-ok:active{opacity:.82}
+
+.memo-wrap{margin:11px 14px 0;background:var(--card-bg);border-radius:var(--r);padding:15px;box-shadow:var(--sh)}
+.memo-ttl{font-size:12px;font-weight:700;color:var(--txt);margin-bottom:3px}
+.memo-note{font-size:10px;color:var(--txt-m);line-height:1.7;margin-bottom:9px}
+.memo-note em{font-style:normal;background:rgba(242,230,182,.7);color:var(--acc-dd);padding:1px 4px;border-radius:3px;font-weight:700}
+textarea{
+  width:100%;min-height:84px;background:var(--info-bg);
+  border:1.5px solid #e0e8d0;border-radius:10px;
+  padding:10px 12px;font-family:'Zen Maru Gothic',sans-serif;
+  font-size:13px;color:var(--txt);resize:none;outline:none;
+  transition:border-color .2s;line-height:1.7;
+}
+textarea:focus{border-color:var(--acc-d)}
+textarea::placeholder{color:var(--txt-m)}
+
+.contact-btns{margin:10px 14px 0;display:flex;gap:8px}
+.cbtn{
+  flex:1;padding:12px 5px;border-radius:12px;border:none;
+  font-family:'Zen Maru Gothic',sans-serif;font-size:12px;font-weight:700;
+  cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;
+  transition:transform .15s,opacity .15s;text-decoration:none;
+}
+.cbtn:active{transform:scale(.95);opacity:.85}
+.cbtn .cico{font-size:21px}
+.cbtn.tel{background:var(--orange);color:#fff}
+.cbtn.form{background:var(--acc);color:#fff}
+.cbtn.merumaga{background:var(--info-bg);color:var(--acc-dd);border:1.5px solid var(--acc)}
+
+/* ── FAQ ── */
+.faq-wrap{background:var(--card-bg);border-radius:var(--r);padding:15px;box-shadow:var(--sh)}
+.faq-item{margin-bottom:14px;border-bottom:1px solid #eee;padding-bottom:12px}
+.faq-item:last-child{margin-bottom:0;border-bottom:none;padding-bottom:0}
+.faq-q{font-weight:700;color:var(--acc-d);font-size:13px;display:block;margin-bottom:5px}
+.faq-a{font-size:12px;color:var(--txt-m);margin:0;line-height:1.75}
+
+/* ── TSUNAGARU ── */
+.ev-list-hdr{background:linear-gradient(135deg,var(--acc-dd),var(--acc-d));padding:18px 18px 22px}
+.ev-list-hdr h2{font-size:19px;font-weight:700;color:#fff;margin-bottom:4px}
+.ev-list-hdr p{font-size:11px;color:rgba(255,255,255,.65);line-height:1.7}
+
+.ev-item{background:var(--card-bg);border-radius:var(--r);padding:15px;margin-bottom:9px;box-shadow:var(--sh);border-top:4px solid var(--acc)}
+.ev-item-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:7px}
+.ev-item-title{font-size:14px;font-weight:700;color:var(--acc-dd);line-height:1.4}
+.ev-tag{font-size:10px;font-weight:700;letter-spacing:.04em;padding:3px 8px;border-radius:10px;flex-shrink:0}
+.ev-tag.r{background:rgba(185,208,139,.25);color:var(--acc-dd)}
+.ev-tag.g{background:rgba(185,208,139,.18);color:var(--acc-d)}
+.ev-tag.b{background:rgba(242,230,182,.6);color:#8a7a30}
+.ev-meta2{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:7px}
+.ev-meta2 span{font-size:11px;color:var(--txt-m)}
+.ev-price{font-size:13px;font-weight:700;color:var(--acc-dd);margin-bottom:9px}
+.hl-box{background:var(--info-bg);border-radius:10px;padding:10px 12px;margin-bottom:9px;font-size:12px;color:var(--txt)}
+.apbtn{
+  width:100%;padding:11px;background:var(--acc);color:#fff;
+  border:none;border-radius:10px;
+  font-family:'Zen Maru Gothic',sans-serif;font-size:13px;font-weight:700;
+  cursor:pointer;transition:opacity .15s;
+}
+.apbtn:active{opacity:.83}
+.apbtn.o{background:var(--orange)}
+.apbtn.y{background:var(--acc-d)}
+
+.enen-card{
+  background:linear-gradient(135deg,var(--info-bg),#fff);
+  border:1.5px dashed var(--acc);border-radius:var(--r);
+  padding:15px;margin-bottom:9px;text-align:center;
+}
+.enen-ttl{font-size:14px;font-weight:700;color:var(--acc-dd);margin-bottom:6px}
+.enen-card p{font-size:11px;color:var(--txt-m);line-height:1.8;margin-bottom:11px}
+.enen-btn{
+  background:var(--acc-d);color:#fff;border:none;border-radius:20px;
+  padding:9px 22px;font-family:'Zen Maru Gothic',sans-serif;
+  font-size:12px;font-weight:700;cursor:pointer;transition:opacity .15s;
+}
+.enen-btn:active{opacity:.82}
+
+/* ── MANABU ── */
+.manabu-hdr{background:linear-gradient(160deg,#3a4a28,var(--acc-dd));padding:17px 18px 21px}
+.manabu-hdr h2{font-size:19px;font-weight:700;color:#fff;margin-bottom:4px}
+.manabu-hdr p{font-size:11px;color:rgba(255,255,255,.6)}
+
+.art-card{background:var(--card-bg);border-radius:var(--r);padding:13px 15px;margin-bottom:9px;box-shadow:var(--sh);cursor:pointer;transition:transform .15s}
+.art-card:active{transform:scale(.98)}
+.art-row{display:flex;gap:11px}
+.art-thumb{width:54px;height:54px;border-radius:10px;background:var(--info-bg);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:24px}
+.art-info{flex:1;min-width:0}
+.art-tag{font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--acc-d);margin-bottom:3px;display:block}
+.art-title{font-size:13px;font-weight:700;color:var(--txt);line-height:1.4;margin-bottom:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.art-date{font-size:10px;color:var(--txt-m)}
+
+.sub-btn{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--info-bg);border:1.5px solid var(--acc);
+  border-radius:var(--r);padding:13px 15px;margin-bottom:9px;
+  cursor:pointer;text-decoration:none;transition:background .15s;
+}
+.sub-btn:active{background:#e8f0de}
+.sub-btn span{font-size:13px;font-weight:700;color:var(--acc-dd)}
+.sub-btn .arr{font-size:14px;color:var(--acc)}
+
+/* ── AYUMI ── */
+.ayumi-hdr{background:linear-gradient(160deg,#3a4a28,var(--acc-d));padding:17px 18px 21px}
+.ayumi-hdr h2{font-size:19px;font-weight:700;color:#fff;margin-bottom:4px}
+.ayumi-hdr p{font-size:11px;color:rgba(255,255,255,.6);line-height:1.7}
+.ayumi-empty{text-align:center;padding:28px 18px}
+.ayumi-empty .big{font-size:42px;margin-bottom:10px}
+.ayumi-empty p{font-size:12px;color:var(--txt-m);line-height:1.8}
+.log-item{
+  background:var(--card-bg);border-radius:12px;padding:12px 15px;
+  margin-bottom:8px;box-shadow:var(--sh);
+  display:flex;align-items:center;gap:11px;
+}
+.log-ico{width:34px;height:34px;border-radius:9px;background:var(--info-bg);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.log-text{flex:1}
+.log-text strong{font-size:12px;color:var(--txt);display:block}
+.log-text span{font-size:10px;color:var(--txt-m)}
+.priv-note{background:var(--info-bg);border:1px solid var(--acc);border-radius:12px;padding:11px 13px;margin:0 14px}
+.priv-note p{font-size:10px;color:var(--acc-dd);line-height:1.8;text-align:center}
+
+/* ── BOTTOM NAV ── */
+#bnav{
+  flex-shrink:0;background:#fff;display:flex;
+  padding-bottom:var(--safe-b);
+  border-top:2px solid var(--acc);
+}
+.bn{
+  flex:1;padding:8px 2px 9px;text-align:center;cursor:pointer;
+  color:var(--txt-m);font-size:9px;line-height:1.4;
+  transition:color .18s;user-select:none;
+}
+.bn .bico{font-size:20px;display:block;margin-bottom:2px;transition:transform .18s}
+.bn.on{color:var(--acc-d)}
+.bn.on .bico{transform:translateY(-2px)}
+
+/* ── MODAL ── */
+#mo{display:none;position:fixed;inset:0;background:rgba(58,74,40,.5);z-index:200;align-items:flex-end;backdrop-filter:blur(2px)}
+#mo.open{display:flex;animation:fi .2s ease}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+#md{
+  background:var(--bg);border-radius:20px 20px 0 0;
+  padding:18px 18px 32px;width:100%;max-height:82dvh;
+  overflow-y:auto;animation:su .27s ease;
+}
+@keyframes su{from{transform:translateY(26px);opacity:0}to{transform:translateY(0);opacity:1}}
+.md-handle{width:36px;height:4px;background:var(--acc);border-radius:2px;margin:0 auto 14px}
+.md-title{font-size:18px;font-weight:700;color:var(--acc-dd);margin-bottom:4px}
+.md-sub{font-size:12px;color:var(--txt-m);line-height:1.8;margin-bottom:13px}
+.md-body{font-size:13px;color:var(--txt);line-height:1.9}
+.md-body a{color:var(--acc-d)}
+.md-body strong{color:var(--acc-dd)}
+.md-close{
+  width:100%;margin-top:16px;background:var(--acc);color:#fff;
+  border:none;border-radius:12px;padding:13px;
+  font-family:'Zen Maru Gothic',sans-serif;font-size:13px;font-weight:700;cursor:pointer;
+}
+
+/* ── TOAST ── */
+#toast{
+  position:fixed;bottom:86px;left:50%;transform:translateX(-50%) translateY(14px);
+  background:var(--acc-dd);color:#fff;padding:10px 20px;border-radius:20px;
+  font-size:12px;white-space:nowrap;opacity:0;pointer-events:none;
+  transition:opacity .25s,transform .25s;z-index:300;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- TOPBAR -->
+<div id="topbar">
+  <div class="tb-logo">
+    <img class="tb-logo-img"
+      src="https://assets.softr-files.com/applications/876a45c9-9cb9-4e95-ab93-c1e5b9bcf07f/assets/afb7b164-df2e-4ad9-b85a-53cc241b9285.jpeg"
+      alt="ロゴ" onerror="this.style.display='none'">
+    <div class="tb-left">
+      <h1>てぃあんだぁクラブ</h1>
+      <span>家庭教育サポート · 沖縄</span>
+    </div>
+  </div>
+  <div class="tb-right" onclick="openM('about')">🤲</div>
+</div>
+
+<div id="sa">
+
+<!-- ══ HOME ══ -->
+<div class="sc on" id="sc-home">
+
+  <div class="hero">
+    <div class="hero-img-wrap">
+      <img class="hero-img"
+        src="https://assets.softr-files.com/applications/876a45c9-9cb9-4e95-ab93-c1e5b9bcf07f/assets/afb7b164-df2e-4ad9-b85a-53cc241b9285.jpeg"
+        alt="てぃあんだぁクラブ" onerror="this.style.display='none'">
+    </div>
+    <div class="hero-overlay">
+      <h2>ひとりで<br>抱えなくて<br><em>大丈夫です。</em></h2>
+      <p>子どもの「好き」と「得意」を見つけ、<br>お母さんが安心を充電する場所です。</p>
+    </div>
+  </div>
+
+  <div class="intro-box">
+    <p>てぃあんだぁクラブは、子どもを変える場所ではありません。<br>まずは<strong>お母さんが安心感を充電する</strong>。そこから、お子さんとの関わり方を一緒に考えていきましょう。</p>
+  </div>
+
+  <div class="sec">
+    <div class="sec-lbl">📅 次回の集まり</div>
+    <div class="ev-card" onclick="goTo('tsunagaru')">
+      <div class="ev-badge">NEXT · 水曜</div>
+      <h3>✏️ ワンコイン勉強会</h3>
+      <div class="ev-meta">
+        <span>📍 豊見城市</span>
+        <span>🕙 10:00〜12:00</span>
+        <span>💴 500円</span>
+      </div>
+      <button class="ev-btn">予約・詳細 →</button>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-lbl">🗂 サービス一覧</div>
+    <div class="svc-grid">
+      <div class="svc-card" onclick="openM('wankokai')">
+        <span class="svc-icon">✏️</span>
+        <div class="svc-title">ワンコイン<br>勉強会</div>
+        <div class="svc-sub">週2回 · 500円</div>
+      </div>
+      <div class="svc-card" onclick="openM('kobetsu')">
+        <span class="svc-icon">🏠</span>
+        <div class="svc-title">個別授業</div>
+        <div class="svc-sub">MI診断つき · 90分</div>
+      </div>
+      <div class="svc-card" onclick="openM('anger')">
+        <span class="svc-icon">🌼</span>
+        <div class="svc-title">アンガー<br>マネジメント</div>
+        <div class="svc-sub">子ども・保護者</div>
+      </div>
+      <div class="svc-card" onclick="openM('ikukai')">
+        <span class="svc-icon">📚</span>
+        <div class="svc-title">子育て<br>勉強会</div>
+        <div class="svc-sub">不定期開催</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-lbl">🔗 つながる</div>
+    <div class="card" onclick="goTo('ansin')">
+      <div class="card-row">
+        <div class="ci g">🤲</div>
+        <div class="card-info">
+          <div class="card-title">安心チャージ</div>
+          <div class="card-sub">気持ちを確認する・相談前メモを書く</div>
+        </div>
+        <div class="card-arr">›</div>
+      </div>
+    </div>
+    <div class="card" onclick="openM('universe')">
+      <div class="card-row">
+        <div class="ci s">🌌</div>
+        <div class="card-info">
+          <div class="card-title">記録の棚（universe）</div>
+          <div class="card-sub">教材・実践・メディア掲載のアーカイブ</div>
+        </div>
+        <div class="card-arr">›</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-lbl">🌐 関連サイト</div>
+    <div class="rel-sites">
+      <a class="rel-a" href="https://universe.tea-under.club" target="_blank">
+        <div class="rel-ico">🌌</div>
+        <div class="rel-info"><div class="rel-title">てぃあんだぁクラブ universe</div><div class="rel-sub">教材・実践・作品のアーカイブ</div></div>
+        <div class="rel-arr">›</div>
+      </a>
+      <a class="rel-a" href="https://alpaca-school.okinawa" target="_blank">
+        <div class="rel-ico">🦙</div>
+        <div class="rel-info"><div class="rel-title">アルパカすく〜る</div><div class="rel-sub">外の世界を、無理なく試す場所</div></div>
+        <div class="rel-arr">›</div>
+      </a>
+      <a class="rel-a" href="https://yumetsumugi.ainoie1962.com/" target="_blank">
+        <div class="rel-ico">🌷</div>
+        <div class="rel-info"><div class="rel-title">わたしの夢つむぎ</div><div class="rel-sub">内側を整えて気持ちをほどく</div></div>
+        <div class="rel-arr">›</div>
+      </a>
+      <a class="rel-a" href="https://teaunderclub.substack.com" target="_blank">
+        <div class="rel-ico">📬</div>
+        <div class="rel-info"><div class="rel-title">メルマガ「ワンコ通信」</div><div class="rel-sub">日々の気づきと活動のたより</div></div>
+        <div class="rel-arr">›</div>
+      </a>
+    </div>
+  </div>
+
+  <p style="text-align:center;font-size:10px;color:var(--txt-m);padding:18px 0 4px;">© 2013-2025 てぃあんだぁクラブ</p>
+
+</div><!-- /home -->
+
+<!-- ══ 安心 ══ -->
+<div class="sc" id="sc-ansin">
+  <div class="ansin-hero">
+    <h2>安心チャージ</h2>
+    <p>押さなくてもOK。来るだけでOK。<br>今日もここにいます。</p>
+  </div>
+
+  <div class="stamp-wrap">
+    <div class="stamp-ttl">今日の気持ちに近いものを選んでください（任意）</div>
+    <div class="stamp-sub">選ばなくてもいいです。読むだけでも。</div>
+    <div class="stamps" id="stamps">
+      <button class="sbtn" onclick="selStamp(this)"><span class="si">🌱</span>今日、少し立ち止まれた</button>
+      <button class="sbtn" onclick="selStamp(this)"><span class="si">☁️</span>今日は休む日にした</button>
+      <button class="sbtn" onclick="selStamp(this)"><span class="si">📖</span>今日は読むだけにした</button>
+      <button class="sbtn" onclick="selStamp(this)"><span class="si">🤝</span>自分を責めすぎなかった</button>
+      <button class="sbtn" onclick="selStamp(this)"><span class="si">✨</span>今日もここにいる</button>
+    </div>
+    <button class="stamp-ok" id="stamp-ok" onclick="stampDone()">記録する（本人だけが見られます）</button>
+  </div>
+
+  <div class="memo-wrap">
+    <div class="memo-ttl">相談前メモ</div>
+    <div class="memo-note">AIは答えを出しません。<br><em>佐渡山さんに話しやすくなるための整理メモ</em>です。</div>
+    <textarea id="memo" placeholder="今、気になっていること・困っていること…&#10;どんな小さなことでも大丈夫です。"></textarea>
+  </div>
+
+  <div class="contact-btns">
+    <a class="cbtn tel" href="tel:07056924173"><span class="cico">📞</span>電話する</a>
+    <a class="cbtn form" href="https://forms.gle/8tFF9vksKx6JJDfZA" target="_blank"><span class="cico">✉️</span>フォーム</a>
+    <a class="cbtn merumaga" href="https://teaunderclub.substack.com" target="_blank"><span class="cico">📬</span>メルマガ</a>
+  </div>
+
+  <div class="sec">
+    <div class="sec-lbl">❓ よくある質問</div>
+    <div class="faq-wrap">
+      <div class="faq-item">
+        <span class="faq-q">Q. 相談だけでも大丈夫ですか？</span>
+        <p class="faq-a">A. はい。まずは無料の電話相談からお気軽にご利用ください。</p>
+      </div>
+      <div class="faq-item">
+        <span class="faq-q">Q. 勉強したい時だけお願いできますか？</span>
+        <p class="faq-a">A. はい。当日でも空きがあれば可能です。まずは一度ご相談ください。</p>
+      </div>
+    </div>
+  </div>
+</div><!-- /ansin -->
+
+<!-- ══ つながる ══ -->
+<div class="sc" id="sc-tsunagaru">
+  <div class="ev-list-hdr">
+    <h2>つながる</h2>
+    <p>参加できる日に、参加できる場所で。<br>事前予約不要の回もあります。</p>
+  </div>
+
+  <div class="sec">
+    <div class="sec-lbl">✏️ ワンコイン勉強会</div>
+    <div class="ev-item">
+      <div class="ev-item-top">
+        <div class="ev-item-title">ワンコイン勉強会（豊見城）</div>
+        <div class="ev-tag r">毎週水曜</div>
+      </div>
+      <div class="hl-box">📅 水曜 10-12時　📍 豊見城市</div>
+      <div class="ev-price">500円 / 回（少人数・個別対応）</div>
+      <button class="apbtn" onclick="openM('apply-toyomi')">予約・お問い合わせ</button>
+    </div>
+
+    <div class="ev-item">
+      <div class="ev-item-top">
+        <div class="ev-item-title">ワンコイン勉強会（うるま）</div>
+        <div class="ev-tag r">毎週金曜</div>
+      </div>
+      <div class="hl-box">📅 金曜 10-12時　📍 うるま市</div>
+      <div class="ev-price">500円 / 回（少人数・個別対応）</div>
+      <button class="apbtn" onclick="openM('apply-uruma')">予約・お問い合わせ</button>
+    </div>
+
+    <div class="sec-lbl" style="margin-top:6px;">🌱 その他のプログラム</div>
+
+    <div class="ev-item">
+      <div class="ev-item-top">
+        <div class="ev-item-title">🏠 個別授業（MI診断つき）</div>
+        <div class="ev-tag b">要相談</div>
+      </div>
+      <div class="hl-box">🌱 好きな科目・家庭学習の習慣・学校での感情コントロールなど<br><span style="font-size:11px;color:var(--txt-m)">※ 1回90分 / 自宅または通いで実施</span></div>
+      <div class="ev-price">まずは無料相談から</div>
+      <button class="apbtn y" onclick="openM('kobetsu')">相談する</button>
+    </div>
+
+    <div class="ev-item">
+      <div class="ev-item-top">
+        <div class="ev-item-title">🌼 アンガーマネジメント</div>
+        <div class="ev-tag g">随時受付</div>
+      </div>
+      <div class="ev-price">詳細はお問い合わせください</div>
+      <button class="apbtn y" onclick="openM('anger')">詳細・お問い合わせ</button>
+    </div>
+
+    <div class="ev-item">
+      <div class="ev-item-top">
+        <div class="ev-item-title">📚 子育て勉強会</div>
+        <div class="ev-tag g">不定期</div>
+      </div>
+      <div class="ev-price">メルマガで先行案内</div>
+      <div style="display:flex;gap:8px;">
+        <button class="apbtn" style="flex:1" onclick="openM('merumaga')">メルマガ登録</button>
+        <a class="apbtn o" style="flex:1;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;" href="https://x.gd/Eu5zx" target="_blank">申し込む</a>
+      </div>
+    </div>
+
+    <div class="enen-card">
+      <div class="enen-ttl">🪷 ご縁カードをお持ちの方へ</div>
+      <p>必要な人にそっと渡せる案内カード。<br>初回の勉強会を安心価格でご参加いただけます。</p>
+      <button class="enen-btn" onclick="openM('enen')">コードを入力する</button>
+    </div>
+  </div>
+</div><!-- /tsunagaru -->
+
+<!-- ══ 学ぶ ══ -->
+<div class="sc" id="sc-manabu">
+  <div class="manabu-hdr">
+    <h2>学ぶ</h2>
+    <p>ゆっくり読んでください。読むだけでいいです。</p>
+  </div>
+
+  <div class="sec">
+    <div class="sec-lbl">📝 ワンコ通信</div>
+    <div class="art-card" onclick="openM('wanko')">
+      <div class="art-row">
+        <div class="art-thumb">🌾</div>
+        <div class="art-info">
+          <span class="art-tag">最新号 · 芒種</span>
+          <div class="art-title">子どもの「やらない」の裏にあるもの</div>
+          <div class="art-date">2026年6月2日</div>
+        </div>
+      </div>
+    </div>
+    <div class="art-card" onclick="openM('wanko2')">
+      <div class="art-row">
+        <div class="art-thumb">🌸</div>
+        <div class="art-info">
+          <span class="art-tag">バックナンバー</span>
+          <div class="art-title">ジョハリの窓 ── 見えていない自分との出会い方</div>
+          <div class="art-date">2026年3月5日</div>
+        </div>
+      </div>
+    </div>
+    <a class="sub-btn" href="https://teaunderclub.substack.com" target="_blank">
+      <span>📬 ワンコ通信をすべて読む（Substack）</span>
+      <span class="arr">›</span>
+    </a>
+
+    <div class="sec-lbl">📗 テーマ別</div>
+    <div class="card" onclick="openM('anger')">
+      <div class="card-row">
+        <div class="ci y">🌼</div>
+        <div class="card-info"><div class="card-title">アンガーマネジメント</div><div class="card-sub">感情の整理・受け止め方・伝え方</div></div>
+        <div class="card-arr">›</div>
+      </div>
+    </div>
+    <div class="card" onclick="openM('mi')">
+      <div class="card-row">
+        <div class="ci g">🧩</div>
+        <div class="card-info"><div class="card-title">多重知能（MI）とは</div><div class="card-sub">得意・苦手を8つの視点で見る</div></div>
+        <div class="card-arr">›</div>
+      </div>
+    </div>
+    <div class="card" onclick="openM('history')">
+      <div class="card-row">
+        <div class="ci o">☕️</div>
+        <div class="card-info"><div class="card-title">てぃあんだぁクラブのはじまり</div><div class="card-sub">2013年 那覇市仲井真〜現在まで</div></div>
+        <div class="card-arr">›</div>
+      </div>
+    </div>
+    <div class="card" onclick="openM('universe')">
+      <div class="card-row">
+        <div class="ci s">🌌</div>
+        <div class="card-info"><div class="card-title">記録の棚（universe）</div><div class="card-sub">教材・メディア掲載・勉強会まとめ</div></div>
+        <div class="card-arr">›</div>
+      </div>
+    </div>
+  </div>
+</div><!-- /manabu -->
+
+<!-- ══ わたしの歩み ══ -->
+<div class="sc" id="sc-ayumi">
+  <div class="ayumi-hdr">
+    <h2>わたしの歩み</h2>
+    <p>ここに残る記録は、あなただけが見られます。<br>孤立から抜けた日々のプロセスです。</p>
+  </div>
+
+  <div class="sec">
+    <div class="priv-note">
+      <p>🔒 この画面の内容は外部に共有されません。<br>本人だけが見られる記録です。</p>
+    </div>
+  </div>
+
+  <div class="sec" id="ayumi-log-sec" style="display:none">
+    <div class="sec-lbl">📅 最近の記録</div>
+    <div id="ayumi-log-list"></div>
+  </div>
+
+  <div class="sec" id="ayumi-empty-sec">
+    <div class="ayumi-empty">
+      <div class="big">🌿</div>
+      <p>まだ記録がありません。<br>安心チャージで気持ちを選ぶと<br>ここに残っていきます。<br><br>来るだけでいいです。</p>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-lbl">🌱 次の一歩</div>
+    <div class="card" onclick="goTo('tsunagaru')">
+      <div class="card-row">
+        <div class="ci g">✏️</div>
+        <div class="card-info"><div class="card-title">勉強会に参加してみる</div><div class="card-sub">500円・少人数・当日参加もOK</div></div>
+        <div class="card-arr">›</div>
+      </div>
+    </div>
+    <div class="card" onclick="openM('universe')">
+      <div class="card-row">
+        <div class="ci s">🌌</div>
+        <div class="card-info"><div class="card-title">universeの記録棚を見る</div><div class="card-sub">あとからゆっくり読み返す</div></div>
+        <div class="card-arr">›</div>
+      </div>
+    </div>
+  </div>
+</div><!-- /ayumi -->
+
+</div><!-- /sa -->
+
+<!-- BOTTOM NAV -->
+<div id="bnav">
+  <div class="bn on" id="bn-home" onclick="goTo('home')"><span class="bico">🏠</span>いま</div>
+  <div class="bn" id="bn-ansin" onclick="goTo('ansin')"><span class="bico">🤲</span>安心</div>
+  <div class="bn" id="bn-tsunagaru" onclick="goTo('tsunagaru')"><span class="bico">📅</span>つながる</div>
+  <div class="bn" id="bn-manabu" onclick="goTo('manabu')"><span class="bico">📖</span>学ぶ</div>
+  <div class="bn" id="bn-ayumi" onclick="goTo('ayumi')"><span class="bico">🌌</span>わたしの歩み</div>
+</div>
+</div><!-- /app -->
+
+<!-- MODAL -->
+<div id="mo" onclick="closeM(event)">
+  <div id="md">
+    <div class="md-handle"></div>
+    <div id="mc"></div>
+    <button class="md-close" onclick="closeM()">閉じる</button>
+  </div>
+</div>
+<div id="toast"></div>
+
+<script>
+const SCS=['home','ansin','tsunagaru','manabu','ayumi'];
+function goTo(n){SCS.forEach(s=>{document.getElementById('sc-'+s).classList.toggle('on',s===n);document.getElementById('bn-'+s).classList.toggle('on',s===n)});document.getElementById('sa').scrollTop=0}
+
+let sel=null;
+function selStamp(b){document.querySelectorAll('.sbtn').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');sel=b.textContent.trim();document.getElementById('stamp-ok').style.display='block'}
+function stampDone(){if(!sel)return;const log=JSON.parse(localStorage.getItem('tia_log')||'[]');log.unshift({text:sel,date:new Date().toLocaleDateString('ja-JP')});localStorage.setItem('tia_log',JSON.stringify(log.slice(0,30)));showToast('記録しました 🌿');document.querySelectorAll('.sbtn').forEach(x=>x.classList.remove('sel'));document.getElementById('stamp-ok').style.display='none';sel=null;renderAyumi()}
+
+function renderAyumi(){const log=JSON.parse(localStorage.getItem('tia_log')||'[]');const emp=document.getElementById('ayumi-empty-sec');const lsc=document.getElementById('ayumi-log-sec');const lst=document.getElementById('ayumi-log-list');if(!log.length){emp.style.display='block';lsc.style.display='none'}else{emp.style.display='none';lsc.style.display='block';lst.innerHTML=log.map(l=>`<div class="log-item"><div class="log-ico">${[...l.text][0]}</div><div class="log-text"><strong>${l.text.replace(/^./,'').trim()}</strong><span>${l.date}</span></div></div>`).join('')}}
+renderAyumi();
+
+const MS={
+  about:{title:'てぃあんだぁクラブとは',sub:'家庭教育サポート | 2013年〜',body:'「てぃあんだぁ」は沖縄の言葉で、手のぬくもり・心のこもった手当てを意味します。<br><br>子どもを変える場所ではありません。まずはお母さんが安心感を充電する。そこから、お子さんとの関わり方を一緒に考えていきましょう。<br><br>担当：佐渡山（さどやま）<br>📞 <a href="tel:07056924173">070-5692-4173</a><br>盆・正月・休日も対応しています☕️'},
+  wankokai:{title:'✏️ ワンコイン勉強会',sub:'週2回 · 500円 / 回',body:'学校に通えていない小・中学生、中学卒業後に高校受験を目指す子のための学びの場です。「久しぶりに人と学ぶ」ための、無理のない入口です。<br><br>📅 水曜 10-12時：豊見城市<br>📅 金曜 10-12時：うるま市<br><br>・1回 500円（少人数・個別対応）<br>・勉強 ＋ 相談の時間<br><br><a href="https://x.gd/Eu5zx" target="_blank">📋 勉強会のお申し込み →</a>'},
+  kobetsu:{title:'🏠 個別授業',sub:'MI診断つき · 1回90分',body:'多重知能（MI）チェックで得意・苦手を可視化。本人のペースで学習をサポートします。<br><br>🌱 好きな科目・家庭学習の習慣・学校での感情コントロールなど<br><br>※ 1回90分 / 自宅または通いで実施<br><br>まずは無料の電話相談からどうぞ。<br>📞 <a href="tel:07056924173">070-5692-4173</a>（佐渡山）'},
+  anger:{title:'🌼 アンガーマネジメント',sub:'子ども・保護者向け',body:'感情のコントロールに悩むお子さんと、その対応に迷う保護者のための心理教育プログラムです。<br><br><strong>子ども：</strong>落ち着く方法、感情の整理・伝え方を練習する<br><br><strong>保護者：</strong>子どもの感情を受け止める「聴き方」「伝え方」、家庭での共感的コミュニケーション<br><br>📞 <a href="tel:07056924173">070-5692-4173</a>（佐渡山）'},
+  ikukai:{title:'📚 子育て勉強会',sub:'不定期開催',body:'親が学び、つながり、安心を充電する場です。<br><br>開催日程はメルマガ「ワンコ通信」で先行案内しています。<br><br><a href="https://teaunderclub.substack.com" target="_blank">📬 メルマガに登録する →</a><br><br><a href="https://x.gd/Eu5zx" target="_blank">📋 勉強会のお申し込みフォーム →</a>'},
+  mi:{title:'多重知能（MI）とは',sub:'個別授業で活用しています',body:'ハワード・ガードナーが提唱した「8つの知能」の理論。<br><br>言語・論理・音楽・身体・空間・自然・対人・内省の8領域から、お子さんの得意・苦手を可視化します。<br><br>「勉強が苦手」ではなく、「この子の得意な学び方はこれだ」という視点に変えるためのツールです。'},
+  history:{title:'てぃあんだぁクラブのはじまり',sub:'〜那覇市 仲井真教室の思い出〜 2013年〜',body:'「ファーストフード店くらいの料金で飲食ができて、時に微分積分まで質問できるような、楽しく勉強できるところがあったらいいな」<br><br>そんな思いつきから、2013年11月に那覇市仲井真で「1日ワンコイン（500円）」で利用できる勉強室をオープンしました。<br><br>その後、無料塾が普及したこともあり2017年に店舗は閉じましたが、その時の「楽しく学ぶ」想いは現在の活動に引き継がれています。<br><br>メディア掲載・インタビュー記事は <a href="https://universe.tea-under.club/" target="_blank">てぃあんだぁクラブ universe</a> にまとめています。'},
+  wanko:{title:'子どもの「やらない」の裏にあるもの',sub:'ワンコ通信 · 2026年6月2日 · 芒種',body:'芒種の頃、稲の穂がそっと頭を出し始めます。<br><br>「なんで勉強しないの？」そう感じる瞬間、子どもの「やらない」の裏には何があるのでしょうか。<br><br>やる気がない、のではなく、やり方がわからないのかもしれません。怠けているのではなく、エネルギーが底をついているだけかもしれません。<br><br><a href="https://teaunderclub.substack.com" target="_blank">📬 ワンコ通信の全文はSubstackで →</a>'},
+  wanko2:{title:'ジョハリの窓 ── 見えていない自分',sub:'ワンコ通信バックナンバー',body:'「ジョハリの窓」は、人と人との関わりを通じて自分を知るための心理モデルです。<br><br>・開放の窓：自分も他人も知っている自分<br>・盲目の窓：他人は知っているが、自分では気づいていない自分<br>・秘密の窓：自分は知っているが、他人には見せていない自分<br>・未知の窓：誰にも知られていない、まだ出会っていない自分<br><br><a href="https://teaunderclub.substack.com" target="_blank">📬 Substackでバックナンバーを読む →</a>'},
+  universe:{title:'記録の棚（universe）',sub:'あとからゆっくり読み返す',body:'てぃあんだぁクラブのこれまでの活動記録・教材・メディア掲載をアーカイブしています。<br><br>「購入する」ではなく、「いつか読み返す棚」として置いてあります。<br><br>🌌 <a href="https://universe.tea-under.club" target="_blank">universe.tea-under.club</a>'},
+  'apply-toyomi':{title:'ワンコイン勉強会（豊見城）',sub:'毎週水曜 10:00〜12:00 · 500円',body:'少人数・個別対応の学びの場です。当日でも空きがあれば参加できます。<br><br>📞 <a href="tel:07056924173">070-5692-4173</a>（佐渡山）<br>盆・正月・休日も対応しています☕️<br><br><a href="https://x.gd/Eu5zx" target="_blank">📋 お申し込みフォーム →</a>'},
+  'apply-uruma':{title:'ワンコイン勉強会（うるま）',sub:'毎週金曜 10:00〜12:00 · 500円',body:'少人数・個別対応の学びの場です。当日でも空きがあれば参加できます。<br><br>📞 <a href="tel:07056924173">070-5692-4173</a>（佐渡山）<br>盆・正月・休日も対応しています☕️<br><br><a href="https://x.gd/Eu5zx" target="_blank">📋 お申し込みフォーム →</a>'},
+  merumaga:{title:'メルマガ「ワンコ通信」',sub:'子育て勉強会の先行案内もお届け',body:'てぃあんだぁクラブの日々の気づきと活動のたよりです。<br>勉強会の先行案内もこちらからお届けします。<br><br><a href="https://teaunderclub.substack.com" target="_blank">📬 Substackで登録する →</a>'},
+  enen:{title:'🪷 ご縁カード',sub:'必要な人にそっと渡せる案内カード',body:'ご縁カードをお持ちの方は、初回の勉強会を安心価格でご参加いただけます。<br><br>カードに記載のコードをお知らせください。<br><br>📞 <a href="tel:07056924173">070-5692-4173</a>（佐渡山）<br><br><a href="https://forms.gle/8tFF9vksKx6JJDfZA" target="_blank">📋 フォームから入力 →</a>'},
+};
+function openM(k){const m=MS[k];if(!m)return;document.getElementById('mc').innerHTML=`<div class="md-title">${m.title}</div><div class="md-sub">${m.sub}</div><div class="md-body">${m.body}</div>`;document.getElementById('mo').classList.add('open')}
+function closeM(e){if(!e||e.target===document.getElementById('mo')||!e.target)document.getElementById('mo').classList.remove('open')}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
+</script>
+</body>
+</html>
