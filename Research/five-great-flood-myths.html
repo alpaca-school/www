@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>五大文明の洪水伝説</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Noto+Sans+JP:wght@300;400;700&family=Cinzel:wght@700;900&display=swap');
+
+  :root {
+    --deep: #0a0a18;
+    --navy: #0d1b3e;
+    --slate: #1a2a5e;
+    --gold: #c8a84b;
+    --gold-light: #f0d070;
+    --teal: #2ec4b6;
+    --red: #e63946;
+    --water: #1e90d4;
+    --water-light: #5bbef5;
+    --parchment: #f5edd8;
+    --cream: #fdf6e3;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--deep);
+    color: #e8e0cc;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── 波紋アニメ背景 ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 120% 60% at 50% 110%, rgba(30,144,212,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 80% 40% at 20% 80%, rgba(46,196,182,0.08) 0%, transparent 60%),
+      linear-gradient(180deg, #0a0a18 0%, #0d1b3e 60%, #0a0a18 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── ヘッダー ── */
+  header {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 28px 16px 16px;
+    border-bottom: 1px solid rgba(200,168,75,0.25);
+  }
+
+  header h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1rem, 4vw, 1.5rem);
+    letter-spacing: 0.08em;
+    color: var(--gold-light);
+    text-shadow: 0 0 24px rgba(200,168,75,0.5);
+  }
+
+  header .sub {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(0.6rem, 2.5vw, 0.8rem);
+    color: rgba(200,168,75,0.6);
+    margin-top: 4px;
+    letter-spacing: 0.15em;
+  }
+
+  /* ── タブ切替ボタン ── */
+  .tab-bar {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .tab-btn {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 8px 24px;
+    border: 1.5px solid rgba(200,168,75,0.4);
+    border-radius: 30px;
+    background: transparent;
+    color: rgba(200,168,75,0.6);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .tab-btn.active {
+    background: linear-gradient(135deg, rgba(200,168,75,0.25), rgba(200,168,75,0.08));
+    border-color: var(--gold);
+    color: var(--gold-light);
+    box-shadow: 0 0 16px rgba(200,168,75,0.3);
+  }
+
+  /* ── ページ切替 ── */
+  .view { display: none; position: relative; z-index: 1; }
+  .view.active { display: block; }
+
+  /* ══════════════════════════════════
+     ポンチ絵モード
+  ══════════════════════════════════ */
+  #ponchi {
+    padding: 0 12px 40px;
+  }
+
+  /* 中央の水の図 */
+  .flood-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 8px auto 20px;
+    position: relative;
+  }
+
+  .flood-center svg {
+    width: min(340px, 92vw);
+    height: auto;
+    filter: drop-shadow(0 0 20px rgba(30,144,212,0.4));
+  }
+
+  /* 五大文明カード */
+  .civ-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  .civ-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+    border: 1px solid rgba(200,168,75,0.2);
+    border-radius: 12px;
+    padding: 12px 10px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .civ-card:active { transform: scale(0.97); }
+
+  .civ-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .civ-card.mesopo::before { background: linear-gradient(90deg, #c8a84b, #f0d070); }
+  .civ-card.india::before  { background: linear-gradient(90deg, #ff6b35, #f7931e); }
+  .civ-card.china::before  { background: linear-gradient(90deg, #e63946, #ff8fa3); }
+  .civ-card.maya::before   { background: linear-gradient(90deg, #2ec4b6, #80deea); }
+  .civ-card.greece::before { background: linear-gradient(90deg, #5b8dee, #a8c8ff); }
+
+  .civ-card .icon { font-size: 1.8rem; margin-bottom: 6px; display: block; }
+  .civ-card .civ-name {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--gold-light);
+    margin-bottom: 3px;
+  }
+  .civ-card .hero {
+    font-size: 0.68rem;
+    color: var(--teal);
+    margin-bottom: 4px;
+  }
+  .civ-card .ark {
+    font-size: 0.62rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.5;
+  }
+  .civ-card .rebirth {
+    font-size: 0.62rem;
+    color: rgba(200,168,75,0.8);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  /* ギリシャカードは全幅 */
+  .civ-card.greece {
+    grid-column: 1 / -1;
+  }
+  .civ-card.greece .inner-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  /* 下部：共通テーマ */
+  .themes {
+    max-width: 420px;
+    margin: 16px auto 0;
+    background: rgba(200,168,75,0.06);
+    border: 1px solid rgba(200,168,75,0.2);
+    border-radius: 12px;
+    padding: 12px;
+  }
+
+  .themes h3 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.72rem;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 8px;
+    letter-spacing: 0.1em;
+  }
+
+  .theme-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .theme-tag {
+    font-size: 0.6rem;
+    padding: 3px 8px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.7);
+  }
+
+  /* ══════════════════════════════════
+     インフォグラフィックモード
+  ══════════════════════════════════ */
+  #info {
+    padding: 0 12px 40px;
+  }
+
+  .section-block {
+    max-width: 440px;
+    margin: 0 auto 20px;
+  }
+
+  .section-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(200,168,75,0.2);
+  }
+
+  /* 比較テーブル */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.62rem;
+  }
+
+  .compare-table th {
+    background: rgba(200,168,75,0.15);
+    color: var(--gold-light);
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 700;
+    padding: 7px 5px;
+    text-align: left;
+    border-bottom: 1px solid rgba(200,168,75,0.3);
+  }
+
+  .compare-table td {
+    padding: 7px 5px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.8);
+    vertical-align: top;
+    line-height: 1.55;
+  }
+
+  .compare-table tr:nth-child(even) td {
+    background: rgba(255,255,255,0.02);
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.58rem;
+    font-weight: 700;
+    margin-right: 2px;
+  }
+  .badge-m { background: rgba(200,168,75,0.25); color: var(--gold-light); }
+  .badge-i { background: rgba(255,107,53,0.25); color: #ffb085; }
+  .badge-c { background: rgba(230,57,70,0.25); color: #ff8fa3; }
+  .badge-my{ background: rgba(46,196,182,0.25); color: #80deea; }
+  .badge-g { background: rgba(91,141,238,0.25); color: #a8c8ff; }
+
+  /* 科学仮説セクション */
+  .hypo-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .hypo-item {
+    background: rgba(255,255,255,0.03);
+    border-left: 3px solid;
+    border-radius: 0 8px 8px 0;
+    padding: 10px 12px;
+  }
+
+  .hypo-item:nth-child(1) { border-color: var(--water); }
+  .hypo-item:nth-child(2) { border-color: var(--teal); }
+  .hypo-item:nth-child(3) { border-color: var(--gold); }
+
+  .hypo-item .hypo-title {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 3px;
+  }
+
+  .hypo-item .hypo-body {
+    font-size: 0.62rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.6;
+  }
+
+  /* 構造サイクル図（マヤ） */
+  .cycle-diagram {
+    background: rgba(46,196,182,0.05);
+    border: 1px solid rgba(46,196,182,0.2);
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
+  }
+
+  .cycle-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+
+  .cycle-node {
+    background: rgba(46,196,182,0.15);
+    border: 1px solid rgba(46,196,182,0.4);
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 0.62rem;
+    color: #80deea;
+    white-space: nowrap;
+  }
+
+  .cycle-arrow {
+    color: rgba(255,255,255,0.3);
+    font-size: 0.7rem;
+  }
+
+  .cycle-result {
+    font-size: 0.62rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.5;
+  }
+
+  /* 結論セクション */
+  .conclusion-box {
+    background: linear-gradient(135deg, rgba(200,168,75,0.1), rgba(200,168,75,0.03));
+    border: 1px solid rgba(200,168,75,0.3);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .conclusion-box .big-text {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.9rem;
+    font-weight: 900;
+    color: var(--gold-light);
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+
+  .conclusion-box .desc {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.7;
+  }
+
+  .water-symbol {
+    font-size: 2rem;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  /* ── 波アニメ ── */
+  @keyframes wave {
+    0%,100% { transform: translateX(0); }
+    50% { transform: translateX(-6px); }
+  }
+  .wave-anim { animation: wave 3s ease-in-out infinite; }
+
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+  .float-anim { animation: float 2.5s ease-in-out infinite; }
+
+</style>
+</head>
+<body>
+
+<header>
+  <h1>FIVE GREAT FLOOD MYTHS</h1>
+  <div class="sub">五大文明の洪水伝説 ── 宇宙の崩壊と人類の再造</div>
+</header>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchView('ponchi', this)">🖼 ポンチ絵</button>
+  <button class="tab-btn" onclick="switchView('info', this)">📊 インフォグラフィック</button>
+</div>
+
+<!-- ══ ポンチ絵 ══ -->
+<div id="ponchi" class="view active">
+
+  <!-- 中央・水の象徴SVG -->
+  <div class="flood-center">
+    <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg">
+      <!-- 背景 -->
+      <defs>
+        <radialGradient id="waterGrad" cx="50%" cy="70%" r="60%">
+          <stop offset="0%" stop-color="#1e90d4" stop-opacity="0.5"/>
+          <stop offset="100%" stop-color="#0a0a18" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="glowGold" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#c8a84b" stop-opacity="0.8"/>
+          <stop offset="100%" stop-color="#c8a84b" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+
+      <!-- 水面 -->
+      <ellipse cx="160" cy="148" rx="150" ry="22" fill="url(#waterGrad)"/>
+
+      <!-- 波 -->
+      <g class="wave-anim">
+        <path d="M20,140 Q50,130 80,140 Q110,150 140,140 Q170,130 200,140 Q230,150 260,140 Q290,130 310,140" stroke="#1e90d4" stroke-width="2" fill="none" stroke-opacity="0.6"/>
+        <path d="M10,150 Q45,140 80,150 Q115,160 150,150 Q185,140 220,150 Q255,160 300,150" stroke="#5bbef5" stroke-width="1.5" fill="none" stroke-opacity="0.4"/>
+      </g>
+
+      <!-- 中央の光柱 -->
+      <line x1="160" y1="135" x2="160" y2="30" stroke="url(#glowGold)" stroke-width="1" stroke-opacity="0.5"/>
+
+      <!-- 中央シンボル：水と炎 -->
+      <g transform="translate(160,80)">
+        <circle cx="0" cy="0" r="28" fill="rgba(13,27,62,0.8)" stroke="rgba(200,168,75,0.5)" stroke-width="1.5"/>
+        <text x="0" y="-10" text-anchor="middle" font-size="22" fill="rgba(255,255,255,0.9)">🌊</text>
+        <text x="0" y="16" text-anchor="middle" font-family="Noto Sans JP" font-size="8" fill="#c8a84b" font-weight="bold">洪水</text>
+        <!-- 光輪 -->
+        <circle cx="0" cy="0" r="34" fill="none" stroke="rgba(200,168,75,0.2)" stroke-width="1" stroke-dasharray="4 3"/>
+      </g>
+
+      <!-- 5文明ノード -->
+      <!-- メソポタミア 上 -->
+      <g transform="translate(160,18)" class="float-anim">
+        <rect x="-36" y="-12" width="72" height="22" rx="5" fill="rgba(200,168,75,0.15)" stroke="rgba(200,168,75,0.5)" stroke-width="1"/>
+        <text x="0" y="3" text-anchor="middle" font-family="Noto Sans JP" font-size="7.5" fill="#f0d070" font-weight="bold">🏺 メソポタミア</text>
+      </g>
+      <line x1="160" y1="30" x2="160" y2="52" stroke="rgba(200,168,75,0.3)" stroke-width="1" stroke-dasharray="3 2"/>
+
+      <!-- インド 右上 -->
+      <g transform="translate(272,44)">
+        <rect x="-34" y="-11" width="68" height="22" rx="5" fill="rgba(255,107,53,0.15)" stroke="rgba(255,107,53,0.5)" stroke-width="1"/>
+        <text x="0" y="3" text-anchor="middle" font-family="Noto Sans JP" font-size="7.5" fill="#ffb085" font-weight="bold">🐟 インド</text>
+      </g>
+      <line x1="188" y1="70" x2="240" y2="53" stroke="rgba(255,107,53,0.3)" stroke-width="1" stroke-dasharray="3 2"/>
+
+      <!-- 中国 右下 -->
+      <g transform="translate(268,118)">
+        <rect x="-34" y="-11" width="68" height="22" rx="5" fill="rgba(230,57,70,0.15)" stroke="rgba(230,57,70,0.5)" stroke-width="1"/>
+        <text x="0" y="3" text-anchor="middle" font-family="Noto Sans JP" font-size="7.5" fill="#ff8fa3" font-weight="bold">🐍 中国</text>
+      </g>
+      <line x1="186" y1="92" x2="237" y2="109" stroke="rgba(230,57,70,0.3)" stroke-width="1" stroke-dasharray="3 2"/>
+
+      <!-- マヤ 左下 -->
+      <g transform="translate(52,118)">
+        <rect x="-34" y="-11" width="68" height="22" rx="5" fill="rgba(46,196,182,0.15)" stroke="rgba(46,196,182,0.5)" stroke-width="1"/>
+        <text x="0" y="3" text-anchor="middle" font-family="Noto Sans JP" font-size="7.5" fill="#80deea" font-weight="bold">🌽 マヤ</text>
+      </g>
+      <line x1="134" y1="92" x2="84" y2="109" stroke="rgba(46,196,182,0.3)" stroke-width="1" stroke-dasharray="3 2"/>
+
+      <!-- ギリシャ 左上 -->
+      <g transform="translate(48,44)">
+        <rect x="-34" y="-11" width="68" height="22" rx="5" fill="rgba(91,141,238,0.15)" stroke="rgba(91,141,238,0.5)" stroke-width="1"/>
+        <text x="0" y="3" text-anchor="middle" font-family="Noto Sans JP" font-size="7.5" fill="#a8c8ff" font-weight="bold">🗿 ギリシャ</text>
+      </g>
+      <line x1="132" y1="70" x2="80" y2="53" stroke="rgba(91,141,238,0.3)" stroke-width="1" stroke-dasharray="3 2"/>
+
+      <!-- 共通テーマラベル -->
+      <text x="160" y="170" text-anchor="middle" font-family="Noto Sans JP" font-size="7" fill="rgba(200,168,75,0.5)" letter-spacing="2">破壊 → 浄化 → 再生</text>
+    </svg>
+  </div>
+
+  <!-- 5文明カード -->
+  <div class="civ-grid">
+
+    <div class="civ-card mesopo">
+      <span class="icon">🏺</span>
+      <div class="civ-name">メソポタミア</div>
+      <div class="hero">英雄：ウトナピシュティム</div>
+      <div class="ark">⛵ 方舟：一辺60mの完全立方体の船<br>7階建て・9区画</div>
+      <div class="rebirth">🌱 再造：夫婦の生殖<br>→ 有限性の自覚（不死の非神話化）</div>
+    </div>
+
+    <div class="civ-card india">
+      <span class="icon">🐟</span>
+      <div class="civ-name">インド（マヌ伝説）</div>
+      <div class="hero">英雄：マヌ＋魚神マツヤ</div>
+      <div class="ark">⛵ 方舟：蛇神で繋いだ木造船<br>七賢者と種子を搭載</div>
+      <div class="rebirth">🌱 再造：供物・苦行から<br>女性「イラー」が誕生</div>
+    </div>
+
+    <div class="civ-card china">
+      <span class="icon">🐍</span>
+      <div class="civ-name">中国（女媧神話）</div>
+      <div class="hero">英雄：女媧 ／ 伏羲・女媧兄妹</div>
+      <div class="ark">🎃 方舟：天授の巨大ひょうたん<br>（葫芦・多産の象徴）</div>
+      <div class="rebirth">🌱 再造：黄土をこねて造人<br>→ 兄妹婚（磨石の神判）</div>
+    </div>
+
+    <div class="civ-card maya">
+      <span class="icon">🌽</span>
+      <div class="civ-name">マヤ（ポポル・ブフ）</div>
+      <div class="hero">英雄：神々（創造主）</div>
+      <div class="ark">❌ 方舟なし<br>木の人類は完全に淘汰</div>
+      <div class="rebirth">🌱 再造：白・黄トウモロコシの粉<br>を練り上げて第三人類を創造</div>
+    </div>
+
+    <div class="civ-card greece">
+      <div class="inner-row">
+        <span class="icon" style="font-size:2rem">🗿</span>
+        <div>
+          <div class="civ-name">ギリシャ（デウカリオン神話）</div>
+          <div class="hero">英雄：デウカリオン＋妻ピュラー</div>
+          <div class="ark">⛵ 方舟：木製の大箱「ラルナクス」<br>プロメテウスの警告で建造、9日9晩漂流</div>
+          <div class="rebirth">🌱 再造：テミスの神託「大地の骨＝石」<br>→ 石を投げると男女へ変身、頑健な新人類誕生</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 共通テーマ -->
+  <div class="themes">
+    <h3>◆ 五伝説に通底するテーマ ◆</h3>
+    <div class="theme-row">
+      <span class="theme-tag">🌊 水＝浄化の媒体</span>
+      <span class="theme-tag">⚠️ 神罰 or 宇宙周期</span>
+      <span class="theme-tag">🚢 方舟＝生命の境界</span>
+      <span class="theme-tag">🌱 依代からの再造</span>
+      <span class="theme-tag">⛰️ 山頂への漂着</span>
+      <span class="theme-tag">🕊️ 鳥放免の試験</span>
+      <span class="theme-tag">🔄 カオス→コスモス</span>
+      <span class="theme-tag">🙏 神との新契約</span>
+    </div>
+  </div>
+
+</div>
+<!-- end ponchi -->
+
+<!-- ══ インフォグラフィック ══ -->
+<div id="info" class="view">
+
+  <!-- 比較表 -->
+  <div class="section-block">
+    <div class="section-title">◆ 五大文明　構造比較表</div>
+    <table class="compare-table">
+      <tr>
+        <th>文明</th>
+        <th>原因</th>
+        <th>方舟・避難</th>
+        <th>人類再造の依代</th>
+      </tr>
+      <tr>
+        <td><span class="badge badge-m">🏺 メソポタミア</span></td>
+        <td>エンリルの不眠（騒音）</td>
+        <td>完全立方体の船（60m一辺）</td>
+        <td>夫婦の生殖（生物学的再生）</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-i">🐟 インド</span></td>
+        <td>カルパ（宇宙周期）の帰滅</td>
+        <td>蛇神で繋いだ木造船</td>
+        <td>供物・苦行→女性「イラー」の誕生</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-c">🐍 中国</span></td>
+        <td>共工vs祝融の天柱破壊</td>
+        <td>天授のひょうたん（葫芦）</td>
+        <td>黄土の造形＋兄妹の神判婚姻</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-my">🌽 マヤ</span></td>
+        <td>神を崇めない木の人類の淘汰</td>
+        <td>なし（完全リセット）</td>
+        <td>白・黄トウモロコシの粉</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-g">🗿 ギリシャ</span></td>
+        <td>リュカオンの不信心・道徳堕落</td>
+        <td>木製の箱「ラルナクス」</td>
+        <td>大地の石（ガイアの骨）の変身</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- マヤ3段階サイクル -->
+  <div class="section-block">
+    <div class="section-title">◆ マヤ『ポポル・ブフ』3段階創造サイクル</div>
+    <div class="cycle-diagram">
+      <div class="cycle-row">
+        <div class="cycle-node">①泥の人類</div>
+        <span class="cycle-arrow">→</span>
+        <div class="cycle-result">柔らかすぎて溶け崩壊（失敗）</div>
+      </div>
+      <div class="cycle-row">
+        <div class="cycle-node">②木の人類</div>
+        <span class="cycle-arrow">→</span>
+        <div class="cycle-result">魂・知性なし。黒い樹脂の洪水＋道具・動物の反乱で全滅。残余は「猿」に退化</div>
+      </div>
+      <div class="cycle-row">
+        <div class="cycle-node">③🌽トウモロコシ人類</div>
+        <span class="cycle-arrow">→</span>
+        <div class="cycle-result">白・黄の粉を水で練る。完全な知性・視力を持ち神を崇める完成形</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 科学的仮説 -->
+  <div class="section-block">
+    <div class="section-title">◆ 世界共通伝説の科学的仮説</div>
+    <div class="hypo-list">
+      <div class="hypo-item">
+        <div class="hypo-title">① 局地的大氾濫説（考古学的検証）</div>
+        <div class="hypo-body">シュルッパク遺跡（イラク）でBC2900〜2750年頃の「洪水層（数mの粘土層）」を発見。実際の大氾濫がギルガメシュ叙事詩の歴史的ベースになったと見られる。</div>
+      </div>
+      <div class="hypo-item">
+        <div class="hypo-title">② 氷河融解・海水準上昇説（地質学）</div>
+        <div class="hypo-body">最終氷期終了（約1万2000年前）に海面が100m以上上昇。農耕地帯として使われていた沿岸平野が水没し、その集団的トラウマが世界各地の洪水神話の根底となった。</div>
+      </div>
+      <div class="hypo-item">
+        <div class="hypo-title">③ 黒海洪水説（ライアン＆ピットマン, 1990年代）</div>
+        <div class="hypo-body">BC7600年頃、ボスポラス海峡の自然堰が決壊。地中海の塩水が300日以上かけて黒海に流入し、新石器時代の農耕民が四散。この記憶がノアの洪水の起源とされる。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 思想的特質比較 -->
+  <div class="section-block">
+    <div class="section-title">◆ 各文明の思想的特質</div>
+    <table class="compare-table">
+      <tr>
+        <th>文明</th>
+        <th>自然・神と人間の関係性</th>
+      </tr>
+      <tr>
+        <td><span class="badge badge-m">メソポタミア</span></td>
+        <td>神は恣意的。人間は神の労働代替として生存。<strong style="color:#f0d070">不条理への適応と死の受容</strong></td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-i">インド</span></td>
+        <td>破壊は宇宙の秩序的生滅（カルパ）。<strong style="color:#ffb085">ヴィシュヌの慈愛＋苦行による生命更新</strong></td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-c">中国</span></td>
+        <td>人と神が能動的労働で宇宙を修復。<strong style="color:#ff8fa3">人本主義「以人力征服自然」</strong></td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-my">マヤ</span></td>
+        <td>神を崇めない存在は淘汰。<strong style="color:#80deea">物質と精神の完全融合（トウモロコシ＝生命物質）</strong></td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-g">ギリシャ</span></td>
+        <td>道徳堕落への神罰。<strong style="color:#a8c8ff">大地（石）から生まれた不屈の道徳的人類の再建</strong></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 結論 -->
+  <div class="section-block">
+    <div class="conclusion-box">
+      <span class="water-symbol">🌊</span>
+      <div class="big-text">カオスからコスモスへ</div>
+      <div class="desc">
+        洪水神話の「水」は<strong style="color:#5bbef5">破壊</strong>と<strong style="color:#c8a84b">再生</strong>の二重の性質を持つ。<br>
+        旧世界の不完全性を洗い流し、<br>
+        新たな生命を胎動させる「母胎（羊水）」として機能する。<br><br>
+        五文明に共通する本質：<br>
+        <strong style="color:#f0d070">人類の精神的レジリエンス（回復力）</strong>と<br>
+        生と死・創造と破壊のダイナミックな循環構造。
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- end info -->
+
+<script>
+  function switchView(id, btn) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+</script>
+</body>
+</html>
