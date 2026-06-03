@@ -30,8 +30,182 @@
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;background:var(--bg);color:var(--txt);font-family:'Zen Maru Gothic',sans-serif;font-size:14px;line-height:1.7;overflow:hidden;-webkit-text-size-adjust:100%}
 
-/* ── SHELL ── */
+/* ── SHELL（モバイル） ── */
 #app{max-width:390px;margin:0 auto;height:100dvh;display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
+
+/* ════════════════════════════════
+   PC レイアウト（768px以上）
+   左：サイドナビ  右：コンテンツ
+   ════════════════════════════════ */
+@media(min-width:768px){
+  html,body{overflow:auto;background:#eef3e8}
+
+  #app{
+    max-width:960px;width:100%;
+    height:auto;min-height:100vh;
+    flex-direction:row;align-items:flex-start;
+    margin:0 auto;
+    box-shadow:0 0 40px rgba(0,0,0,0.12);
+    background:var(--bg);
+    overflow:visible;
+  }
+
+  /* ── PC サイドナビ ── */
+  #pc-side{
+    width:220px;flex-shrink:0;
+    background:var(--acc-dd);
+    min-height:100vh;
+    display:flex;flex-direction:column;
+    position:sticky;top:0;
+    padding:28px 0 24px;
+  }
+  .pc-logo-wrap{
+    display:flex;flex-direction:column;align-items:center;
+    padding:0 20px 24px;
+    border-bottom:1px solid rgba(255,255,255,0.15);
+    margin-bottom:20px;
+  }
+  .pc-logo-img{
+    width:72px;height:72px;border-radius:50%;
+    object-fit:cover;
+    border:3px solid rgba(255,255,255,0.5);
+    margin-bottom:10px;
+    background:var(--acc-d);
+  }
+  .pc-logo-name{font-size:14px;font-weight:700;color:#fff;text-align:center;line-height:1.4}
+  .pc-logo-sub{font-size:10px;color:rgba(255,255,255,.55);margin-top:3px;text-align:center;letter-spacing:.06em}
+
+  .pc-nav-item{
+    display:flex;align-items:center;gap:12px;
+    padding:12px 24px;cursor:pointer;
+    color:rgba(255,255,255,.6);font-size:14px;font-weight:700;
+    transition:all .18s;border-left:3px solid transparent;
+    user-select:none;
+  }
+  .pc-nav-item .pico{font-size:20px}
+  .pc-nav-item:hover{background:rgba(255,255,255,.08);color:#fff}
+  .pc-nav-item.on{
+    background:rgba(255,255,255,.14);color:#fff;
+    border-left-color:var(--acc);
+  }
+
+  .pc-side-contact{
+    margin-top:auto;padding:20px 20px 0;
+    border-top:1px solid rgba(255,255,255,.15);
+  }
+  .pc-side-contact a{
+    display:block;text-align:center;
+    background:var(--orange);color:#fff;
+    border-radius:12px;padding:10px;
+    font-size:13px;font-weight:700;text-decoration:none;
+    margin-bottom:8px;transition:opacity .15s;
+  }
+  .pc-side-contact a:hover{opacity:.85}
+  .pc-side-contact a.sub{background:rgba(255,255,255,.15);color:#fff}
+  .pc-side-contact .tel-pc{
+    text-align:center;font-size:11px;color:rgba(255,255,255,.55);margin-top:8px;
+  }
+  .pc-side-contact .tel-pc a{
+    background:none;color:rgba(255,255,255,.8);font-size:13px;
+    font-weight:700;padding:0;margin:2px 0 0;display:block;
+  }
+
+  /* ── PC メインエリア ── */
+  #pc-main{
+    flex:1;min-width:0;
+    min-height:100vh;
+    display:flex;flex-direction:column;
+    overflow:visible;
+  }
+
+  /* PCではトップバーとボトムナビを非表示 */
+  #topbar{display:none}
+  #bnav{display:none}
+
+  /* スクロールエリアをPC用に解放 */
+  #sa{
+    flex:1;overflow:visible;height:auto;
+    -webkit-overflow-scrolling:auto;
+  }
+
+  /* 全スクリーンを表示（タブ切り替えではなく常時表示） */
+  .sc{display:block !important;animation:none;padding-bottom:0}
+
+  /* PC用セクション区切りヘッダー */
+  .pc-sec-hdr{
+    background:linear-gradient(135deg,var(--acc-dd),var(--acc-d));
+    padding:20px 28px;
+    display:flex;align-items:center;gap:12px;
+  }
+  .pc-sec-hdr h2{font-size:18px;font-weight:700;color:#fff;margin:0}
+  .pc-sec-hdr p{font-size:12px;color:rgba(255,255,255,.65);margin:0}
+  .pc-sec-hdr-icon{font-size:26px}
+
+  /* コンテンツ余白をPC用に広げる */
+  .sec{padding:20px 28px 0}
+  .intro-box{margin:20px 28px 0}
+  .stamp-wrap,.memo-wrap{margin-left:28px;margin-right:28px}
+  .contact-btns{margin-left:28px;margin-right:28px}
+  .priv-note{margin-left:28px;margin-right:28px}
+
+  /* PC用グリッド：サービスカード4列 */
+  .svc-grid{grid-template-columns:1fr 1fr 1fr 1fr;gap:12px}
+  .svc-icon{font-size:32px}
+  .svc-title{font-size:13px}
+
+  /* hero高さをPC用に */
+  .hero-img-wrap{height:280px}
+  .hero-overlay h2{font-size:28px}
+  .hero-overlay p{font-size:13px}
+
+  /* カードをPC用にホバー対応 */
+  .card:hover,.svc-card:hover,.ev-card:hover,
+  .art-card:hover,.rel-a:hover,.ev-item:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(0,0,0,0.12);
+  }
+
+  /* セクション間スペース */
+  .sc{border-bottom:1px solid #eef3e8}
+  .sc:last-child{border-bottom:none}
+
+  /* PC：関連サイトを2列グリッドに */
+  .rel-sites{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+  /* PC：ファストアクセスバー */
+  #pc-topbar{
+    background:var(--acc);
+    padding:10px 28px;
+    display:flex;align-items:center;justify-content:space-between;
+    border-bottom:2px solid var(--acc-d);
+    position:sticky;top:0;z-index:50;
+  }
+  #pc-topbar .pt-title{font-size:13px;font-weight:700;color:#fff}
+  #pc-topbar .pt-sub{font-size:10px;color:rgba(255,255,255,.65);margin-left:8px}
+
+  /* スタンプボタンをPC用にグリッド */
+  .stamps{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+  /* evリストを2カラム */
+  #sc-tsunagaru .sec > .ev-item:not(.full){
+    display:inline-block;width:calc(50% - 5px);vertical-align:top;margin-right:10px;
+  }
+  #sc-tsunagaru .sec > .ev-item:nth-child(even){margin-right:0}
+
+  /* ayumi: ログとnext-stepを横並び */
+  #sc-ayumi .sec#ayumi-log-sec,
+  #sc-ayumi .sec#ayumi-empty-sec{max-width:480px}
+
+  /* PC側サイドナビ表示 */
+  #pc-side{display:flex}
+}
+
+/* スマホ時はPC要素を非表示 */
+@media(max-width:767px){
+  #pc-side{display:none}
+  #pc-topbar{display:none}
+  #pc-main{display:contents}
+}
 
 /* ── TOPBAR ── */
 #topbar{
