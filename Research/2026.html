@@ -708,16 +708,14 @@ const CONTENTS = {
           <a class="apbtn o" style="flex:1;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;" href="https://x.gd/Eu5zx" target="_blank">申し込む</a>
         </div>
       </div>
-      <div class="card" onclick="window.open('https://furima.ryukyu-tane.com/','_blank')" style="border-left:4px solid #e8a0c0;">
-        <div class="card-row">
-          <div class="ci" style="background:rgba(232,160,192,.15);font-size:22px;">🎨</div>
-          <div class="card-info">
-            <div class="card-title">沖縄文芸フリマ</div>
-            <div class="card-sub">文学・イラスト・ハンドメイド。子どもから大人まで表現できる場<br><span style="font-size:10px;color:var(--acc-d);">主催：琉球のタネ</span></div>
-          </div>
-          <div class="card-arr">›</div>
+      <a class="ogp-card" href="https://furima.ryukyu-tane.com/" target="_blank" id="ogp-furima">
+        <div class="ogp-img-placeholder">🎨</div>
+        <div class="ogp-body">
+          <span class="ogp-tag">沖縄文芸フリマ · 琉球のタネ主催</span>
+          <div class="ogp-title">人の想いや創造力が静かにきらめく文化の場</div>
+          <div class="ogp-desc">文学・イラスト・漫画・ハンドメイドなど。子どもから大人まで誰もが主役になれる場所。</div>
         </div>
-      </div>
+      </a>
       <div class="enen-card">
         <div class="enen-ttl">🪷 ご縁カードをお持ちの方へ</div>
         <p>必要な人にそっと渡せる案内カード。<br>初回の勉強会を安心価格でご参加いただけます。</p>
@@ -752,36 +750,42 @@ const CONTENTS = {
 
       <div class="sec-lbl" style="margin-top:8px;">📣 開催報告</div>
 
-      <a class="art-card" href="https://news.ryukyu-tane.com/251130-nichiyougakkou-furugenchu/" target="_blank" style="text-decoration:none;display:block;">
-        <div class="art-row">
-          <div class="art-thumb">🎧</div>
-          <div class="art-info">
-            <span class="art-tag">2025年11月30日</span>
-            <div class="art-title">古堅中学校「日曜学校 心のセミナー」開催報告</div>
-            <div class="art-date">音声対応コンテンツ</div>
-          </div>
+      <!-- OGPカード：クリックでリンク先へ、画像は動的取得 -->
+      <style>
+        .ogp-card { background:var(--white); border-radius:var(--r); margin-bottom:10px; box-shadow:var(--sh); overflow:hidden; cursor:pointer; transition:transform .15s; text-decoration:none; display:block; }
+        .ogp-card:hover { transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,0.12); }
+        .ogp-img { width:100%; height:160px; object-fit:cover; display:block; background:var(--info); }
+        .ogp-img-placeholder { width:100%; height:160px; background:linear-gradient(135deg,var(--acc),var(--acc-d)); display:flex; align-items:center; justify-content:center; font-size:40px; }
+        .ogp-body { padding:12px 14px; }
+        .ogp-tag { font-size:10px; font-weight:700; color:var(--acc-d); letter-spacing:.06em; margin-bottom:4px; display:block; }
+        .ogp-title { font-size:13px; font-weight:700; color:var(--txt); line-height:1.45; margin-bottom:3px; }
+        .ogp-desc { font-size:11px; color:var(--txt-m); line-height:1.5; }
+      </style>
+
+      <a class="ogp-card" href="https://news.ryukyu-tane.com/251130-nichiyougakkou-furugenchu/" target="_blank" id="ogp-1">
+        <div class="ogp-img-placeholder">🎧</div>
+        <div class="ogp-body">
+          <span class="ogp-tag">2025年11月30日 · 開催報告</span>
+          <div class="ogp-title">古堅中学校「日曜学校 心のセミナー」開催報告</div>
+          <div class="ogp-desc">🎧 音声対応コンテンツ</div>
         </div>
       </a>
 
-      <a class="art-card" href="https://news.ryukyu-tane.com/251018oogimi-festa/" target="_blank" style="text-decoration:none;display:block;">
-        <div class="art-row">
-          <div class="art-thumb">🌟</div>
-          <div class="art-info">
-            <span class="art-tag">2025年10月18日</span>
-            <div class="art-title">大宜味村「みんなの個性 光る未来フェスタ」開催報告</div>
-            <div class="art-date">大宜味村</div>
-          </div>
+      <a class="ogp-card" href="https://news.ryukyu-tane.com/251018oogimi-festa/" target="_blank" id="ogp-2">
+        <div class="ogp-img-placeholder">🌟</div>
+        <div class="ogp-body">
+          <span class="ogp-tag">2025年10月18日 · 開催報告</span>
+          <div class="ogp-title">大宜味村「みんなの個性 光る未来フェスタ」開催報告</div>
+          <div class="ogp-desc">大宜味村</div>
         </div>
       </a>
 
-      <a class="art-card" href="https://news.ryukyu-tane.com/250705-morinoko/" target="_blank" style="text-decoration:none;display:block;">
-        <div class="art-row">
-          <div class="art-thumb">🌳</div>
-          <div class="art-info">
-            <span class="art-tag">2025年7月5日</span>
-            <div class="art-title">森の子児童センター「子育て応援ミニセミナー」開催報告</div>
-            <div class="art-date">豊見城市</div>
-          </div>
+      <a class="ogp-card" href="https://news.ryukyu-tane.com/250705-morinoko/" target="_blank" id="ogp-3">
+        <div class="ogp-img-placeholder">🌳</div>
+        <div class="ogp-body">
+          <span class="ogp-tag">2025年7月5日 · 開催報告</span>
+          <div class="ogp-title">森の子児童センター「子育て応援ミニセミナー」開催報告</div>
+          <div class="ogp-desc">豊見城市</div>
         </div>
       </a>
       <div class="card" onclick="openM('history')">
@@ -953,6 +957,7 @@ function closeM(e) {
   if(!e || e.target===document.getElementById('mo') || !e.target)
     document.getElementById('mo').classList.remove('open');
 }
+
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg; t.classList.add('show');
