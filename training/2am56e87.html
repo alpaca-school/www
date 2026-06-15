@@ -225,7 +225,6 @@
 </head>
 <body>
 
-  <!-- 🔐 認証画面 -->
   <div id="auth-screen">
     <div class="auth-card">
       <h2>🔐 アクセス認証</h2>
@@ -238,7 +237,6 @@
     </div>
   </div>
 
-  <!-- 📄 提案書本体（個人特定に繋がる文脈をすべて排除） -->
   <div id="main-content">
     <div class="container" id="page-wrapper">
       <header>
@@ -251,7 +249,6 @@
         <button class="mode-btn" id="btn-detail" onclick="switchMode('detail')">📊 詳細モード</button>
       </div>
 
-      <!-- ①いまの状況 -->
       <section>
         <h2>①いまの状況</h2>
         <div class="mode-content diagram-only">
@@ -290,7 +287,6 @@
         </div>
       </section>
 
-      <!-- ②授業の3つの柱 -->
       <section>
         <h2>②授業の3つの柱</h2>
         <div class="pillar-list">
@@ -318,7 +314,6 @@
         </div>
       </section>
 
-      <!-- ③1週間の流れ -->
       <section>
         <h2>③1週間の流れ</h2>
         <h3>平日（毎日の言語化）× 指定曜日（対面のフォロー）</h3>
@@ -345,7 +340,6 @@
         </div>
       </section>
 
-      <!-- ④授業1回の流れ -->
       <section>
         <h2>④授業1回の流れ（90分）</h2>
         <div class="flow-container">
@@ -357,7 +351,6 @@
         </div>
       </section>
 
-      <!-- ⑤メンタルケアと安心設計 -->
       <section>
         <h2>⑤安心のための学習設計</h2>
         <div class="mode-content diagram-only">
@@ -378,7 +371,6 @@
         </div>
       </section>
 
-      <!-- ⑥授業料・支援メニュー -->
       <section>
         <h2>⑥支援メニュー・授業料</h2>
         <table>
@@ -394,7 +386,6 @@
         <p style="font-size: 0.85rem; color: #718096; margin-top: 10px;">※ スケジュールや回数の調整、単発での実施、または「まずは対面のみからスタート」なども柔軟に対応可能です。お気軽にご相談ください。</p>
       </section>
 
-      <!-- ⑦本人へのメッセージ -->
       <section>
         <h2>⑦生徒様へのメッセージ</h2>
         <div class="message-box">
@@ -412,8 +403,8 @@
   </div>
 
   <script>
-    // 🔑 パスワード（「alpaca2026」のSHA-256ハッシュ値）
-    const CORRECT_HASH = "8e950d87a419fcda0367bf63297a79eb89be3e36e6559d8ef922650ee979ee93";
+    // 🔑 パスワード（「alpaca2026」の正しいSHA-256ハッシュ値）
+    const CORRECT_HASH = "11b8e193c145b85d726931f44c7ca3ee4c0a6f97cc7249932f7ff9fcad9982b0";
 
     async function sha256(message) {
       const msgBuffer = new TextEncoder().encode(message);
@@ -443,7 +434,7 @@
       if (mode === 'detail') {
         wrapper.classList.add('show-detail');
         btnDetail.classList.add('active');
-        btnDiagram.remove('active');
+        btnDiagram.classList.remove('active');
       } else {
         wrapper.classList.remove('show-detail');
         btnDiagram.classList.add('active');
