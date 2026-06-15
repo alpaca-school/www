@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>月末対応チェックリスト 2026-05-25</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .priority-section {
+            margin-bottom: 40px;
+            border-left: 6px solid;
+            padding-left: 20px;
+        }
+
+        .priority-red {
+            border-left-color: #e74c3c;
+            background: #fdebee;
+            padding: 20px;
+            border-radius: 6px;
+        }
+
+        .priority-orange {
+            border-left-color: #f39c12;
+            background: #fef5e7;
+            padding: 20px;
+            border-radius: 6px;
+        }
+
+        .priority-yellow {
+            border-left-color: #f1c40f;
+            background: #fffbea;
+            padding: 20px;
+            border-radius: 6px;
+        }
+
+        .priority-section h2 {
+            display: flex;
+            align-items: center;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .priority-icon {
+            font-size: 2em;
+            margin-right: 10px;
+        }
+
+        .task-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .task-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .task-item label {
+            cursor: pointer;
+            flex-grow: 1;
+        }
+
+        .task-title {
+            font-weight: 600;
+            font-size: 1.05em;
+            margin-bottom: 5px;
+        }
+
+        .task-desc {
+            font-size: 0.95em;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .task-deadline {
+            display: inline-block;
+            background: #ffe0e0;
+            color: #c0392b;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .task-deadline.warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .task-deadline.info {
+            background: #cfe2ff;
+            color: #084298;
+        }
+
+        .sub-task {
+            margin-left: 40px;
+            margin-top: 10px;
+            padding-left: 15px;
+            border-left: 3px solid #ddd;
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        .sub-task li {
+            margin-bottom: 8px;
+            list-style-type: none;
+        }
+
+        .sub-task li:before {
+            content: "→ ";
+            color: #999;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .step-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .step-box h3 {
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 10px;
+        }
+
+        .step-box ul {
+            margin-left: 20px;
+        }
+
+        .step-box li {
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .step-box input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        th {
+            background: #f5f5f5;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #ddd;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background: #f9f9f9;
+        }
+
+        .confirmation-box {
+            background: #e8f5e9;
+            border: 2px solid #4caf50;
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 30px;
+        }
+
+        .confirmation-box h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+
+        .confirmation-box .task-item {
+            margin-bottom: 10px;
+        }
+
+        footer {
+            background: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+            border-top: 1px solid #ddd;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .status-done {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 0.9em;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📋 月末対応チェックリスト</h1>
+            <p>2026年5月末（5月31日）までのプロジェクト管理タスク</p>
+        </header>
+
+        <div class="content">
+            <!-- 最優先セクション -->
+            <div class="priority-section priority-red">
+                <h2>
+                    <span class="priority-icon">🔴</span>
+                    【最優先】即時実行（今週中）
+                </h2>
+
+                <div class="task-item">
+                    <input type="checkbox" id="task1">
+                    <label for="task1">
+                        <div class="task-title">1. 同友会：請求メール送信</div>
+                        <div class="task-deadline">⏰ 本日中推奨</div>
+                        <div class="task-desc">メール下書き完成済み（2026-05-01）。COREC請求書をGmailから本送信。</div>
+                        <ul class="sub-task">
+                            <li>COREC URL確認 → <a href="https://corec.jp/b/invoices/026551-D0000154/92611" target="_blank">https://corec.jp/b/invoices/026551-D0000154/92611</a></li>
+                            <li>宛先：當眞 永子様、中山 翔太様（CC：宮城様）</li>
+                            <li>件名：【ご請求と提案】2026年1月〜3月分景況調査データ加工代</li>
+                            <li>効果：5月中の入金確認が可能</li>
+                        </ul>
+                    </label>
+                </div>
+
+                <div class="task-item">
+                    <input type="checkbox" id="task2">
+                    <label for="task2">
+                        <div class="task-title">2. 長安さま：ドメイン移管完了フォロー</div>
+                        <div class="task-deadline">⏰ 5月28～30日</div>
+                        <div class="task-desc">ドメイン移管申請中。移管完了後の動作確認と報告が必要。</div>
+                        <ul class="sub-task">
+                            <li>DNS設定確認（Google Workspace メール継続確認）</li>
+                            <li>ホームページ（choan.jp）動作確認</li>
+                            <li>メール送受信テスト</li>
+                            <li>バリュードメインでの年額代金管理確認（10,000円）</li>
+                            <li>山川さんへ移管完了報告メール作成・送信</li>
+                        </ul>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 高優先セクション -->
+            <div class="priority-section priority-orange">
+                <h2>
+                    <span class="priority-icon">🟠</span>
+                    【高優先】今週～来週中に進捗確保
+                </h2>
+
+                <div class="task-item">
+                    <input type="checkbox" id="task3">
+                    <label for="task3">
+                        <div class="task-title">3. 琉球のタネ：決算処理と青色申告対応</div>
+                        <div class="task-deadline warning">🚨 重要</div>
+                        <div class="task-desc">決算処理と青色申告の期限対応が月末に集中します。</div>
+                        <ul class="sub-task">
+                            <li><strong>決算関連（5月末まで）</strong></li>
+                            <li style="list-style-type: none; margin-left: 20px;">✓ 2025年度決算：3月分までの伝票整理・入力完了</li>
+                            <li style="list-style-type: none; margin-left: 20px;">□ 4月分伝票整理・入力</li>
+                            <li style="list-style-type: none; margin-left: 20px;">□ 5月分伝票整理・入力（月末に向けて並行）</li>
+                            <li><strong>青色申告対応（期限厳守）</strong></li>
+                            <li style="list-style-type: none; margin-left: 20px;">□ 取消通知書の受領日を確認（ユーザー帰宅後にヒアリング）</li>
+                            <li style="list-style-type: none; margin-left: 20px;">□ 最短再申請可能日付を法的に特定</li>
+                            <li style="list-style-type: none; margin-left: 20px;">□ <strong>次回「決算1ヶ月前」提出期限をカレンダー登録</strong>（絶対に見逃さない）</li>
+                            <li style="list-style-type: none; margin-left: 20px;">□ 再申請書類のドラフト作成</li>
+                        </ul>
+                    </label>
+                </div>
+
+                <div class="task-item">
+                    <input type="checkbox" id="task4">
+                    <label for="task4">
+                        <div class="task-title">4. 経理：決算処理推進</div>
+                        <div class="task-deadline info">📅 月末処理</div>
+                        <div class="task-desc">全プロジェクトの月末伝票整理と入金確認。</div>
+                        <ul class="sub-task">
+                            <li>全プロジェクトの月末伝票整理</li>
+                            <li>振込・入金確認の整理</li>
+                            <li>Gemini活用による伝票自動分類テスト</li>
+                        </ul>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 中優先セクション -->
+            <div class="priority-section priority-yellow">
+                <h2>
+                    <span class="priority-icon">🟡</span>
+                    【中優先】5月中に並行実施
+                </h2>
+
+                <div class="task-item">
+                    <input type="checkbox" id="task5">
+                    <label for="task5">
+                        <div class="task-title">5. 小松事務所：GASシミュレーションシステム本格実装</div>
+                        <div class="task-deadline info">📅 5月中</div>
+                        <div class="task-desc">シミュレーション版コード完成。本格実装に向けたデプロイとテスト。</div>
+                        <ul class="sub-task">
+                            <li>GASプロジェクト作成・デプロイ</li>
+                            <li>テスト実行（知念様協力）</li>
+                            <li>ダッシュボード共有・テスト依頼</li>
+                            <li>棚卸しレポート作成（4月末→5月末に延期提案）</li>
+                        </ul>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 実行ステップ -->
+            <h2 style="margin-top: 40px; margin-bottom: 20px; color: #333;">🛠️ 実行ステップ（秘書AI手順）</h2>
+
+            <div class="steps-grid">
+                <div class="step-box">
+                    <h3>📅 Step 1: 本日（5月25日）</h3>
+                    <ul>
+                        <li><input type="checkbox"> 同友会メール送信確認 → 送信実施</li>
+                        <li><input type="checkbox"> 長安さまドメイン移管スケジュール確認</li>
+                        <li><input type="checkbox"> 琉球のタネ「決算1ヶ月前」カレンダー登録準備</li>
+                    </ul>
+                </div>
+
+                <div class="step-box">
+                    <h3>📅 Step 2: 5月26～27日</h3>
+                    <ul>
+                        <li><input type="checkbox"> 琉球のタネ決算処理（4月分伝票入力）</li>
+                        <li><input type="checkbox"> 長安さまドメイン移管状況確認（シュリ・タン様に連絡）</li>
+                        <li><input type="checkbox"> 小松事務所GASデプロイ準備</li>
+                    </ul>
+                </div>
+
+                <div class="step-box">
+                    <h3>📅 Step 3: 5月28～30日</h3>
+                    <ul>
+                        <li><input type="checkbox"> 長安さまドメイン移管完了確認 → 動作テスト → 報告メール</li>
+                        <li><input type="checkbox"> 琉球のタネ決算処理（5月分並行）</li>
+                        <li><input type="checkbox"> 小松事務所テスト実行</li>
+                    </ul>
+                </div>
+
+                <div class="step-box">
+                    <h3>📅 Step 4: 5月31日（月末締め）</h3>
+                    <ul>
+                        <li><input type="checkbox"> 全プロジェクト伝票整理確認</li>
+                        <li><input type="checkbox"> 入金確認整理</li>
+                        <li><input type="checkbox"> 翌月6月の重要タスク準備</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 注意点テーブル -->
+            <h2 style="margin-top: 40px; margin-bottom: 20px; color: #333;">⚠️ 特に注意する点</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>項目</th>
+                        <th>内容</th>
+                        <th>リスク</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>同友会請求</strong></td>
+                        <td>メール送信確認必須</td>
+                        <td>再確認なく送信すると修正困難</td>
+                    </tr>
+                    <tr>
+                        <td><strong>琉球のタネ決算</strong></td>
+                        <td>伝票整理を月内に完了</td>
+                        <td>6月入ってから対応すると煩雑</td>
+                    </tr>
+                    <tr>
+                        <td><strong>青色申告</strong></td>
+                        <td>「決算1ヶ月前」をカレンダー登録</td>
+                        <td>期限後申告→未承認の繰り返し防止</td>
+                    </tr>
+                    <tr>
+                        <td><strong>長安ドメイン</strong></td>
+                        <td>移管後のDNS・メール確認</td>
+                        <td>設定誤りで顧客メール不達</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- 確認事項 -->
+            <div class="confirmation-box">
+                <h3>✅ 実行開始前に確認が必要な項目</h3>
+
+                <div class="task-item">
+                    <input type="checkbox" id="confirm1">
+                    <label for="confirm1">
+                        <div class="task-title">1. 同友会メール送信</div>
+                        <div class="task-desc">今日送信してもよいか確認が必要です。</div>
+                    </label>
+                </div>
+
+                <div class="task-item">
+                    <input type="checkbox" id="confirm2">
+                    <label for="confirm2">
+                        <div class="task-title">2. 琉球のタネ伝票整理の優先度</div>
+                        <div class="task-desc">4月分・5月分の処理順序を確認。</div>
+                    </label>
+                </div>
+
+                <div class="task-item">
+                    <input type="checkbox" id="confirm3">
+                    <label for="confirm3">
+                        <div class="task-title">3. 青色申告対応</div>
+                        <div class="task-desc">ユーザー帰宅後にいつヒアリング可能か確認。</div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>📄 2026-05-25 月末対応チェックリスト | 秘書AI作成</p>
+            <p style="margin-top: 10px; color: #999;">このリストはブラウザのチェックボックスで進捗管理できます</p>
+        </footer>
+    </div>
+
+    <script>
+        // チェックボックスの状態をローカルストレージに保存
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            const savedState = localStorage.getItem(checkbox.id);
+            if (savedState) {
+                checkbox.checked = JSON.parse(savedState);
+            }
+
+            checkbox.addEventListener('change', () => {
+                localStorage.setItem(checkbox.id, JSON.stringify(checkbox.checked));
+            });
+        });
+    </script>
+</body>
+</html>
