@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>個別学習支援提案書｜将来の目標に向けて</title>
+  <title>あなただけの勉強プラン｜目標に向かって進もう！</title>
   <style>
     :root {
       --primary-color: #2b6cb0;
@@ -121,10 +121,10 @@
     }
 
     h1 {
-      font-size: 2.2rem;
+      font-size: 2rem;
       color: var(--primary-color);
       margin: 0 0 20px;
-      line-height: 1.3;
+      line-height: 1.4;
     }
 
     .mode-switch {
@@ -162,7 +162,7 @@
     }
 
     h2 {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       color: var(--primary-color);
       border-bottom: 2px solid var(--border-color);
       padding-bottom: 10px;
@@ -171,14 +171,14 @@
     }
 
     h3 {
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       color: var(--secondary-color);
       margin-top: 0;
     }
 
-    .grid-4 {
+    .grid-3 {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 15px;
       margin-bottom: 20px;
     }
@@ -198,20 +198,20 @@
     .pillar-list { display: flex; flex-direction: column; gap: 15px; }
     .pillar-item { display: flex; align-items: flex-start; gap: 15px; background: var(--bg-color); padding: 15px 20px; border-radius: 8px; }
     .pillar-num { background: var(--secondary-color); color: white; font-weight: bold; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .pillar-content h4 { margin: 0 0 5px; font-size: 1.1rem; }
-    .pillar-content p { margin: 0; font-size: 0.95rem; color: #4a5568; }
+    .pillar-content h4 { margin: 0 0 5px; font-size: 1.05rem; }
+    .pillar-content p { margin: 0; font-size: 0.9rem; color: #4a5568; }
 
     .flow-container { display: flex; flex-direction: column; gap: 10px; }
     .flow-step { background: var(--bg-color); padding: 15px; border-radius: 8px; display: flex; align-items: center; gap: 20px; }
     .flow-time { background: var(--primary-color); color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.85rem; font-weight: bold; min-width: 70px; text-align: center; }
 
     table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+    th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 0.95rem; }
     th { background-color: var(--bg-color); color: var(--primary-color); }
     .total-row { font-weight: bold; background-color: #ebf8ff; }
 
     .message-box { background: linear-gradient(135deg, #ebf8ff 0%, #e6fffa 100%); border-left: 4px solid var(--primary-color); padding: 25px; border-radius: 0 12px 12px 0; }
-    .message-box p { margin: 0 0 15px; }
+    .message-box p { margin: 0 0 15px; font-size: 0.95rem; }
     .message-box p:last-child { margin-bottom: 0; }
     .arrow-divider { text-align: center; margin: 10px 0; color: var(--secondary-color); font-size: 1.2rem; }
 
@@ -228,11 +228,11 @@
   <div id="auth-screen">
     <div class="auth-card">
       <h2>🔐 アクセス認証</h2>
-      <p>提案書を表示するにはパスワードを入力してください。</p>
+      <p>ページを見るにはパスワードを入力してね！</p>
       <div class="auth-form">
         <input type="password" id="password-input" placeholder="パスワードを入力" onkeydown="if(event.key==='Enter')checkPassword()">
         <button onclick="checkPassword()">認証する</button>
-        <div id="error-msg">パスワードが正しくありません</div>
+        <div id="error-msg">パスワードがちがうよ！もう一度たしかめてね</div>
       </div>
     </div>
   </div>
@@ -240,90 +240,78 @@
   <div id="main-content">
     <div class="container" id="page-wrapper">
       <header>
-        <div class="subtitle">個別学習支援提案書</div>
-        <h1>将来の目標・夢に向けて<br>自分を知り、学びをデザインする</h1>
+        <div class="subtitle">✨ アルパカスクール ✨</div>
+        <h1>目標に向かって進む！🚀<br>あなただけのオーダーメイド勉強プラン</h1>
       </header>
 
       <div class="mode-switch">
-        <button class="mode-btn active" id="btn-diagram" onclick="switchMode('diagram')">✏️ 図解モード</button>
-        <button class="mode-btn" id="btn-detail" onclick="switchMode('detail')">📊 詳細モード</button>
+        <button class="mode-btn active" id="btn-diagram" onclick="switchMode('diagram')">✏️ イラスト図解モード</button>
+        <button class="mode-btn" id="btn-detail" onclick="switchMode('detail')">📊 くわしい文章モード</button>
       </div>
 
       <section>
-        <h2>①いまの状況</h2>
+        <h2>① いまのあなたの様子 🌟</h2>
         <div class="mode-content diagram-only">
-          <h3>生徒様を取り巻く環境と心の変化</h3>
-          <div class="grid-4">
+          <h3>毎日の生活と、これからの目標</h3>
+          <div class="grid-3">
             <div class="grid-card">
               <div class="icon">🎯</div>
               <div class="title">将来の夢</div>
-              <div class="desc">明確な目標・目指す職業あり</div>
+              <div class="desc">「やってみたい！」という素敵な目標・夢がある</div>
             </div>
             <div class="grid-card">
               <div class="icon">🏃</div>
-              <div class="title">課外活動</div>
-              <div class="desc">定期的な活動と練習の継続</div>
-            </div>
-            <div class="grid-card">
-              <div class="icon">📢</div>
-              <div class="title">自己開示</div>
-              <div class="desc">自身の特性の理解と行動変化</div>
+              <div class="title">大好きな活動</div>
+              <div class="desc">部活やクラブチームでの練習を全力で続けている</div>
             </div>
             <div class="grid-card">
               <div class="icon">📝</div>
-              <div class="title">学習意欲</div>
-              <div class="desc">自習を継続中。苦手教科の克服希望</div>
+              <div class="title">勉強へのやる気</div>
+              <div class="desc">自分から進んで勉強中！苦手をなくしたい気持ち</div>
             </div>
           </div>
         </div>
 
         <div class="mode-content detail-only">
-          <h3>面談に基づく現状の整理</h3>
+          <h3>お話を聞いて整理した「いまの状況」</h3>
           <ul>
-            <li><strong>課外活動の状況：</strong> 引退後も次のステップでの継続を見据え、夜間を含めた外部チームでの練習に精力的に励んでいる。</li>
-            <li><strong>精神的成長：</strong> 自身の学習・行動特性について周囲と共有（自己開示）できたことを機に、生活リズムの改善や主体的な行動変化が見られ、周囲からも高く評価されている。学習に対する自発的な意欲が非常に高まっている時期である。</li>
-            <li><strong>学習課題：</strong> 現在は家庭用教材等で自習中。特に特定の教科に苦手意識があり、「個別指導で基礎からしっかりと学び直したい」という強い本人希望がある。</li>
+            <li><strong>がんばっていること：</strong> 次のステップや未来の目標を見据えて、夜間の練習も含めた外部チームでの活動にとても一生懸命取り組んでいます！</li>
+            <li><strong>素敵なところ：</strong> 自分の生活リズムを自分で整えたり、前向きに行動を変えていこうとするエネルギーがとても素晴らしいです。勉強に対しても「やってみよう！」という気持ちが高まっています。</li>
+            <li><strong>これからの課題：</strong> 今は家での教材などを使って自分の力で勉強していますが、「もっと基礎からしっかり分かるようになりたい教科」があり、個別指導で教えてほしいという強い希望を持っています。</li>
           </ul>
         </div>
       </section>
 
       <section>
-        <h2>②授業の3つの柱</h2>
+        <h2>② 授業をささえる「2つの柱」 🏛️</h2>
         <div class="pillar-list">
           <div class="pillar-item">
             <div class="pillar-num">1</div>
             <div class="pillar-content">
-              <h4>夢から逆算した重点科目と基礎の強化</h4>
-              <p>将来の目標に向けて最重要となる「重点科目」の底上げ、およびつまずきやすい主要教科の基礎を徹底して整えます。</p>
+              <h4>🎯 夢から逆算した、教科の基礎力アップ！</h4>
+              <p>あなたの将来の目標に向けて、一番大切になる教科の点数を底上げします。つまずきやすいポイントを見つけ、自分のペースでじっくりと基礎を固めていきます。</p>
             </div>
           </div>
           <div class="pillar-item">
             <div class="pillar-num">2</div>
             <div class="pillar-content">
-              <h4>「毎日10分」の言語化フィードバック</h4>
-              <p>平日に過度な宿題負担は課さず、SNSを活用したその日の「分かった/分からなかった」の振り返りで、メタ認知能力（自己分析力）を育てます。</p>
-            </div>
-          </div>
-          <div class="pillar-item">
-            <div class="pillar-num">3</div>
-            <div class="pillar-content">
-              <h4>過去の苦手意識を徹底ケアする安心空間</h4>
-              <p>過去の学習で行き詰まってしまった悔しい経験や心理的負担に寄り添い、決して置いていかない、本人のペースに合わせたステップを用意します。</p>
+              <h4>💬 「まいにち10分」のLINEで振り返り！</h4>
+              <p>平日に重くて大変な宿題は出しません！その代わりに、その日の勉強で「分かったこと」や「分からなかったハテナ」をLINEで教えてもらい、自分で振り返る力を育てます。</p>
             </div>
           </div>
         </div>
       </section>
 
       <section>
-        <h2>③1週間の流れ</h2>
-        <h3>平日（毎日の言語化）× 指定曜日（対面のフォロー）</h3>
+        <h2>③ 1週間のスケジュール 📅</h2>
+        <h3>平日の「まいにちLINE」× 授業日の「しっかり対面フォロー」</h3>
         <div class="flow-container">
           <div class="flow-step">
             <div class="flow-time" style="background-color: var(--secondary-color);">月〜金</div>
             <div>
-              <strong>LINE等を活用した10分間のデイリー・フィードバック（制限時間設定あり）</strong>
-              <div style="font-size: 0.9rem; color: #4a5568; margin-top: 5px;">
-                学校や自習で取り組んだことの「分かったこと」「分からなかったこと」をボイスメッセージ等で言語化して送信。
+              <strong>📱 LINEで10分間のデイリー・フィードバック（夜の決まった時間まで）</strong>
+              <div style="font-size: 0.85rem; color: #4a5568; margin-top: 5px;">
+                学校や家での勉強で「できたこと」「分からん！」と思ったところを、音声やメッセージでかんたんに送るだけでOK！
               </div>
             </div>
           </div>
@@ -331,9 +319,9 @@
           <div class="flow-step">
             <div class="flow-time">授業日</div>
             <div>
-              <strong>対面個別授業 90分（夕方〜夜間の最適な時間帯で調整）</strong>
-              <div style="font-size: 0.9rem; color: #4a5568; margin-top: 5px;">
-                毎日の音声・テキストログをベースに、特に苦手な部分や強化したい重点科目のフォローを直接実施。
+              <strong>🏫 対面の個別授業 90分（夕方〜夜の話し合って決めた時間）</strong>
+              <div style="font-size: 0.85rem; color: #4a5568; margin-top: 5px;">
+                平日のLINEに届いたハテナをベースに、特に苦手なところや、もっと伸ばしたい教科を直接先生が教えます！
               </div>
             </div>
           </div>
@@ -341,63 +329,58 @@
       </section>
 
       <section>
-        <h2>④授業1回の流れ（90分）</h2>
+        <h2>④ 授業（90分）の流れ ⏱️</h2>
         <div class="flow-container">
-          <div class="flow-step"><div class="flow-time">5分</div><div><strong>① 近況確認：</strong> 課外活動での様子や学校の体調・メンタルチェック</div></div>
-          <div class="flow-step"><div class="flow-time">10分</div><div><strong>② デイリーログのふり返り：</strong> 今週送ってくれた「分からなかったこと」の整理</div></div>
-          <div class="flow-step"><div class="flow-time">50分</div><div><strong>③ メイン学習（重点教科）：</strong> 焦らず、つまずいた場所まで戻って「わかる！」を積み上げる</div></div>
-          <div class="flow-step"><div class="flow-time">15分</div><div><strong>④ サブ教科・進路相談：</strong> 学校の宿題フォローや、将来の夢に向けた情報交換・動機付け</div></div>
-          <div class="flow-step"><div class="flow-time">10分</div><div><strong>⑤ 今日のまとめ：</strong> 次の1週間へ向けた「言語化」の練習と目標設定</div></div>
+          <div class="flow-step"><div class="flow-time">5分</div><div><strong>① おしゃべりタイム ☕️：</strong> 最近の様子や、体調・メンタルのチェック</div></div>
+          <div class="flow-step"><div class="flow-time">10分</div><div><strong>② LINEの振り返り 🔍：</strong> 今週送ってくれた「分からないこと」を整理しよう</div></div>
+          <div class="flow-step"><div class="flow-time">50分</div><div><strong>③ メインの勉強タイム 📖：</strong> 焦らなくて大丈夫。つまずいた場所まで戻って「わかる！」を積み上げよう</div></div>
+          <div class="flow-step"><div class="flow-time">15分</div><div><strong>④ 宿題・進路の相談 🗺️：</strong> 学校の宿題のフォローや、将来の夢に向けた情報交換・作戦会議</div></div>
+          <div class="flow-step"><div class="flow-time">10分</div><div><strong>⑤ 今日のまとめ 📝：</strong> 次の1週間に向けた、かんたんな練習とこれからの目標設定</div></div>
         </div>
       </section>
 
       <section>
-        <h2>⑤安心のための学習設計</h2>
+        <h2>⑤ これからの進路選び 🤝</h2>
         <div class="mode-content diagram-only">
-          <div class="grid-4" style="grid-template-columns: 1fr 1fr;">
+          <div class="grid-3" style="grid-template-columns: 1fr;">
             <div class="grid-card" style="text-align: left;">
-              <div class="title" style="color: var(--accent-color);">🚫 過去の悔しさとケア</div>
-              <div class="desc" style="font-size: 0.9rem; line-height: 1.5; margin-top: 5px;">過去の学習で行き詰まり、強い挫折感を感じた経験を考慮。再スタートへ向けた本人のいまの気持ち・意思を丁寧に最優先で確認します。</div>
-            </div>
-            <div class="grid-card" style="text-align: left;">
-              <div class="title" style="color: var(--secondary-color);">🤝 柔軟な環境選択</div>
-              <div class="desc" style="font-size: 0.9rem; line-height: 1.5; margin-top: 5px;">良好な学習評価や本人の適性を活かし、様々な支援制度も視野に。夢や目標に向けて特定の進学校のみに拘らず、専門学科を含め最適なルートを一緒に検討します。</div>
+              <div class="title" style="color: var(--secondary-color);">🗺️ あなたに一番ぴったりのルートを考えよう</div>
+              <div class="desc" style="font-size: 0.9rem; line-height: 1.5; margin-top: 5px;">学校での良い評価や、あなたの得意なことをたくさん活かしていきましょう！ひとつの進路だけにこだわらず、専門的な学校や学科も含めて、あなたが一番ワクワクして夢に近づけるルートを一緒に探していきます。</div>
             </div>
           </div>
         </div>
         <div class="mode-content detail-only">
-          <p><strong>過去の挫折への配慮：</strong> わからないことが積み重なってしまったかつての悔しい経験を大切に扱います。その悔しさをエネルギーにできる強さを持っていますが、心理的負担を避けるため、スモールステップでの指導と細やかな承認を徹底します。</p>
-          <p><strong>外部・地域連携の可能性：</strong> 多面的な成長や居場所づくりに向けて、地域の専門教育プログラムや外部のサポート機関とも、ポジティブに情報共有・連携を行っていく準備があります。</p>
+          <p><strong>前向きな環境えらび：</strong> 学校の内申点や日頃のがんばりは大きな武器になります。将来の夢に向かって、ただ勉強のハードルを上げるだけでなく、あなたらしさを発揮できる多様な学校選びや特待制度なども視野に入れ、一番納得のいく進路を一緒に作っていきます。</p>
         </div>
       </section>
 
       <section>
-        <h2>⑥支援メニュー・授業料</h2>
+        <h2>⑥ 応援プラン（費用について） 💳</h2>
         <table>
           <thead>
-            <tr><th>支援内容</th><th>時間・回数</th><th>料金</th></tr>
+            <tr><th>サポート内容</th><th>じかん・回数</th><th>料金</th></tr>
           </thead>
           <tbody>
             <tr><td><strong>対面個別授業</strong></td><td>90分 × 週1回（月4回）</td><td>22,000円 / 月</td></tr>
-            <tr><td><strong>デイリー・フィードバックサポート</strong></td><td>平日毎日（週5回 / 月20回相当）</td><td>5,500円 / 月</td></tr>
-            <tr class="total-row"><td>総合サポートプラン（税込）</td><td>上記すべてを含む</td><td>27,500円 / 月</td></tr>
+            <tr><td><strong>まいにちLINEサポート</strong></td><td>平日毎日（週5回 / 月20回くらい）</td><td>5,500円 / 月</td></tr>
+            <tr class="total-row"><td>総合サポートプラン（税込）</td><td>上のすべてが含まれます</td><td>27,500円 / 月</td></tr>
           </tbody>
         </table>
-        <p style="font-size: 0.85rem; color: #718096; margin-top: 10px;">※ スケジュールや回数の調整、単発での実施、または「まずは対面のみからスタート」なども柔軟に対応可能です。お気軽にご相談ください。</p>
+        <p style="font-size: 0.8rem; color: #718096; margin-top: 10px;">※ スケジュールや回数の調整、まずは対面授業だけからスタートするなど、ご家庭に合わせて柔軟に変更できますのでお気軽にご相談ください。</p>
       </section>
 
       <section>
-        <h2>⑦生徒様へのメッセージ</h2>
+        <h2>⑦ あなたへの応援メッセージ 💌</h2>
         <div class="message-box">
-          <p><strong>生徒様へ</strong></p>
-          <p>部活動の節目を迎えてからも、次の目標に向けて熱心に活動や練習をがんばっていること、本当に素晴らしいなと思います！さらに、自分の特徴や課題をまわりの人にしっかり伝えて、自分の行動をポジティブに変えていく姿に、周囲の先生たちもすごく応援したい気持ちになっています。</p>
-          <p>「こうなりたい」という大きな夢や目標があること、それ自体が大きな強みです。その夢のために、まずは大好きなことを全力でやりながら、一歩ずつ進んでいきましょう。</p>
-          <p>勉強で昔、すごく悔しい思いをした瞬間があったかもしれませんが、これからの授業では絶対に置いてきぼりにはしません。毎日、日々の活動のなかで「ここが分からんかった！」「これができた！」と教えてくれるだけで100点満点。そこを対面授業で一緒に解決していきましょう。飛行機がゆっくりと滑走路から飛び立つように、自分のペースで加速していこうね！</p>
+          <p><strong>勉強も、大好きな活動も、両がんばるあなたへ</strong></p>
+          <p>次の目標に向けて夜遅くまで一生懸命練習に励んでいる姿、本当にカッコいいなと思います！「こうなりたい！」という大きな夢や目標を持っていること、それ自体がすでにあなたの強力な武器（才能）です。その夢を叶えるために、まずは今やりたいことを全力で楽しみながら、一歩ずつ進んでいきましょう。</p>
+          <p>これからの授業では、絶対にあなたを置いてきぼりにはしません。毎日、自分のペースで「ここが分からんかった！」とLINEで教えてくれるだけで100点満点です。そこを授業の日に一緒に解決していきましょう。</p>
+          <p>飛行機がゆっくりと滑走路を走り出して、大空へ飛び立つように、あなたらしいペースで少しずつ加速していこうね！</p>
         </div>
       </section>
 
       <footer>
-        個別学習支援提案テンプレート｜アルパカスクール
+        個別学習支援プラン｜アルパカスクール
       </footer>
     </div>
   </div>
