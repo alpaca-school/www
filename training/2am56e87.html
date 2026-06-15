@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>個別学習支援提案書｜将来の目標に向けて</title>
+  <style>
+    :root {
+      --primary-color: #2b6cb0;
+      --secondary-color: #319795;
+      --accent-color: #dd6b20;
+      --bg-color: #f7fafc;
+      --card-bg: #ffffff;
+      --text-color: #2d3748;
+      --border-color: #e2e8f0;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* ----------------------------------
+       🔐 アクセス認証画面のスタイル
+    ---------------------------------- */
+    #auth-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background-color: var(--bg-color);
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .auth-card {
+      background: var(--card-bg);
+      padding: 40px 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .auth-card h2 {
+      color: var(--primary-color);
+      margin-bottom: 10px;
+      font-size: 1.5rem;
+    }
+
+    .auth-card p {
+      color: #718096;
+      font-size: 0.9rem;
+      margin-bottom: 25px;
+    }
+
+    .auth-form input[type="password"] {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 1rem;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .auth-form button {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .auth-form button:hover {
+      background-color: #1a4373;
+    }
+
+    #error-msg {
+      color: #e53e3e;
+      font-size: 0.85rem;
+      margin-top: 10px;
+      display: none;
+    }
+
+    /* ----------------------------------
+       📄 提案書本体のスタイル
+    ---------------------------------- */
+    #main-content {
+      display: none;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      padding: 40px 0 20px;
+    }
+
+    .subtitle {
+      color: var(--secondary-color);
+      font-size: 1.1rem;
+      font-weight: bold;
+      letter-spacing: 0.1em;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      color: var(--primary-color);
+      margin: 0 0 20px;
+      line-height: 1.3;
+    }
+
+    .mode-switch {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 40px;
+    }
+
+    .mode-btn {
+      padding: 10px 20px;
+      border: 1px solid var(--border-color);
+      background-color: var(--card-bg);
+      cursor: pointer;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .mode-btn.active {
+      background-color: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+
+    section {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 10px;
+      margin-top: 0;
+      margin-bottom: 25px;
+    }
+
+    h3 {
+      font-size: 1.2rem;
+      color: var(--secondary-color);
+      margin-top: 0;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .grid-card {
+      background-color: var(--bg-color);
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      border: 1px solid var(--border-color);
+    }
+
+    .grid-card .icon { font-size: 2rem; margin-bottom: 10px; }
+    .grid-card .title { font-weight: bold; font-size: 1rem; margin-bottom: 5px; }
+    .grid-card .desc { font-size: 0.85rem; color: #718096; }
+
+    .pillar-list { display: flex; flex-direction: column; gap: 15px; }
+    .pillar-item { display: flex; align-items: flex-start; gap: 15px; background: var(--bg-color); padding: 15px 20px; border-radius: 8px; }
+    .pillar-num { background: var(--secondary-color); color: white; font-weight: bold; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .pillar-content h4 { margin: 0 0 5px; font-size: 1.1rem; }
+    .pillar-content p { margin: 0; font-size: 0.95rem; color: #4a5568; }
+
+    .flow-container { display: flex; flex-direction: column; gap: 10px; }
+    .flow-step { background: var(--bg-color); padding: 15px; border-radius: 8px; display: flex; align-items: center; gap: 20px; }
+    .flow-time { background: var(--primary-color); color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.85rem; font-weight: bold; min-width: 70px; text-align: center; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+    th { background-color: var(--bg-color); color: var(--primary-color); }
+    .total-row { font-weight: bold; background-color: #ebf8ff; }
+
+    .message-box { background: linear-gradient(135deg, #ebf8ff 0%, #e6fffa 100%); border-left: 4px solid var(--primary-color); padding: 25px; border-radius: 0 12px 12px 0; }
+    .message-box p { margin: 0 0 15px; }
+    .message-box p:last-child { margin-bottom: 0; }
+    .arrow-divider { text-align: center; margin: 10px 0; color: var(--secondary-color); font-size: 1.2rem; }
+
+    footer { text-align: center; padding: 40px 0; font-size: 0.85rem; color: #a0aec0; border-top: 1px solid var(--border-color); margin-top: 40px; }
+
+    .mode-content { display: block; }
+    .detail-only { display: none; }
+    .show-detail .diagram-only { display: none; }
+    .show-detail .detail-only { display: block; }
+  </style>
+</head>
+<body>
+
+  <!-- 🔐 認証画面 -->
+  <div id="auth-screen">
+    <div class="auth-card">
+      <h2>🔐 アクセス認証</h2>
+      <p>提案書を表示するにはパスワードを入力してください。</p>
+      <div class="auth-form">
+        <input type="password" id="password-input" placeholder="パスワードを入力" onkeydown="if(event.key==='Enter')checkPassword()">
+        <button onclick="checkPassword()">認証する</button>
+        <div id="error-msg">パスワードが正しくありません</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 📄 提案書本体（個人特定に繋がる文脈をすべて排除） -->
+  <div id="main-content">
+    <div class="container" id="page-wrapper">
+      <header>
+        <div class="subtitle">個別学習支援提案書</div>
+        <h1>将来の目標・夢に向けて<br>自分を知り、学びをデザインする</h1>
+      </header>
+
+      <div class="mode-switch">
+        <button class="mode-btn active" id="btn-diagram" onclick="switchMode('diagram')">✏️ 図解モード</button>
+        <button class="mode-btn" id="btn-detail" onclick="switchMode('detail')">📊 詳細モード</button>
+      </div>
+
+      <!-- ①いまの状況 -->
+      <section>
+        <h2>①いまの状況</h2>
+        <div class="mode-content diagram-only">
+          <h3>生徒様を取り巻く環境と心の変化</h3>
+          <div class="grid-4">
+            <div class="grid-card">
+              <div class="icon">🎯</div>
+              <div class="title">将来の夢</div>
+              <div class="desc">明確な目標・目指す職業あり</div>
+            </div>
+            <div class="grid-card">
+              <div class="icon">🏃</div>
+              <div class="title">課外活動</div>
+              <div class="desc">定期的な活動と練習の継続</div>
+            </div>
+            <div class="grid-card">
+              <div class="icon">📢</div>
+              <div class="title">自己開示</div>
+              <div class="desc">自身の特性の理解と行動変化</div>
+            </div>
+            <div class="grid-card">
+              <div class="icon">📝</div>
+              <div class="title">学習意欲</div>
+              <div class="desc">自習を継続中。苦手教科の克服希望</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mode-content detail-only">
+          <h3>面談に基づく現状の整理</h3>
+          <ul>
+            <li><strong>課外活動の状況：</strong> 引退後も次のステップでの継続を見据え、夜間を含めた外部チームでの練習に精力的に励んでいる。</li>
+            <li><strong>精神的成長：</strong> 自身の学習・行動特性について周囲と共有（自己開示）できたことを機に、生活リズムの改善や主体的な行動変化が見られ、周囲からも高く評価されている。学習に対する自発的な意欲が非常に高まっている時期である。</li>
+            <li><strong>学習課題：</strong> 現在は家庭用教材等で自習中。特に特定の教科に苦手意識があり、「個別指導で基礎からしっかりと学び直したい」という強い本人希望がある。</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ②授業の3つの柱 -->
+      <section>
+        <h2>②授業の3つの柱</h2>
+        <div class="pillar-list">
+          <div class="pillar-item">
+            <div class="pillar-num">1</div>
+            <div class="pillar-content">
+              <h4>夢から逆算した重点科目と基礎の強化</h4>
+              <p>将来の目標に向けて最重要となる「重点科目」の底上げ、およびつまずきやすい主要教科の基礎を徹底して整えます。</p>
+            </div>
+          </div>
+          <div class="pillar-item">
+            <div class="pillar-num">2</div>
+            <div class="pillar-content">
+              <h4>「毎日10分」の言語化フィードバック</h4>
+              <p>平日に過度な宿題負担は課さず、SNSを活用したその日の「分かった/分からなかった」の振り返りで、メタ認知能力（自己分析力）を育てます。</p>
+            </div>
+          </div>
+          <div class="pillar-item">
+            <div class="pillar-num">3</div>
+            <div class="pillar-content">
+              <h4>過去の苦手意識を徹底ケアする安心空間</h4>
+              <p>過去の学習で行き詰まってしまった悔しい経験や心理的負担に寄り添い、決して置いていかない、本人のペースに合わせたステップを用意します。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ③1週間の流れ -->
+      <section>
+        <h2>③1週間の流れ</h2>
+        <h3>平日（毎日の言語化）× 指定曜日（対面のフォロー）</h3>
+        <div class="flow-container">
+          <div class="flow-step">
+            <div class="flow-time" style="background-color: var(--secondary-color);">月〜金</div>
+            <div>
+              <strong>LINE等を活用した10分間のデイリー・フィードバック（制限時間設定あり）</strong>
+              <div style="font-size: 0.9rem; color: #4a5568; margin-top: 5px;">
+                学校や自習で取り組んだことの「分かったこと」「分からなかったこと」をボイスメッセージ等で言語化して送信。
+              </div>
+            </div>
+          </div>
+          <div class="arrow-divider">▼</div>
+          <div class="flow-step">
+            <div class="flow-time">授業日</div>
+            <div>
+              <strong>対面個別授業 90分（夕方〜夜間の最適な時間帯で調整）</strong>
+              <div style="font-size: 0.9rem; color: #4a5568; margin-top: 5px;">
+                毎日の音声・テキストログをベースに、特に苦手な部分や強化したい重点科目のフォローを直接実施。
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ④授業1回の流れ -->
+      <section>
+        <h2>④授業1回の流れ（90分）</h2>
+        <div class="flow-container">
+          <div class="flow-step"><div class="flow-time">5分</div><div><strong>① 近況確認：</strong> 課外活動での様子や学校の体調・メンタルチェック</div></div>
+          <div class="flow-step"><div class="flow-time">10分</div><div><strong>② デイリーログのふり返り：</strong> 今週送ってくれた「分からなかったこと」の整理</div></div>
+          <div class="flow-step"><div class="flow-time">50分</div><div><strong>③ メイン学習（重点教科）：</strong> 焦らず、つまずいた場所まで戻って「わかる！」を積み上げる</div></div>
+          <div class="flow-step"><div class="flow-time">15分</div><div><strong>④ サブ教科・進路相談：</strong> 学校の宿題フォローや、将来の夢に向けた情報交換・動機付け</div></div>
+          <div class="flow-step"><div class="flow-time">10分</div><div><strong>⑤ 今日のまとめ：</strong> 次の1週間へ向けた「言語化」の練習と目標設定</div></div>
+        </div>
+      </section>
+
+      <!-- ⑤メンタルケアと安心設計 -->
+      <section>
+        <h2>⑤安心のための学習設計</h2>
+        <div class="mode-content diagram-only">
+          <div class="grid-4" style="grid-template-columns: 1fr 1fr;">
+            <div class="grid-card" style="text-align: left;">
+              <div class="title" style="color: var(--accent-color);">🚫 過去の悔しさとケア</div>
+              <div class="desc" style="font-size: 0.9rem; line-height: 1.5; margin-top: 5px;">過去の学習で行き詰まり、強い挫折感を感じた経験を考慮。再スタートへ向けた本人のいまの気持ち・意思を丁寧に最優先で確認します。</div>
+            </div>
+            <div class="grid-card" style="text-align: left;">
+              <div class="title" style="color: var(--secondary-color);">🤝 柔軟な環境選択</div>
+              <div class="desc" style="font-size: 0.9rem; line-height: 1.5; margin-top: 5px;">良好な学習評価や本人の適性を活かし、様々な支援制度も視野に。夢や目標に向けて特定の進学校のみに拘らず、専門学科を含め最適なルートを一緒に検討します。</div>
+            </div>
+          </div>
+        </div>
+        <div class="mode-content detail-only">
+          <p><strong>過去の挫折への配慮：</strong> わからないことが積み重なってしまったかつての悔しい経験を大切に扱います。その悔しさをエネルギーにできる強さを持っていますが、心理的負担を避けるため、スモールステップでの指導と細やかな承認を徹底します。</p>
+          <p><strong>外部・地域連携の可能性：</strong> 多面的な成長や居場所づくりに向けて、地域の専門教育プログラムや外部のサポート機関とも、ポジティブに情報共有・連携を行っていく準備があります。</p>
+        </div>
+      </section>
+
+      <!-- ⑥授業料・支援メニュー -->
+      <section>
+        <h2>⑥支援メニュー・授業料</h2>
+        <table>
+          <thead>
+            <tr><th>支援内容</th><th>時間・回数</th><th>料金</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>対面個別授業</strong></td><td>90分 × 週1回（月4回）</td><td>22,000円 / 月</td></tr>
+            <tr><td><strong>デイリー・フィードバックサポート</strong></td><td>平日毎日（週5回 / 月20回相当）</td><td>5,500円 / 月</td></tr>
+            <tr class="total-row"><td>総合サポートプラン（税込）</td><td>上記すべてを含む</td><td>27,500円 / 月</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size: 0.85rem; color: #718096; margin-top: 10px;">※ スケジュールや回数の調整、単発での実施、または「まずは対面のみからスタート」なども柔軟に対応可能です。お気軽にご相談ください。</p>
+      </section>
+
+      <!-- ⑦本人へのメッセージ -->
+      <section>
+        <h2>⑦生徒様へのメッセージ</h2>
+        <div class="message-box">
+          <p><strong>生徒様へ</strong></p>
+          <p>部活動の節目を迎えてからも、次の目標に向けて熱心に活動や練習をがんばっていること、本当に素晴らしいなと思います！さらに、自分の特徴や課題をまわりの人にしっかり伝えて、自分の行動をポジティブに変えていく姿に、周囲の先生たちもすごく応援したい気持ちになっています。</p>
+          <p>「こうなりたい」という大きな夢や目標があること、それ自体が大きな強みです。その夢のために、まずは大好きなことを全力でやりながら、一歩ずつ進んでいきましょう。</p>
+          <p>勉強で昔、すごく悔しい思いをした瞬間があったかもしれませんが、これからの授業では絶対に置いてきぼりにはしません。毎日、日々の活動のなかで「ここが分からんかった！」「これができた！」と教えてくれるだけで100点満点。そこを対面授業で一緒に解決していきましょう。飛行機がゆっくりと滑走路から飛び立つように、自分のペースで加速していこうね！</p>
+        </div>
+      </section>
+
+      <footer>
+        個別学習支援提案テンプレート｜アルパカスクール
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    // 🔑 パスワード（「alpaca2026」のSHA-256ハッシュ値）
+    const CORRECT_HASH = "8e950d87a419fcda0367bf63297a79eb89be3e36e6559d8ef922650ee979ee93";
+
+    async function sha256(message) {
+      const msgBuffer = new TextEncoder().encode(message);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function checkPassword() {
+      const input = document.getElementById('password-input').value;
+      const inputHash = await sha256(input);
+      const errorMsg = document.getElementById('error-msg');
+
+      if (inputHash === CORRECT_HASH) {
+        document.getElementById('auth-screen').style.display = 'none';
+        document.getElementById('main-content').style.display = 'block';
+      } else {
+        errorMsg.style.display = 'block';
+      }
+    }
+
+    function switchMode(mode) {
+      const wrapper = document.getElementById('page-wrapper');
+      const btnDiagram = document.getElementById('btn-diagram');
+      const btnDetail = document.getElementById('btn-detail');
+
+      if (mode === 'detail') {
+        wrapper.classList.add('show-detail');
+        btnDetail.classList.add('active');
+        btnDiagram.remove('active');
+      } else {
+        wrapper.classList.remove('show-detail');
+        btnDiagram.classList.add('active');
+        btnDetail.classList.remove('active');
+      }
+    }
+  </script>
+</body>
+</html>
