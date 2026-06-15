@@ -6,8 +6,10 @@
   <title>あなただけの勉強プラン｜目標に向かって進もう！</title>
   <style>
     :root {
-      --primary-color: #2b6cb0;
+      --primary-color: #1a365d;
+      --primary-light: #2b6cb0;
       --secondary-color: #319795;
+      --secondary-light: #2c7a7b;
       --accent-color: #dd6b20;
       --bg-color: #f7fafc;
       --card-bg: #ffffff;
@@ -17,9 +19,9 @@
 
     body {
       font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
-      background-color: var(--bg-color);
+      background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
       color: var(--text-color);
-      line-height: 1.6;
+      line-height: 1.7;
       margin: 0;
       padding: 0;
     }
@@ -32,7 +34,7 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      background-color: var(--bg-color);
+      background: linear-gradient(135deg, #ebf8ff 0%, #e6fffa 100%);
       padding: 20px;
       box-sizing: border-box;
     }
@@ -40,58 +42,69 @@
     .auth-card {
       background: var(--card-bg);
       padding: 40px 30px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.06);
       max-width: 400px;
       width: 100%;
       text-align: center;
+      border: 1px solid rgba(255,255,255,0.8);
     }
 
     .auth-card h2 {
-      color: var(--primary-color);
+      color: var(--primary-light);
       margin-bottom: 10px;
-      font-size: 1.5rem;
+      font-size: 1.6rem;
+      font-weight: 700;
     }
 
     .auth-card p {
       color: #718096;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       margin-bottom: 25px;
     }
 
     .auth-form input[type="password"] {
       width: 100%;
-      padding: 12px 15px;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      font-size: 1rem;
+      padding: 14px 15px;
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      font-size: 1.1rem;
       box-sizing: border-box;
       margin-bottom: 15px;
       text-align: center;
+      transition: border-color 0.2s;
+    }
+
+    .auth-form input[type="password"]:focus {
+      border-color: var(--primary-light);
+      outline: none;
     }
 
     .auth-form button {
       width: 100%;
-      padding: 12px;
-      background-color: var(--primary-color);
+      padding: 14px;
+      background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-color) 100%);
       color: white;
       border: none;
-      border-radius: 8px;
-      font-size: 1rem;
+      border-radius: 10px;
+      font-size: 1.05rem;
       font-weight: bold;
       cursor: pointer;
-      transition: background 0.2s;
+      box-shadow: 0 4px 12px rgba(43, 108, 176, 0.3);
+      transition: all 0.2s;
     }
 
     .auth-form button:hover {
-      background-color: #1a4373;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 15px rgba(43, 108, 176, 0.4);
     }
 
     #error-msg {
       color: #e53e3e;
-      font-size: 0.85rem;
-      margin-top: 10px;
+      font-size: 0.9rem;
+      margin-top: 12px;
       display: none;
+      font-weight: bold;
     }
 
     /* ----------------------------------
@@ -102,121 +115,155 @@
     }
 
     .container {
-      max-width: 800px;
+      max-width: 840px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 40px 20px;
     }
 
     header {
       text-align: center;
-      padding: 40px 0 20px;
+      padding: 40px 0;
     }
 
     .subtitle {
       color: var(--secondary-color);
-      font-size: 1.1rem;
-      font-weight: bold;
-      letter-spacing: 0.1em;
-      margin-bottom: 10px;
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      margin-bottom: 12px;
+      text-transform: uppercase;
     }
 
     h1 {
-      font-size: 2rem;
+      font-size: 2.2rem;
       color: var(--primary-color);
-      margin: 0 0 20px;
+      margin: 0 0 25px;
       line-height: 1.4;
+      font-weight: 800;
     }
 
+    /* モードスイッチ（タブ風モダンデザイン） */
     .mode-switch {
       display: flex;
       justify-content: center;
-      gap: 10px;
+      gap: 12px;
       margin-bottom: 40px;
+      background: rgba(226, 232, 240, 0.6);
+      padding: 6px;
+      border-radius: 30px;
+      max-width: 360px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .mode-btn {
-      padding: 10px 20px;
-      border: 1px solid var(--border-color);
-      background-color: var(--card-bg);
+      padding: 10px 24px;
+      border: none;
+      background: transparent;
       cursor: pointer;
-      border-radius: 20px;
-      font-size: 0.9rem;
+      border-radius: 24px;
+      font-size: 0.95rem;
+      font-weight: bold;
       display: flex;
       align-items: center;
       gap: 8px;
+      color: var(--text-color);
       transition: all 0.3s ease;
     }
 
     .mode-btn.active {
-      background-color: var(--primary-color);
-      color: white;
-      border-color: var(--primary-color);
+      background-color: var(--card-bg);
+      color: var(--primary-light);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     }
 
     section {
       background: var(--card-bg);
-      border-radius: 12px;
-      padding: 30px;
-      margin-bottom: 30px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      border-radius: 16px;
+      padding: 35px;
+      margin-bottom: 35px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(226, 232, 240, 0.8);
     }
 
     h2 {
-      font-size: 1.4rem;
+      font-size: 1.5rem;
       color: var(--primary-color);
-      border-bottom: 2px solid var(--border-color);
-      padding-bottom: 10px;
+      border-bottom: 3px solid var(--secondary-color);
+      padding-bottom: 12px;
       margin-top: 0;
       margin-bottom: 25px;
+      font-weight: 800;
     }
 
     h3 {
-      font-size: 1.15rem;
-      color: var(--secondary-color);
+      font-size: 1.2rem;
+      color: var(--secondary-light);
       margin-top: 0;
+      margin-bottom: 20px;
+      font-weight: 700;
     }
 
+    /* 3カラムグリッド（ダッシュボード風） */
     .grid-3 {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin-bottom: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 10px;
     }
 
     .grid-card {
       background-color: var(--bg-color);
-      padding: 20px;
-      border-radius: 8px;
+      padding: 25px 20px;
+      border-radius: 12px;
       text-align: center;
       border: 1px solid var(--border-color);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+      transition: transform 0.2s;
     }
 
-    .grid-card .icon { font-size: 2rem; margin-bottom: 10px; }
-    .grid-card .title { font-weight: bold; font-size: 1rem; margin-bottom: 5px; }
-    .grid-card .desc { font-size: 0.85rem; color: #718096; }
+    .grid-card:hover {
+      transform: translateY(-2px);
+    }
 
-    .pillar-list { display: flex; flex-direction: column; gap: 15px; }
-    .pillar-item { display: flex; align-items: flex-start; gap: 15px; background: var(--bg-color); padding: 15px 20px; border-radius: 8px; }
-    .pillar-num { background: var(--secondary-color); color: white; font-weight: bold; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .pillar-content h4 { margin: 0 0 5px; font-size: 1.05rem; }
-    .pillar-content p { margin: 0; font-size: 0.9rem; color: #4a5568; }
+    .grid-card .icon { font-size: 2.5rem; margin-bottom: 12px; }
+    .grid-card .title { font-weight: 800; font-size: 1.05rem; margin-bottom: 8px; color: var(--primary-color); }
+    .grid-card .desc { font-size: 0.9rem; color: #4a5568; line-height: 1.5; }
 
-    .flow-container { display: flex; flex-direction: column; gap: 10px; }
-    .flow-step { background: var(--bg-color); padding: 15px; border-radius: 8px; display: flex; align-items: center; gap: 20px; }
-    .flow-time { background: var(--primary-color); color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.85rem; font-weight: bold; min-width: 70px; text-align: center; }
+    /* 2つの柱（リストスタイル） */
+    .pillar-list { display: flex; flex-direction: column; gap: 20px; }
+    .pillar-item { display: flex; align-items: flex-start; gap: 20px; background: linear-gradient(90deg, var(--bg-color) 0%, #ffffff 100%); padding: 20px; border-radius: 12px; border-left: 5px solid var(--secondary-color); box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+    .pillar-num { background: var(--secondary-color); color: white; font-weight: bold; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.1rem; }
+    .pillar-content h4 { margin: 0 0 6px; font-size: 1.1rem; color: var(--primary-color); font-weight: 800; }
+    .pillar-content p { margin: 0; font-size: 0.95rem; color: #4a5568; }
 
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 0.95rem; }
-    th { background-color: var(--bg-color); color: var(--primary-color); }
-    .total-row { font-weight: bold; background-color: #ebf8ff; }
+    /* タイムライン・フロー */
+    .flow-container { display: flex; flex-direction: column; gap: 12px; position: relative; }
+    .flow-step { background: var(--bg-color); padding: 20px; border-radius: 12px; display: flex; align-items: center; gap: 20px; border: 1px solid var(--border-color); }
+    .flow-time { background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-color) 100%); color: white; padding: 6px 12px; border-radius: 6px; font-size: 0.9rem; font-weight: bold; min-width: 80px; text-align: center; box-shadow: 0 2px 6px rgba(43,108,176,0.2); }
+    .flow-time.alt { background: linear-gradient(135deg, var(--secondary-light) 0%, var(--secondary-color) 100%); box-shadow: 0 2px 6px rgba(49,151,149,0.2); }
+    .arrow-divider { text-align: center; margin: 5px 0; color: var(--secondary-color); font-size: 1.5rem; font-weight: bold; }
 
-    .message-box { background: linear-gradient(135deg, #ebf8ff 0%, #e6fffa 100%); border-left: 4px solid var(--primary-color); padding: 25px; border-radius: 0 12px 12px 0; }
-    .message-box p { margin: 0 0 15px; font-size: 0.95rem; }
+    /* テーブルデザイン */
+    .table-responsive { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; border-radius: 8px; overflow: hidden; }
+    th, td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+    th { background-color: #edf2f7; color: var(--primary-color); font-weight: 800; }
+    td { background-color: #ffffff; }
+    .total-row td { font-weight: bold; background-color: #ebf8ff; color: var(--primary-light); border-top: 2px solid var(--primary-light); border-bottom: 2px solid var(--primary-light); }
+
+    /* メッセージボックス */
+    .message-box { background: linear-gradient(135deg, #ebf8ff 0%, #e6fffa 100%); border-left: 6px solid var(--primary-light); padding: 30px; border-radius: 4px 16px 16px 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+    .message-box p { margin: 0 0 18px; font-size: 1rem; color: #2d3748; }
     .message-box p:last-child { margin-bottom: 0; }
-    .arrow-divider { text-align: center; margin: 10px 0; color: var(--secondary-color); font-size: 1.2rem; }
 
-    footer { text-align: center; padding: 40px 0; font-size: 0.85rem; color: #a0aec0; border-top: 1px solid var(--border-color); margin-top: 40px; }
+    ul { margin: 0; padding-left: 20px; }
+    li { margin-bottom: 12px; color: #4a5568; }
+    li:last-child { margin-bottom: 0; }
 
+    footer { text-align: center; padding: 40px 0; font-size: 0.9rem; color: #a0aec0; border-top: 1px solid var(--border-color); margin-top: 40px; }
+
+    /* モード切り替えロジック用 */
     .mode-content { display: block; }
     .detail-only { display: none; }
     .show-detail .diagram-only { display: none; }
@@ -267,7 +314,7 @@
             <div class="grid-card">
               <div class="icon">📝</div>
               <div class="title">勉強へのやる気</div>
-              <div class="desc">自分から進んで勉強中！苦手をなくしたい気持ち</div>
+              <div class="desc">自分から進んで勉強中！苦性をなくしたい気持ち</div>
             </div>
           </div>
         </div>
@@ -307,10 +354,10 @@
         <h3>平日の「まいにちLINE」× 授業日の「しっかり対面フォロー」</h3>
         <div class="flow-container">
           <div class="flow-step">
-            <div class="flow-time" style="background-color: var(--secondary-color);">月〜金</div>
+            <div class="flow-time" style="background: linear-gradient(135deg, #4fd1c5 0%, #319795 100%);">月〜金</div>
             <div>
               <strong>📱 LINEで10分間のデイリー・フィードバック（夜の決まった時間まで）</strong>
-              <div style="font-size: 0.85rem; color: #4a5568; margin-top: 5px;">
+              <div style="font-size: 0.9rem; color: #4a5568; margin-top: 5px;">
                 学校や家での勉強で「できたこと」「分からん！」と思ったところを、音声やメッセージでかんたんに送るだけでOK！
               </div>
             </div>
@@ -319,8 +366,8 @@
           <div class="flow-step">
             <div class="flow-time">授業日</div>
             <div>
-              <strong>🏫 対面の個別授業 90分（夕方〜夜の話し合って決めた時間）</strong>
-              <div style="font-size: 0.85rem; color: #4a5568; margin-top: 5px;">
+              <strong>🏫 对面の個別授業 90分（夕方〜夜の話し合って決めた時間）</strong>
+              <div style="font-size: 0.9rem; color: #4a5568; margin-top: 5px;">
                 平日のLINEに届いたハテナをベースに、特に苦手なところや、もっと伸ばしたい教科を直接先生が教えます！
               </div>
             </div>
@@ -343,9 +390,9 @@
         <h2>⑤ これからの進路選び 🤝</h2>
         <div class="mode-content diagram-only">
           <div class="grid-3" style="grid-template-columns: 1fr;">
-            <div class="grid-card" style="text-align: left;">
-              <div class="title" style="color: var(--secondary-color);">🗺️ あなたに一番ぴったりのルートを考えよう</div>
-              <div class="desc" style="font-size: 0.9rem; line-height: 1.5; margin-top: 5px;">学校での良い評価や、あなたの得意なことをたくさん活かしていきましょう！ひとつの進路だけにこだわらず、専門的な学校や学科も含めて、あなたが一番ワクワクして夢に近づけるルートを一緒に探していきます。</div>
+            <div class="grid-card" style="text-align: left; padding: 25px;">
+              <div class="title" style="color: var(--secondary-color); font-size: 1.1rem; text-align: left; margin-bottom: 10px;">🗺️ あなたに一番ぴったりのルートを考えよう</div>
+              <div class="desc" style="font-size: 0.95rem; line-height: 1.6;">学校での良い評価や、あなたの得意なことをたくさん活かしていきましょう！ひとつの進路だけにこだわらず、専門的な学校や学科も含めて、あなたが一番ワクワクして夢に近づけるルートを一緒に探していきます。</div>
             </div>
           </div>
         </div>
@@ -356,23 +403,25 @@
 
       <section>
         <h2>⑥ 応援プラン（費用について） 💳</h2>
-        <table>
-          <thead>
-            <tr><th>サポート内容</th><th>じかん・回数</th><th>料金</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><strong>対面個別授業</strong></td><td>90分 × 週1回（月4回）</td><td>22,000円 / 月</td></tr>
-            <tr><td><strong>まいにちLINEサポート</strong></td><td>平日毎日（週5回 / 月20回くらい）</td><td>5,500円 / 月</td></tr>
-            <tr class="total-row"><td>総合サポートプラン（税込）</td><td>上のすべてが含まれます</td><td>27,500円 / 月</td></tr>
-          </tbody>
-        </table>
-        <p style="font-size: 0.8rem; color: #718096; margin-top: 10px;">※ スケジュールや回数の調整、まずは対面授業だけからスタートするなど、ご家庭に合わせて柔軟に変更できますのでお気軽にご相談ください。</p>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr><th>サポート内容</th><th>じかん・回数</th><th>料金</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>対面個別授業</strong></td><td>90分 × 週1回（月4回）</td><td>22,000円 / 月</td></tr>
+              <tr><td><strong>まいにちLINEサポート</strong></td><td>平日毎日（週5回 / 月20回くらい）</td><td>5,500円 / 月</td></tr>
+              <tr class="total-row"><td>総合サポートプラン（税込）</td><td>上のすべてが含まれます</td><td>27,500円 / 月</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size: 0.85rem; color: #718096; margin-top: 15px;">※ スケジュールや回数の調整、まずは対面授業だけからスタートするなど、ご家庭に合わせて柔軟に変更できますのでお気軽にご相談ください。</p>
       </section>
 
       <section>
         <h2>⑦ あなたへの応援メッセージ 💌</h2>
         <div class="message-box">
-          <p><strong>勉強も、大好きな活動も、両がんばるあなたへ</strong></p>
+          <p><strong>勉強も、大好きな活動も、両方共がんばるあなたへ</strong></p>
           <p>次の目標に向けて夜遅くまで一生懸命練習に励んでいる姿、本当にカッコいいなと思います！「こうなりたい！」という大きな夢や目標を持っていること、それ自体がすでにあなたの強力な武器（才能）です。その夢を叶えるために、まずは今やりたいことを全力で楽しみながら、一歩ずつ進んでいきましょう。</p>
           <p>これからの授業では、絶対にあなたを置いてきぼりにはしません。毎日、自分のペースで「ここが分からんかった！」とLINEで教えてくれるだけで100点満点です。そこを授業の日に一緒に解決していきましょう。</p>
           <p>飛行機がゆっくりと滑走路を走り出して、大空へ飛び立つように、あなたらしいペースで少しずつ加速していこうね！</p>
