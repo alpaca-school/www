@@ -1,0 +1,1412 @@
+<!docTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>個別授業提案書｜夢へ近づく学び</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Shippori+Mincho:wght@500;700;800&family=Caveat:wght@600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4ede0;
+      --bg-2: #ebe1cc;
+      --ink: #2a2419;
+      --ink-soft: #5a4f3d;
+      --accent: #c8472b;
+      --accent-2: #d97742;
+      --green: #5a7a3d;
+      --blue: #3d5a7a;
+      --paper: #fbf6ea;
+      --line: #2a2419;
+      --shadow: rgba(42, 36, 25, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    body {
+      background-image:
+        radial-gradient(circle at 20% 10%, rgba(217, 119, 66, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(90, 122, 61, 0.06) 0%, transparent 40%);
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .container {
+      max-width: 420px;
+      margin: 0 auto;
+      padding: 20px 16px 80px;
+    }
+
+    /* ===== 認証フォーム ===== */
+    .auth-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      z-index: 9999;
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .auth-overlay.show {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .auth-form-container {
+      background: var(--paper);
+      border: 2.5px solid var(--ink);
+      padding: 40px 24px;
+      max-width: 320px;
+      width: 90%;
+      box-shadow: 8px 8px 0 var(--ink);
+      text-align: center;
+    }
+
+    .auth-form-container h2 {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 18px;
+      font-weight: 800;
+      margin: 0 0 8px;
+      color: var(--ink);
+    }
+
+    .auth-form-container p {
+      font-size: 12px;
+      color: var(--ink-soft);
+      margin: 0 0 28px;
+      line-height: 1.6;
+    }
+
+    .auth-input-wrap {
+      margin-bottom: 16px;
+    }
+
+    .auth-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid var(--ink);
+      background: white;
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-size: 14px;
+      color: var(--ink);
+      box-sizing: border-box;
+    }
+
+    .auth-input::placeholder {
+      color: var(--ink-soft);
+    }
+
+    .auth-input:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(200, 71, 43, 0.2);
+    }
+
+    .auth-btn {
+      width: 100%;
+      padding: 12px 14px;
+      background: var(--ink);
+      color: var(--paper);
+      border: none;
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 3px 3px 0 var(--ink);
+    }
+
+    .auth-btn:hover {
+      background: var(--accent);
+      box-shadow: 4px 4px 0 var(--accent);
+    }
+
+    .auth-error {
+      display: none;
+      background: #ffebee;
+      border: 1.5px solid #c8472b;
+      color: #c8472b;
+      padding: 10px 12px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      border-radius: 4px;
+    }
+
+    .auth-error.show {
+      display: block;
+    }
+
+    /* ===== ヘッダー ===== */
+    .hero {
+      text-align: center;
+      margin-bottom: 24px;
+      padding: 28px 16px 24px;
+      border: 2px solid var(--ink);
+      background: var(--paper);
+      position: relative;
+      box-shadow: 6px 6px 0 var(--ink);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      right: 8px;
+      bottom: 8px;
+      border: 1px dashed var(--ink-soft);
+      pointer-events: none;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-family: 'Shippori Mincho', serif;
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      background: var(--ink);
+      color: var(--paper);
+      padding: 4px 14px;
+      margin-bottom: 14px;
+    }
+
+    .hero h1 {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 26px;
+      font-weight: 800;
+      margin: 0 0 8px;
+      line-height: 1.4;
+      letter-spacing: 0.02em;
+    }
+
+    .hero h1 .accent {
+      color: var(--accent);
+      display: inline-block;
+      position: relative;
+    }
+
+    .hero h1 .accent::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: rgba(200, 71, 43, 0.2);
+      z-index: -1;
+    }
+
+    .hero p {
+      font-size: 13px;
+      color: var(--ink-soft);
+      margin: 8px 0 0;
+      line-height: 1.6;
+    }
+
+    /* ===== トグル切替 ===== */
+    .toggle-wrap {
+      display: flex;
+      gap: 0;
+      margin: 0 auto 24px;
+      background: var(--paper);
+      border: 2px solid var(--ink);
+      box-shadow: 4px 4px 0 var(--ink);
+      position: sticky;
+      top: 12px;
+      z-index: 100;
+    }
+
+    .toggle-btn {
+      flex: 1;
+      padding: 12px 8px;
+      background: transparent;
+      border: none;
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--ink);
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .toggle-btn.active {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .toggle-btn .icon {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 2px;
+    }
+
+    /* ===== ビュー切替 ===== */
+    .view {
+      display: none;
+    }
+
+    .view.active {
+      display: block;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ===== セクション共通 ===== */
+    .section {
+      margin-bottom: 28px;
+    }
+
+    .section-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0 0 14px;
+      padding-left: 14px;
+      border-left: 5px solid var(--accent);
+      line-height: 1.3;
+    }
+
+    .section-title .num {
+      font-family: 'Caveat', cursive;
+      color: var(--accent);
+      font-size: 24px;
+      margin-right: 6px;
+    }
+
+    /* ===================== */
+    /* ポンチ絵モード         */
+    /* ===================== */
+
+    .ponchi {
+      background: var(--paper);
+      border: 2.5px solid var(--ink);
+      padding: 20px 16px;
+      margin-bottom: 20px;
+      position: relative;
+      box-shadow: 5px 5px 0 var(--ink);
+    }
+
+    .ponchi-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 16px;
+      font-weight: 800;
+      text-align: center;
+      margin: 0 0 16px;
+      padding-bottom: 10px;
+      border-bottom: 1.5px dashed var(--ink);
+    }
+
+    /* 状況図 */
+    .situation-map {
+      position: relative;
+      padding: 20px 0;
+    }
+
+    .person-circle {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      margin: 0 auto 16px;
+      border: 3px solid var(--ink);
+      box-shadow: 3px 3px 0 var(--ink);
+      font-family: 'Shippori Mincho', serif;
+      font-weight: 700;
+    }
+
+    .person-circle .label-jp {
+      font-size: 11px;
+      opacity: 0.9;
+    }
+
+    .person-circle .label-main {
+      font-size: 15px;
+      margin-top: 2px;
+    }
+
+    .arrow-down {
+      text-align: center;
+      font-size: 20px;
+      color: var(--accent);
+      margin: 4px 0;
+    }
+
+    .bubble-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .bubble {
+      background: var(--bg);
+      border: 2px solid var(--ink);
+      border-radius: 14px;
+      padding: 10px 8px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.4;
+      position: relative;
+    }
+
+    .bubble .b-icon {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .bubble strong {
+      display: block;
+      font-size: 13px;
+      color: var(--accent);
+      margin-bottom: 2px;
+    }
+
+    /* 3つの柱 */
+    .pillars {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .pillar {
+      display: flex;
+      align-items: stretch;
+      border: 2px solid var(--ink);
+      background: var(--bg);
+      overflow: hidden;
+    }
+
+    .pillar-num {
+      background: var(--ink);
+      color: var(--paper);
+      width: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Caveat', cursive;
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+
+    .pillar-body {
+      padding: 10px 12px;
+      flex: 1;
+    }
+
+    .pillar-head {
+      font-size: 13px;
+      font-weight: 700;
+      margin: 0 0 4px;
+      color: var(--accent);
+    }
+
+    .pillar-text {
+      font-size: 11.5px;
+      margin: 0;
+      color: var(--ink-soft);
+      line-height: 1.5;
+    }
+
+    /* 平日と土曜 */
+    .week-flow {
+      margin-top: 8px;
+    }
+
+    .day-card {
+      background: var(--bg);
+      border: 2px solid var(--ink);
+      padding: 12px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    .day-card .day-label {
+      position: absolute;
+      top: -10px;
+      left: 12px;
+      background: var(--accent);
+      color: white;
+      padding: 2px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      border: 1.5px solid var(--ink);
+    }
+
+    .day-card .day-title {
+      font-size: 13px;
+      font-weight: 700;
+      margin: 6px 0 8px;
+    }
+
+    .voice-icon-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px;
+      background: var(--paper);
+      border: 1.5px dashed var(--ink);
+      margin-top: 6px;
+    }
+
+    .voice-icon {
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+
+    .voice-text {
+      font-size: 11px;
+      line-height: 1.5;
+      color: var(--ink);
+    }
+
+    /* 4つの質問 */
+    .q-list {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0 0;
+      counter-reset: q;
+    }
+
+    .q-list li {
+      counter-increment: q;
+      background: var(--paper);
+      border: 1.5px solid var(--ink);
+      padding: 8px 8px 8px 38px;
+      margin-bottom: 6px;
+      font-size: 12px;
+      position: relative;
+      border-radius: 6px;
+    }
+
+    .q-list li::before {
+      content: counter(q);
+      position: absolute;
+      left: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 26px;
+      height: 26px;
+      background: var(--green);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Caveat', cursive;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    /* 授業の流れ */
+    .flow-step {
+      display: flex;
+      gap: 10px;
+      padding: 10px;
+      background: var(--bg);
+      border: 1.5px solid var(--ink);
+      margin-bottom: 8px;
+      position: relative;
+    }
+
+    .flow-time {
+      width: 56px;
+      text-align: center;
+      padding: 4px 0;
+      background: var(--ink);
+      color: var(--paper);
+      font-family: 'Caveat', cursive;
+      font-size: 16px;
+      font-weight: 700;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.2;
+    }
+
+    .flow-body {
+      flex: 1;
+    }
+
+    .flow-head {
+      font-size: 13px;
+      font-weight: 700;
+      margin: 0 0 2px;
+    }
+
+    .flow-desc {
+      font-size: 11px;
+      color: var(--ink-soft);
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    /* 教える側になる */
+    .teach-box {
+      background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+      border: 2.5px solid var(--accent);
+      padding: 16px 14px;
+      margin-top: 8px;
+      text-align: center;
+      position: relative;
+    }
+
+    .teach-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 10px 0;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .teach-side {
+      background: var(--paper);
+      border: 2px solid var(--ink);
+      padding: 8px 10px;
+      border-radius: 8px;
+      flex: 1;
+      max-width: 130px;
+    }
+
+    .teach-side .icon {
+      font-size: 22px;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .teach-arrow .arrow {
+      font-size: 22px;
+      color: var(--accent);
+    }
+
+    .teach-msg {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 8px 0 0;
+      line-height: 1.5;
+    }
+
+    /* 料金 */
+    .fee-box {
+      background: var(--bg);
+      border: 2px solid var(--ink);
+      padding: 14px 12px;
+      margin-top: 10px;
+    }
+
+    .fee-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--ink-soft);
+      font-size: 12px;
+    }
+
+    .fee-row:last-child {
+      border-bottom: none;
+    }
+
+    .fee-row .name {
+      flex: 1;
+    }
+
+    .fee-row .price {
+      font-family: 'Shippori Mincho', serif;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--accent);
+    }
+
+    .fee-row.total {
+      border-top: 2px solid var(--ink);
+      border-bottom: none;
+      margin-top: 4px;
+      padding-top: 10px;
+      font-weight: 700;
+    }
+
+    .fee-row.total .price {
+      font-size: 18px;
+    }
+
+    /* ===================== */
+    /* インフォグラフィック   */
+    /* ===================== */
+
+    .info-card {
+      background: var(--paper);
+      border-radius: 14px;
+      padding: 20px 16px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(42, 36, 25, 0.1);
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    .info-stat {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .stat-item {
+      background: var(--paper);
+      border-radius: 12px;
+      padding: 14px 10px;
+      text-align: center;
+      border: 1px solid rgba(42, 36, 25, 0.1);
+      box-shadow: 0 2px 6px var(--shadow);
+    }
+
+    .stat-num {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .stat-num .unit {
+      font-size: 13px;
+      color: var(--ink-soft);
+      margin-left: 2px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--ink-soft);
+      line-height: 1.4;
+      font-weight: 500;
+    }
+
+    .info-h {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 16px;
+      font-weight: 700;
+      margin: 0 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .info-h::before {
+      content: '';
+      width: 4px;
+      height: 18px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    .voice-flow {
+      background: linear-gradient(135deg, #5a7a3d 0%, #7a9a5d 100%);
+      color: white;
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .voice-flow .vf-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 14px;
+      font-weight: 700;
+      margin: 0 0 12px;
+      opacity: 0.95;
+    }
+
+    .voice-flow .vf-time {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .voice-flow .vf-time .small {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-left: 4px;
+    }
+
+    .voice-flow .vf-sub {
+      font-size: 12px;
+      opacity: 0.85;
+      margin-top: 4px;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 28px;
+      margin-top: 8px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 9px;
+      top: 6px;
+      bottom: 6px;
+      width: 2px;
+      background: var(--accent);
+    }
+
+    .tl-item {
+      position: relative;
+      padding-bottom: 14px;
+    }
+
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      left: -23px;
+      top: 4px;
+      width: 12px;
+      height: 12px;
+      background: var(--paper);
+      border: 2.5px solid var(--accent);
+      border-radius: 50%;
+    }
+
+    .tl-month {
+      font-family: 'Caveat', cursive;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 2px;
+    }
+
+    .tl-theme {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .tl-detail {
+      font-size: 11px;
+      color: var(--ink-soft);
+      line-height: 1.5;
+    }
+
+    .subject-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .subject-card {
+      border-radius: 12px;
+      padding: 14px 12px;
+      color: white;
+    }
+
+    .subject-card.math {
+      background: linear-gradient(135deg, #3d5a7a 0%, #5a7a9a 100%);
+    }
+
+    .subject-card.eng {
+      background: linear-gradient(135deg, #c8472b 0%, #d97742 100%);
+    }
+
+    .subject-card .s-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 17px;
+      font-weight: 800;
+      margin: 0 0 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .subject-card .s-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .subject-card .s-list li::before {
+      content: '◆ ';
+      opacity: 0.7;
+    }
+
+    /* シェア共有 */
+    .share-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .share-item {
+      background: var(--bg);
+      border-radius: 10px;
+      padding: 10px 8px;
+      text-align: center;
+      border: 1px solid rgba(42, 36, 25, 0.1);
+      font-size: 11px;
+    }
+
+    .share-item .si-icon {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    /* 料金（インフォ版） */
+    .fee-info {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(42, 36, 25, 0.1);
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    .fee-info-row {
+      background: var(--paper);
+      padding: 14px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--bg-2);
+    }
+
+    .fee-info-row:last-child {
+      border-bottom: none;
+    }
+
+    .fee-info-row .label-area {
+      flex: 1;
+    }
+
+    .fee-info-row .label-name {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .fee-info-row .label-sub {
+      font-size: 10px;
+      color: var(--ink-soft);
+    }
+
+    .fee-info-row .price {
+      font-family: 'Shippori Mincho', serif;
+      font-weight: 800;
+      font-size: 17px;
+      color: var(--accent);
+    }
+
+    .fee-info-row .price .yen {
+      font-size: 11px;
+      margin-left: 2px;
+    }
+
+    .fee-info-row.total {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .fee-info-row.total .price {
+      color: #ffb84d;
+    }
+
+    /* メッセージカード */
+    .message-card {
+      background: linear-gradient(135deg, var(--paper) 0%, #fff8eb 100%);
+      border-radius: 14px;
+      padding: 20px 16px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(200, 71, 43, 0.2);
+      box-shadow: 0 4px 12px var(--shadow);
+      position: relative;
+    }
+
+    .message-card::before {
+      content: '"';
+      position: absolute;
+      top: 4px;
+      left: 12px;
+      font-family: 'Shippori Mincho', serif;
+      font-size: 50px;
+      color: var(--accent);
+      opacity: 0.2;
+      line-height: 1;
+    }
+
+    .message-card p {
+      font-size: 12.5px;
+      line-height: 1.8;
+      margin: 0 0 8px;
+      color: var(--ink);
+    }
+
+    .message-card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .message-card .voice-quote {
+      background: var(--bg);
+      border-left: 3px solid var(--accent);
+      padding: 8px 12px;
+      margin: 10px 0;
+      font-family: 'Shippori Mincho', serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    /* フッター */
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      padding: 20px 0;
+      font-size: 10px;
+      color: var(--ink-soft);
+      border-top: 1.5px dashed var(--ink-soft);
+    }
+
+    /* 注釈手書き風 */
+    .handwrite {
+      font-family: 'Caveat', cursive;
+      color: var(--accent);
+      font-size: 15px;
+      font-weight: 600;
+      display: inline-block;
+      transform: rotate(-2deg);
+    }
+
+    .note-tag {
+      display: inline-block;
+      background: #ffeb99;
+      border: 1.5px solid var(--ink);
+      padding: 2px 8px;
+      font-size: 10px;
+      font-weight: 700;
+      transform: rotate(-1deg);
+      margin: 4px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 認証オーバーレイ -->
+  <div class="auth-overlay" id="authOverlay">
+    <div class="auth-form-container">
+      <h2>🔐 アクセス認証</h2>
+      <p>提案書を表示するには<br>パスワードを入力してください</p>
+      <div class="auth-error" id="authError">パスワードが正しくありません</div>
+      <form id="authForm" onsubmit="handleAuth(event)">
+        <div class="auth-input-wrap">
+          <input type="password" id="authPassword" class="auth-input" placeholder="パスワード" autocomplete="off">
+        </div>
+        <button type="submit" class="auth-btn">認証する</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- ヘッダー -->
+    <header class="hero">
+      <span class="hero-tag">For 生徒さん 2026</span>
+      <h1>個別授業<br><span class="accent">提案書</span></h1>
+      <p>CAの夢を叶えるために<br>得意を強みに変える学び方</p>
+    </header>
+
+    <!-- 切替トグル -->
+    <div class="toggle-wrap" role="tablist">
+      <button class="toggle-btn active" data-view="ponchi" role="tab">
+        <span class="icon">✏️</span>
+        図解モード
+      </button>
+      <button class="toggle-btn" data-view="info" role="tab">
+        <span class="icon">📊</span>
+        詳細モード
+      </button>
+    </div>
+
+    <!-- =============================== -->
+    <!-- ポンチ絵モード                   -->
+    <!-- =============================== -->
+    <div class="view active" id="view-ponchi">
+
+      <!-- 状況 -->
+      <section class="section">
+        <h2 class="section-title"><span class="num">①</span>いまの状況</h2>
+        <div class="ponchi">
+          <h3 class="ponchi-title">夢へのステップ</h3>
+          <div class="situation-map">
+            <div class="person-circle">
+              <span class="label-jp">生徒さん</span>
+              <span class="label-main">中学生</span>
+            </div>
+            <div class="arrow-down">▼</div>
+            <div class="bubble-grid">
+              <div class="bubble">
+                <span class="b-icon">✈️</span>
+                <strong>CAになる</strong>
+                キャビンアテンダント<br>への第一歩
+              </div>
+              <div class="bubble">
+                <span class="b-icon">🎙️</span>
+                <strong>毎日5分LINE</strong>
+                音声でふり返り<br>積み残しゼロ
+              </div>
+              <div class="bubble">
+                <span class="b-icon">📐</span>
+                <strong>数学克服</strong>
+                苦手意識を<br>少しずつ解消
+              </div>
+              <div class="bubble">
+                <span class="b-icon">🇬🇧</span>
+                <strong>英語を強みに</strong>
+                好きを伸ばして<br>説明練習
+              </div>
+            </div>
+          </div>
+          <div style="text-align:center; margin-top:14px;">
+            <span class="note-tag">夢と基礎を両立する</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3つの柱 -->
+      <section class="section">
+        <h2 class="section-title"><span class="num">②</span>授業の3つの柱</h2>
+        <div class="ponchi">
+          <div class="pillars">
+            <div class="pillar">
+              <div class="pillar-num">1</div>
+              <div class="pillar-body">
+                <p class="pillar-head">毎日の「報告」で習慣化</p>
+                <p class="pillar-text">毎日5〜10分の音声LINEで、その日の不明点をクリアにする</p>
+              </div>
+            </div>
+            <div class="pillar">
+              <div class="pillar-num">2</div>
+              <div class="pillar-body">
+                <p class="pillar-head">数学を基礎からやり直す</p>
+                <p class="pillar-text">週1回、基礎から丁寧に戻って土台を作る</p>
+              </div>
+            </div>
+            <div class="pillar">
+              <div class="pillar-num">3</div>
+              <div class="pillar-body">
+                <p class="pillar-head">「教える側」への挑戦</p>
+                <p class="pillar-text">得意な英語で、学んだことを説明する練習をする</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 1週間の流れ -->
+      <section class="section">
+        <h2 class="section-title"><span class="num">③</span>1週間の流れ</h2>
+        <div class="ponchi">
+          <h3 class="ponchi-title">平日 × 火曜の組み合わせ</h3>
+          <div class="week-flow">
+            <div class="day-card">
+              <span class="day-label">月〜金</span>
+              <p class="day-title">毎日LINE音声ふり返り</p>
+              <div class="voice-icon-wrap">
+                <div class="voice-icon">🎙️</div>
+                <div class="voice-text">
+                  その日学校で習ったことを<br>
+                  音声で5〜10分報告。<br>
+                  問題集はナシ！
+                </div>
+              </div>
+              <ol class="q-list">
+                <li>今日、学校で何を習ったか</li>
+                <li>何がわかって、何がわからなかったか</li>
+                <li>今の課題</li>
+              </ol>
+            </div>
+
+            <div class="arrow-down">▼</div>
+
+            <div class="day-card">
+              <span class="day-label">火曜</span>
+              <p class="day-title">個別授業 90分</p>
+              <div class="voice-icon-wrap">
+                <div class="voice-icon">📝</div>
+                <div class="voice-text">
+                  LINEのふり返りを参考に<br>
+                  数学を基礎から徹底フォロー<br>
+                  一歩ずつフォロー
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 授業の流れ -->
+      <section class="section">
+        <h2 class="section-title"><span class="num">④</span>授業1回の流れ</h2>
+        <div class="ponchi">
+          <div class="flow-step">
+            <div class="flow-time">5分</div>
+            <div class="flow-body">
+              <p class="flow-head">① 近況確認</p>
+              <p class="flow-desc">体調・バレーの様子など</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-time">10分</div>
+            <div class="flow-body">
+              <p class="flow-head">② LINE音声のふり返り</p>
+              <p class="flow-desc">今週の不明点を整理・確認</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-time">45分</div>
+            <div class="flow-body">
+              <p class="flow-head">③ メイン学習（数学）</p>
+              <p class="flow-desc">苦手意識の克服。戻り学習を重視</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-time">20分</div>
+            <div class="flow-body">
+              <p class="flow-head">④ 英語（CAへの道）</p>
+              <p class="flow-desc">英語や他教科の説明練習★</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-time">10分</div>
+            <div class="flow-body">
+              <p class="flow-head">⑤ まとめ</p>
+              <p class="flow-desc">今日やったことの確認と次の課題</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 教える側になる -->
+      <section class="section">
+        <h2 class="section-title"><span class="num">⑤</span>教える側になる挑戦</h2>
+        <div class="ponchi">
+          <div class="teach-box">
+            <p style="margin:0; font-size:12px; color:var(--ink-soft);">CAという目標に向けて</p>
+            <p class="teach-msg">「得意な英語を、誰かに説明できる自信に」</p>
+            <div class="teach-arrow">
+              <div class="teach-side">
+                <span class="icon">🙋</span>
+                <strong>教えてもらう側</strong>
+              </div>
+              <span class="arrow">→</span>
+              <div class="teach-side" style="background:var(--accent); color:white; border-color:var(--ink);">
+                <span class="icon">👨‍🏫</span>
+                <strong>教える側</strong>
+              </div>
+            </div>
+            <p style="margin:8px 0 0; font-size:11px; color:var(--ink-soft);">
+              「英語でこう言うのは、なぜ？」<br>
+              自分の言葉で説明できたとき、大きな自信になります。
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- =============================== -->
+    <!-- インフォグラフィックモード       -->
+    <!-- =============================== -->
+    <div class="view" id="view-info">
+
+      <!-- 数字でわかる本提案 -->
+      <section class="section">
+        <h2 class="section-title"><span class="num">①</span>数字で見る本提案</h2>
+        <div class="info-card">
+          <div class="info-stat">
+            <div class="stat-item">
+              <div class="stat-num">5〜10<span class="unit">分</span></div>
+              <div class="stat-label">毎日のLINE音声<br>報告時間</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">90<span class="unit">分</span></div>
+              <div class="stat-label">週1回の対面授業</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">火曜<span class="unit"></span></div>
+              <div class="stat-label">授業実施日</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">数学<span class="unit"></span></div>
+              <div class="stat-label">強みを活かす<br>目標教科</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 平日の音声ふり返り -->
+      <section class="section">
+        <h2 class="section-title"><span class="num">②</span>日々のLINE音声ふり返り</h2>
+        <div class="voice-flow">
+          <p class="vf-title">🎙️ 毎日の習慣</p>
+          <div class="vf-time">5〜10<span class="small">分</span></div>
+          <p class="vf-sub">その日わからないことを残さない。</p>
+        </div>
+        <div class="info-card">
+          <h3 class="info-h">音声報告のヒント</h3>
+          <ol class="q-list">
+            <li>今日、学校で何を習ったか</li>
+            <li>何がわかって、何がわからなかったか</li>
+            <li>今、気になっていること</li>
+          </ol>
+          <p style="font-size:11px; color:var(--ink-soft); margin-top:10px; line-height:1.6;">
+            毎日少しずつ言語化することで、火曜日の授業をより効果的に活用します。
+          </p>
+        </div>
+      </section>
+
+      <!-- 授業料 -->
+      <section class="section">
+        <h2 class="section-title"><span class="num">⑥</span>授業料と体制</h2>
+        <div class="fee-info">      <div class="fee-info">
+          <div class="fee-info-row">
+            <div class="label-area">
+              <div class="label-name">週1回の対面授業</div>
+              <div class="label-sub">火曜日 16:30〜 / 自宅等</div>
+            </div>
+            <div class="price">4,500<span class="yen">円/回</span></div>
+          </div>
+          <div class="fee-info-row">
+            <div class="label-area">
+              <div class="label-name">日々のLINEフォロー</div>
+              <div class="label-sub">毎日音声報告による習慣付け</div>
+            </div>
+            <div class="price">4,500<span class="yen">円/月</span></div>
+          </div>
+          <div class="fee-info-row total">
+            <div class="label-area">
+              <div class="label-name">月額目安（両方利用）</div>
+              <div class="label-sub" style="color:rgba(255,255,255,0.7);">授業2回＋音声フォロー</div>
+            </div>
+            <div class="price">13,500〜<span class="yen">円</span></div>
+          </div>
+        </div></div>
+      </section>
+
+      <!-- メッセージ -->
+      <section class="section">
+        <h2 class="section-title"><span class="num">⑦</span>本人へのメッセージ</h2>
+        <div class="message-card">
+          <p>CAになりたいという目標、とても素敵です。英語が好きなら、CAになるために英語がたくさん学べる高校を選ぶのも、夢を叶える近道になりますよ。</p>
+          <p>まずは苦手な数学を少しずつ克服していきましょう。平日は無理せず、LINE音声で日々のふり返りを続け、火曜日の授業で確実に定着させていくスタイルで進めます。</p>
+          <div class="voice-quote">焦らず、一歩ずつ。教える側に立つ準備を一緒に始めよう。</div>
+        </div>
+      </section>
+
+    </div>
+
+    <footer class="footer">
+      個別授業提案書｜2026年6月作成<br>
+      頑張っているバレーと両立し、夢に向かって一歩ずつ。
+    </footer>
+
+  </div>
+
+  <script>
+    // 認証チェック
+    function checkAuth() {
+      const isAuthenticated = sessionStorage.getItem('auth_rurusa');
+      if (!isAuthenticated) {
+        document.getElementById('authOverlay').classList.add('show');
+      }
+    }
+
+    // 認証処理
+    function handleAuth(event) {
+      event.preventDefault();
+      const password = document.getElementById('authPassword').value;
+      const correctPassword = 'rurusa';
+      const errorElement = document.getElementById('authError');
+
+      if (password === correctPassword) {
+        sessionStorage.setItem('auth_rurusa', 'true');
+        document.getElementById('authOverlay').classList.remove('show');
+        document.getElementById('authPassword').value = '';
+        errorElement.classList.remove('show');
+      } else {
+        errorElement.classList.add('show');
+        document.getElementById('authPassword').value = '';
+      }
+    }
+
+    // トグル切替
+    const btns = document.querySelectorAll('.toggle-btn');
+    const views = document.querySelectorAll('.view');
+
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.view;
+        btns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        views.forEach(v => {
+          if (v.id === 'view-' + target) {
+            v.classList.add('active');
+          } else {
+            v.classList.remove('active');
+          }
+        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+
+    // ページ読み込み時に認証チェック
+    window.addEventListener('DOMContentLoaded', checkAuth);
+  </script>
+</body>
+
+</html>
