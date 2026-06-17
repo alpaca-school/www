@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>読谷版アルパカツアー パンフレット企画 全体像</title>
+  <style>
+    :root {
+      --primary: #2c7a4b;
+      --secondary: #f0a500;
+      --accent: #e84545;
+      --light-green: #e8f5ee;
+      --light-yellow: #fff8e1;
+      --light-blue: #e3f2fd;
+      --light-red: #fdecea;
+      --text: #2d2d2d;
+      --muted: #6b7280;
+      --border: #e0e0e0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Hiragino Sans', 'Helvetica Neue', Arial, sans-serif;
+      color: var(--text);
+      background: #f9f9f7;
+      line-height: 1.7;
+    }
+
+    /* ─── ヘッダー ─── */
+    header {
+      background: linear-gradient(135deg, var(--primary) 0%, #1a5c36 100%);
+      color: white;
+      text-align: center;
+      padding: 64px 20px 56px;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50px; right: -50px;
+      width: 300px; height: 300px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+    }
+    .header-tag {
+      display: inline-block;
+      background: var(--secondary);
+      color: #333;
+      font-size: 0.8em;
+      font-weight: bold;
+      padding: 4px 16px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      letter-spacing: 0.05em;
+    }
+    header h1 {
+      font-size: clamp(1.6em, 4vw, 2.5em);
+      font-weight: 900;
+      line-height: 1.3;
+      margin-bottom: 14px;
+    }
+    header h1 span { color: var(--secondary); }
+    header p {
+      font-size: 1.05em;
+      opacity: 0.88;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .header-meta { margin-top: 28px; font-size: 0.85em; opacity: 0.65; }
+
+    /* ─── 共通 ─── */
+    section { padding: 64px 20px; }
+    .container { max-width: 960px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.78em;
+      font-weight: bold;
+      color: var(--primary);
+      letter-spacing: 0.12em;
+      margin-bottom: 8px;
+    }
+    h2 {
+      font-size: clamp(1.3em, 3vw, 1.9em);
+      font-weight: 800;
+      color: #1a1a1a;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+    .section-desc {
+      color: var(--muted);
+      margin-bottom: 40px;
+      font-size: 1em;
+      max-width: 660px;
+    }
+
+    /* ─── 課題 ─── */
+    .issue-section { background: white; }
+    .issue-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-top: 32px;
+    }
+    .issue-card {
+      background: var(--light-green);
+      border-left: 5px solid var(--primary);
+      border-radius: 10px;
+      padding: 20px 22px;
+    }
+    .issue-card .icon { font-size: 1.8em; margin-bottom: 8px; }
+    .issue-card h3 { font-size: 1em; font-weight: 700; margin-bottom: 6px; }
+    .issue-card p { font-size: 0.9em; color: var(--muted); }
+
+    /* ─── コンセプト ─── */
+    .concept-section { background: var(--light-green); }
+    .concept-box {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(44,122,75,0.12);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .concept-emoji { font-size: 3em; margin-bottom: 16px; }
+    .concept-box h3 {
+      font-size: 1.5em;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
+    .concept-box p { color: var(--muted); font-size: 1em; }
+
+    /* ─── 3ステップ ─── */
+    .steps-section { background: white; }
+    .steps-flow {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      margin-top: 36px;
+      flex-wrap: wrap;
+    }
+    .step-item {
+      flex: 1;
+      min-width: 200px;
+      padding: 28px 24px;
+      border-radius: 14px;
+      text-align: center;
+    }
+    .step-hop { background: var(--light-green); border: 2px solid #81c995; }
+    .step-step { background: var(--light-yellow); border: 2px solid #f0c84a; }
+    .step-jump { background: var(--light-red); border: 2px solid #ef9a9a; }
+    .step-arrow {
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      color: #bbb;
+      font-size: 1.8em;
+      align-self: center;
+    }
+    .step-badge {
+      display: inline-block;
+      font-size: 0.75em;
+      font-weight: bold;
+      padding: 3px 12px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    .step-hop .step-badge { background: var(--primary); color: white; }
+    .step-step .step-badge { background: var(--secondary); color: #333; }
+    .step-jump .step-badge { background: var(--accent); color: white; }
+    .step-item h3 { font-size: 1.1em; font-weight: 800; margin-bottom: 8px; }
+    .step-item p { font-size: 0.85em; color: var(--muted); }
+    .step-note {
+      margin-top: 14px;
+      font-size: 0.8em;
+      font-weight: bold;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.75);
+      border: 1px solid #f0c84a;
+      color: #b07d00;
+    }
+
+    /* ─── 武雄くん誘いかけ ─── */
+    .invite-section { background: #f5f5f5; }
+    .invite-box {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      max-width: 760px;
+      margin: 0 auto;
+      border-left: 8px solid var(--secondary);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+    }
+    .invite-box h3 {
+      font-size: 1.25em;
+      font-weight: 800;
+      color: #b07d00;
+      margin-bottom: 16px;
+    }
+    .invite-flow {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .invite-step {
+      background: var(--light-yellow);
+      border-radius: 12px;
+      padding: 18px 16px;
+      text-align: center;
+    }
+    .invite-step .arrow-label {
+      font-size: 1.5em;
+      margin-bottom: 8px;
+    }
+    .invite-step h4 { font-size: 0.9em; font-weight: 800; margin-bottom: 4px; }
+    .invite-step p { font-size: 0.8em; color: var(--muted); }
+    .invite-quote {
+      margin-top: 24px;
+      background: var(--light-green);
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-size: 0.92em;
+      font-style: italic;
+      color: #2c5c3a;
+      border-left: 4px solid var(--primary);
+    }
+
+    /* ─── 取材エリア ─── */
+    .area-section { background: white; }
+    .area-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 36px;
+      align-items: start;
+    }
+    @media (max-width: 640px) { .area-grid { grid-template-columns: 1fr; } }
+    .area-map {
+      background: var(--light-green);
+      border-radius: 16px;
+      padding: 32px 24px;
+      text-align: center;
+    }
+    .area-map .map-emoji { font-size: 3em; margin-bottom: 14px; }
+    .area-map h3 { font-size: 1.1em; font-weight: 800; margin-bottom: 8px; color: var(--primary); }
+    .area-map p { font-size: 0.88em; color: var(--muted); }
+    .area-list { list-style: none; }
+    .area-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.92em;
+    }
+    .area-list li:last-child { border-bottom: none; }
+    .area-num {
+      background: var(--primary);
+      color: white;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78em;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+    .area-name { font-weight: 700; }
+    .area-sub { font-size: 0.82em; color: var(--muted); }
+
+    /* ─── パンフ構成 ─── */
+    .pamphlet-section { background: #f5f5f5; }
+    .pamphlet-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 32px;
+      align-items: start;
+    }
+    @media (max-width: 640px) { .pamphlet-grid { grid-template-columns: 1fr; } }
+    .pamphlet-cover {
+      background: var(--primary);
+      color: white;
+      border-radius: 14px;
+      padding: 32px 24px;
+      text-align: center;
+      box-shadow: 6px 6px 0 rgba(44,122,75,0.25);
+    }
+    .cover-emoji { font-size: 2.5em; margin: 16px 0; }
+    .cover-title { font-size: 1.15em; font-weight: 900; line-height: 1.5; margin-bottom: 8px; }
+    .cover-sub { font-size: 0.78em; opacity: 0.78; }
+    .pages-list { list-style: none; }
+    .pages-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .pages-list li:last-child { border-bottom: none; }
+    .page-num {
+      background: var(--primary);
+      color: white;
+      font-size: 0.72em;
+      font-weight: bold;
+      padding: 3px 9px;
+      border-radius: 4px;
+      white-space: nowrap;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+    .page-num.hl { background: var(--secondary); color: #333; }
+    .page-info h4 { font-size: 0.95em; font-weight: 700; }
+    .page-info p { font-size: 0.82em; color: var(--muted); margin-top: 2px; }
+
+    /* ─── 体験先サンプル ─── */
+    .spot-section { background: white; }
+    .spot-card-example {
+      background: white;
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      max-width: 700px;
+      margin: 32px auto 0;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+    .spot-card-header {
+      background: var(--primary);
+      color: white;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .spot-logo {
+      width: 54px; height: 54px;
+      background: white;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6em;
+      flex-shrink: 0;
+    }
+    .spot-card-body { padding: 22px 24px; }
+    .spot-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .spot-tag { font-size: 0.78em; padding: 4px 12px; border-radius: 20px; font-weight: bold; }
+    .tag-green { background: var(--light-green); color: var(--primary); }
+    .tag-yellow { background: var(--light-yellow); color: #b07d00; }
+    .spot-quote {
+      background: var(--light-green);
+      border-left: 4px solid var(--primary);
+      padding: 14px 18px;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.9em;
+      font-style: italic;
+      margin-top: 14px;
+    }
+    .spot-meta { display: flex; gap: 20px; margin-top: 14px; font-size: 0.82em; color: var(--muted); }
+
+    /* ─── 役割 ─── */
+    .roles-section { background: var(--light-yellow); }
+    .roles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 32px;
+    }
+    .role-card {
+      background: white;
+      border-radius: 14px;
+      padding: 24px 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+    .role-card.main-role { border: 3px solid var(--primary); }
+    .role-main-tag {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      font-size: 0.72em;
+      font-weight: bold;
+      padding: 2px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    .role-sub-tag {
+      display: inline-block;
+      background: var(--light-yellow);
+      color: #b07d00;
+      font-size: 0.72em;
+      font-weight: bold;
+      padding: 2px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+      border: 1px solid #f0c84a;
+    }
+    .role-avatar {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2em;
+      margin: 0 auto 14px;
+    }
+    .role-card h3 { font-size: 1.05em; font-weight: 800; margin-bottom: 6px; }
+    .role-task { font-size: 0.85em; color: var(--muted); }
+    .role-note { margin-top: 10px; font-size: 0.78em; color: var(--secondary); font-weight: bold; }
+
+    /* ─── スケジュール ─── */
+    .schedule-section { background: white; }
+    .timeline {
+      position: relative;
+      padding-left: 36px;
+      margin-top: 36px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 12px; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--border);
+      border-radius: 3px;
+    }
+    .tl-item {
+      position: relative;
+      padding: 0 0 36px 24px;
+    }
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      left: -24px; top: 6px;
+      width: 15px; height: 15px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: 3px solid white;
+      box-shadow: 0 0 0 2px var(--primary);
+    }
+    .tl-month { font-size: 0.8em; font-weight: bold; color: var(--primary); margin-bottom: 4px; }
+    .tl-item h3 { font-size: 1em; font-weight: 700; margin-bottom: 4px; }
+    .tl-item p { font-size: 0.85em; color: var(--muted); }
+    .tl-invite {
+      display: inline-block;
+      margin-top: 6px;
+      background: var(--light-yellow);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 0.8em;
+      font-weight: bold;
+      color: #b07d00;
+    }
+
+    /* ─── 協賛 ─── */
+    .sponsor-section { background: #1a1a2e; color: white; }
+    .sponsor-section h2 { color: white; }
+    .sponsor-section .section-label { color: var(--secondary); }
+    .sponsor-section .section-desc { color: rgba(255,255,255,0.65); }
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .plan-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+      padding: 24px 18px;
+      text-align: center;
+    }
+    .plan-card.featured { background: var(--secondary); color: #1a1a2e; border-color: var(--secondary); }
+    .plan-price { font-size: 1.6em; font-weight: 900; margin: 8px 0 4px; }
+    .plan-name { font-size: 0.78em; font-weight: bold; opacity: 0.7; letter-spacing: 0.05em; }
+    .plan-features { margin-top: 14px; font-size: 0.82em; line-height: 1.9; opacity: 0.85; text-align: left; }
+
+    /* ─── CTA ─── */
+    .cta-section { background: var(--primary); color: white; text-align: center; }
+    .cta-section h2 { color: white; }
+    .cta-section p { color: rgba(255,255,255,0.85); margin: 16px 0 32px; }
+    .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn { padding: 14px 32px; border-radius: 8px; font-weight: bold; font-size: 1em; text-decoration: none; display: inline-block; }
+    .btn-white { background: white; color: var(--primary); }
+    .btn-outline { background: transparent; color: white; border: 2px solid rgba(255,255,255,0.7); }
+
+    footer {
+      background: #111;
+      color: rgba(255,255,255,0.45);
+      text-align: center;
+      padding: 32px 20px;
+      font-size: 0.82em;
+    }
+
+    @media (max-width: 600px) {
+      .steps-flow { flex-direction: column; }
+      .step-arrow { display: none; }
+      section { padding: 48px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ヘッダー -->
+<header>
+  <div class="header-tag">2026年度 KCS × アルパカすく〜る 新企画</div>
+  <h1>読谷の大人に会いに行く<br><span>アルパカツアー</span>パンフレット</h1>
+  <p>地域の体験先を「旅行パンフレット」として可視化し、<br>子どもたちが自ら未来を選べる仕組みをつくります。</p>
+  <div class="header-meta">主催：喜名自治会 ／ 制作：株式会社 琉球のタネ　2026年6月</div>
+</header>
+
+<!-- 課題 -->
+<section class="issue-section">
+  <div class="container">
+    <div class="section-label">PROBLEM</div>
+    <h2>「どこに行けばいいか、わからない」<br>という子どもたちの声</h2>
+    <p class="section-desc">KCS事業の「すてっぷ（地域探訪）」フェーズで、2つの課題が浮かび上がっています。</p>
+    <div class="issue-grid">
+      <div class="issue-card">
+        <div class="icon">🗺️</div>
+        <h3>体験先が見えない</h3>
+        <p>どんな事業所があるか・どんな大人がいるかが生徒に伝わっておらず、選びたくても選べない</p>
+      </div>
+      <div class="issue-card">
+        <div class="icon">😶</div>
+        <h3>誘っても伝わりにくい</h3>
+        <p>KCSに関わってほしい子に声をかけても「何をするのか」がイメージしにくく、一歩が踏み出せない</p>
+      </div>
+      <div class="issue-card">
+        <div class="icon">👨‍👩‍👧</div>
+        <h3>保護者の不安</h3>
+        <p>見学先の雰囲気が分からず、同意書へのハードルが高くなる</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- コンセプト -->
+<section class="concept-section">
+  <div class="container">
+    <div class="concept-box">
+      <div class="concept-emoji">✈️</div>
+      <h3>「旅するように、進路を選ぶ」</h3>
+      <p>
+        旅行パンフレットを見ながら「ここに行ってみたい！」と思うように、<br>
+        地域の体験先を<strong>写真・大人の一言・体験メニュー付きで可視化</strong>します。<br>
+        生徒が<em>自ら選ぶ</em>ことで、じゃんぷ（実習）への意欲が生まれます。<br>
+        また、関わってほしい子どもへの<em>「お誘いツール」</em>としても機能します。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- 3ステップとパンフの位置づけ -->
+<section class="steps-section">
+  <div class="container">
+    <div class="section-label">KCS 3ステップモデル</div>
+    <h2>パンフレットは「すてっぷ」を<br>支える道具になる</h2>
+    <p class="section-desc">ほっぷ・すてっぷ・じゃんぷの3段階。パンフが「見学前の予習」と「お誘いの入口」として機能します。</p>
+    <div class="steps-flow">
+      <div class="step-item step-hop">
+        <div class="step-badge">ほっぷ</div>
+        <h3>公民館授業<br>（信頼の蓄積）</h3>
+        <p>挨拶・学習・ポイント獲得で信頼を積み重ねる</p>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step-item step-step">
+        <div class="step-badge">すてっぷ</div>
+        <h3>地域探訪<br>（準備・見学）</h3>
+        <p>体験先を知り、自分で選べるようになる</p>
+        <div class="step-note">← パンフが活躍する場所</div>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step-item step-jump">
+        <div class="step-badge">じゃんぷ</div>
+        <h3>現場実習<br>（実践体験）</h3>
+        <p>4者同意書を経て、希望先で実習を行う</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 武雄くんへの誘いかけ -->
+<section class="invite-section">
+  <div class="container">
+    <div class="section-label">INVITATION STRATEGY</div>
+    <h2>パンフが「お誘いの橋渡し」になる</h2>
+    <p class="section-desc">関わってほしい子どもたち（例：武雄くん）に、言葉だけでなく「見せながら誘える」ツールとして活用します。</p>
+    <div class="invite-box">
+      <h3>武雄くんへのアプローチ例</h3>
+      <div class="invite-flow">
+        <div class="invite-step">
+          <div class="arrow-label">📖</div>
+          <h4>パンフを手渡す</h4>
+          <p>「こんな場所があるよ」と具体的にイメージさせる</p>
+        </div>
+        <div class="invite-step">
+          <div class="arrow-label">📸</div>
+          <h4>「一緒に見に行こう」</h4>
+          <p>なおちゃんの取材に同行という自然な誘いかけ</p>
+        </div>
+        <div class="invite-step">
+          <div class="arrow-label">🚶</div>
+          <h4>軽い入り口から参加</h4>
+          <p>同行体験がそのまま「すてっぷ」の入口になる</p>
+        </div>
+      </div>
+      <div class="invite-quote">
+        「パンフを見せながら『ここ面白そうじゃない？なおちゃんと取材に行くけど来る？』——<br>
+        その一言が、武雄くんへの最初のほっぷになります。」
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 取材エリア -->
+<section class="area-section">
+  <div class="container">
+    <div class="section-label">PHASE 1 — KINA AREA</div>
+    <h2>第1フェーズ：喜名エリアから始める</h2>
+    <p class="section-desc">まず「歩いて行ける範囲」の身近な場所から取材・掲載します。武雄くんが「知ってる場所」から始めることがポイントです。</p>
+    <div class="area-grid">
+      <div class="area-map">
+        <div class="map-emoji">📍</div>
+        <h3>喜名エリア</h3>
+        <p>安里会長の橋渡しで、自治会関連事業者を中心に取材先をリストアップ。なおちゃんが主担当で訪問します。</p>
+      </div>
+      <ul class="area-list">
+        <li>
+          <div class="area-num">19</div>
+          <div>
+            <div class="area-name">土木・建築会社</div>
+            <div class="area-sub">喜名自治会関連事業者</div>
+          </div>
+        </li>
+        <li>
+          <div class="area-num">💅</div>
+          <div>
+            <div class="area-name">ネイルサロン</div>
+            <div class="area-sub">美容・おしゃれ系の仕事を体感</div>
+          </div>
+        </li>
+        <li>
+          <div class="area-num">✂️</div>
+          <div>
+            <div class="area-name">理容室</div>
+            <div class="area-sub">地域の常連に支えられる仕事</div>
+          </div>
+        </li>
+        <li>
+          <div class="area-num">＋</div>
+          <div>
+            <div class="area-name">その他 喜名地区の事業所</div>
+            <div class="area-sub">安里会長の橋渡しで拡大予定</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- パンフ構成 -->
+<section class="pamphlet-section">
+  <div class="container">
+    <div class="section-label">PAMPHLET STRUCTURE</div>
+    <h2>冊子の中身</h2>
+    <p class="section-desc">A5判・12〜16ページ。子どもがパラパラとめくって「楽しそう」と思える旅ガイドスタイル。</p>
+    <div class="pamphlet-grid">
+      <div>
+        <div class="pamphlet-cover">
+          <div class="cover-emoji">🦙</div>
+          <div class="cover-title">読谷版<br>アルパカツアー<br>2026</div>
+          <div class="cover-sub">KCSキャリア教育ガイドブック<br>喜名自治会 × 琉球のタネ</div>
+        </div>
+      </div>
+      <div>
+        <ul class="pages-list">
+          <li>
+            <span class="page-num">表紙</span>
+            <div class="page-info">
+              <h4>読谷版アルパカツアー 2026</h4>
+              <p>キャッチコピー＋メインビジュアル（なおちゃん撮影）</p>
+            </div>
+          </li>
+          <li>
+            <span class="page-num">p.1</span>
+            <div class="page-info">
+              <h4>このパンフの使い方</h4>
+              <p>ほっぷ→すてっぷ→じゃんぷの3ステップ説明</p>
+            </div>
+          </li>
+          <li>
+            <span class="page-num">p.2-3</span>
+            <div class="page-info">
+              <h4>読谷・喜名という「フィールド」</h4>
+              <p>地図＋まちの特徴・KCS事業の背景</p>
+            </div>
+          </li>
+          <li>
+            <span class="page-num hl">p.4〜</span>
+            <div class="page-info">
+              <h4>★体験スポット紹介（各1〜2ページ）</h4>
+              <p>なおちゃん撮影の写真・スタッフの一言・体験内容・対象学年・定員</p>
+            </div>
+          </li>
+          <li>
+            <span class="page-num">末尾</span>
+            <div class="page-info">
+              <h4>申込方法 ／ KCS・アルパカすく〜る紹介</h4>
+              <p>QRコード・連絡先・ポイント制の説明</p>
+            </div>
+          </li>
+          <li>
+            <span class="page-num">裏表紙</span>
+            <div class="page-info">
+              <h4>協賛事業者ロゴ一覧</h4>
+              <p>掲載協賛いただいた企業・団体のロゴを掲載</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 体験先ページサンプル -->
+<section class="spot-section">
+  <div class="container">
+    <div class="section-label">PAGE SAMPLE</div>
+    <h2>体験スポットページ イメージ</h2>
+    <p class="section-desc">旅行パンフレットのように、各事業所を「行きたくなる」ビジュアルで紹介します。</p>
+    <div class="spot-card-example">
+      <div class="spot-card-header">
+        <div class="spot-logo">🏗️</div>
+        <div>
+          <h3>○○建設 様（仮）</h3>
+          <p>読谷村 喜名 ／ 建設・ものづくり体験</p>
+        </div>
+      </div>
+      <div class="spot-card-body">
+        <div class="spot-tags">
+          <span class="spot-tag tag-green">ものづくり</span>
+          <span class="spot-tag tag-green">屋外体験</span>
+          <span class="spot-tag tag-yellow">中学1〜3年</span>
+          <span class="spot-tag tag-yellow">定員 2名/回</span>
+        </div>
+        <p style="font-size:0.9em; color:#555;">
+          図面を読んで、実際に材料を触って。完成したとき、地域の誰かの生活を支えてるってわかる仕事です。
+        </p>
+        <div class="spot-quote">
+          「ミスを怖れずに挑戦してほしい。現場では失敗から学ぶことが一番大事です。」<br>
+          <strong>— 現場監督 ○○さん</strong>
+        </div>
+        <div class="spot-meta">
+          <span>📅 月2回（要相談）</span>
+          <span>⏱ 3〜4時間</span>
+          <span>📍 読谷村喜名</span>
+        </div>
+      </div>
+    </div>
+    <p style="text-align:center; margin-top:16px; font-size:0.82em; color:var(--muted);">
+      ※ なおちゃんによる取材・撮影をもとに制作予定
+    </p>
+  </div>
+</section>
+
+<!-- 役割分担 -->
+<section class="roles-section">
+  <div class="container">
+    <div class="section-label">TEAM</div>
+    <h2>制作チーム</h2>
+    <p class="section-desc">なおちゃんが現場を担い、佐渡山が形にする。武雄くんには「一緒に行こう」と声をかけます。</p>
+    <div class="roles-grid">
+      <div class="role-card main-role">
+        <div class="role-main-tag">取材主担当</div>
+        <div class="role-avatar" style="background:#ffe0f0;">📸</div>
+        <h3>なおちゃん</h3>
+        <div class="role-task">事業所取材・写真撮影<br>インタビュー・原稿</div>
+      </div>
+      <div class="role-card">
+        <div class="role-sub-tag">誘いかけ対象・サブ同行</div>
+        <div class="role-avatar" style="background:var(--light-blue);">🚶</div>
+        <h3>武雄くん</h3>
+        <div class="role-task">なおちゃんの取材に同行<br>参加できるところから</div>
+        <div class="role-note">このパンフが彼への「誘い状」になる</div>
+      </div>
+      <div class="role-card main-role">
+        <div class="role-main-tag">デザイン主担当</div>
+        <div class="role-avatar" style="background:var(--light-green);">🎨</div>
+        <h3>佐渡山 要</h3>
+        <div class="role-task">デザイン・レイアウト<br>最終編集・印刷入稿</div>
+      </div>
+      <div class="role-card">
+        <div class="role-avatar" style="background:#f0f0f0;">🤖</div>
+        <h3>AI秘書（琉球のタネ）</h3>
+        <div class="role-task">テキスト構成<br>データ管理・進行サポート</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- スケジュール -->
+<section class="schedule-section">
+  <div class="container">
+    <div class="section-label">SCHEDULE</div>
+    <h2>制作スケジュール（案）</h2>
+    <p class="section-desc">10月の地域連携会議での配布を目標に動きます。</p>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-month">2026年 7月</div>
+        <h3>取材先リスト確定・なおちゃんによる取材開始</h3>
+        <p>安里会長の橋渡しで事業所へアプローチ。なおちゃんが主担当で取材スタート。</p>
+        <span class="tl-invite">武雄くんへ：「一緒に行ってみない？」と声かけ</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-month">2026年 8月</div>
+        <h3>全取材完了・原稿・写真収集</h3>
+        <p>喜名エリア全体験先の取材を完了。テキストを整理する。</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-month">2026年 9月</div>
+        <h3>デザイン・校正・入稿</h3>
+        <p>佐渡山によるレイアウト制作。事業者・自治会による最終確認。</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-month">2026年 10月</div>
+        <h3>完成・配布</h3>
+        <p>地域連携会議・読谷中学校・喜名公民館にて配布。武雄くんへの手渡しも。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 協賛 -->
+<section class="sponsor-section">
+  <div class="container">
+    <div class="section-label">SPONSORSHIP</div>
+    <h2>掲載協賛のご案内</h2>
+    <p class="section-desc">体験先として掲載されることで、地域への貢献とPRを同時に実現できます。</p>
+    <div class="plans-grid">
+      <div class="plan-card">
+        <div class="plan-name">ライト</div>
+        <div class="plan-price">¥5,000</div>
+        <div class="plan-features">
+          ✓ 裏表紙にロゴ掲載<br>
+          ✓ Web版に社名掲載
+        </div>
+      </div>
+      <div class="plan-card featured">
+        <div class="plan-name">スタンダード（推奨）</div>
+        <div class="plan-price">¥20,000</div>
+        <div class="plan-features">
+          ✓ 体験スポット 1ページ掲載<br>
+          ✓ 写真・スタッフコメント掲載<br>
+          ✓ ロゴ掲載
+        </div>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">プレミアム</div>
+        <div class="plan-price">¥50,000</div>
+        <div class="plan-features">
+          ✓ 見開き2ページ掲載<br>
+          ✓ 独自体験プログラム設計<br>
+          ✓ 年間広報連携
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <h2>一緒に、子どもたちの<br>「行きたい」を増やしませんか</h2>
+    <p>体験先としての参加・取材協力・協賛など、<br>お気軽にご相談ください。</p>
+    <div class="cta-buttons">
+      <a href="mailto:info@ryukyu-tane.com" class="btn btn-white">📧 問い合わせる</a>
+      <a href="tel:07056924173" class="btn btn-outline">📞 070-5692-4173</a>
+    </div>
+    <p style="margin-top:24px; font-size:0.85em; opacity:0.75;">株式会社 琉球のタネ　担当：佐渡山 要</p>
+  </div>
+</section>
+
+<footer>
+  <p>読谷版アルパカツアー パンフレット企画　2026年6月　喜名自治会 × 株式会社 琉球のタネ</p>
+</footer>
+
+</body>
+</html>
