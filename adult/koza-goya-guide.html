@@ -3,8 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>コザ・ゴヤ 1000ベロ＆話題のお店ガイド</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         * {
             margin: 0;
@@ -50,6 +51,54 @@
             padding: 20px;
         }
 
+        /* 地図 */
+        #map {
+            width: 100%;
+            height: 380px;
+            border-radius: 14px;
+            border: 1px solid #ffe0d0;
+            margin-bottom: 8px;
+        }
+
+        .map-legend {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            font-size: 12px;
+            color: #666;
+            padding: 8px 4px 20px;
+        }
+
+        .map-legend span {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .leaflet-div-icon {
+            background: none;
+            border: none;
+        }
+
+        .map-pin {
+            font-size: 26px;
+            line-height: 1;
+            text-align: center;
+            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
+        }
+
+        .map-pin.visited {
+            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35)) grayscale(0.15);
+        }
+
+        .map-pin.visited::after {
+            content: "✅";
+            position: absolute;
+            font-size: 13px;
+            margin-left: -10px;
+            margin-top: -8px;
+        }
+
         .section-title {
             font-size: 18px;
             font-weight: bold;
@@ -59,7 +108,7 @@
             border-bottom: 3px solid #ffecd2;
         }
 
-        .section-title:first-child {
+        .content>.section-title:first-child {
             margin-top: 0;
         }
 
@@ -69,13 +118,35 @@
             border-radius: 14px;
             padding: 16px;
             margin-bottom: 14px;
+            position: relative;
+        }
+
+        .shop-name-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 6px;
         }
 
         .shop-name {
             font-size: 17px;
             font-weight: bold;
             color: #333;
-            margin-bottom: 6px;
+        }
+
+        .visited-badge {
+            display: none;
+            font-size: 12px;
+            background: #4caf50;
+            color: white;
+            padding: 3px 9px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .visited-badge.show {
+            display: inline-block;
         }
 
         .shop-info {
@@ -88,7 +159,14 @@
             font-size: 14px;
             color: #444;
             line-height: 1.6;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+        }
+
+        .shop-actions {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
         .shop-link a {
@@ -99,6 +177,21 @@
 
         .shop-link a:hover {
             text-decoration: underline;
+        }
+
+        .record-btn {
+            font-size: 13px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .record-btn:active {
+            transform: scale(0.97);
         }
 
         .note {
@@ -118,6 +211,184 @@
             font-size: 12px;
             color: #999;
         }
+
+        /* モーダル */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            padding: 16px;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-card {
+            background: white;
+            width: 100%;
+            max-width: 480px;
+            max-height: 85vh;
+            overflow-y: auto;
+            border-radius: 20px 20px 16px 16px;
+            padding: 22px 20px 24px;
+            position: relative;
+            animation: slideUp 0.25s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: none;
+            background: #f0f0f0;
+            color: #666;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .modal-card h3 {
+            font-size: 19px;
+            color: #333;
+            margin: 0 24px 8px 0;
+        }
+
+        .modal-info {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 8px;
+        }
+
+        .modal-desc {
+            font-size: 14px;
+            color: #444;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .modal-card .shop-link {
+            margin-bottom: 18px;
+        }
+
+        .modal-divider {
+            border: none;
+            border-top: 1px dashed #ffd8c2;
+            margin: 16px 0;
+        }
+
+        .visited-check {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 14px;
+            cursor: pointer;
+        }
+
+        .visited-check input {
+            width: 22px;
+            height: 22px;
+            accent-color: #ff6b6b;
+        }
+
+        .comment-label {
+            font-size: 13px;
+            color: #777;
+            margin-bottom: 6px;
+        }
+
+        #modal-comment {
+            width: 100%;
+            min-height: 90px;
+            border: 1px solid #ffe0d0;
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 15px;
+            font-family: inherit;
+            resize: vertical;
+            margin-bottom: 14px;
+        }
+
+        #modal-comment:focus {
+            outline: 2px solid #ffb08a;
+        }
+
+        .modal-save-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .modal-save-btn:active {
+            transform: scale(0.98);
+        }
+
+        .saved-msg {
+            text-align: center;
+            font-size: 13px;
+            color: #4caf50;
+            font-weight: bold;
+            margin-top: 10px;
+            min-height: 18px;
+        }
+
+        /* iPhone12 (375px幅) を含む小画面向け調整 */
+        @media (max-width: 480px) {
+            body {
+                padding: 8px;
+            }
+
+            .container {
+                border-radius: 14px;
+            }
+
+            .header h1 {
+                font-size: 19px;
+            }
+
+            #map {
+                height: 300px;
+            }
+
+            .content {
+                padding: 14px;
+            }
+
+            .shop-actions {
+                justify-content: space-between;
+            }
+
+            .modal-card {
+                padding: 20px 16px 20px;
+            }
+        }
     </style>
 </head>
 
@@ -129,61 +400,23 @@
         </div>
 
         <div class="content">
+            <div class="section-title">🗺️ マップで見る</div>
+            <div id="map"></div>
+            <div class="map-legend">
+                <span>🍻 1000ベロ系</span>
+                <span>⭐ 話題・注目店</span>
+                <span>✅ 行った記録あり</span>
+            </div>
+
             <div class="section-title">① 1000ベロ系（千円台で楽しめるお店）</div>
-
-            <div class="shop-card">
-                <div class="shop-name">でんすけ商店コザ</div>
-                <div class="shop-info">沖縄市中央1-6-2（一番街）</div>
-                <div class="shop-desc">日本酒中心のお店。ドリンク3杯＋おつまみで千円台から楽しめます。</div>
-                <div class="shop-link"><a href="https://www.kozaweb.jp/featurePages/show/221" target="_blank" rel="noopener">Kozaweb特集で見る</a></div>
-            </div>
-
-            <div class="shop-card">
-                <div class="shop-name">大衆劇場 足立屋</div>
-                <div class="shop-info">沖縄市中央1-20-9 ガキヤビル1F</div>
-                <div class="shop-desc">屋台風のカウンター席が特徴。串揚げのメニューが充実しています。</div>
-                <div class="shop-link"><a href="https://aumo.jp/articles/4343830" target="_blank" rel="noopener">aumoで見る</a></div>
-            </div>
-
-            <div class="shop-card">
-                <div class="shop-name">串喝酒場ちゃうちゃう</div>
-                <div class="shop-info">沖縄市字松本850-1</div>
-                <div class="shop-desc">串カツが全品100円という大阪風のお店。</div>
-                <div class="shop-link"><a href="https://aumo.jp/articles/4343830" target="_blank" rel="noopener">aumoで見る</a></div>
-            </div>
-
-            <div class="shop-card">
-                <div class="shop-name">居酒屋かくれんぼ</div>
-                <div class="shop-info">沖縄市中央1-6-17（一番街）</div>
-                <div class="shop-desc">レモンサワーが13種類。ドリンク＋鶏煮込みのセットあり。</div>
-                <div class="shop-link"><a href="https://kozamachi-magazine.com/kozanomimatome/" target="_blank" rel="noopener">コザまちマガジンで見る</a></div>
-            </div>
-
-            <div class="shop-card">
-                <div class="shop-name">酒バルRAKU</div>
-                <div class="shop-info">沖縄市中央1-10-7（サンシティ商店街）</div>
-                <div class="shop-desc">おつまみ＋ドリンク3杯のセットが千円台。</div>
-                <div class="shop-link"><a href="https://www.kozaweb.jp/featurePages/show/221" target="_blank" rel="noopener">Kozaweb特集で見る</a></div>
-            </div>
+            <div id="list-sen"></div>
 
             <div class="section-title">② 話題・注目のお店</div>
-
-            <div class="shop-card">
-                <div class="shop-name">Be²Bar（べべばー）</div>
-                <div class="shop-info">沖縄市中央1-7-6 HOPEビル102（一番街）</div>
-                <div class="shop-desc">沖縄初の「日替わり店長制」ソーシャルバー。起業家や投資家も集まる交流拠点として継続的に話題です。</div>
-                <div class="shop-link"><a href="https://www.instagram.com/bebebar_okinawa/" target="_blank" rel="noopener">Instagramで見る</a></div>
-            </div>
-
-            <div class="shop-card">
-                <div class="shop-name">ソムチャイ</div>
-                <div class="shop-info">パルミラ通り・沖縄市中央1-17-14</div>
-                <div class="shop-desc">タイ人育ちの店主による本格タイ料理。地元グルメツアーでも紹介される、知る人ぞ知るお店です。</div>
-                <div class="shop-link"><a href="https://note.com/kozarocks/n/n52c083c13c79" target="_blank" rel="noopener">コザスタートアップ商店街noteで見る</a></div>
-            </div>
+            <div id="list-topic"></div>
 
             <div class="note">
-                ※ 情報は掲載時点（2026年7月）のWeb検索に基づくものです。営業時間・定休日・価格は変更される場合がありますので、訪問前に各店舗の最新情報をご確認ください。
+                ※ 情報は掲載時点（2026年7月）のWeb検索に基づくものです。営業時間・定休日・価格は変更される場合がありますので、訪問前に各店舗の最新情報をご確認ください。<br>
+                ※ 「行った」チェックと感想は、この端末のブラウザ内にのみ保存されます（他の人とは共有されません）。
             </div>
         </div>
 
@@ -191,6 +424,239 @@
             アルパカすく〜る｜地域情報まとめ
         </div>
     </div>
+
+    <!-- モーダル -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-card">
+            <button class="modal-close" id="modalClose" aria-label="閉じる">×</button>
+            <h3 id="modalName"></h3>
+            <div class="modal-info" id="modalInfo"></div>
+            <div class="modal-desc" id="modalDesc"></div>
+            <div class="shop-link"><a id="modalLink" href="#" target="_blank" rel="noopener">情報源で見る</a></div>
+
+            <hr class="modal-divider">
+
+            <label class="visited-check">
+                <input type="checkbox" id="modalVisited">
+                <span>この店、行った！</span>
+            </label>
+
+            <div class="comment-label">感想メモ</div>
+            <textarea id="modalComment" placeholder="味・雰囲気・値段など、自由にメモしてください"></textarea>
+
+            <button class="modal-save-btn" id="modalSave">保存する</button>
+            <div class="saved-msg" id="savedMsg"></div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        const shops = [
+            {
+                id: 'densuke',
+                name: 'でんすけ商店コザ',
+                category: 'sen',
+                info: '沖縄市中央1-6-2（一番街）',
+                desc: '日本酒中心のお店。ドリンク3杯＋おつまみで千円台から楽しめます。',
+                link: 'https://www.kozaweb.jp/featurePages/show/221',
+                lat: 26.336956,
+                lng: 127.800713
+            },
+            {
+                id: 'adachiya',
+                name: '大衆劇場 足立屋',
+                category: 'sen',
+                info: '沖縄市中央1-20-9 ガキヤビル1F',
+                desc: '屋台風のカウンター席が特徴。串揚げのメニューが充実しています。',
+                link: 'https://aumo.jp/articles/4343830',
+                lat: 26.338249,
+                lng: 127.800879
+            },
+            {
+                id: 'chauchau',
+                name: '串喝酒場ちゃうちゃう',
+                category: 'sen',
+                info: '沖縄市字松本850-1',
+                desc: '串カツが全品100円という大阪風のお店。',
+                link: 'https://aumo.jp/articles/4343830',
+                lat: 26.353129,
+                lng: 127.823003
+            },
+            {
+                id: 'kakurenbo',
+                name: '居酒屋かくれんぼ',
+                category: 'sen',
+                info: '沖縄市中央1-6-17（一番街）',
+                desc: 'レモンサワーが13種類。ドリンク＋鶏煮込みのセットあり。',
+                link: 'https://kozamachi-magazine.com/kozanomimatome/',
+                lat: 26.337118,
+                lng: 127.800941
+            },
+            {
+                id: 'raku',
+                name: '酒バルRAKU',
+                category: 'sen',
+                info: '沖縄市中央1-10-7（サンシティ商店街）',
+                desc: 'おつまみ＋ドリンク3杯のセットが千円台。',
+                link: 'https://www.kozaweb.jp/featurePages/show/221',
+                lat: 26.336185,
+                lng: 127.799301
+            },
+            {
+                id: 'bebebar',
+                name: 'Be²Bar（べべばー）',
+                category: 'topic',
+                info: '沖縄市中央1-7-6 HOPEビル102（一番街）',
+                desc: '沖縄初の「日替わり店長制」ソーシャルバー。起業家や投資家も集まる交流拠点として継続的に話題です。',
+                link: 'https://www.instagram.com/bebebar_okinawa/',
+                lat: 26.336645,
+                lng: 127.800323
+            },
+            {
+                id: 'somchai',
+                name: 'ソムチャイ',
+                category: 'topic',
+                info: 'パルミラ通り・沖縄市中央1-17-14',
+                desc: 'タイ人育ちの店主による本格タイ料理。地元グルメツアーでも紹介される、知る人ぞ知るお店です。',
+                link: 'https://note.com/kozarocks/n/n52c083c13c79',
+                lat: 26.337519,
+                lng: 127.801245
+            }
+        ];
+
+        const STORAGE_KEY = 'koza-goya-visits';
+
+        function loadRecords() {
+            try {
+                return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function saveRecord(id, data) {
+            const records = loadRecords();
+            records[id] = data;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+        }
+
+        function isVisited(id) {
+            const r = loadRecords()[id];
+            return !!(r && r.visited);
+        }
+
+        // --- 地図初期化 ---
+        const map = L.map('map', { scrollWheelZoom: false }).setView([26.3388, 127.8035], 15);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors',
+            maxZoom: 19
+        }).addTo(map);
+
+        const markers = {};
+
+        function pinIcon(shop) {
+            const emoji = shop.category === 'sen' ? '🍻' : '⭐';
+            const visitedClass = isVisited(shop.id) ? ' visited' : '';
+            return L.divIcon({
+                className: 'leaflet-div-icon',
+                html: '<div class="map-pin' + visitedClass + '">' + emoji + '</div>',
+                iconSize: [30, 30],
+                iconAnchor: [15, 26]
+            });
+        }
+
+        shops.forEach(shop => {
+            const marker = L.marker([shop.lat, shop.lng], { icon: pinIcon(shop) }).addTo(map);
+            marker.on('click', () => openModal(shop.id));
+            markers[shop.id] = marker;
+        });
+
+        function refreshMarker(id) {
+            const shop = shops.find(s => s.id === id);
+            if (shop && markers[id]) {
+                markers[id].setIcon(pinIcon(shop));
+            }
+        }
+
+        // --- 一覧カード描画 ---
+        function renderList() {
+            const senEl = document.getElementById('list-sen');
+            const topicEl = document.getElementById('list-topic');
+            senEl.innerHTML = '';
+            topicEl.innerHTML = '';
+
+            shops.forEach(shop => {
+                const card = document.createElement('div');
+                card.className = 'shop-card';
+                card.id = 'card-' + shop.id;
+                card.innerHTML =
+                    '<div class="shop-name-row">' +
+                    '<div class="shop-name">' + shop.name + '</div>' +
+                    '<div class="visited-badge' + (isVisited(shop.id) ? ' show' : '') + '" id="badge-' + shop.id + '">✅ 行った</div>' +
+                    '</div>' +
+                    '<div class="shop-info">' + shop.info + '</div>' +
+                    '<div class="shop-desc">' + shop.desc + '</div>' +
+                    '<div class="shop-actions">' +
+                    '<div class="shop-link"><a href="' + shop.link + '" target="_blank" rel="noopener">情報源で見る</a></div>' +
+                    '<button class="record-btn" data-id="' + shop.id + '">記録する</button>' +
+                    '</div>';
+                (shop.category === 'sen' ? senEl : topicEl).appendChild(card);
+            });
+
+            document.querySelectorAll('.record-btn').forEach(btn => {
+                btn.addEventListener('click', () => openModal(btn.dataset.id));
+            });
+        }
+
+        // --- モーダル ---
+        const overlay = document.getElementById('modalOverlay');
+        let currentShopId = null;
+
+        function openModal(id) {
+            const shop = shops.find(s => s.id === id);
+            if (!shop) return;
+            currentShopId = id;
+
+            document.getElementById('modalName').textContent = shop.name;
+            document.getElementById('modalInfo').textContent = shop.info;
+            document.getElementById('modalDesc').textContent = shop.desc;
+            document.getElementById('modalLink').href = shop.link;
+            document.getElementById('savedMsg').textContent = '';
+
+            const record = loadRecords()[id] || { visited: false, comment: '' };
+            document.getElementById('modalVisited').checked = !!record.visited;
+            document.getElementById('modalComment').value = record.comment || '';
+
+            overlay.classList.add('open');
+        }
+
+        function closeModal() {
+            overlay.classList.remove('open');
+            currentShopId = null;
+        }
+
+        document.getElementById('modalClose').addEventListener('click', closeModal);
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) closeModal();
+        });
+
+        document.getElementById('modalSave').addEventListener('click', () => {
+            if (!currentShopId) return;
+            const visited = document.getElementById('modalVisited').checked;
+            const comment = document.getElementById('modalComment').value;
+            saveRecord(currentShopId, { visited, comment });
+
+            const badge = document.getElementById('badge-' + currentShopId);
+            if (badge) badge.classList.toggle('show', visited);
+            refreshMarker(currentShopId);
+
+            const msg = document.getElementById('savedMsg');
+            msg.textContent = '保存しました！';
+            setTimeout(() => { msg.textContent = ''; }, 1800);
+        });
+
+        renderList();
+    </script>
 </body>
 
 </html>
