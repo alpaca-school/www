@@ -405,6 +405,7 @@
             <div class="map-legend">
                 <span>🍻 1000ベロ系</span>
                 <span>⭐ 話題・注目店</span>
+                <span>🍸 Bar</span>
                 <span>✅ 行った記録あり</span>
             </div>
 
@@ -413,6 +414,9 @@
 
             <div class="section-title">② 話題・注目のお店</div>
             <div id="list-topic"></div>
+
+            <div class="section-title">③ Bar（アイリッシュバーほか）</div>
+            <div id="list-bar"></div>
 
             <div class="note">
                 ※ 情報は掲載時点（2026年7月）のWeb検索に基づくものです。営業時間・定休日・価格は変更される場合がありますので、訪問前に各店舗の最新情報をご確認ください。<br>
@@ -521,6 +525,66 @@
                 link: 'https://note.com/kozarocks/n/n52c083c13c79',
                 lat: 26.337519,
                 lng: 127.801245
+            },
+            {
+                id: 'paddymacs',
+                name: "Paddy Mac's Irish Pub（パディマックス）",
+                category: 'bar',
+                info: '沖縄市中央2-7-44（中央パークアベニュー沿い）',
+                desc: '1995年創業のアイリッシュパブ。アイルランド人シェフ運営で、ギネス・アイリッシュウイスキー・フィッシュ&チップスなど本場の味が楽しめます。予算目安1,000〜1,999円。※Instagramは活動継続中に見えますが、一部情報源で閉店表記もあり営業状況に食い違いがあります。訪問前に電話等でのご確認をおすすめします。',
+                link: 'https://www.instagram.com/paddymacs/',
+                lat: 26.339487,
+                lng: 127.799660
+            },
+            {
+                id: 'bobbys',
+                name: "Bobby's（ボビーズ）",
+                category: 'bar',
+                info: '沖縄市中央1-5-18 花屋ひるがお2F',
+                desc: '本格派かつ独創的なカクテルで評判のバー。アットホームな雰囲気です。',
+                link: 'https://retty.me/area/PRE47/ARE267/SUB26704/100001204733/',
+                lat: 26.337530,
+                lng: 127.798615
+            },
+            {
+                id: 'smittys',
+                name: "SMITTY'S（スミティーズ）",
+                category: 'bar',
+                info: '沖縄市上地1-2-22',
+                desc: 'ゲート通り・ミュージックタウンすぐそばのアメリカンバー。外国人客も多い雰囲気です。',
+                link: 'https://www.kozaweb.jp/eats/show/88',
+                lat: 26.335541,
+                lng: 127.799164
+            },
+            {
+                id: 'firstchance',
+                name: 'First Chance（ファーストチャンス）',
+                category: 'bar',
+                info: '沖縄市中央1-30-7',
+                desc: 'アメリカ田舎風の内装のカクテル／プールバー。ビリヤードが無料で楽しめます。',
+                link: 'https://www.kozaweb.jp/plays/show/53',
+                lat: 26.337029,
+                lng: 127.801437
+            },
+            {
+                id: 'islay',
+                name: 'Shot Bar ISLAY（ショットバーアイラ）',
+                category: 'bar',
+                info: '沖縄市照屋1-1-5（銀天街商店街内）',
+                desc: 'コザ十字路ガリバー向かいのウイスキー・ショットバー。ジャズが流れる落ち着いた空間です。',
+                link: 'https://nakamako.info/islay/',
+                lat: 26.338751,
+                lng: 127.815620
+            },
+            {
+                id: 'sportsking',
+                name: 'Sports Music Bar KING',
+                category: 'bar',
+                info: '沖縄市諸見里1-1-5 2F（ゴヤ・コザ中心部からやや南）',
+                desc: '大型テレビでスポーツ観戦ができるスポーツバー。ダーツあり、最大120席。',
+                link: 'https://www.kozaweb.jp/eats/show/329',
+                lat: 26.329878,
+                lng: 127.794991
             }
         ];
 
@@ -555,7 +619,7 @@
         const markers = {};
 
         function pinIcon(shop) {
-            const emoji = shop.category === 'sen' ? '🍻' : '⭐';
+            const emoji = shop.category === 'sen' ? '🍻' : (shop.category === 'bar' ? '🍸' : '⭐');
             const visitedClass = isVisited(shop.id) ? ' visited' : '';
             return L.divIcon({
                 className: 'leaflet-div-icon',
@@ -582,8 +646,10 @@
         function renderList() {
             const senEl = document.getElementById('list-sen');
             const topicEl = document.getElementById('list-topic');
+            const barEl = document.getElementById('list-bar');
             senEl.innerHTML = '';
             topicEl.innerHTML = '';
+            barEl.innerHTML = '';
 
             shops.forEach(shop => {
                 const card = document.createElement('div');
@@ -600,7 +666,8 @@
                     '<div class="shop-link"><a href="' + shop.link + '" target="_blank" rel="noopener">情報源で見る</a></div>' +
                     '<button class="record-btn" data-id="' + shop.id + '">記録する</button>' +
                     '</div>';
-                (shop.category === 'sen' ? senEl : topicEl).appendChild(card);
+                const targetEl = shop.category === 'sen' ? senEl : (shop.category === 'bar' ? barEl : topicEl);
+                targetEl.appendChild(card);
             });
 
             document.querySelectorAll('.record-btn').forEach(btn => {
