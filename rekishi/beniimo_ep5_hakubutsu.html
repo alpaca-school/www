@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>井戸（カー）の水を、お洗濯に使えるように 💧</title>
+    <title>紅芋の色、なんで紫なの？【知能の窓 ep5：博物学編】 🍠</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -47,41 +47,37 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m15 18-6-6 6-6"/></svg>
         );
 
-        // 4アルパカ（性格は不変。「困りごとを持ち込む役」。全員、惜しいところで間違える）
+        // 4アルパカ（性格は既存シリーズと同じ。困りごとを持ち込む役）
         const ALPACAS = {
           hari: {
             name: "ハーリー", color: "red", emoji: "🔥", img: "../img/characters/harly.png",
-            guess: { trips: 3 },
-            line: "井戸から水汲むだけっしょ、オレに任せろ!3往復で余裕っしょ!",
-            gag: "（効果音：ズコーッ！ハーリー、水の入ったバケツを持ったまま道端ですっ転ぶ）"
+            claim: "紫色は絵の具で塗ってるに決まってるっしょ！自然の食べ物があんな色になるわけないっしょ！",
+            gag: "（効果音：ズコーッ！ハーリー、畑のあぜ道ですっ転ぶ）"
           },
           sara: {
             name: "サラバンジ", color: "blue", emoji: "⚡", img: "../img/characters/sarabanji.png",
-            guess: { trips: 2 },
-            line: "水汲みか…一発で終わらせるさ。2往復!",
+            claim: "一発でわかるさ！沖縄でしか生えない、特別な魔法の植物だからだよ！",
             gag: "（サラバンジ、その場でバタン！と大げさに倒れる→3秒後にムクッと起き上がる）"
           },
           gan: {
             name: "ガンジュー", color: "green", emoji: "😴", img: "../img/characters/ganjuu.png",
-            guess: { trips: 7 },
-            line: "井戸…深いから、こわいです…えっと、深さが3メートルで、歩いて15分だから…7往復、だと思います…",
-            gag: "（ガンジュー、立ったまま本気のいびき→徳枝オバーに肩を叩かれてハッと飛び起きる）"
+            claim: "えっと…土が紫だから、芋も紫になる…んじゃ、ないかなあ…",
+            gag: "（ガンジュー、立ったまま本気のいびき→美咲オバーに肩を叩かれてハッと飛び起きる）"
           },
           kaa: {
             name: "カーギー", color: "purple", emoji: "💁‍♀️", img: "../img/characters/carggy.png",
-            guess: { trips: 3 },
-            line: "井戸の水は、まず衛生面が心配ですね。…必要な水の合計は35リットル、一度に運べるのは10リットル。35÷10は3.5…なので、3往復で足りますね。",
+            claim: "台風が来ても平気なのは、地面の下に隠れているから、じゃないでしょうか。",
             gag: "（カーギー、風で乱れた前髪を鏡もなしに一瞬でピシッと直しながら、少し首をかしげる）"
           }
         };
         const ALPACA_KEYS = ["hari", "sara", "gan", "kaa"];
 
-        // 4メンター（オバー・オジー）。多重知能8分類を2つずつ担当する「知能の窓」シリーズの案内役
+        // 4メンター（オバー・オジー）
         const MENTORS = {
-          chinen: { name: "知念オジー", role: "智（論理・言語）", color: "amber", emoji: "🧓" },
-          tokue: { name: "徳枝オバー", role: "徳（対人・内省）", color: "rose", emoji: "👵" },
-          rikiya: { name: "力也オジー", role: "体（音楽・運動）", color: "teal", emoji: "🧓" },
-          misaki: { name: "美咲オバー", role: "感（視覚空間・博物学）", color: "indigo", emoji: "👵" }
+          chinen: { name: "知念オジー", color: "amber", emoji: "🧓" },
+          tokue: { name: "徳枝オバー", color: "rose", emoji: "👵" },
+          rikiya: { name: "力也オジー", color: "teal", emoji: "🧓" },
+          misaki: { name: "美咲オバー", color: "indigo", emoji: "👵" }
         };
 
         const COLOR_MAP = {
@@ -95,7 +91,6 @@
           indigo: { bg: "bg-indigo-50", border: "border-indigo-300", text: "text-indigo-700", solid: "bg-indigo-500" }
         };
 
-        // キャラ画像。アルパカは画像→失敗時絵文字。メンターは画像未整備のため絵文字のみ
         const Avatar = ({ person }) => {
           const [failed, setFailed] = useState(false);
           if (!person.img || failed) {
@@ -124,47 +119,64 @@
           return arr.slice(0, 3);
         }
 
-        // COCOLOプラン（ホームスクーラー等の学習記録）向けの教材メタ情報
+        // やってみる：正しい説明／間違った説明をクリックで見分けるカード
+        const FACT_CARDS = [
+          { id: "f1", text: "紅芋の紫色は、ポリフェノールの一種（アントシアニン）という自然の色素の色である。", correct: true },
+          { id: "f2", text: "紅芋は、もともとメキシコから南米にかけての地域が原産の植物である。", correct: true },
+          { id: "f3", text: "台風で地上の葉やツルが傷んでも、土の中の芋は比較的無事なことが多い。", correct: true },
+          { id: "f4", text: "紅芋の紫色は、育てるときに紫色の絵の具を土に混ぜているからついている。", correct: false },
+          { id: "f5", text: "紅芋は、沖縄以外の場所では絶対に育たない特別な植物である。", correct: false }
+        ];
+        function shuffledCards() {
+          const arr = [...FACT_CARDS];
+          for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+          }
+          return arr;
+        }
+
         const MATERIAL = {
-          title: "井戸（カー）の水を、お洗濯に使えるように",
-          series: "知能の窓：算数・防災編",
-          subjectGrade: "理科5年・算数4年"
+          title: "紅芋の色、なんで紫なの？",
+          series: "知能の窓 ep5：博物学編",
+          subjectGrade: "理科4年・社会3年"
         };
 
-        const WaterFilterPredictionApp = () => {
+        const BeniimoEp5App = () => {
           const [threeKeys] = useState(() => shuffledThreeAlpacas());
           const [currentSlide, setCurrentSlide] = useState(0);
-          const [guess, setGuess] = useState(null); // ユーザーが選んだ困りごとのキー
+          const [guess, setGuess] = useState(null);
+          const [cards] = useState(() => shuffledCards());
+          const [answers, setAnswers] = useState({});
           const [imagineAnswer, setImagineAnswer] = useState("");
           const [childName, setChildName] = useState("");
           const [canDoIt, setCanDoIt] = useState(null);
           const [memoryAnswer, setMemoryAnswer] = useState("");
 
-          const need = { laundry: 20, dishes: 15 };
-          const total = need.laundry + need.dishes; // 35リットル
-          const perTrip = 10;
-          const correctTrips = 4; // 35÷10=3.5→切り上げて4往復
+          const slideIds = ["intro", "trouble", "mentor", "sort", "imagine", "checkin", "parent"];
+          const total = slideIds.length;
 
-          const slideIds = ["intro", "trouble", "mentor", "verify", "imagine", "checkin", "parent"];
-          const totalSlides = slideIds.length;
-
-          const nextSlide = () => setCurrentSlide((p) => Math.min(p + 1, totalSlides - 1));
+          const nextSlide = () => setCurrentSlide((p) => Math.min(p + 1, total - 1));
           const prevSlide = () => setCurrentSlide((p) => Math.max(p - 1, 0));
+
+          const pickAnswer = (id, choice) => {
+            setAnswers(prev => ({ ...prev, [id]: choice }));
+          };
+          const resetSort = () => setAnswers({});
+          const answeredCount = Object.keys(answers).length;
+          const isSortComplete = answeredCount === cards.length;
+          const correctCount = cards.filter(c => answers[c.id] === c.correct).length;
 
           const renderIntro = () => (
             <div className="space-y-6">
               <div className="text-center">
-                <div className="text-6xl mb-4">💧</div>
-                <h2 className="text-2xl font-bold text-cyan-700">断水が続いています</h2>
-                <span className="inline-block mt-2 px-3 py-1 text-xs font-bold rounded-full bg-cyan-100 text-cyan-700">📚 {MATERIAL.subjectGrade}</span>
+                <div className="text-6xl mb-4">🍠</div>
+                <h2 className="text-2xl font-bold text-orange-600">紅芋を切ったら、きれいな紫色</h2>
+                <span className="inline-block mt-2 px-3 py-1 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
               </div>
-              <div className="bg-cyan-50 border-2 border-cyan-200 rounded-lg p-6 space-y-3">
-                <p>水道からは水が出ません。おばあの家族は、集落に残る<strong>カー（井戸）</strong>まで、バケツで水を汲みに行くことにしました。</p>
-                <p>カーの水は砂や葉っぱが混ざって濁っています。そのままでは洗濯や食器洗いに使えないので、手作りのろ過フィルター（ペットボトルに小石→砂→炭の順に重ねたもの）を通してから使います。</p>
-                <p>バケツを2つ持って一度に<strong>10リットル</strong>運べます。洗濯に<strong>20リットル</strong>、食器洗いに<strong>15リットル</strong>必要だとすると、合計で何往復すればよいでしょう？</p>
-              </div>
-              <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600">
-                <p>気をつけて：カーまでの道のりの時間（歩いて15分）・井戸の深さ（3メートル）・バケツの値段（1個800円）は、この問題を解くのには関係ありません。</p>
+              <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 space-y-3">
+                <p>畑で紅芋を掘り出したアルパカたち。切ってみると、中は鮮やかな紫色でした。「なんでこんな色をしているんだろう？」「なんで沖縄でこんなによく育つんだろう？」と、みんなで話題になりました。</p>
+                <p>物知りの美咲オバーなら、きっと理由を知っているはずです。</p>
               </div>
             </div>
           );
@@ -174,7 +186,7 @@
               <div className="text-center">
                 <div className="text-5xl mb-4">😱</div>
                 <h2 className="text-xl font-bold text-red-600 mb-1">困りごと発生！</h2>
-                <p className="text-gray-600">3人のアルパカが、焦って往復の数を言いはじめた。きみは、誰の言うことに一番近いと思う？</p>
+                <p className="text-gray-600">3人のアルパカが、それぞれ違う理由を言いはじめた。きみは、誰の言うことに一番近いと思う？</p>
               </div>
               <div className="grid gap-4">
                 {threeKeys.map((key) => {
@@ -192,8 +204,7 @@
                       <div className="flex items-start gap-3">
                         <Avatar person={c} />
                         <div className={`speech-bubble flex-1 rounded-lg p-3 ${cc.text} bg-white/70`}>
-                          <p className={`font-bold ${cc.text}`}>{c.name}：{c.guess.trips}往復？</p>
-                          <p className="text-sm text-gray-700 mt-1">「{c.line}」</p>
+                          <p className="text-sm text-gray-700">「{c.claim}」</p>
                         </div>
                         {selected && (
                           <div className={`w-7 h-7 rounded-full ${cc.solid} flex items-center justify-center text-white text-sm shrink-0`}>✓</div>
@@ -206,7 +217,7 @@
               {!guess && <p className="text-center text-sm text-orange-500">↑ どれか1つを選ぶと、次に進めるよ</p>}
               {guess && (
                 <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
-                  <p>みんな焦っていて、バラバラの数字を言っている…。ここは、知能の窓シリーズのメンターに聞いてみよう。</p>
+                  <p>みんな、なんとなく答えてるみたい。美咲オバーに聞いてみよう。</p>
                 </div>
               )}
             </div>
@@ -215,60 +226,86 @@
           const renderMentor = () => (
             <div className="space-y-6">
               <div className="text-center">
-                <div className="text-5xl mb-4">🧓</div>
-                <h2 className="text-xl font-bold text-amber-600">知念オジーが教えてくれた</h2>
+                <div className="text-5xl mb-4">👵</div>
+                <h2 className="text-xl font-bold text-indigo-600">美咲オバーが教えてくれた</h2>
               </div>
-              <div className={`rounded-lg p-4 space-y-2 ${COLOR_MAP.amber.bg}`}>
+              <div className={`rounded-lg p-4 space-y-2 ${COLOR_MAP.indigo.bg}`}>
                 <div className="flex items-center gap-3 mb-1">
-                  <Avatar person={MENTORS.chinen} />
-                  <p className="font-bold text-amber-700">{MENTORS.chinen.name}</p>
+                  <Avatar person={MENTORS.misaki} />
+                  <p className="font-bold text-indigo-700">{MENTORS.misaki.name}</p>
                 </div>
-                <p className="text-sm text-gray-700">「焦らんでいいさぁ。水を運ぶときも、2つだけ順番に考えればいいんだよ」</p>
-                <p className="text-sm text-gray-700">「1つ目：必要な水の合計を出す。洗濯20リットルと食器洗い15リットルを足すと35リットルだね」</p>
-                <p className="text-sm text-gray-700">「2つ目：一度に運べる量で割る。35÷10は3あまり5。あまりが出たら、その5リットルのためにもう1往復いるから、3ではなく4往復と切り上げて考えるのがコツさ」</p>
+                <p className="text-sm text-gray-700">「よく気づいたねえ。紅芋はもともと、遠いメキシコから南米のあたりが生まれ故郷なんだよ。それが大航海時代のあと、世界中に運ばれて、沖縄や鹿児島にもやってきたのさ」</p>
+                <p className="text-sm text-gray-700">「あの紫色はね、ポリフェノールの仲間で『アントシアニン』っていう、植物が自分で作る色の成分なんだよ。体にいいと言われる、抗酸化作用ってやつがあるんだって」</p>
+                <p className="text-sm text-gray-700">「それに紅芋は台風にも強いんだよ。地面の上の葉っぱが傷んでも、土の中の芋は無事なことが多いから、『命をつなぐ作物』として、昔から大事にされてきたのさ」</p>
               </div>
               <div className="grid gap-3">
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.amber.bg}`}>
+                  <Avatar person={MENTORS.chinen} />
+                  <p className="text-sm text-amber-700">「原産地から沖縄まで、地図で辿ってみると面白いさぁ」</p>
+                </div>
                 <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.rose.bg}`}>
                   <Avatar person={MENTORS.tokue} />
-                  <p className="text-sm text-rose-700">「焦って計算すると、あまりを忘れがちだよね。まずは深呼吸してから、もう一度確かめてみようね」</p>
+                  <p className="text-sm text-rose-700">「知らないことを『なんでだろう』って聞けるの、いいことだよ」</p>
                 </div>
                 <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.teal.bg}`}>
                   <Avatar person={MENTORS.rikiya} />
-                  <p className="text-sm text-teal-700">「よし、リズムに乗って運ぶかー！いっぽ・にほ…あ、まずは計算が先だったな」</p>
-                </div>
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.indigo.bg}`}>
-                  <Avatar person={MENTORS.misaki} />
-                  <p className="text-sm text-indigo-700">「ろ過フィルターの、小石→砂→炭の重なり方も、今度じっくり観察してみようね」</p>
+                  <p className="text-sm text-teal-700">「台風のときの掘り方は、また今度たっぷり教えるさー」</p>
                 </div>
               </div>
             </div>
           );
 
-          const renderVerify = () => {
-            const guessedAlpaca = guess ? ALPACAS[guess] : null;
-            return (
-              <div className="space-y-6">
-                <div className="text-center">
-                  <div className="text-5xl mb-4">✅</div>
-                  <h2 className="text-2xl font-bold text-green-600">やってみよう</h2>
-                </div>
-                <div className="bg-green-50 border-2 border-green-200 rounded-lg p-6 space-y-2 text-sm">
-                  <p>1つ目（たし算）：必要な水の合計は、洗濯<strong>20リットル</strong>＋食器洗い<strong>15リットル</strong>＝<strong>35リットル</strong></p>
-                  <p>2つ目（わり算）：一度に運べる量は、バケツ2つで<strong>10リットル</strong>。35÷10＝3.5。3往復だと30リットルで5リットル足りないので、あと1往復必要。答えは<strong>4往復</strong>。</p>
-                  <p className="text-gray-500 text-xs">カーまでの時間・井戸の深さ・バケツの値段は、この計算には使わない。</p>
-                </div>
-                {guessedAlpaca && (
-                  <div className="rounded-lg p-4 text-center bg-gray-100">
-                    <p className="font-bold text-gray-700">きみが選んだ{guessedAlpaca.name}の「{guessedAlpaca.guess.trips}往復」は、正解の「{correctTrips}往復」とは違っていたね。</p>
-                    <p className="text-xs text-gray-500 mt-2">{guessedAlpaca.gag}</p>
-                  </div>
-                )}
-                <div className="bg-cyan-50 rounded-lg p-4 text-sm text-cyan-800 text-center">
-                  <p>正解は4往復。あまりが出たときは切り上げる、というのが今日のコツだったね。</p>
-                </div>
+          const renderSort = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">🔍</div>
+                <h2 className="text-2xl font-bold text-green-600">やってみよう</h2>
+                <p className="text-gray-600 text-sm mt-1">それぞれの説明が「正しい」か「間違い」か、クリックして選ぼう。</p>
               </div>
-            );
-          };
+              <div className="grid gap-3">
+                {cards.map((card) => {
+                  const answered = answers[card.id] !== undefined;
+                  const isRight = answered && answers[card.id] === card.correct;
+                  return (
+                    <div key={card.id} className={`p-4 rounded-lg border-2 ${answered ? (isRight ? "bg-green-50 border-green-300" : "bg-red-50 border-red-300") : "bg-white border-gray-200"}`}>
+                      <p className="text-sm text-gray-700 mb-3">{card.text}</p>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => pickAnswer(card.id, true)}
+                          disabled={answered}
+                          className={`px-4 py-2 rounded-lg font-bold text-sm border-2 transition ${
+                            answers[card.id] === true ? "bg-green-500 text-white border-green-500" : "bg-white text-green-700 border-green-300 hover:bg-green-50"
+                          } ${answered ? "cursor-not-allowed" : ""}`}
+                        >
+                          ⭕ 正しい
+                        </button>
+                        <button
+                          onClick={() => pickAnswer(card.id, false)}
+                          disabled={answered}
+                          className={`px-4 py-2 rounded-lg font-bold text-sm border-2 transition ${
+                            answers[card.id] === false ? "bg-red-500 text-white border-red-500" : "bg-white text-red-700 border-red-300 hover:bg-red-50"
+                          } ${answered ? "cursor-not-allowed" : ""}`}
+                        >
+                          ✖️ 間違い
+                        </button>
+                      </div>
+                      {answered && (
+                        <p className={`text-xs mt-2 font-bold ${isRight ? "text-green-600" : "text-red-600"}`}>
+                          {isRight ? "正解！" : `惜しい、これは「${card.correct ? "正しい" : "間違い"}」だよ。`}
+                        </p>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              {isSortComplete && (
+                <div className="rounded-lg p-4 text-center bg-yellow-100">
+                  <p className="font-bold text-yellow-700">🎉 {cards.length}問中、{correctCount}問正解！美咲オバーの話をよく聞けていたね。</p>
+                  <button onClick={resetSort} className="mt-3 text-sm font-bold text-green-600 underline">もう一度やってみる</button>
+                </div>
+              )}
+            </div>
+          );
 
           const renderImagine = () => (
             <div className="space-y-6">
@@ -277,15 +314,15 @@
                 <h2 className="text-2xl font-bold text-pink-600">想像してみよう</h2>
               </div>
               <div className="bg-pink-50 rounded-lg p-6">
-                <p className="text-lg">ろ過しても、目に見えないくらい小さいもの（雑菌など）が心配なとき、フィルターにどんな工夫をする？</p>
-                <p className="text-sm text-gray-500 mt-2">（布を重ねる、煮沸する…正解は一つじゃないよ）</p>
+                <p className="text-lg">もし紅芋が台風に弱い作物だったら、沖縄の暮らしはどう変わっていたと思う？きみの考えを自由に書いてみよう。</p>
+                <p className="text-sm text-gray-500 mt-2">（食べるものが減っていたかも・別の作物を大事にしていたかも…正解は一つじゃないよ）</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">きみの考えを書いてみよう（学習記録シートに残せるよ）</label>
                 <textarea
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400 text-sm"
                   rows="3"
-                  placeholder="例：布を2枚重ねて濾す"
+                  placeholder="例：台風のたびに困っていたかもしれない"
                   value={imagineAnswer}
                   onChange={(e) => setImagineAnswer(e.target.value)}
                 ></textarea>
@@ -300,7 +337,7 @@
                 <h2 className="text-2xl font-bold text-teal-600">ふりかえり</h2>
               </div>
               <div className="bg-teal-50 rounded-lg p-6">
-                <p className="font-medium text-teal-800 mb-3">✏️ 知念オジーのやり方、自分でも使えそうだと思った？</p>
+                <p className="font-medium text-teal-800 mb-3">✏️ 美咲オバーが教えてくれたこと、誰かに説明できそうだと思った？</p>
                 <div className="flex flex-wrap gap-2">
                   {["はい", "いいえ", "わからない"].map((opt) => (
                     <button
@@ -320,13 +357,13 @@
                 <textarea
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400 text-sm"
                   rows="3"
-                  placeholder="例：わり算のあまりを切り上げる、というのが分かった"
+                  placeholder="例：紫色が絵の具じゃなくて自然の成分だと知って驚いた"
                   value={memoryAnswer}
                   onChange={(e) => setMemoryAnswer(e.target.value)}
                 ></textarea>
               </div>
               <div className="bg-indigo-50 rounded-lg p-4 text-sm text-indigo-700 text-center">
-                <p>次に水を運ぶときも、あわてず「合計を出す→運べる量で割る→あまりは切り上げる」の順番を思い出してね。</p>
+                <p>次回、知能の窓 ep6（視覚・空間編）では、紅芋の畑や台所の様子を絵や図で見わたすよ。お楽しみに。</p>
               </div>
             </div>
           );
@@ -340,12 +377,11 @@
               <div className="bg-yellow-50 rounded-lg p-4">
                 <p className="text-xs font-bold text-yellow-800 mb-2">学習指導要領との対応</p>
                 <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
-                  <li><strong>算数（4年）</strong>：整数の四則混合計算、あまりを考慮した「切り上げ」の考え方</li>
-                  <li><strong>理科（5年「もののとけ方」）</strong>：ろ過という操作、混合物と水溶液の違いにつながる基礎体験</li>
-                  <li><strong>社会・生活</strong>：沖縄の集落に残る「カー（井戸）」という地域の伝統的な水利用の知恵</li>
+                  <li><strong>理科（4年）</strong>：植物の成長や特徴を観察し、環境との関わりを考える</li>
+                  <li><strong>社会（3年〜）</strong>：地域の特産品（紅芋）が育つ自然条件、伝来の歴史</li>
                 </ul>
-                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓」シリーズです。多重知能（MI）理論に基づき、1つのテーマ（今回は井戸の水運びとろ過）を8つの知能の窓（論理・数学／言語／音楽／身体運動／博物学／視覚空間／内省／対人）から順番に描く構成を予定しています。今回は「論理・数学」の窓から、知念オジーが「あまりの切り上げ」の考え方を教える回でした。</p>
-                <p className="text-xs text-gray-500 mt-1">※ 4アルパカ（ハーリー・サラバンジ・ガンジュー・カーギー）は、「困りごとを持ち込む役」として登場します。3人の予想はランダムに選ばれ、いずれも正解ではありません。カーギーも今回はわり算のあまりを切り上げ忘れるという惜しい間違いをします。「自分たちだけで焦って解こうとすると間違えやすい」「専門家（メンター）に教わって、順序立てて考えると解ける」という体験そのものが、この教材のねらいです。</p>
+                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓」シリーズ ep5です。ep1（論理・数学編）・ep2（言語・語学編）・ep3（音楽・リズム編）に続き、同じ紅芋というテーマを「博物学」の窓から描いています。今回は美咲オバーが主役で、紅芋の原産地（中南米）・紫色の色素（ポリフェノールの一種であるアントシアニン）・台風に強い理由という、一般的に知られている自然科学的な事実のみを扱っています。他の3名のメンターは1〜2行のカメオ出演です。</p>
+                <p className="text-xs text-gray-500 mt-1">※ 4アルパカ（ハーリー・サラバンジ・ガンジュー・カーギー）は「困りごとを持ち込む役」として登場します。3人の発言はランダムに選ばれ、いずれも正しい説明とは異なります。</p>
               </div>
               <div className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-4">
                 <p className="text-xs font-bold text-gray-700 mb-2">🖨️ 学習記録シートを作る（COCOLOプラン等の学習記録用）</p>
@@ -379,33 +415,36 @@
                   <tr><td className="py-1 pr-4 font-bold w-32">学習日</td><td className="py-1">{todayStr}</td></tr>
                   <tr><td className="py-1 pr-4 font-bold">お子さんの名前</td><td className="py-1">{childName || "＿＿＿＿＿＿＿＿＿＿"}</td></tr>
                   <tr><td className="py-1 pr-4 font-bold">教材名</td><td className="py-1">{MATERIAL.title}（{MATERIAL.series}）</td></tr>
-                  <tr><td className="py-1 pr-4 font-bold">対応教科・学年</td><td className="py-1">{MATERIAL.subjectGrade}（社会・生活にも接続）</td></tr>
+                  <tr><td className="py-1 pr-4 font-bold">対応教科・学年</td><td className="py-1">{MATERIAL.subjectGrade}</td></tr>
                 </tbody>
               </table>
               <div className="mb-4 text-xs text-gray-700 bg-gray-50 border border-gray-300 rounded p-3">
                 <p className="font-bold mb-1">学習指導要領との対応</p>
                 <ul className="space-y-0.5 list-disc list-inside">
-                  <li>算数（4年）：整数の四則混合計算、あまりを考慮した「切り上げ」の考え方</li>
-                  <li>理科（5年「もののとけ方」）：ろ過という操作、混合物と水溶液の違いにつながる基礎体験</li>
-                  <li>社会・生活：沖縄の集落に残る「カー（井戸）」という地域の伝統的な水利用の知恵</li>
+                  <li>理科（4年）：植物の成長や特徴を観察し、環境との関わりを考える</li>
+                  <li>社会（3年〜）：地域の特産品（紅芋）が育つ自然条件、伝来の歴史</li>
                 </ul>
               </div>
               <div className="mb-4">
-                <p className="font-bold text-sm mb-1">1. アルパカの困りごとで、一番近いと思った数字</p>
+                <p className="font-bold text-sm mb-1">1. アルパカの困りごとで、一番近いと思った理由</p>
                 <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">
-                  {guessedForSheet ? `${guessedForSheet.name}の「${guessedForSheet.guess.trips}往復」を選びました。` : "（記入なし）"}
+                  {guessedForSheet ? `${guessedForSheet.name}の「${guessedForSheet.claim}」を選びました。` : "（記入なし）"}
                 </p>
               </div>
               <div className="mb-4">
-                <p className="font-bold text-sm mb-1">2. 知念オジーに教わって、実際に確かめた答え</p>
-                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">{correctTrips}往復（洗濯20L＋食器洗い15L＝35L必要、バケツ2つで一度に10L運べる、35÷10＝3.5なので4往復必要）。</p>
+                <p className="font-bold text-sm mb-1">2. 美咲オバーに教わった、正しい理由</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">紫色はアントシアニン（ポリフェノールの一種）という自然の色素。紅芋はもともと中南米が原産で、大航海時代以降に世界へ広まった。台風で葉が傷んでも土の中の芋は無事なことが多く、「命をつなぐ作物」として大切にされてきた。</p>
               </div>
               <div className="mb-4">
-                <p className="font-bold text-sm mb-1">3. 想像する問題への自分の考え</p>
+                <p className="font-bold text-sm mb-1">3. やってみようで正解した数</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">{cards.length}問中、{correctCount}問正解</p>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">4. 想像する問題への自分の考え</p>
                 <p className="text-sm border border-gray-400 rounded p-2 min-h-[3rem]">{imagineAnswer || "（記入なし）"}</p>
               </div>
               <div className="mb-4">
-                <p className="font-bold text-sm mb-1">4. 今日一番心に残ったこと</p>
+                <p className="font-bold text-sm mb-1">5. 今日一番心に残ったこと</p>
                 <p className="text-sm border border-gray-400 rounded p-2 min-h-[3rem]">{memoryAnswer || "（記入なし）"}</p>
               </div>
               <div className="mt-8 pt-4 border-t border-gray-400">
@@ -418,16 +457,16 @@
             intro: renderIntro,
             trouble: renderTrouble,
             mentor: renderMentor,
-            verify: renderVerify,
+            sort: renderSort,
             imagine: renderImagine,
             checkin: renderCheckin,
             parent: renderParent
           };
           const slideTitles = {
-            intro: "💧 はじまりの問い",
+            intro: "🍠 はじまりの問い",
             trouble: "😱 困りごと",
-            mentor: "🧓 メンター登場",
-            verify: "✅ やってみる",
+            mentor: "👵 メンター登場",
+            sort: "🔍 やってみる",
             imagine: "💭 想像する",
             checkin: "🙋 ふりかえり",
             parent: "👪 保護者の方へ"
@@ -436,24 +475,24 @@
           const canGoNext = !(slideIds[currentSlide] === "trouble" && !guess);
 
           return (
-            <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-blue-50">
+            <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50">
               <div className="container mx-auto px-4 py-8 max-w-2xl">
-                <a href="../matrix-library.html" className="inline-flex items-center gap-1 text-sm font-bold text-cyan-600 hover:text-cyan-800 mb-4">
+                <a href="../matrix-library.html" className="inline-flex items-center gap-1 text-sm font-bold text-orange-500 hover:text-orange-700 mb-4">
                   <ChevronLeft className="w-4 h-4" />教材一覧へ戻る
                 </a>
                 <div className="text-center mb-6">
-                  <p className="text-xs font-bold text-indigo-500 mb-1">{MATERIAL.series}</p>
-                  <h1 className="text-2xl md:text-3xl font-bold text-cyan-700">井戸（カー）の水を、お洗濯に使えるように 💧</h1>
-                  <span className="inline-block mt-1 px-2 py-0.5 text-xs font-bold rounded-full bg-cyan-100 text-cyan-700">📚 {MATERIAL.subjectGrade}</span>
+                  <p className="text-xs font-bold text-indigo-500 mb-1">知能の窓 ep5：博物学編</p>
+                  <h1 className="text-2xl md:text-3xl font-bold text-orange-600">紅芋の色、なんで紫なの？ 🍠</h1>
+                  <span className="inline-block mt-1 px-2 py-0.5 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
                 </div>
 
                 <div className="mb-6">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-sm text-gray-600">{slideTitles[slideIds[currentSlide]]}</span>
-                    <span className="text-sm text-gray-600">{currentSlide + 1} / {totalSlides}</span>
+                    <span className="text-sm text-gray-600">{currentSlide + 1} / {total}</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div className="bg-cyan-500 h-2 rounded-full transition-all duration-300" style={{ width: `${((currentSlide + 1) / totalSlides) * 100}%` }}></div>
+                    <div className="bg-orange-500 h-2 rounded-full transition-all duration-300" style={{ width: `${((currentSlide + 1) / total) * 100}%` }}></div>
                   </div>
                 </div>
 
@@ -466,21 +505,21 @@
                     onClick={prevSlide}
                     disabled={currentSlide === 0}
                     className={`flex items-center px-5 py-3 rounded-lg font-medium transition-all ${
-                      currentSlide === 0 ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-cyan-600 text-white hover:bg-cyan-700"
+                      currentSlide === 0 ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-orange-500 text-white hover:bg-orange-600"
                     }`}
                   >
                     <ChevronLeft className="w-5 h-5 mr-1" />まえへ
                   </button>
                   <div className="flex space-x-2">
                     {slideIds.map((id, index) => (
-                      <div key={id} className={`w-2.5 h-2.5 rounded-full ${index === currentSlide ? "bg-cyan-600" : "bg-gray-300"}`} />
+                      <div key={id} className={`w-2.5 h-2.5 rounded-full ${index === currentSlide ? "bg-orange-500" : "bg-gray-300"}`} />
                     ))}
                   </div>
                   <button
                     onClick={nextSlide}
-                    disabled={currentSlide === totalSlides - 1 || !canGoNext}
+                    disabled={currentSlide === total - 1 || !canGoNext}
                     className={`flex items-center px-5 py-3 rounded-lg font-medium transition-all ${
-                      currentSlide === totalSlides - 1 || !canGoNext ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-cyan-600 text-white hover:bg-cyan-700"
+                      currentSlide === total - 1 || !canGoNext ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-orange-500 text-white hover:bg-orange-600"
                     }`}
                   >
                     つぎへ<ChevronRight className="w-5 h-5 ml-1" />
@@ -492,7 +531,7 @@
           );
         };
 
-        createRoot(document.getElementById("root")).render(<WaterFilterPredictionApp />);
+        createRoot(document.getElementById("root")).render(<BeniimoEp5App />);
     </script>
 </body>
 </html>

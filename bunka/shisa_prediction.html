@@ -183,6 +183,7 @@
         // COCOLOプラン（ホームスクーラー等の学習記録）向けの教材メタ情報
         const MATERIAL = {
           title: "シーサーは、あと何体たりない？",
+          series: "知能の窓：博物学・言語編",
           subjectGrade: "算数4年・社会4年"
         };
 
@@ -613,6 +614,7 @@
                   <ChevronLeft className="w-4 h-4" />教材一覧へ戻る
                 </a>
                 <div className="text-center mb-6">
+                  <p className="text-xs font-bold text-indigo-500 mb-1">{MATERIAL.series}</p>
                   <h1 className="text-2xl md:text-3xl font-bold text-orange-600">シーサーは、あと何体たりない？ 🦁</h1>
                   <span className="inline-block mt-1 px-2 py-0.5 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
                 </div>
