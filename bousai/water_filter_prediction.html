@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>井戸（カー）の水を、お洗濯に使えるように 💧</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        .speech-bubble { position: relative; }
+        .speech-bubble::after {
+            content: "";
+            position: absolute;
+            left: -10px;
+            top: 18px;
+            border-width: 8px 10px 8px 0;
+            border-style: solid;
+            border-color: transparent currentColor transparent transparent;
+        }
+        .chara-avatar {
+            width: 56px; height: 56px; border-radius: 9999px; object-fit: cover;
+            border: 2px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.15); background: #fff;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+        const { createRoot } = ReactDOM;
+
+        const ChevronRight = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m9 18 6-6-6-6"/></svg>
+        );
+        const ChevronLeft = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m15 18-6-6 6-6"/></svg>
+        );
+        const Sparkles = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+        );
+
+        // 4キャラクターのデータ（予想・理由・スピンオフ台本）
+        const CHARACTERS = {
+          hari: {
+            name: "ハーリー", color: "red", emoji: "🔥", img: "../img/characters/harly.png",
+            predict: { trips: 3 },
+            line: "井戸から水汲むだけっしょ、オレに任せろ!3往復で余裕っしょ!",
+            reasonAfter: "井戸までの時間とか深さとか、そんなん気にしてたらキリないっしょ!って、勢いでパッと数字だけ言っちゃった。ちゃんと計算するの、忘れてた…",
+            spinoff: [
+              "ハーリー「井戸から水汲むだけっしょ、オレに任せろ!」",
+              "ハーリー「3往復で余裕っしょ!」",
+              "おばあ「ブッブー」",
+              "（効果音：ズコーッ！ハーリー、水の入ったバケツを持ったまま道端ですっ転ぶ）",
+              "おばあ「バケツ2つで一度に10リットル。洗濯20リットル、食器洗い15リットル必要だよ」",
+              "ハーリー「井戸までの時間とか深さとか、そんなん知らなくていいっしょ」（と言いつつメモ）",
+              "ハーリー「4往復!」",
+              "おばあ「正解」",
+              "ハーリー「次はろ過装置もオレが作るっしょ!」"
+            ]
+          },
+          sara: {
+            name: "サラバンジ", color: "blue", emoji: "⚡", img: "../img/characters/sarabanji.png",
+            predict: { trips: 2 },
+            line: "水汲みか…一発で終わらせるさ。2往復!",
+            reasonAfter: "一発勝負で終わらせたくて、じっくり計算せずに勢いで数字を言っちゃった。体力を温存したかったのもある。",
+            spinoff: [
+              "サラバンジ「水汲みか…一発で終わらせるさ」",
+              "サラバンジ「2往復!」",
+              "おばあ「ブッブー」",
+              "（サラバンジ、その場でバタン！と大げさに倒れる→3秒後にムクッと起き上がる）",
+              "おばあ「バケツ2つで10リットル。洗濯20リットル、食器洗い15リットル必要」",
+              "サラバンジ（息切れ）「井戸の深さとか時間とか…勢いで無視する」",
+              "サラバンジ「4往復…当たった…」",
+              "おばあ「一発勝負、成功だね」",
+              "サラバンジ「次のろ過も…一瞬で…たぶん」"
+            ]
+          },
+          gan: {
+            name: "ガンジュー", color: "green", emoji: "😴", img: "../img/characters/ganjuu.png",
+            predict: { trips: 7 },
+            line: "井戸…深いから、こわいです…えっと、深さが3メートルで、歩いて15分だから…7往復、だと思います…",
+            reasonAfter: "井戸の深さや歩く時間を、うっかり計算に混ぜちゃった…実は関係ない数字だったなんて、気づかなかった…",
+            spinoff: [
+              "ガンジュー（モジモジ）「井戸…深いから、こわいです…」",
+              "おばあ「大丈夫、今日は計算するだけだよ」",
+              "ガンジュー「砂と炭、いい匂いです…あ、すみません、先に計算しないと」",
+              "おばあ「バケツ2つで10リットル。洗濯20リットル、食器洗い15リットル必要」",
+              "ガンジュー（あくび）「井戸の深さは…関係ない、です、よね…」",
+              "おばあ「よく気づいたね」",
+              "（ガンジュー、立ったまま本気のいびき→おばあに肩を叩かれてハッと飛び起きる）",
+              "ガンジュー（半分寝ながら）「4往復…です…」",
+              "おばあ「正解」",
+              "ガンジュー「水汲み…疲れました…（あくび）」"
+            ]
+          },
+          kaa: {
+            name: "カーギー", color: "purple", emoji: "💁‍♀️", img: "../img/characters/carggy.png",
+            predict: { trips: 4 },
+            line: "井戸の水は、まず衛生面が心配ですね。…必要な水の合計から、一度に運べる量で割ると、4往復ですね。",
+            reasonAfter: "井戸の深さや時間は、今回は使わない方が確実だと思って、はじめから無視して計算した。安全策が一番。",
+            spinoff: [
+              "カーギー「井戸の水は、まず衛生面が心配ですね」（風で乱れた前髪を鏡もなしに一瞬でピシッと直す）",
+              "カーギー「ろ過する前の水を、直接口に入れたりしていませんか？」",
+              "おばあ「大丈夫だよ」",
+              "おばあ「バケツ2つで10リットル。洗濯20リットル、食器洗い15リットル必要」",
+              "カーギー（きれいにまとめながら）「井戸の深さや時間は、今回は使わない方が確実ですね」",
+              "カーギー「4往復。確実な計算です」",
+              "おばあ「よくできたね」",
+              "カーギー「次はフィルターの層も、きれいに整えて作ります」"
+            ]
+          }
+        };
+        const ALL_KEYS = ["hari", "sara", "gan", "kaa"];
+        const COLOR_MAP = {
+          red: { bg: "bg-red-50", border: "border-red-300", text: "text-red-700", solid: "bg-red-500" },
+          blue: { bg: "bg-blue-50", border: "border-blue-300", text: "text-blue-700", solid: "bg-blue-500" },
+          green: { bg: "bg-green-50", border: "border-green-300", text: "text-green-700", solid: "bg-green-500" },
+          purple: { bg: "bg-purple-50", border: "border-purple-300", text: "text-purple-700", solid: "bg-purple-500" }
+        };
+
+        // キャラ画像。読み込めない場合は絵文字アバターにフォールバックする
+        const Avatar = ({ charKey }) => {
+          const c = CHARACTERS[charKey];
+          const [failed, setFailed] = useState(false);
+          if (failed) {
+            return (
+              <div className={`chara-avatar flex items-center justify-center text-2xl ${COLOR_MAP[c.color].bg}`}>
+                {c.emoji}
+              </div>
+            );
+          }
+          return (
+            <img
+              src={c.img}
+              alt={c.name}
+              className="chara-avatar"
+              onError={() => setFailed(true)}
+            />
+          );
+        };
+
+        function shuffledThree() {
+          const arr = [...ALL_KEYS];
+          for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+          }
+          return arr.slice(0, 3);
+        }
+
+        const WaterFilterPredictionApp = () => {
+          const [threeKeys] = useState(() => shuffledThree());
+          const [bonusKey] = useState(() => {
+            if (Math.random() >= 0.35) return null; // 35%の確率でスピンオフ出現
+            return ALL_KEYS[Math.floor(Math.random() * ALL_KEYS.length)];
+          });
+          const [currentSlide, setCurrentSlide] = useState(0);
+          const [guess, setGuess] = useState(null); // ユーザーが選んだ予想のキャラキー
+
+          const correctKey = "kaa"; // カーギーの予想が唯一の正解（4往復）
+
+          const slideIds = ["intro", "predict", "discuss", "verify", "imagine", "bonus", "parent"];
+          const total = slideIds.length;
+
+          const nextSlide = () => setCurrentSlide((p) => Math.min(p + 1, total - 1));
+          const prevSlide = () => setCurrentSlide((p) => Math.max(p - 1, 0));
+
+          const renderIntro = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-6xl mb-4">💧</div>
+                <h2 className="text-2xl font-bold text-cyan-700">断水が続いています</h2>
+              </div>
+              <div className="bg-cyan-50 border-2 border-cyan-200 rounded-lg p-6 space-y-3">
+                <p>水道からは水が出ません。おばあの家族は、集落に残る<strong>カー（井戸）</strong>まで、バケツで水を汲みに行くことにしました。</p>
+                <p>カーの水は砂や葉っぱが混ざって濁っています。そのままでは洗濯や食器洗いに使えないので、手作りのろ過フィルター（ペットボトルに小石→砂→炭の順に重ねたもの）を通してから使います。</p>
+                <p>バケツを2つ持って一度に<strong>10リットル</strong>運べます。洗濯に<strong>20リットル</strong>、食器洗いに<strong>15リットル</strong>必要だとすると、合計で何往復すればよいでしょう？</p>
+              </div>
+              <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600">
+                <p>気をつけて：カーまでの道のりの時間（歩いて15分）・井戸の深さ（3メートル）・バケツの値段（1個800円）は、この問題を解くのには関係ありません。</p>
+              </div>
+            </div>
+          );
+
+          const renderPredict = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">🤔</div>
+                <h2 className="text-2xl font-bold text-blue-600 mb-2">3人のアルパカが予想したよ</h2>
+                <p className="text-gray-600">きみは、誰の予想が正しいと思う？クリックして選んでみよう。</p>
+              </div>
+              <div className="grid gap-4">
+                {threeKeys.map((key) => {
+                  const c = CHARACTERS[key];
+                  const cc = COLOR_MAP[c.color];
+                  const selected = guess === key;
+                  return (
+                    <div
+                      key={key}
+                      onClick={() => setGuess(key)}
+                      className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${cc.bg} ${
+                        selected ? `${cc.border} ring-2 ring-offset-1 ring-${c.color}-400` : "border-gray-200 hover:border-gray-300"
+                      }`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <Avatar charKey={key} />
+                        <div className={`speech-bubble flex-1 rounded-lg p-3 ${cc.text} bg-white/70`}>
+                          <p className={`font-bold ${cc.text}`}>{c.name}編の予想：{c.predict.trips}往復</p>
+                          <p className="text-sm text-gray-700 mt-1">「{c.line}」</p>
+                        </div>
+                        {selected && (
+                          <div className={`w-7 h-7 rounded-full ${cc.solid} flex items-center justify-center text-white text-sm shrink-0`}>✓</div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              {!guess && <p className="text-center text-sm text-orange-500">↑ どれか1つを選ぶと、次に進めるよ</p>}
+            </div>
+          );
+
+          const renderDiscuss = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">💬</div>
+                <h2 className="text-2xl font-bold text-purple-600">どうしてその数字になったのかな？</h2>
+              </div>
+              <div className="space-y-3">
+                {threeKeys.map((key) => {
+                  const c = CHARACTERS[key];
+                  const cc = COLOR_MAP[c.color];
+                  const isYourPick = guess === key;
+                  return (
+                    <div key={key} className={`flex items-start gap-3 p-3 rounded-lg border-2 ${cc.bg} ${isYourPick ? cc.border : "border-transparent"}`}>
+                      <Avatar charKey={key} />
+                      <div className={`speech-bubble flex-1 rounded-lg p-3 bg-white/70 ${cc.text}`}>
+                        <p className={`font-bold ${cc.text}`}>{c.name}{isYourPick ? "（きみが選んだ予想）" : ""}</p>
+                        <p className="text-sm text-gray-700 mt-1">{c.reasonAfter}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="bg-blue-50 rounded-lg p-4 text-sm text-blue-800">
+                <p>3人の予想、それぞれ理由があったね。次は、おばあが実際に計算して確かめるよ。</p>
+              </div>
+            </div>
+          );
+
+          const renderVerify = () => {
+            const guessedCharacter = guess ? CHARACTERS[guess] : null;
+            const wasCorrect = guess === correctKey;
+            return (
+              <div className="space-y-6">
+                <div className="text-center">
+                  <div className="text-5xl mb-4">✅</div>
+                  <h2 className="text-2xl font-bold text-green-600">確かめてみよう</h2>
+                </div>
+                <div className="bg-green-50 border-2 border-green-200 rounded-lg p-6 space-y-2 text-sm">
+                  <p>必要な水の合計：洗濯<strong>20リットル</strong>＋食器洗い<strong>15リットル</strong>＝<strong>35リットル</strong></p>
+                  <p>一度に運べる量：バケツ2つで<strong>10リットル</strong></p>
+                  <p className="font-bold text-green-700">35÷10＝3.5。3往復だと30リットルで5リットル足りないので、あと1往復必要。答えは<strong>4往復</strong>。</p>
+                  <p className="text-gray-500 text-xs">カーまでの時間・井戸の深さ・バケツの値段は、この計算には使わない。</p>
+                </div>
+                {guessedCharacter && (
+                  <div className={`rounded-lg p-4 text-center ${wasCorrect ? "bg-yellow-100" : "bg-gray-100"}`}>
+                    {wasCorrect ? (
+                      <p className="font-bold text-yellow-700">🎉 きみが選んだ{guessedCharacter.name}編の予想、正解だった！</p>
+                    ) : (
+                      <p className="font-bold text-gray-700">きみが選んだ{guessedCharacter.name}編の予想は、正解の「4往復」とは違っていたね。どこで数字がズレたか、見直してみよう。</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          };
+
+          const renderImagine = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">💭</div>
+                <h2 className="text-2xl font-bold text-pink-600">想像してみよう</h2>
+              </div>
+              <div className="bg-pink-50 rounded-lg p-6">
+                <p className="text-lg">ろ過しても、目に見えないくらい小さいもの（雑菌など）が心配なとき、フィルターにどんな工夫をする？</p>
+                <p className="text-sm text-gray-500 mt-2">（布を重ねる、煮沸する…正解は一つじゃないよ）</p>
+              </div>
+            </div>
+          );
+
+          const renderBonus = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">{bonusKey ? "🎬" : "🌤️"}</div>
+                <h2 className="text-2xl font-bold text-indigo-600 flex items-center justify-center gap-2">
+                  {bonusKey ? <>ひみつのスピンオフ <Sparkles className="w-6 h-6 text-yellow-400" /></> : "今日はスピンオフはお休み"}
+                </h2>
+              </div>
+              {bonusKey ? (
+                <div className={`rounded-lg p-4 space-y-2 text-sm ${COLOR_MAP[CHARACTERS[bonusKey].color].bg}`}>
+                  <div className="flex items-center gap-3 mb-2">
+                    <Avatar charKey={bonusKey} />
+                    <p className={`font-bold ${COLOR_MAP[CHARACTERS[bonusKey].color].text}`}>
+                      {CHARACTERS[bonusKey].name}編フルストーリー（レア出現）
+                    </p>
+                  </div>
+                  {CHARACTERS[bonusKey].spinoff.map((line, i) => (
+                    <p key={i} className={line.startsWith("（") ? "text-xs text-gray-400 italic" : ""}>{line}</p>
+                  ))}
+                </div>
+              ) : (
+                <div className="bg-gray-100 rounded-lg p-6 text-center text-gray-500">
+                  <p>スピンオフは、たまにしか出てこないよ。また今度チェックしてみてね。</p>
+                </div>
+              )}
+            </div>
+          );
+
+          const renderParent = () => (
+            <div className="space-y-4">
+              <div className="text-center">
+                <div className="text-5xl mb-4">👪</div>
+                <h2 className="text-2xl font-bold text-yellow-700">保護者・支援者の方へ</h2>
+              </div>
+              <div className="bg-yellow-50 rounded-lg p-4">
+                <p className="text-xs font-bold text-yellow-800 mb-2">学習指導要領との対応</p>
+                <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
+                  <li><strong>算数（4年）</strong>：整数の四則混合計算、あまりを考慮した「切り上げ」の考え方</li>
+                  <li><strong>理科（5年「もののとけ方」）</strong>：ろ過という操作、混合物と水溶液の違いにつながる基礎体験</li>
+                  <li><strong>社会・生活</strong>：沖縄の集落に残る「カー（井戸）」という地域の伝統的な水利用の知恵</li>
+                </ul>
+                <p className="text-xs text-gray-500 mt-2">※ この教材は「仮説実験授業」の型（予想する→理由を話し合う→確かめる）を採用しています。3人のアルパカの予想はランダムに選ばれ、正解が含まれないこともあります。「みんなの予想が外れることもある」という体験も学びの一部です。実際にペットボトルで簡易フィルターを作る親子体験にも発展できます。</p>
+              </div>
+            </div>
+          );
+
+          const slideRenderers = {
+            intro: renderIntro,
+            predict: renderPredict,
+            discuss: renderDiscuss,
+            verify: renderVerify,
+            imagine: renderImagine,
+            bonus: renderBonus,
+            parent: renderParent
+          };
+          const slideTitles = {
+            intro: "💧 はじまり",
+            predict: "🤔 予想する",
+            discuss: "💬 話し合う",
+            verify: "✅ 確かめる",
+            imagine: "💭 想像する",
+            bonus: bonusKey ? "🎬 スピンオフ" : "🌤️ スピンオフ",
+            parent: "👪 保護者の方へ"
+          };
+
+          const canGoNext = !(slideIds[currentSlide] === "predict" && !guess);
+
+          return (
+            <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-blue-50">
+              <div className="container mx-auto px-4 py-8 max-w-2xl">
+                <div className="text-center mb-6">
+                  <h1 className="text-2xl md:text-3xl font-bold text-cyan-700">井戸（カー）の水を、お洗濯に使えるように 💧</h1>
+                </div>
+
+                <div className="mb-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm text-gray-600">{slideTitles[slideIds[currentSlide]]}</span>
+                    <span className="text-sm text-gray-600">{currentSlide + 1} / {total}</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="bg-cyan-500 h-2 rounded-full transition-all duration-300" style={{ width: `${((currentSlide + 1) / total) * 100}%` }}></div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-6 min-h-96">
+                  {slideRenderers[slideIds[currentSlide]]()}
+                </div>
+
+                <div className="flex justify-between items-center">
+                  <button
+                    onClick={prevSlide}
+                    disabled={currentSlide === 0}
+                    className={`flex items-center px-5 py-3 rounded-lg font-medium transition-all ${
+                      currentSlide === 0 ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-cyan-600 text-white hover:bg-cyan-700"
+                    }`}
+                  >
+                    <ChevronLeft className="w-5 h-5 mr-1" />まえへ
+                  </button>
+                  <div className="flex space-x-2">
+                    {slideIds.map((id, index) => (
+                      <div key={id} className={`w-2.5 h-2.5 rounded-full ${index === currentSlide ? "bg-cyan-600" : "bg-gray-300"}`} />
+                    ))}
+                  </div>
+                  <button
+                    onClick={nextSlide}
+                    disabled={currentSlide === total - 1 || !canGoNext}
+                    className={`flex items-center px-5 py-3 rounded-lg font-medium transition-all ${
+                      currentSlide === total - 1 || !canGoNext ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-cyan-600 text-white hover:bg-cyan-700"
+                    }`}
+                  >
+                    つぎへ<ChevronRight className="w-5 h-5 ml-1" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        };
+
+        createRoot(document.getElementById("root")).render(<WaterFilterPredictionApp />);
+    </script>
+</body>
+</html>
