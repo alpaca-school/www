@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>台風がきたら、紅芋はあと何個いる？ 🌀</title>
+    <title>シーサーは、あと何体たりない？ 🦁</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -54,70 +54,67 @@
         const CHARACTERS = {
           hari: {
             name: "ハーリー", color: "red", emoji: "🔥", img: "../img/characters/harly.png",
-            predict: { taro: 5, water: 8 },
-            line: "台風?停電?そんなん平気っしょ、オレが何とかしてやるさ!紅芋はあと5個、水はあと8本で足りるっしょ!",
-            reasonAfter: "気圧とか台風の名前とか、そんなん気にしてたらキリないっしょ!って、勢いでパッと数字だけ言っちゃった。ちゃんと計算するの、忘れてた…",
+            predict: { count: 32 },
+            line: "シーサー作りっしょ?オレに任せろ!今ある分とか気にしてたらキリないっしょ、32体作れば安心っしょ!",
+            reasonAfter: "工房にもう完成品があること、うっかり忘れてた…全部新しく作るつもりで、勢いで数字言っちゃった。",
             spinoff: [
-              "ハーリー「台風?停電?そんなん平気っしょ、オレが何とかしてやるさ!」",
-              "ハーリー「紅芋はあと5個で足りるっしょ!」",
+              "ハーリー「シーサー作りっしょ?オレに任せろ!」",
+              "ハーリー「32体作れば安心っしょ!」",
               "おばあ「ブッブー」",
-              "（効果音：ズコーッ！ハーリー、勢いよく畳の上ですっ転ぶ）",
-              "おばあ「7日分は紅芋28個・水28本必要。今は紅芋12個、水10本だよ」",
-              "ハーリー「台風の名前とか気圧とか、そんなん知らなくていいっしょ」（と言いつつメモ）",
-              "ハーリー「紅芋はあと16個!水はあと18本!」",
+              "（効果音：ズコーッ！ハーリー、粘土のかたまりを持ったまま作業台の前ですっ転ぶ）",
+              "おばあ「棚にはもうオス9体、メス14体、完成してるんだよ」",
+              "ハーリー「あ…そうか、それ引かなきゃダメか」（と言いつつメモ）",
+              "ハーリー「9体!」",
               "おばあ「正解」",
-              "ハーリー「次の台風はもっと余裕っしょ!」"
+              "ハーリー「次は窯の火加減もオレが見るっしょ!」"
             ]
           },
           sara: {
             name: "サラバンジ", color: "blue", emoji: "⚡", img: "../img/characters/sarabanji.png",
-            predict: { taro: 10, water: 12 },
-            line: "台風か…一発で計算して終わらせるさ。紅芋はあと10個、水はあと12本!",
-            reasonAfter: "一発勝負で終わらせたくて、じっくり計算せずに勢いで数字を言っちゃった。体力を温存したかったのもある。",
+            predict: { count: 7 },
+            line: "計算か…一発で終わらせるさ。16(軒)から9(オスの数)引いて…7体!",
+            reasonAfter: "軒数と体数、ごっちゃにして引き算しちゃった。一発勝負にこだわって、じっくり考えなかった。",
             spinoff: [
-              "サラバンジ「台風か…一発で計算して終わらせるさ」",
-              "サラバンジ「紅芋はあと10個!」",
+              "サラバンジ「計算か…一発で終わらせるさ」",
+              "サラバンジ「16から9引いて…7体!」",
               "おばあ「ブッブー」",
               "（サラバンジ、その場でバタン！と大げさに倒れる→3秒後にムクッと起き上がる）",
-              "おばあ「7日分は紅芋28個・水28本。今は紅芋12個、水10本」",
-              "サラバンジ（息切れ）「気圧とか名前とか…勢いで無視する」",
-              "サラバンジ「紅芋あと16個…水あと18本…当たった…」",
-              "おばあ「一発勝負、成功だね」",
-              "サラバンジ「次の台風も…一瞬で…たぶん」"
+              "おばあ「軒の数と、シーサーの体数は別だよ。16軒×2体で、まず全部で何体必要か考えてごらん」",
+              "サラバンジ（息切れ）「32体…そこから23体引いて…9体…当たった…」",
+              "おばあ「一発勝負、今度は成功だね」",
+              "サラバンジ「次の窯出しも…一瞬で…たぶん」"
             ]
           },
           gan: {
             name: "ガンジュー", color: "green", emoji: "😴", img: "../img/characters/ganjuu.png",
-            predict: { taro: 24, water: 26 },
-            line: "台風…停電…こわいです…えっと、気圧が960で、台風の名前がタイフー1号で…紅芋はあと24個、水はあと26本、だと思います…",
-            reasonAfter: "気圧の960とか台風の名前とか、数字っぽいものを全部使って計算しちゃった…実は関係ない数字だったなんて、気づかなかった…",
+            predict: { count: 14 },
+            line: "さっきの獅子の話、まだ引きずってて…獅子は百獣の王だから、きっと多めにいる気がして…えっと、メスが14体あるから、それと同じ数で…14体、だと思います…",
+            reasonAfter: "獅子（本当はシーサー）は特別に多く必要な気がして、なんとなく在庫の数字と同じ数を答えちゃった…ちゃんと引き算するの、忘れてた…",
             spinoff: [
-              "ガンジュー（モジモジ）「台風…停電…こわいです…」",
+              "ガンジュー（モジモジ）「粘土のにおい、落ち着きます…」",
               "おばあ「大丈夫、今日は計算するだけだよ」",
-              "ガンジュー「紅芋、おいしそうです…あ、すみません、先に数えないと」",
-              "おばあ「7日分は紅芋28個・水28本。今は紅芋12個、水10本」",
-              "ガンジュー（あくび）「気圧の数字は…関係ない、です、よね…」",
-              "おばあ「よく気づいたね」",
-              "（ガンジュー、立ったまま本気のいびき→おばあに肩を叩かれてハッと飛び起きる）",
-              "ガンジュー（半分寝ながら）「紅芋あと16個…水あと18本…です…」",
+              "ガンジュー「獅子は百獣の王ですから…多めに…えっと、14体だと思います」",
+              "おばあ「ブッブー。獅子じゃなくてシーサーだよ。まず全部で何体必要か、それから今ある数を引くんだよ」",
+              "ガンジュー（あくび）「32体から…23体引いて…」",
+              "（ガンジュー、正解を答える直前に立ったまま本気のいびき→おばあに肩を叩かれてハッと飛び起きる）",
+              "ガンジュー（半分寝ながら）「9体…です…」",
               "おばあ「正解」",
-              "ガンジュー「紅芋…先に食べたいです…（あくび）」"
+              "ガンジュー「粘土こねるの…疲れました…（あくび）」"
             ]
           },
           kaa: {
             name: "カーギー", color: "purple", emoji: "💁‍♀️", img: "../img/characters/carggy.png",
-            predict: { taro: 16, water: 18 },
-            line: "台風の前は、髪が湿気で広がるので気をつけないと。…必要な数から今ある数を引くと、紅芋はあと16個、水はあと18本ですね。",
-            reasonAfter: "台風の名前や気圧は、今回は使わない方が確実だと思って、はじめから無視して計算した。安全策が一番。",
+            predict: { count: 9 },
+            line: "粘土の重さや焼く日数は、今回は関係なさそうですね。…必要な数から、今ある数を引くと、9体ですね。",
+            reasonAfter: "16軒×2体で32体必要、今ある23体を引けば9体。焼成日数や粘土の重さは、はじめから使わない方が確実だと思った。",
             spinoff: [
-              "カーギー「台風の前は、髪が湿気で広がるので気をつけないと」（風で乱れた前髪を鏡もなしに一瞬でピシッと直す）",
-              "カーギー「停電中の水と食べ物、傷んでいませんか？衛生的に保管されていますか？」",
+              "カーギー「粘土の重さや、窯で焼く日数は、今回は使わない方が確実ですね」（登場直後、風で乱れた前髪を鏡もなしに一瞬でピシッと直す）",
+              "カーギー「まず全部で何体必要か、それから今ある数を引きます」",
               "おばあ「大丈夫だよ」",
-              "おばあ「7日分は紅芋28個・水28本。今は紅芋12個、水10本」",
-              "カーギー（きれいにまとめながら）「気圧や名前は、今回は使わない方が確実ですね」",
-              "カーギー「紅芋あと16個、水あと18本。確実な計算です」",
+              "おばあ「棚にはオス9体、メス14体、完成してるんだよ」",
+              "カーギー（きれいにまとめながら）「16軒×2体で32体。32－23で、9体ですね」",
               "おばあ「よくできたね」",
-              "カーギー「次の台風も、備えを整えて待ちます」"
+              "カーギー「次は阿形と吽形の表情も、きれいに整えて作ります」"
             ]
           }
         };
@@ -161,24 +158,40 @@
 
         // COCOLOプラン（ホームスクーラー等の学習記録）向けの教材メタ情報
         const MATERIAL = {
-          title: "台風がきたら、紅芋はあと何個いる？",
+          title: "シーサーは、あと何体たりない？",
           subjectGrade: "算数4年・社会4年"
         };
 
-        const TyphoonPredictionApp = () => {
+        // ミルクボーイ風の掛け合い（ボケ→違う候補→やっぱり違う→正解に着地）
+        // ここで出る「獅子・こま犬」は、後の計算パートのトラップ情報（ガンジューの誤答理由・気をつけての注記）と接続している
+        const GAG_LINES = [
+          { speaker: "hari", text: "なんか、村の入口の石の生き物が壊れたらしいっしょ！大変っしょ！" },
+          { speaker: "sara", text: "ああ、あれか。名前なんだっけ…獅子？" },
+          { speaker: "hari", text: "獅子じゃないっしょ！たしかにライオンっぽい顔してるけど、獅子じゃないっしょ！" },
+          { speaker: "sara", text: "じゃあ虎？" },
+          { speaker: "hari", text: "虎でもないっしょ！けど気持ちはわかるっしょ、あの牙とかそんな感じだから！" },
+          { speaker: "sara", text: "あ、わかった、こま犬！" },
+          { speaker: "hari", text: "こま犬でもないっしょ！似てるけど違うっしょ！こま犬は神社にいるやつっしょ！これは家の屋根とか村の入口にいて、悪いもの追い払って、福を呼び込む、あの…" },
+          { speaker: "sara", text: "シーサーやないかい！" },
+          { speaker: "hari", text: "それっしょ！！" },
+        ];
+
+        const ShisaPredictionApp = () => {
           const [threeKeys] = useState(() => shuffledThree());
           const [bonusKey] = useState(() => {
             if (Math.random() >= 0.35) return null; // 35%の確率でスピンオフ出現
             return ALL_KEYS[Math.floor(Math.random() * ALL_KEYS.length)];
           });
           const [currentSlide, setCurrentSlide] = useState(0);
-          const [guess, setGuess] = useState(null); // ユーザーが選んだ予想のキャラキー
+          const [guess, setGuess] = useState(null);
           const [imagineAnswer, setImagineAnswer] = useState("");
           const [childName, setChildName] = useState("");
+          const [wantOwn, setWantOwn] = useState(null); // 「自分の家にも置いてみたい？」はい・いいえ・わからない
+          const [surpriseAnswer, setSurpriseAnswer] = useState("");
 
-          const correctKey = "kaa"; // カーギーの予想が唯一の正解（16個・18本）
+          const correctKey = "kaa"; // カーギーの予想が唯一の正解（あと9体）
 
-          const slideIds = ["intro", "predict", "discuss", "verify", "imagine", "bonus", "parent"];
+          const slideIds = ["intro", "know", "situation", "predict", "discuss", "verify", "imagine", "checkin", "bonus", "parent"];
           const total = slideIds.length;
 
           const nextSlide = () => setCurrentSlide((p) => Math.min(p + 1, total - 1));
@@ -187,18 +200,63 @@
           const renderIntro = () => (
             <div className="space-y-6">
               <div className="text-center">
-                <div className="text-6xl mb-4">🌀</div>
-                <h2 className="text-2xl font-bold text-orange-600">大型台風が接近中</h2>
+                <div className="text-6xl mb-4">🦁</div>
+                <h2 className="text-2xl font-bold text-orange-600">村の入り口のシーサー像が、割れていた</h2>
                 <span className="inline-block mt-2 px-3 py-1 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
               </div>
               <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 space-y-3">
-                <p>すでに停電していて、船も1週間来ない見込みという放送が流れました。おばあの家は4人家族。</p>
-                <p>今、家には紅芋が<strong>12個</strong>、2リットルの水のペットボトルが<strong>10本</strong>あります。</p>
-                <p>家族4人が、1人1日1個ずつ紅芋を食べて、1日2リットルずつ水を飲むとすると、7日間で紅芋は<strong>28個</strong>、水は<strong>28本</strong>必要です。</p>
-                <p className="font-bold text-orange-700">今ある数から、あと何個・何本足りないでしょう？</p>
+                <p>朝、工房のおばあが表に出ると、村の入り口に立つ大きな共同のシーサー像の顔が、大きくひび割れていました。「これは、村を守る力が弱くなっている証拠かもしれない」と、村のみんなが心配しはじめました。</p>
+                <p><strong>お祭りまで、あと5日</strong>。村を守る力を取り戻そうと、近くの家々から「うちにも新しい一対を置きたい」と、急な注文が次々に来ました。</p>
+                <p className="font-bold text-orange-700">そもそも、シーサーって何だろう？　まずは、そこから知っていこう。</p>
+              </div>
+            </div>
+          );
+
+          const renderKnow = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-4xl mb-2">📖</div>
+                <h2 className="text-xl font-bold text-red-600">ステップ1：シーサーを知ろう</h2>
+                <p className="text-gray-600 text-sm mt-1">村がざわつく中、ハーリーとサラバンジがモメていた。</p>
+              </div>
+              <div className="space-y-3">
+                {GAG_LINES.map((l, i) => {
+                  const c = CHARACTERS[l.speaker];
+                  const cc = COLOR_MAP[c.color];
+                  const isRight = l.speaker === "sara";
+                  return (
+                    <div key={i} className={`flex items-start gap-3 ${isRight ? "flex-row-reverse text-right" : ""}`}>
+                      <Avatar charKey={l.speaker} />
+                      <div className={`speech-bubble flex-1 rounded-lg p-3 bg-white/70 ${cc.text}`}>
+                        <p className="text-sm">{l.text}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="bg-red-50 rounded-lg p-4 text-sm text-red-700 text-center">
+                <p>そう、これは「シーサー」。じゃあ、シーサーってどこから来て、なぜ一対で置かれるんだろう？</p>
+              </div>
+              <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 space-y-3 text-sm">
+                <p><strong>由来</strong>：もともとエジプトやインドで「守り神」として信じられていたライオンの像が、シルクロードを通って中国に伝わり「獅子（しし）」に。それがさらに沖縄へ伝わり、「シーサー」と呼ばれるようになった、と言われています。</p>
+                <p><strong>一対で置かれる理由</strong>：沖縄の家の屋根や門には、シーサーが一対（2体で1組）で置かれます。向かって右が口を開けた「阿形（あぎょう）」でオス、左が口を閉じた「吽形（うんぎょう）」でメス。オスは悪いものを追い払い、メスは福を家の中にとどめる役目、と言い伝えられています。</p>
+                <p><strong>置かれる場所</strong>：家の屋根の上、門柱、村の入り口など、家や村を守りたい場所に置かれます。</p>
+              </div>
+            </div>
+          );
+
+          const renderSituation = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-4xl mb-2">🧮</div>
+                <h2 className="text-xl font-bold text-orange-600">ステップ2：状況を整理しよう</h2>
+              </div>
+              <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 space-y-3">
+                <p>近くの<strong>16軒</strong>の家から「うちにも一対を置きたい」と注文が来ました。1軒につきオス1体・メス1体、合わせて<strong>2体</strong>が必要です。</p>
+                <p>今、工房の棚には、完成したオスが<strong>9体</strong>、メスが<strong>14体</strong>並んでいます。お祭りに間に合わせるには、あと何体、急いで焼けばよいでしょう？</p>
               </div>
               <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600">
-                <p>気をつけて：台風の名前（タイフー1号）・中心気圧（960ヘクトパスカル）・乾パンの値段（1箱600円）は、この問題を解くのには関係ありません。</p>
+                <p>気をつけて：粘土の重さ（1体800g）・窯で焼く日数（3日）・シーサーの色、それに「神社の狛犬も一対（2体）で奉納される」という話は、どれもこの問題を解くのには関係ありません。</p>
               </div>
             </div>
           );
@@ -207,8 +265,9 @@
             <div className="space-y-6">
               <div className="text-center">
                 <div className="text-5xl mb-4">🤔</div>
-                <h2 className="text-2xl font-bold text-blue-600 mb-2">3人のアルパカが予想したよ</h2>
-                <p className="text-gray-600">きみは、誰の予想が正しいと思う？クリックして選んでみよう。</p>
+                <h2 className="text-xl font-bold text-blue-600 mb-1">ステップ3：予想して、確かめよう</h2>
+                <p className="text-lg font-bold text-blue-600 mb-2">時間がない！3人のアルパカが急いで予想したよ</p>
+                <p className="text-gray-600">お祭りまで5日しかない。きみは、誰の予想が正しいと思う？クリックして選んでみよう。</p>
               </div>
               <div className="grid gap-4">
                 {threeKeys.map((key) => {
@@ -226,7 +285,7 @@
                       <div className="flex items-start gap-3">
                         <Avatar charKey={key} />
                         <div className={`speech-bubble flex-1 rounded-lg p-3 ${cc.text} bg-white/70`}>
-                          <p className={`font-bold ${cc.text}`}>{c.name}編の予想：紅芋あと{c.predict.taro}個・水あと{c.predict.water}本</p>
+                          <p className={`font-bold ${cc.text}`}>{c.name}編の予想：あと{c.predict.count}体</p>
                           <p className="text-sm text-gray-700 mt-1">「{c.line}」</p>
                         </div>
                         {selected && (
@@ -279,20 +338,23 @@
                   <h2 className="text-2xl font-bold text-green-600">確かめてみよう</h2>
                 </div>
                 <div className="bg-green-50 border-2 border-green-200 rounded-lg p-6 space-y-2 text-sm">
-                  <p>7日間で必要な数：紅芋 4人×1個×7日＝<strong>28個</strong>、水 4人×2Lずつ×7日＝<strong>28本</strong></p>
-                  <p>今ある数：紅芋<strong>12個</strong>、水<strong>10本</strong></p>
-                  <p className="font-bold text-green-700">足りない数：紅芋 28－12＝あと16個／水 28－10＝あと18本</p>
-                  <p className="text-gray-500 text-xs">台風の名前・気圧・乾パンの値段は、この計算には使わない。</p>
+                  <p>全部で必要な数：16軒×2体（オス1・メス1）＝<strong>32体</strong></p>
+                  <p>今ある数：オス9体＋メス14体＝<strong>23体</strong></p>
+                  <p className="font-bold text-green-700">足りない数：32－23＝あと9体</p>
+                  <p className="text-gray-500 text-xs">粘土の重さ・焼く日数・シーサーの色は、この計算には使わない。</p>
                 </div>
                 {guessedCharacter && (
                   <div className={`rounded-lg p-4 text-center ${wasCorrect ? "bg-yellow-100" : "bg-gray-100"}`}>
                     {wasCorrect ? (
                       <p className="font-bold text-yellow-700">🎉 きみが選んだ{guessedCharacter.name}編の予想、正解だった！</p>
                     ) : (
-                      <p className="font-bold text-gray-700">きみが選んだ{guessedCharacter.name}編の予想は、正解の「あと16個・18本」とは違っていたね。どこで数字がズレたか、見直してみよう。</p>
+                      <p className="font-bold text-gray-700">きみが選んだ{guessedCharacter.name}編の予想は、正解の「あと9体」とは違っていたね。どこで数字がズレたか、見直してみよう。</p>
                     )}
                   </div>
                 )}
+                <div className="bg-orange-50 rounded-lg p-4 text-sm text-orange-800">
+                  <p>9体、あと5日で焼き上げれば、お祭りまでに16軒すべてに新しいシーサーが届く。村の入り口の像も、お祭りの日までに直すことになった。村の守りは、間に合いそうだ。</p>
+                </div>
               </div>
             );
           };
@@ -304,17 +366,52 @@
                 <h2 className="text-2xl font-bold text-pink-600">想像してみよう</h2>
               </div>
               <div className="bg-pink-50 rounded-lg p-6">
-                <p className="text-lg">停電して冷蔵庫が使えないとき、水や食べ物をどうやって確保する？</p>
-                <p className="text-sm text-gray-500 mt-2">（近所と分け合う、日持ちする紅芋を先に食べる…正解は一つじゃないよ）</p>
+                <p className="text-lg">もし、きみの家の門にシーサーを一対置くとしたら、悪いものを追い払うオス（阿形）と、福を家の中にとどめるメス（吽形）、それぞれどんな表情にしたい？</p>
+                <p className="text-sm text-gray-500 mt-2">（怖い顔・やさしい顔・笑った顔…正解は一つじゃないよ）</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">きみの考えを書いてみよう（学習記録シートに残せるよ）</label>
                 <textarea
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400 text-sm"
                   rows="3"
-                  placeholder="例：近所のおばあちゃんに氷を分けてもらう"
+                  placeholder="例：オスは強そうな怖い顔、メスはにっこり笑った顔にしたい"
                   value={imagineAnswer}
                   onChange={(e) => setImagineAnswer(e.target.value)}
+                ></textarea>
+              </div>
+            </div>
+          );
+
+          const renderCheckin = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">🙋</div>
+                <h2 className="text-2xl font-bold text-teal-600">ふりかえり</h2>
+              </div>
+              <div className="bg-teal-50 rounded-lg p-6">
+                <p className="font-medium text-teal-800 mb-3">✏️ 自分の家にもシーサーを置いてみたいと思った？</p>
+                <div className="flex flex-wrap gap-2">
+                  {["はい", "いいえ", "わからない"].map((opt) => (
+                    <button
+                      key={opt}
+                      onClick={() => setWantOwn(opt)}
+                      className={`px-4 py-2 rounded-lg font-bold border-2 transition ${
+                        wantOwn === opt ? "bg-teal-500 text-white border-teal-500" : "bg-white text-teal-700 border-teal-200"
+                      }`}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">✏️ 今日知ったことで、一番びっくりしたことを書いてみよう</label>
+                <textarea
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400 text-sm"
+                  rows="3"
+                  placeholder="例：シーサーがエジプトのライオンから来てるなんて知らなかった"
+                  value={surpriseAnswer}
+                  onChange={(e) => setSurpriseAnswer(e.target.value)}
                 ></textarea>
               </div>
             </div>
@@ -358,10 +455,12 @@
                 <p className="text-xs font-bold text-yellow-800 mb-2">学習指導要領との対応</p>
                 <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
                   <li><strong>算数（4年）</strong>：整数の四則混合計算、大きい数の処理、必要量から所持量を引く「不足分」の考え方</li>
-                  <li><strong>社会（4年〜）</strong>：自然災害から人々を守る活動、地域の防災・備蓄の工夫</li>
-                  <li><strong>生活・家庭科</strong>：非常時の食料・水の管理という実生活に直結する内容</li>
+                  <li><strong>社会（4年〜）</strong>：地域の伝統工芸・郷土文化、暮らしと信仰の結びつき</li>
+                  <li><strong>道徳・特別活動</strong>：異なる役割を持つもの同士が対になって家を守る、という考え方への気づき</li>
                 </ul>
                 <p className="text-xs text-gray-500 mt-2">※ この教材は「仮説実験授業」の型（予想する→理由を話し合う→確かめる）を採用しています。3人のアルパカの予想はランダムに選ばれ、正解が含まれないこともあります。「みんなの予想が外れることもある」という体験も学びの一部です。</p>
+                <p className="text-xs text-gray-500 mt-1">※ 阿形・吽形とオス・メスの対応や役割の言い伝えは、地域や工房によって解釈が異なる場合があります。本教材では代表的な言い伝えの一つを採用しています。</p>
+                <p className="text-xs text-gray-500 mt-1">※ 「村の共同シーサー像が割れていた」という導入部分は、問題に緊張感を持たせるための創作です。実在の出来事ではありません。</p>
               </div>
               <div className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-4">
                 <p className="text-xs font-bold text-gray-700 mb-2">🖨️ 学習記録シートを作る（COCOLOプラン等の学習記録用）</p>
@@ -395,26 +494,26 @@
                   <tr><td className="py-1 pr-4 font-bold w-32">学習日</td><td className="py-1">{todayStr}</td></tr>
                   <tr><td className="py-1 pr-4 font-bold">お子さんの名前</td><td className="py-1">{childName || "＿＿＿＿＿＿＿＿＿＿"}</td></tr>
                   <tr><td className="py-1 pr-4 font-bold">教材名</td><td className="py-1">{MATERIAL.title}</td></tr>
-                  <tr><td className="py-1 pr-4 font-bold">対応教科・学年</td><td className="py-1">{MATERIAL.subjectGrade}（家庭科・国語にも接続）</td></tr>
+                  <tr><td className="py-1 pr-4 font-bold">対応教科・学年</td><td className="py-1">{MATERIAL.subjectGrade}（道徳・特別活動にも接続）</td></tr>
                 </tbody>
               </table>
               <div className="mb-4 text-xs text-gray-700 bg-gray-50 border border-gray-300 rounded p-3">
                 <p className="font-bold mb-1">学習指導要領との対応</p>
                 <ul className="space-y-0.5 list-disc list-inside">
                   <li>算数（4年）：整数の四則混合計算、大きい数の処理、必要量から所持量を引く「不足分」の考え方</li>
-                  <li>社会（4年〜）：自然災害から人々を守る活動、地域の防災・備蓄の工夫</li>
-                  <li>生活・家庭科：非常時の食料・水の管理という実生活に直結する内容</li>
+                  <li>社会（4年〜）：地域の伝統工芸・郷土文化、暮らしと信仰の結びつき</li>
+                  <li>道徳・特別活動：異なる役割を持つもの同士が対になって家を守る、という考え方への気づき</li>
                 </ul>
               </div>
               <div className="mb-4">
                 <p className="font-bold text-sm mb-1">1. 自分の予想</p>
                 <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">
-                  {guessedForSheet ? `${guessedForSheet.name}編の予想（紅芋あと${guessedForSheet.predict.taro}個・水あと${guessedForSheet.predict.water}本）を選びました。` : "（記入なし）"}
+                  {guessedForSheet ? `${guessedForSheet.name}編の予想（あと${guessedForSheet.predict.count}体）を選びました。` : "（記入なし）"}
                 </p>
               </div>
               <div className="mb-4">
                 <p className="font-bold text-sm mb-1">2. 実際に確かめた答え</p>
-                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">紅芋はあと16個、水はあと18本足りない（28個・28本必要 − 今ある12個・10本）。{guessedForSheet && (guess === correctKey ? " 自分の予想と一致した。" : " 自分の予想とは異なっていた。")}</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">あと9体足りない（16軒×2体＝32体必要、今ある9体＋14体＝23体を引く）。{guessedForSheet && (guess === correctKey ? " 自分の予想と一致した。" : " 自分の予想とは異なっていた。")}</p>
               </div>
               <div className="mb-4">
                 <p className="font-bold text-sm mb-1">3. 想像する問題への自分の考え</p>
@@ -428,19 +527,25 @@
 
           const slideRenderers = {
             intro: renderIntro,
+            know: renderKnow,
+            situation: renderSituation,
             predict: renderPredict,
             discuss: renderDiscuss,
             verify: renderVerify,
             imagine: renderImagine,
+            checkin: renderCheckin,
             bonus: renderBonus,
             parent: renderParent
           };
           const slideTitles = {
-            intro: "🌀 はじまり",
-            predict: "🤔 予想する",
+            intro: "🦁 はじまりの問い",
+            know: "📖 ステップ1：知る",
+            situation: "🧮 ステップ2：整理する",
+            predict: "🤔 ステップ3：予想する",
             discuss: "💬 話し合う",
             verify: "✅ 確かめる",
             imagine: "💭 想像する",
+            checkin: "🙋 ふりかえり",
             bonus: bonusKey ? "🎬 スピンオフ" : "🌤️ スピンオフ",
             parent: "👪 保護者の方へ"
           };
@@ -454,7 +559,7 @@
                   <ChevronLeft className="w-4 h-4" />教材一覧へ戻る
                 </a>
                 <div className="text-center mb-6">
-                  <h1 className="text-2xl md:text-3xl font-bold text-orange-600">台風がきたら、紅芋はあと何個いる？ 🌀</h1>
+                  <h1 className="text-2xl md:text-3xl font-bold text-orange-600">シーサーは、あと何体たりない？ 🦁</h1>
                   <span className="inline-block mt-1 px-2 py-0.5 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
                 </div>
 
@@ -503,7 +608,7 @@
           );
         };
 
-        createRoot(document.getElementById("root")).render(<TyphoonPredictionApp />);
+        createRoot(document.getElementById("root")).render(<ShisaPredictionApp />);
     </script>
 </body>
 </html>

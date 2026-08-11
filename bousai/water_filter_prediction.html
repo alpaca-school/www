@@ -397,6 +397,14 @@
                   <tr><td className="py-1 pr-4 font-bold">対応教科・学年</td><td className="py-1">{MATERIAL.subjectGrade}（社会・生活にも接続）</td></tr>
                 </tbody>
               </table>
+              <div className="mb-4 text-xs text-gray-700 bg-gray-50 border border-gray-300 rounded p-3">
+                <p className="font-bold mb-1">学習指導要領との対応</p>
+                <ul className="space-y-0.5 list-disc list-inside">
+                  <li>算数（4年）：整数の四則混合計算、あまりを考慮した「切り上げ」の考え方</li>
+                  <li>理科（5年「もののとけ方」）：ろ過という操作、混合物と水溶液の違いにつながる基礎体験</li>
+                  <li>社会・生活：沖縄の集落に残る「カー（井戸）」という地域の伝統的な水利用の知恵</li>
+                </ul>
+              </div>
               <div className="mb-4">
                 <p className="font-bold text-sm mb-1">1. 自分の予想</p>
                 <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">
@@ -441,6 +449,9 @@
           return (
             <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-blue-50">
               <div className="container mx-auto px-4 py-8 max-w-2xl">
+                <a href="../matrix-library.html" className="inline-flex items-center gap-1 text-sm font-bold text-cyan-600 hover:text-cyan-800 mb-4">
+                  <ChevronLeft className="w-4 h-4" />教材一覧へ戻る
+                </a>
                 <div className="text-center mb-6">
                   <h1 className="text-2xl md:text-3xl font-bold text-cyan-700">井戸（カー）の水を、お洗濯に使えるように 💧</h1>
                   <span className="inline-block mt-1 px-2 py-0.5 text-xs font-bold rounded-full bg-cyan-100 text-cyan-700">📚 {MATERIAL.subjectGrade}</span>
