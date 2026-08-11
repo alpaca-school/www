@@ -1,569 +1,522 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>アルパカすく〜る｜体験フロア 🦙</title>
-  <link rel="icon"
-    href="https://lh3.googleusercontent.com/sitesv/AG8ngQVORBD7CsRXMpHSPNausJe9Ew9wgtNcpm1UeBjz0d3UkUlNOw_DJ7DMOyyZCaA__YXllGlSBICFlGdf944DKS51ezTezb8FkEirXosTZpMlqcAjoIAHwzI9shpt3g4ZasFfDK7REG4JniWi0Ok7bXmC4qH6LlasxzT1x-23iCMyEbaOU4Z2w3xs6rlR_3Q">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-  <script src="https://unpkg.com/@babel/standalone@7.25.9/babel.min.js"></script>
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap');
-
-    body {
-      font-family: 'M PLUS Rounded 1c', sans-serif;
-    }
-
-    .text-fluid-4xl {
-      font-size: clamp(2rem, 6vw, 3rem);
-    }
-
-    .text-fluid-xl {
-      font-size: clamp(1.1rem, 3vw, 1.5rem);
-    }
-
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-
-    .no-scrollbar {
-      scrollbar-width: none;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アルパカすく〜る教材ライブラリ（マトリクス型・試作版）</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { darkMode: 'class' };
+    </script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        .banner-track { animation: banner-scroll 18s linear infinite; }
+        .banner-track:hover { animation-play-state: paused; }
+        @keyframes banner-scroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+    </style>
 </head>
+<body class="bg-orange-50 dark:bg-gray-900 transition-colors">
+    <div id="root"></div>
 
-<body>
-  <div id="root"></div>
+    <script type="text/babel">
+        const { useState, useMemo, useEffect } = React;
+        const { createRoot } = ReactDOM;
 
-  <script type="text/babel">
-    const { useState, useEffect } = React;
+        // --- サンプルデータ ---
+        // status: "published"（実在ページあり） / "coming"（準備中プレースホルダー）
+        // capital: 文化資本 / 社会関係資本 / 経済資本（ブルデュー3資本。カード上のバッジとして表示、絞り込みには未使用）
+        // grades: 対象学年・年齢の配列
+        // subjects: 関連教科の配列（絞り込みに使用）
+        // mi: 多重知能4分類（智=論理数学+言語／徳=対人+内省／体=音楽+身体運動／感=視覚空間+博物学）
+        // dateAdded: 新着バナー・並び替え用
+        // recommended: おすすめ欄に手動で載せるフラグ（将来アクセスデータに置き換え予定）
+        const MATERIALS = [
+          {
+            id: "beniimo-ep1",
+            title: "紅芋チップス、あと何袋たりない？（知能の窓 ep1：論理・数学編）",
+            url: "rekishi/beniimo_ep1_ronri.html",
+            subjectLabel: "算数3年・社会3年",
+            grades: ["小3"],
+            subjects: ["算数", "社会"],
+            mi: "智",
+            capital: "文化資本",
+            ladderStep: "初級",
+            status: "published",
+            emoji: "🍠",
+            dateAdded: "2026-08-11",
+            recommended: true,
+          },
+          {
+            id: "typhoon",
+            title: "台風がきたら、紅芋はあと何個いる？",
+            url: "bousai/typhoon_prediction.html",
+            subjectLabel: "算数4年・社会4年",
+            grades: ["小4"],
+            subjects: ["算数", "社会"],
+            mi: "智",
+            capital: "文化資本",
+            ladderStep: "初級",
+            status: "published",
+            emoji: "🌀",
+            dateAdded: "2026-08-10",
+            recommended: true,
+          },
+          {
+            id: "water-filter",
+            title: "井戸（カー）の水を、お洗濯に使えるように",
+            url: "bousai/water_filter_prediction.html",
+            subjectLabel: "理科5年・算数4年",
+            grades: ["小4", "小5"],
+            subjects: ["理科", "算数"],
+            mi: "智",
+            capital: "文化資本",
+            ladderStep: "初級",
+            status: "published",
+            emoji: "💧",
+            dateAdded: "2026-08-10",
+            recommended: false,
+          },
+          {
+            id: "shisa",
+            title: "シーサーは、あと何体たりない？",
+            url: "bunka/shisa_prediction.html",
+            subjectLabel: "算数4年・社会4年",
+            grades: ["小4"],
+            subjects: ["算数", "社会"],
+            mi: "感",
+            capital: "文化資本",
+            ladderStep: "初級",
+            status: "published",
+            emoji: "🦁",
+            dateAdded: "2026-08-11",
+            recommended: true,
+          },
+          {
+            id: "mi-shindan",
+            title: "MI（多重知能）強み診断＆キャラクター診断",
+            url: "#",
+            subjectLabel: "特別活動・自己理解",
+            grades: ["小3", "小4", "小5", "小6"],
+            subjects: ["特別活動"],
+            mi: "徳",
+            capital: "文化資本",
+            ladderStep: "初級",
+            status: "coming",
+            emoji: "🧭",
+            dateAdded: "2026-07-01",
+            recommended: false,
+          },
+          {
+            id: "kyoudo-douga",
+            title: "郷土文化体験動画（ハルサー・三線・食育）＋無料プリント",
+            url: "#",
+            subjectLabel: "総合・生活",
+            grades: ["小3", "小4", "小5", "小6"],
+            subjects: ["総合", "生活"],
+            mi: "感",
+            capital: "文化資本",
+            ladderStep: "初級",
+            status: "coming",
+            emoji: "🎏",
+            dateAdded: "2026-07-01",
+            recommended: false,
+          },
+          {
+            id: "yumetsumugi",
+            title: "「わたしの夢つむぎ」ワークシート",
+            url: "#",
+            subjectLabel: "思考・感情の言語化",
+            grades: ["小3", "小4", "小5", "小6"],
+            subjects: ["国語"],
+            mi: "徳",
+            capital: "文化資本",
+            ladderStep: "初級",
+            status: "coming",
+            emoji: "📝",
+            dateAdded: "2026-07-01",
+            recommended: false,
+          },
+          {
+            id: "furima-zine",
+            title: "文芸フリマでのZINE出展・販売体験",
+            url: "#",
+            subjectLabel: "表現・発信",
+            grades: ["中学生"],
+            subjects: ["国語", "図画工作"],
+            mi: "徳",
+            capital: "社会関係資本",
+            ladderStep: "中級",
+            status: "coming",
+            emoji: "📖",
+            dateAdded: "2026-07-01",
+            recommended: false,
+          },
+          {
+            id: "chaganju",
+            title: "茶願寿（スカベンジャーハント）企画・運営",
+            url: "#",
+            subjectLabel: "企画・協働",
+            grades: ["中学生"],
+            subjects: ["特別活動"],
+            mi: "徳",
+            capital: "社会関係資本",
+            ladderStep: "中級",
+            status: "coming",
+            emoji: "🗺️",
+            dateAdded: "2026-07-01",
+            recommended: false,
+          },
+          {
+            id: "syouhin-kaihatsu",
+            title: "地域商品開発（オリジナル味噌・月桃スプレー）",
+            url: "#",
+            subjectLabel: "パッケージデザイン",
+            grades: ["中学生"],
+            subjects: ["図画工作"],
+            mi: "感",
+            capital: "社会関係資本",
+            ladderStep: "中級",
+            status: "coming",
+            emoji: "🌿",
+            dateAdded: "2026-07-01",
+            recommended: false,
+          },
+          {
+            id: "cafe-ojt",
+            title: "カフェ運営型職業訓練（OJT・月6万副収入）",
+            url: "#",
+            subjectLabel: "実務・自立",
+            grades: ["高校生・大人"],
+            subjects: ["家庭科"],
+            mi: "体",
+            capital: "経済資本",
+            ladderStep: "上級",
+            status: "coming",
+            emoji: "☕",
+            dateAdded: "2026-07-01",
+            recommended: false,
+          },
+          {
+            id: "web-hosa",
+            title: "Web更新・動画編集・PDFレイアウト補助業務",
+            url: "#",
+            subjectLabel: "実務・自立",
+            grades: ["高校生・大人"],
+            subjects: ["技術・情報"],
+            mi: "智",
+            capital: "経済資本",
+            ladderStep: "上級",
+            status: "coming",
+            emoji: "💻",
+            dateAdded: "2026-07-01",
+            recommended: false,
+          },
+          {
+            id: "b2b-project",
+            title: "企業冠プロジェクト（B2B実務受託）",
+            url: "#",
+            subjectLabel: "実務・自立",
+            grades: ["高校生・大人"],
+            subjects: ["総合"],
+            mi: "徳",
+            capital: "経済資本",
+            ladderStep: "上級",
+            status: "coming",
+            emoji: "🤝",
+            dateAdded: "2026-07-01",
+            recommended: false,
+          },
+        ];
 
-    /* ========= フロア意味づけ（体験ベース） ========= */
-    const floorMeta = {
-      歴史: "過去を知り、今を理解する",
-      文化: "手仕事と物語に触れる",
-      自然: "生きている環境を感じる",
-      平和: "社会と自分の関係を考える",
-      生活: "暮らしの中で生きる力を育てる",
-      仕事: "社会と関わる準備をする"
-    };
+        const GRADES = ["小3", "小4", "小5", "小6", "中学生", "高校生・大人"];
+        const SUBJECTS = ["国語", "算数", "理科", "社会", "生活", "家庭科", "図画工作", "総合", "特別活動", "技術・情報"];
+        const MI_LIST = [
+          { key: "智", label: "智（論理・言語）" },
+          { key: "徳", label: "徳（対人・内省）" },
+          { key: "体", label: "体（音楽・運動）" },
+          { key: "感", label: "感（視覚空間・博物学）" },
+        ];
+        const CAPITALS = [
+          { key: "文化資本", color: "orange" },
+          { key: "社会関係資本", color: "cyan" },
+          { key: "経済資本", color: "emerald" },
+        ];
 
-    const floors = ["歴史", "文化", "自然", "平和", "生活", "仕事"];
+        const capitalColorClasses = {
+          orange: { chipOn: "bg-orange-500 text-white border-orange-500", chipOff: "bg-white dark:bg-gray-800 text-orange-700 dark:text-orange-300 border-orange-300 dark:border-orange-700", badge: "bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-200" },
+          cyan: { chipOn: "bg-cyan-500 text-white border-cyan-500", chipOff: "bg-white dark:bg-gray-800 text-cyan-700 dark:text-cyan-300 border-cyan-300 dark:border-cyan-700", badge: "bg-cyan-100 dark:bg-cyan-900 text-cyan-700 dark:text-cyan-200" },
+          emerald: { chipOn: "bg-emerald-500 text-white border-emerald-500", chipOff: "bg-white dark:bg-gray-800 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700", badge: "bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-200" },
+          purple: { chipOn: "bg-purple-500 text-white border-purple-500", chipOff: "bg-white dark:bg-gray-800 text-purple-700 dark:text-purple-300 border-purple-300 dark:border-purple-700", badge: "bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200" },
+          teal: { chipOn: "bg-teal-500 text-white border-teal-500", chipOff: "bg-white dark:bg-gray-800 text-teal-700 dark:text-teal-300 border-teal-300 dark:border-teal-700", badge: "bg-teal-100 dark:bg-teal-900 text-teal-700 dark:text-teal-200" },
+        };
 
-    /* ========= データ ========= */
-    const floorData = {
-      歴史: {
-        title: "歴史", color: "bg-pink-100 border-pink-300", headerColor: "bg-pink-200",
-        sections: [
-          {
-            id: "K4",
-            title: "🍠 サツマイモ物語 🍠",
-            description: "原産地から日本へ ― 食べ物の世界旅行",
-            location: "特別展示",
-            actionType: "modal",
-            modalUrl: "./rekishi/sweet_potato_history.html"
-          },
-          {
-            id: "H-oldhouse",
-            title: "沖縄の古い家探検❗️",
-            description: "沖縄の伝統的な家屋の工夫を見てみよう",
-            location: "郷土",
-            videoId: "QpI0t9jXbwU"
-          },
-          {
-            id: "H-imo",
-            title: "お芋のチカラ",
-            description: "飢饉から人々を救ったお芋の歴史と効果",
-            location: "歴史",
-            isComingSoon: true
-          }
-        ]
-      },
-      文化: {
-        title: "文化", color: "bg-green-100 border-green-300", headerColor: "bg-green-200",
-        sections: [
-          {
-            id: "S1",
-            title: "読谷やちむんの里 オンライン陶芸鑑賞会",
-            description: "自宅でゆっくり、器と手仕事の物語に触れる",
-            location: "4C",
-            actionType: "modal",
-            modalUrl: "./bunka/yachimun.html"
-          },
-          {
-            id: "C-shisa",
-            title: "シーサーを作ろう❗️",
-            description: "守り神シーサーを粘土で作ってみよう",
-            location: "工房",
-            videoId: "Nb7Nfb0embU"
-          },
-          {
-            id: "C-shisa-quiz",
-            title: "🦁 シーサーは、あと何体たりない？",
-            description: "📚算数4年・社会4年｜予想する→話し合う→確かめる、不足数の計算（仮説実験授業スタイル）",
-            location: "工房",
-            actionType: "modal",
-            modalUrl: "./bunka/shisa_prediction.html"
-          },
-          {
-            id: "C-sanshin",
-            title: "楽器を演奏しよう❗️",
-            description: "沖縄の伝統楽器「三線」の音色",
-            location: "舞台",
-            videoId: "Zm8X3FACbF0"
-          },
-          {
-            id: "C-obon",
-            title: "1分でわかる❗️沖縄のお盆❗️",
-            description: "ご先祖さまをお迎えする大切な行事",
-            location: "行事",
-            videoId: "PZ4YPyx3B9I"
-          },
-          {
-            id: "C-mimigusuri",
-            title: "歌や耳ぐすり",
-            description: "工工四と三線でみんなを楽しませよう",
-            location: "舞台",
-            isComingSoon: true
-          }
-        ]
-      },
-      自然: {
-        title: "自然", color: "bg-orange-100 border-orange-300", headerColor: "bg-orange-200",
-        sections: [
-          {
-            id: "G2",
-            title: "奇跡の川 塩川",
-            description: "世界に2つだけの塩水が湧き出る川",
-            location: "本部町",
-            videoId: "UbKtWt6jrDw"
-          },
-          {
-            id: "N-goya",
-            title: "夏野菜料理〜ゴーヤー編〜",
-            description: "旬の野菜をおいしく食べる知恵",
-            location: "キッチン",
-            videoId: "y7E5pd6Z1_4"
-          },
-          {
-            id: "N-haruser",
-            title: "畑（ハルサー）",
-            description: "ハルサーしながら土と触れ合おう",
-            location: "畑",
-            isComingSoon: true
-          },
-          {
-            id: "N-chaganju",
-            title: "茶願寿（Chaganju）",
-            description: "ミッション達成をしながら沖縄中を綺麗にしよう！",
-            location: "ボランティア",
-            isComingSoon: true
-          }
-        ]
-      },
-      平和: {
-        title: "平和", color: "bg-blue-100 border-blue-300", headerColor: "bg-blue-200",
-        sections: [
-          {
-            id: "H5",
-            title: "やる気のヒミツ",
-            description: "行動のあとに生まれる、やる気の正体",
-            location: "特別展示",
-            actionType: "modal",
-            modalUrl: "./heiwa/yaruki.html"
-          }
-        ]
-      },
-      生活: {
-        title: "生活",
-        color: "bg-yellow-100 border-yellow-300",
-        headerColor: "bg-yellow-200",
-        sections: [
-          {
-            id: "L-money-0",
-            title: "クレジットカードとの付き合い方",
-            description: "お金と安全につきあうための基礎知識",
-            location: "お金",
-            learningContent: {
-              title: "クレジットカードとの付き合い方",
-              html: `
-                <h3>🦙 アルパカ先生のクレカ講座</h3>
-                <strong>⚠️ リボ払いは絶対NG</strong>
-                <ul>
-                  <li>一括・2回払いを基本に</li>
-                  <li>利用額は収入の1/3以内</li>
-                  <li>「後払い」であることを理解する</li>
-                </ul>
-              `
-            }
-          },
-          {
-            id: "L-money-1",
-            title: "詐欺から身を守ろう！",
-            description: "悪徳商法・詐欺の典型パターン",
-            location: "お金",
-            learningContent: {
-              title: "悪徳商法の見分け方",
-              html: `
-                <ul>
-                  <li>「必ず儲かる」は危険</li>
-                  <li>友人経由の勧誘に注意</li>
-                  <li>高額な初期費用を要求される</li>
-                </ul>
-                <p>困ったら <strong>消費生活センター（188）</strong></p>
-              `
-            }
-          },
-          {
-            id: "L-money-3",
-            title: "家庭学習が成績になる！",
-            description: "家庭・フリースクールの学びが評価される仕組み",
-            location: "特別展示",
-            actionType: "modal",
-            modalUrl: "https://alpaca-school.okinawa/1722582416_d3e0b7a5d8a3c6b1e4b5a0d8c7b6a5d4.html"
-          },
-          {
-            id: "L-money-4",
-            title: "COCOLOプランとは？",
-            description: "誰一人取り残されない学びの設計",
-            location: "特別展示",
-            actionType: "modal",
-            modalUrl: "https://alpaca-school.okinawa/250802cocolo.html"
-          },
-          {
-            id: "L-money-5",
-            title: "楽しく英語学習♪",
-            description: "英語の基礎を体験するオンライン教材",
-            location: "特別展示",
-            actionType: "modal",
-            modalUrl: "https://alpaca-school.okinawa/training/english-training.html"
-          },
-          {
-            id: "L-bug",
-            title: "虫除けスプレーを作ろう",
-            description: "月桃の葉っぱで自然な虫除け",
-            location: "生活の知恵",
-            isComingSoon: true
-          },
-          {
-            id: "L-snack",
-            title: "おやつづくり",
-            description: "ちんびんとポーポーを作ろう",
-            location: "キッチン",
-            isComingSoon: true
-          },
-          {
-            id: "L-cooking",
-            title: "沖縄料理を作ってみよう",
-            description: "苦味を楽しむゴーヤーチャンプルー",
-            location: "キッチン",
-            isComingSoon: true
-          },
-          {
-            id: "L-curry",
-            title: "カレーの学校",
-            description: "スパイスから作る沖縄アーユルヴェーダ",
-            location: "キッチン",
-            isComingSoon: true
-          },
-          {
-            id: "L-miso",
-            title: "味噌作り",
-            description: "腸活に！大豆やおからで手作り味噌",
-            location: "キッチン",
-            isComingSoon: true
-          },
-          {
-            id: "L-rakkyo",
-            title: "食べられる根っこ（島らっきょう編）",
-            description: "捨てたらもったいない！根っこも美味しく食べられます。",
-            location: "生活の知恵",
-            actionType: "modal",
-            modalUrl: "./training/rakkyo_roots_guide.html"
-          },
-          {
-            id: "L-kumquat",
-            title: "金柑とアーユルヴェーダ・五行",
-            description: "冬の養生に役立つ小さな宝物",
-            location: "生活の知恵",
-            actionType: "modal",
-            modalUrl: "./training/kumquat_infographic.html"
-          },
-          {
-            id: "L-money-6",
-            title: "🇯🇵 日本のお金の負担2026〜2036年",
-            description: "これから10年で変わる、わたしたちの負担とサバイブ術を学ぼう",
-            location: "お金・将来",
-            actionType: "modal",
-            modalUrl: "./social/money_burden_2026.html"
-          },
-          {
-            id: "L-bousai-typhoon",
-            title: "🌀 台風がきたら、紅芋はあと何個いる？",
-            description: "📚算数4年・社会4年｜予想する→話し合う→確かめる、そなえの計算（仮説実験授業スタイル）",
-            location: "そなえ",
-            actionType: "modal",
-            modalUrl: "./bousai/typhoon_prediction.html"
-          },
-          {
-            id: "L-bousai-filter",
-            title: "💧 井戸（カー）の水を、お洗濯に使えるように",
-            description: "📚理科5年・算数4年｜予想する→話し合う→確かめる、濾過と混ざりものの正体（仮説実験授業スタイル）",
-            location: "そなえ",
-            actionType: "modal",
-            modalUrl: "./bousai/water_filter_prediction.html"
-          }
-        ]
-      },
-      仕事: {
-        title: "仕事", color: "bg-cyan-100 border-cyan-300", headerColor: "bg-cyan-200",
-        sections: [
-          {
-            id: "W1",
-            title: "経営理論の変遷",
-            description: "仕事と社会の関係を考える",
-            location: "特別展示",
-            actionType: "modal",
-            modalUrl: "./Research/keiriron-hensei.html"
-          },
-          {
-            id: "W-goen",
-            title: "仕事は「ご縁」",
-            description: "仕事と人との関係性について学ぶ",
-            location: "キャリア",
-            learningContent: {
-              title: "仕事は誰かとの「ご縁」",
-              html: `
-                <div class="space-y-4 text-center">
-                  <p>誰かに仕事をお願いする<br>誰かから仕事をいただく</p>
-                  <p class="font-bold text-cyan-700">仕事を通して人とつながり<br>これまでのご縁に感謝する</p>
-                  <p>たくさんのご縁から仕事があり、<br>そのご縁が<br><strong>「未来の仕事」</strong>と<strong>「成長」</strong>と<strong>「人」</strong>との<br>新たなご縁となります。</p>
-                  <div class="mt-6 pt-6 border-t border-cyan-100">
-                    <p class="text-sm text-gray-600">アルパカツアーをとおして<br>見えなかった素敵な仕事を感じて<br>ご縁あった人から "自分にもできそうなこと" に気づく</p>
+        function Chip({ label, active, onClick, colorClasses }) {
+          const cls = active ? colorClasses.chipOn : colorClasses.chipOff;
+          return (
+            <button
+              onClick={onClick}
+              className={`px-3 py-1.5 rounded-full text-xs font-bold border transition ${cls}`}
+            >
+              {label}
+            </button>
+          );
+        }
+
+        function MaterialCard({ item }) {
+          const cap = CAPITALS.find(c => c.key === item.capital);
+          const colorClasses = capitalColorClasses[cap.color];
+          const isPublished = item.status === "published";
+          const CardInner = (
+            <div className={`h-full flex flex-col gap-3 p-5 rounded-2xl border-2 bg-white dark:bg-gray-800 shadow-sm transition ${isPublished ? "hover:shadow-md hover:-translate-y-0.5 cursor-pointer border-gray-200 dark:border-gray-700" : "border-dashed border-gray-300 dark:border-gray-600 opacity-70"}`}>
+              <div className="flex items-start justify-between gap-2">
+                <span className="text-3xl">{item.emoji}</span>
+                {!isPublished && (
+                  <span className="px-2 py-0.5 text-xs font-bold rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 whitespace-nowrap">準備中</span>
+                )}
+              </div>
+              <h3 className="font-bold text-gray-800 dark:text-gray-100 leading-snug">{item.title}</h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400">{item.subjectLabel}</p>
+              <div className="mt-auto flex flex-wrap gap-1.5">
+                <span className={`px-2 py-0.5 text-xs font-bold rounded-full ${colorClasses.badge}`}>{item.capital}</span>
+                <span className="px-2 py-0.5 text-xs font-bold rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">{item.ladderStep}</span>
+                <span className="px-2 py-0.5 text-xs font-bold rounded-full bg-teal-100 dark:bg-teal-900 text-teal-700 dark:text-teal-200">{item.mi}</span>
+                {item.grades.map(g => (
+                  <span key={g} className="px-2 py-0.5 text-xs font-bold rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">{g}</span>
+                ))}
+              </div>
+            </div>
+          );
+          return isPublished
+            ? <a href={item.url} className="block h-full">{CardInner}</a>
+            : <div className="h-full">{CardInner}</div>;
+        }
+
+        // 新着バナー：更新日が新しい順に、数秒ごとに自動で切り替わる帯
+        function UpdateBanner({ items }) {
+          const [index, setIndex] = useState(0);
+          const recent = useMemo(() => (
+            [...items].sort((a, b) => b.dateAdded.localeCompare(a.dateAdded)).slice(0, 5)
+          ), [items]);
+
+          useEffect(() => {
+            if (recent.length === 0) return;
+            const timer = setInterval(() => setIndex(i => (i + 1) % recent.length), 3500);
+            return () => clearInterval(timer);
+          }, [recent]);
+
+          if (recent.length === 0) return null;
+          const current = recent[index];
+
+          return (
+            <div className="bg-orange-500 dark:bg-orange-700 text-white">
+              <div className="max-w-6xl mx-auto px-4 py-2 flex items-center gap-3 overflow-hidden">
+                <span className="text-xs font-bold bg-white/20 rounded-full px-2 py-0.5 whitespace-nowrap">🆕 新着</span>
+                <a href={current.url === "#" ? undefined : current.url} className="text-sm font-bold truncate flex-1 hover:underline">
+                  {current.emoji} {current.title}（{current.dateAdded}）
+                </a>
+                <div className="flex gap-1 shrink-0">
+                  {recent.map((r, i) => (
+                    <span key={r.id} className={`w-1.5 h-1.5 rounded-full ${i === index ? "bg-white" : "bg-white/40"}`} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        function Sidebar({ selectedGrades, setSelectedGrades, selectedSubjects, setSelectedSubjects, selectedMi, setSelectedMi, toggle }) {
+          return (
+            <aside className="w-full lg:w-56 shrink-0 space-y-6">
+              <div>
+                <p className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-2">学年・年齢</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {GRADES.map(g => (
+                    <Chip key={g} label={g} active={selectedGrades.includes(g)}
+                      onClick={() => toggle(selectedGrades, setSelectedGrades, g)}
+                      colorClasses={capitalColorClasses.orange} />
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-2">多重知能（知能の窓）</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {MI_LIST.map(m => (
+                    <Chip key={m.key} label={m.label} active={selectedMi.includes(m.key)}
+                      onClick={() => toggle(selectedMi, setSelectedMi, m.key)}
+                      colorClasses={capitalColorClasses.teal} />
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-2">関連教科</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {SUBJECTS.map(s => (
+                    <Chip key={s} label={s} active={selectedSubjects.includes(s)}
+                      onClick={() => toggle(selectedSubjects, setSelectedSubjects, s)}
+                      colorClasses={capitalColorClasses.purple} />
+                  ))}
+                </div>
+              </div>
+            </aside>
+          );
+        }
+
+        function App() {
+          const [selectedGrades, setSelectedGrades] = useState([]);
+          const [selectedSubjects, setSelectedSubjects] = useState([]);
+          const [selectedMi, setSelectedMi] = useState([]);
+          const [searchQuery, setSearchQuery] = useState("");
+          const [darkMode, setDarkMode] = useState(false);
+
+          const toggle = (list, setList, value) => {
+            setList(list.includes(value) ? list.filter(v => v !== value) : [...list, value]);
+          };
+
+          const filtered = useMemo(() => {
+            const q = searchQuery.trim().toLowerCase();
+            return MATERIALS.filter(item => {
+              const gradeOk = selectedGrades.length === 0 || item.grades.some(g => selectedGrades.includes(g));
+              const subjectOk = selectedSubjects.length === 0 || item.subjects.some(s => selectedSubjects.includes(s));
+              const miOk = selectedMi.length === 0 || selectedMi.includes(item.mi);
+              const searchOk = q === "" || item.title.toLowerCase().includes(q) || item.subjectLabel.toLowerCase().includes(q);
+              return gradeOk && subjectOk && miOk && searchOk;
+            });
+          }, [selectedGrades, selectedSubjects, selectedMi, searchQuery]);
+
+          const recommended = useMemo(() => MATERIALS.filter(m => m.recommended && m.status === "published"), []);
+
+          const hasFilter = selectedGrades.length > 0 || selectedSubjects.length > 0 || selectedMi.length > 0 || searchQuery.trim() !== "";
+          const resetAll = () => { setSelectedGrades([]); setSelectedSubjects([]); setSelectedMi([]); setSearchQuery(""); };
+
+          return (
+            <div className={darkMode ? "dark" : ""}>
+            <div className="bg-gradient-to-b from-sky-100 to-orange-50 dark:from-gray-900 dark:to-gray-900 min-h-screen transition-colors">
+
+              <UpdateBanner items={MATERIALS} />
+
+              <div className="sticky top-0 z-10 bg-white/90 dark:bg-gray-800/90 backdrop-blur border-b border-gray-200 dark:border-gray-700">
+                <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
+                  <span className="font-extrabold text-gray-800 dark:text-gray-100 whitespace-nowrap">🦙 アルパカすく〜る</span>
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="教材を検索（タイトル・教科）"
+                    className="flex-1 px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  />
+                  <button
+                    onClick={() => setDarkMode(d => !d)}
+                    aria-label="ライト/ダークモード切り替え"
+                    className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-bold hover:bg-gray-50 dark:hover:bg-gray-600 transition"
+                  >
+                    {darkMode ? "☀️" : "🌙"}
+                  </button>
+                </div>
+              </div>
+
+              <div className="max-w-6xl mx-auto px-4 py-8">
+                <header className="mb-8 text-center">
+                  <h1 className="text-3xl md:text-4xl font-extrabold text-gray-800 dark:text-gray-100 mb-4">アルパカすく〜る 🦙</h1>
+                  <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+                    「やってみたい」を、<br />勉強・生活・仕事・社会につながる形で試せる場所。
+                  </p>
+                  <p className="mt-4 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                    学ぶ・つくる・つながる。<br />
+                    子どもから大人まで、沖縄の雑学を学ぶオンライン学び舎。
+                  </p>
+                </header>
+
+                {recommended.length > 0 && (
+                  <section className="mb-10">
+                    <p className="text-sm font-bold text-orange-500 mb-3">🏆 おすすめ教材</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      {recommended.map(item => <MaterialCard key={item.id} item={item} />)}
+                    </div>
+                  </section>
+                )}
+
+                <div className="flex flex-col lg:flex-row gap-8">
+                  <Sidebar
+                    selectedGrades={selectedGrades} setSelectedGrades={setSelectedGrades}
+                    selectedSubjects={selectedSubjects} setSelectedSubjects={setSelectedSubjects}
+                    selectedMi={selectedMi} setSelectedMi={setSelectedMi}
+                    toggle={toggle}
+                  />
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-4">
+                      <p className="text-sm text-gray-500 dark:text-gray-400">{filtered.length}件の教材</p>
+                      {hasFilter && (
+                        <button onClick={resetAll} className="text-sm font-bold text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 underline">絞り込みを解除</button>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                      {filtered.map(item => <MaterialCard key={item.id} item={item} />)}
+                    </div>
+
+                    {filtered.length === 0 && (
+                      <p className="text-center text-gray-400 dark:text-gray-500 py-16">条件に合う教材が見つかりませんでした。</p>
+                    )}
                   </div>
                 </div>
-              `
-            }
-          }
-        ]
-      }
-    };
 
-    /* ========= Components ========= */
+                <section className="mt-12">
+                  <div className="bg-white dark:bg-gray-800 border-2 border-dashed dark:border-gray-700 rounded-xl p-6 text-center">
+                    <h3 className="font-bold text-lg mb-2 text-gray-800 dark:text-gray-100">学んだことを、次の一歩へ</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                      体験したことは、表現を通して社会とつながっていきます。
+                    </p>
+                    <a href="https://furima.ryukyu-tane.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-emerald-500 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-600 transition inline-block">
+                      文芸フリマで表現してみる
+                    </a>
+                  </div>
+                </section>
 
-    const Hero = () => (
-      <section className="bg-gradient-to-b from-sky-100 to-gray-50">
-        <div className="max-w-4xl mx-auto p-8 text-center">
-          <h1 className="text-fluid-4xl font-extrabold mb-4">アルパカすく〜る 🦙</h1>
-          <p className="text-fluid-xl text-gray-700 leading-relaxed">
-            「やってみたい」を、<br />勉強・生活・仕事・社会につながる形で試せる場所。
-          </p>
-          <p className="mt-4 text-sm text-gray-600 leading-relaxed">
-            学ぶ・つくる・つながる。<br />
-            子どもから大人まで、沖縄の雑学を学ぶオンライン学び舎。
-          </p>
-        </div>
-      </section>
-    );
+                <section className="mt-6">
+                  <div className="bg-white dark:bg-gray-800 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-xl p-8 text-center">
+                    <p className="mb-4 text-gray-700 dark:text-gray-300">
+                      学びの中で使った教材や記録をまとめています。
+                    </p>
+                    <a href="https://universe.tea-under.club/"
+                      className="inline-block px-6 py-2 bg-blue-50 dark:bg-blue-900 text-blue-900 dark:text-blue-200 rounded-full font-bold hover:bg-blue-100 dark:hover:bg-blue-800 transition">
+                      てぃあんだぁクラブ universe
+                    </a>
+                  </div>
+                </section>
+              </div>
 
-    const Header = ({ currentFloor, setCurrentFloor, meta, data }) => (
-      <header className={`${data.headerColor} sticky top-0 z-10 shadow`}>
-        <div className="max-w-4xl mx-auto p-4">
-          <h2 className="text-xl font-extrabold">{currentFloor}</h2>
-          <p className="text-sm text-gray-700">{meta}</p>
-          <div className="flex gap-2 overflow-x-auto no-scrollbar mt-3">
-            {floors.map(f => (
-              <button key={f}
-                onClick={() => setCurrentFloor(f)}
-                className={`px-4 py-2 rounded-lg font-bold hover:bg-white transition ${f === currentFloor ? "bg-white" : "bg-white/50"}`}>
-                {f}
-              </button>
-            ))}
-          </div>
-        </div>
-      </header>
-    );
-
-    const FloorContent = ({ data, onVideoClick, onModalClick }) => (
-      <main className="max-w-4xl mx-auto p-6 grid md:grid-cols-2 gap-4">
-        {data.sections.map(s => (
-          <div key={s.id} className={`${data.color} border-2 rounded-xl p-6 shadow`}>
-            <h3 className="font-bold text-lg mb-2">{s.title}</h3>
-            <p className="text-sm text-gray-700 mb-4">{s.description}</p>
-            {s.videoId && (
-              <button onClick={() => onVideoClick(s.videoId)}
-                className="bg-red-500 text-white px-3 py-2 rounded font-bold hover:bg-red-600 transition">
-                動画を見る
-              </button>
-            )}
-            {(s.actionType === "modal" || s.learningContent) && (
-              <button onClick={() => onModalClick(s)}
-                className="bg-purple-500 text-white px-3 py-2 rounded font-bold ml-2 hover:bg-purple-600 transition">
-                学ぶ
-              </button>
-            )}
-            {s.isComingSoon && (
-              <button disabled
-                className="bg-gray-300 text-gray-500 px-3 py-2 rounded font-bold ml-2 cursor-not-allowed">
-                Coming Soon
-              </button>
-            )}
-          </div>
-        ))}
-      </main>
-    );
-
-    const Footer = () => (
-      <>
-        <section className="max-w-4xl mx-auto p-6">
-          <div className="bg-white border-2 border-dashed rounded-xl p-6 text-center">
-            <h3 className="font-bold text-lg mb-2">学んだことを、次の一歩へ</h3>
-            <p className="text-sm text-gray-600 mb-2">
-              体験したことは、表現を通して社会とつながっていきます。
-            </p>
-            <a href="https://furima.ryukyu-tane.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-emerald-500 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-600 transition inline-block">
-              文芸フリマで表現してみる
-            </a>
-          </div>
-        </section >
-
-        <section className="max-w-4xl mx-auto p-6">
-          <div className="bg-white border-2 border-dashed border-gray-200 rounded-xl p-8 text-center">
-            <p className="mb-4 text-gray-700">
-              学びの中で使った教材や記録をまとめています。
-            </p>
-            <a href="https://universe.tea-under.club/"
-              className="inline-block px-6 py-2 bg-blue-50 text-blue-900 rounded-full font-bold hover:bg-blue-100 transition">
-              てぃあんだぁクラブ universe
-            </a>
-          </div>
-        </section>
-
-        <footer className="bg-gray-800 text-white p-6 text-sm">
-          <div className="max-w-4xl mx-auto">
-            <p>
-              仕事は、誰かとのご縁。<br />
-              アルパカすく〜るは、その入口をつくります。
-              <br />
-              このコンテンツは、ご自宅から快適に学習できるよう設計されています。車椅子をご利用の方、高齢の方、外出が難しい方など、すべての方が楽しめるよう善処します。
-            </p>
-            <a
-              href="./concept.html"
-              className="inline-block mt-2 underline hover:text-emerald-300"
-            >
-              ▶ この学びの設計思想を読む
-            </a>
-          </div>
-        </footer>
-      </>
-    );
-
-    const VideoModal = ({ videoId, onClose }) => (
-      <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4" onClick={onClose}>
-        <div className="relative w-full max-w-4xl">
-          <button
-            onClick={onClose}
-            className="absolute -top-10 right-0 text-white hover:text-gray-300 text-sm font-bold"
-            aria-label="閉じる">
-            ✕ 閉じる (ESC)
-          </button>
-          <iframe
-            key={videoId}
-            src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&playsinline=1`}
-            title="YouTube video player"
-            className="w-full aspect-video rounded-lg"
-            onClick={(e) => e.stopPropagation()}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allowFullScreen
-          />
-        </div>
-      </div>
-    );
-
-    const ContentModal = ({ content, onClose }) => (
-      <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4" onClick={onClose}>
-        <div className="relative w-full max-w-4xl h-5/6">
-          <button
-            onClick={onClose}
-            className="absolute -top-10 right-0 text-white hover:text-gray-300 text-sm font-bold"
-            aria-label="閉じる">
-            ✕ 閉じる (ESC)
-          </button>
-          {content.modalUrl ? (
-            <iframe
-              src={content.modalUrl}
-              className="w-full h-full rounded-lg bg-white"
-              onClick={(e) => e.stopPropagation()}
-            />
-          ) : content.learningContent ? (
-            <div
-              className="w-full h-full rounded-lg bg-white p-8 overflow-y-auto"
-              onClick={(e) => e.stopPropagation()}>
-              <h3 className="text-2xl font-bold mb-4">{content.learningContent.title}</h3>
-              <div dangerouslySetInnerHTML={{ __html: content.learningContent.html }} />
+              <footer className="bg-gray-800 text-white p-6 text-sm mt-12">
+                <div className="max-w-6xl mx-auto">
+                  <p>
+                    仕事は、誰かとのご縁。<br />
+                    アルパカすく〜るは、その入口をつくります。
+                    <br />
+                    このコンテンツは、ご自宅から快適に学習できるよう設計されています。車椅子をご利用の方、高齢の方、外出が難しい方など、すべての方が楽しめるよう善処します。
+                  </p>
+                  <a
+                    href="./concept.html"
+                    className="inline-block mt-2 underline hover:text-emerald-300"
+                  >
+                    ▶ この学びの設計思想を読む
+                  </a>
+                </div>
+              </footer>
             </div>
-          ) : null}
-        </div>
-      </div>
-    );
+            </div>
+          );
+        }
 
-    function App() {
-      const [currentFloor, setCurrentFloor] = useState("歴史");
-      const [videoUrl, setVideoUrl] = useState(null);
-      const [modal, setModal] = useState(null);
-
-      useEffect(() => { lucide.createIcons(); }, [currentFloor, videoUrl, modal]);
-
-      useEffect(() => {
-        const handleEsc = (e) => {
-          if (e.key === 'Escape') {
-            setVideoUrl(null);
-            setModal(null);
-          }
-        };
-        window.addEventListener('keydown', handleEsc);
-        return () => window.removeEventListener('keydown', handleEsc);
-      }, []);
-
-      const data = floorData[currentFloor];
-
-      return (
-        <div className="min-h-screen bg-gray-50">
-          <Hero />
-
-          <Header
-            currentFloor={currentFloor}
-            setCurrentFloor={setCurrentFloor}
-            meta={floorMeta[currentFloor]}
-            data={data}
-          />
-
-          <FloorContent
-            data={data}
-            onVideoClick={setVideoUrl}
-            onModalClick={setModal}
-          />
-
-          <Footer />
-
-          {videoUrl && <VideoModal videoId={videoUrl} onClose={() => setVideoUrl(null)} />}
-          {modal && <ContentModal content={modal} onClose={() => setModal(null)} />}
-        </div>
-      );
-    }
-
-    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
-  </script>
+        createRoot(document.getElementById("root")).render(<App />);
+    </script>
 </body>
-
 </html>
