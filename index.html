@@ -298,104 +298,10 @@
           {
             id: "L-bousai-typhoon",
             title: "🌀 台風がきたら、紅芋はあと何個いる？",
-            description: "停電・断水にそなえる、そなえの計算",
+            description: "予想する→話し合う→確かめる、そなえの計算（仮説実験授業スタイル）",
             location: "そなえ",
-            learningContent: {
-              title: "台風がきたら、紅芋はあと何個いる？",
-              html: `
-                <div class="space-y-4">
-                  <p>大型台風が接近中。すでに停電していて、船も1週間来ない見込みという放送が流れました。おばあの家は4人家族。今、家には紅芋が12個、2リットルの水のペットボトルが10本あります。</p>
-                  <p>家族4人が、1人1日1個ずつ紅芋を食べて、1日2リットルずつ水を飲むとすると、7日間で紅芋は<strong>28個</strong>、水は<strong>28本</strong>必要です。</p>
-                  <p class="font-bold text-yellow-700">今ある数から、あと何個・何本足りないでしょう？</p>
-
-                  <details class="mt-2">
-                    <summary class="cursor-pointer font-bold text-orange-600">💡 ヒントを見る</summary>
-                    <p class="mt-2 text-sm">まず「7日間で必要な数（1人1日1個×4人×7日、水は1人1日2リットル×4人×7日）」を計算しよう。次に、今ある数（紅芋12個・水10本）との差を求めよう。</p>
-                  </details>
-
-                  <details class="mt-2">
-                    <summary class="cursor-pointer font-bold text-green-700">✅ 答えを見る</summary>
-                    <p class="mt-2 text-sm">紅芋はあと<strong>16個</strong>、水はあと<strong>18本</strong>足りません。</p>
-                  </details>
-
-                  <div class="mt-6 pt-6 border-t border-yellow-100">
-                    <p class="text-sm text-gray-600"><strong>想像してみよう：</strong>停電して冷蔵庫が使えないとき、水や食べ物をどうやって確保する？（近所と分け合う、日持ちする紅芋を先に食べる…正解は一つじゃないよ）</p>
-                  </div>
-
-                  <details class="mt-6 pt-6 border-t border-yellow-100">
-                    <summary class="cursor-pointer font-bold text-pink-600">🦙 4人のアルパカで読んでみる</summary>
-                    <div class="mt-3 space-y-4">
-                      <details class="bg-red-50 rounded-lg p-3">
-                        <summary class="cursor-pointer font-bold text-red-700">ハーリー編</summary>
-                        <div class="mt-2 text-sm space-y-1">
-                          <p>ハーリー「台風?停電?そんなん平気っしょ、オレが何とかしてやるさ!」</p>
-                          <p>ハーリー「紅芋はあと5個で足りるっしょ!」</p>
-                          <p>おばあ「ブッブー」</p>
-                          <p class="text-xs text-gray-400 italic">（効果音：ズコーッ！ハーリー、勢いよく畳の上ですっ転ぶ）</p>
-                          <p>おばあ「7日分は紅芋28個・水28本必要。今は紅芋12個、水10本だよ」</p>
-                          <p>ハーリー「台風の名前とか気圧とか、そんなん知らなくていいっしょ」<span class="text-xs text-gray-400">（と言いつつメモ）</span></p>
-                          <p>ハーリー「紅芋はあと16個！水はあと18本！」</p>
-                          <p>おばあ「正解」</p>
-                          <p>ハーリー「次の台風はもっと余裕っしょ!」</p>
-                        </div>
-                      </details>
-                      <details class="bg-blue-50 rounded-lg p-3">
-                        <summary class="cursor-pointer font-bold text-blue-700">サラバンジ編</summary>
-                        <div class="mt-2 text-sm space-y-1">
-                          <p>サラバンジ「台風か…一発で計算して終わらせるさ」</p>
-                          <p>サラバンジ「紅芋はあと10個!」</p>
-                          <p>おばあ「ブッブー」</p>
-                          <p class="text-xs text-gray-400 italic">（サラバンジ、その場でバタン！と大げさに倒れる→3秒後にムクッと起き上がる）</p>
-                          <p>おばあ「7日分は紅芋28個・水28本。今は紅芋12個、水10本」</p>
-                          <p>サラバンジ<span class="text-xs text-gray-400">（息切れ）</span>「気圧とか名前とか…勢いで無視する」</p>
-                          <p>サラバンジ「紅芋あと16個…水あと18本…当たった…」</p>
-                          <p>おばあ「一発勝負、成功だね」</p>
-                          <p>サラバンジ「次の台風も…一瞬で…たぶん」</p>
-                        </div>
-                      </details>
-                      <details class="bg-green-50 rounded-lg p-3">
-                        <summary class="cursor-pointer font-bold text-green-700">ガンジュー編</summary>
-                        <div class="mt-2 text-sm space-y-1">
-                          <p>ガンジュー<span class="text-xs text-gray-400">（モジモジ）</span>「台風…停電…こわいです…」</p>
-                          <p>おばあ「大丈夫、今日は計算するだけだよ」</p>
-                          <p>ガンジュー「紅芋、おいしそうです…あ、すみません、先に数えないと」</p>
-                          <p>おばあ「7日分は紅芋28個・水28本。今は紅芋12個、水10本」</p>
-                          <p>ガンジュー<span class="text-xs text-gray-400">（あくび）</span>「気圧の数字は…関係ない、です、よね…」</p>
-                          <p>おばあ「よく気づいたね」</p>
-                          <p class="text-xs text-gray-400 italic">（ガンジュー、立ったまま本気のいびき→おばあに肩を叩かれてハッと飛び起きる）</p>
-                          <p>ガンジュー<span class="text-xs text-gray-400">（半分寝ながら）</span>「紅芋あと16個…水あと18本…です…」</p>
-                          <p>おばあ「正解」</p>
-                          <p>ガンジュー「紅芋…先に食べたいです…（あくび）」</p>
-                        </div>
-                      </details>
-                      <details class="bg-purple-50 rounded-lg p-3">
-                        <summary class="cursor-pointer font-bold text-purple-700">カーギー編</summary>
-                        <div class="mt-2 text-sm space-y-1">
-                          <p>カーギー「台風の前は、髪が湿気で広がるので気をつけないと」<span class="text-xs text-gray-400">（風で乱れた前髪を鏡もなしに一瞬でピシッと直す）</span></p>
-                          <p>カーギー「停電中の水と食べ物、傷んでいませんか？衛生的に保管されていますか？」</p>
-                          <p>おばあ「大丈夫だよ」</p>
-                          <p>おばあ「7日分は紅芋28個・水28本。今は紅芋12個、水10本」</p>
-                          <p>カーギー<span class="text-xs text-gray-400">（きれいにまとめながら）</span>「気圧や名前は、今回は使わない方が確実ですね」</p>
-                          <p>カーギー「紅芋あと16個、水あと18本。確実な計算です」</p>
-                          <p>おばあ「よくできたね」</p>
-                          <p>カーギー「次の台風も、備えを整えて待ちます」</p>
-                        </div>
-                      </details>
-                    </div>
-                  </details>
-
-                  <div class="mt-6 pt-6 border-t border-yellow-100 bg-yellow-50 rounded-lg p-4">
-                    <p class="text-xs font-bold text-yellow-800 mb-2">👪 保護者・支援者の方へ（学習指導要領との対応）</p>
-                    <ul class="text-xs text-gray-700 space-y-1 list-disc list-inside">
-                      <li><strong>算数（4年）</strong>：整数の四則混合計算、大きい数の処理、必要量から所持量を引く「不足分」の考え方</li>
-                      <li><strong>社会（4年〜）</strong>：自然災害から人々を守る活動、地域の防災・備蓄の工夫</li>
-                      <li><strong>生活・家庭科</strong>：非常時の食料・水の管理という実生活に直結する内容</li>
-                    </ul>
-                    <p class="text-xs text-gray-500 mt-2">※ 対象学年は目安です。低学年のお子さんには「答えを見る」を先に一緒に確認しながら進めても構いません。</p>
-                  </div>
-                </div>
-              `
-            }
+            actionType: "modal",
+            modalUrl: "./bousai/typhoon_prediction.html"
           },
           {
             id: "L-bousai-filter",

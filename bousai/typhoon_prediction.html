@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>台風がきたら、紅芋はあと何個いる？ 🌀</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        .speech-bubble { position: relative; }
+        .speech-bubble::after {
+            content: "";
+            position: absolute;
+            left: -10px;
+            top: 18px;
+            border-width: 8px 10px 8px 0;
+            border-style: solid;
+            border-color: transparent currentColor transparent transparent;
+        }
+        .chara-avatar {
+            width: 56px; height: 56px; border-radius: 9999px; object-fit: cover;
+            border: 2px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.15); background: #fff;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+        const { createRoot } = ReactDOM;
+
+        const ChevronRight = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m9 18 6-6-6-6"/></svg>
+        );
+        const ChevronLeft = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m15 18-6-6 6-6"/></svg>
+        );
+        const Sparkles = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+        );
+
+        // 4キャラクターのデータ（予想・理由・スピンオフ台本）
+        const CHARACTERS = {
+          hari: {
+            name: "ハーリー", color: "red", emoji: "🔥", img: "../img/characters/harly.png",
+            predict: { taro: 5, water: 8 },
+            line: "台風?停電?そんなん平気っしょ、オレが何とかしてやるさ!紅芋はあと5個、水はあと8本で足りるっしょ!",
+            reasonAfter: "気圧とか台風の名前とか、そんなん気にしてたらキリないっしょ!って、勢いでパッと数字だけ言っちゃった。ちゃんと計算するの、忘れてた…",
+            spinoff: [
+              "ハーリー「台風?停電?そんなん平気っしょ、オレが何とかしてやるさ!」",
+              "ハーリー「紅芋はあと5個で足りるっしょ!」",
+              "おばあ「ブッブー」",
+              "（効果音：ズコーッ！ハーリー、勢いよく畳の上ですっ転ぶ）",
+              "おばあ「7日分は紅芋28個・水28本必要。今は紅芋12個、水10本だよ」",
+              "ハーリー「台風の名前とか気圧とか、そんなん知らなくていいっしょ」（と言いつつメモ）",
+              "ハーリー「紅芋はあと16個!水はあと18本!」",
+              "おばあ「正解」",
+              "ハーリー「次の台風はもっと余裕っしょ!」"
+            ]
+          },
+          sara: {
+            name: "サラバンジ", color: "blue", emoji: "⚡", img: "../img/characters/sarabanji.png",
+            predict: { taro: 10, water: 12 },
+            line: "台風か…一発で計算して終わらせるさ。紅芋はあと10個、水はあと12本!",
+            reasonAfter: "一発勝負で終わらせたくて、じっくり計算せずに勢いで数字を言っちゃった。体力を温存したかったのもある。",
+            spinoff: [
+              "サラバンジ「台風か…一発で計算して終わらせるさ」",
+              "サラバンジ「紅芋はあと10個!」",
+              "おばあ「ブッブー」",
+              "（サラバンジ、その場でバタン！と大げさに倒れる→3秒後にムクッと起き上がる）",
+              "おばあ「7日分は紅芋28個・水28本。今は紅芋12個、水10本」",
+              "サラバンジ（息切れ）「気圧とか名前とか…勢いで無視する」",
+              "サラバンジ「紅芋あと16個…水あと18本…当たった…」",
+              "おばあ「一発勝負、成功だね」",
+              "サラバンジ「次の台風も…一瞬で…たぶん」"
+            ]
+          },
+          gan: {
+            name: "ガンジュー", color: "green", emoji: "😴", img: "../img/characters/ganjuu.png",
+            predict: { taro: 24, water: 26 },
+            line: "台風…停電…こわいです…えっと、気圧が960で、台風の名前がタイフー1号で…紅芋はあと24個、水はあと26本、だと思います…",
+            reasonAfter: "気圧の960とか台風の名前とか、数字っぽいものを全部使って計算しちゃった…実は関係ない数字だったなんて、気づかなかった…",
+            spinoff: [
+              "ガンジュー（モジモジ）「台風…停電…こわいです…」",
+              "おばあ「大丈夫、今日は計算するだけだよ」",
+              "ガンジュー「紅芋、おいしそうです…あ、すみません、先に数えないと」",
+              "おばあ「7日分は紅芋28個・水28本。今は紅芋12個、水10本」",
+              "ガンジュー（あくび）「気圧の数字は…関係ない、です、よね…」",
+              "おばあ「よく気づいたね」",
+              "（ガンジュー、立ったまま本気のいびき→おばあに肩を叩かれてハッと飛び起きる）",
+              "ガンジュー（半分寝ながら）「紅芋あと16個…水あと18本…です…」",
+              "おばあ「正解」",
+              "ガンジュー「紅芋…先に食べたいです…（あくび）」"
+            ]
+          },
+          kaa: {
+            name: "カーギー", color: "purple", emoji: "💁‍♀️", img: "../img/characters/carggy.png",
+            predict: { taro: 16, water: 18 },
+            line: "台風の前は、髪が湿気で広がるので気をつけないと。…必要な数から今ある数を引くと、紅芋はあと16個、水はあと18本ですね。",
+            reasonAfter: "台風の名前や気圧は、今回は使わない方が確実だと思って、はじめから無視して計算した。安全策が一番。",
+            spinoff: [
+              "カーギー「台風の前は、髪が湿気で広がるので気をつけないと」（風で乱れた前髪を鏡もなしに一瞬でピシッと直す）",
+              "カーギー「停電中の水と食べ物、傷んでいませんか？衛生的に保管されていますか？」",
+              "おばあ「大丈夫だよ」",
+              "おばあ「7日分は紅芋28個・水28本。今は紅芋12個、水10本」",
+              "カーギー（きれいにまとめながら）「気圧や名前は、今回は使わない方が確実ですね」",
+              "カーギー「紅芋あと16個、水あと18本。確実な計算です」",
+              "おばあ「よくできたね」",
+              "カーギー「次の台風も、備えを整えて待ちます」"
+            ]
+          }
+        };
+        const ALL_KEYS = ["hari", "sara", "gan", "kaa"];
+        const COLOR_MAP = {
+          red: { bg: "bg-red-50", border: "border-red-300", text: "text-red-700", solid: "bg-red-500" },
+          blue: { bg: "bg-blue-50", border: "border-blue-300", text: "text-blue-700", solid: "bg-blue-500" },
+          green: { bg: "bg-green-50", border: "border-green-300", text: "text-green-700", solid: "bg-green-500" },
+          purple: { bg: "bg-purple-50", border: "border-purple-300", text: "text-purple-700", solid: "bg-purple-500" }
+        };
+
+        // キャラ画像。読み込めない場合は絵文字アバターにフォールバックする
+        const Avatar = ({ charKey }) => {
+          const c = CHARACTERS[charKey];
+          const [failed, setFailed] = useState(false);
+          if (failed) {
+            return (
+              <div className={`chara-avatar flex items-center justify-center text-2xl ${COLOR_MAP[c.color].bg}`}>
+                {c.emoji}
+              </div>
+            );
+          }
+          return (
+            <img
+              src={c.img}
+              alt={c.name}
+              className="chara-avatar"
+              onError={() => setFailed(true)}
+            />
+          );
+        };
+
+        function shuffledThree() {
+          const arr = [...ALL_KEYS];
+          for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+          }
+          return arr.slice(0, 3);
+        }
+
+        const TyphoonPredictionApp = () => {
+          const [threeKeys] = useState(() => shuffledThree());
+          const [bonusKey] = useState(() => {
+            if (Math.random() >= 0.35) return null; // 35%の確率でスピンオフ出現
+            return ALL_KEYS[Math.floor(Math.random() * ALL_KEYS.length)];
+          });
+          const [currentSlide, setCurrentSlide] = useState(0);
+          const [guess, setGuess] = useState(null); // ユーザーが選んだ予想のキャラキー
+
+          const correctKey = "kaa"; // カーギーの予想が唯一の正解（16個・18本）
+
+          const slideIds = ["intro", "predict", "discuss", "verify", "imagine", "bonus", "parent"];
+          const total = slideIds.length;
+
+          const nextSlide = () => setCurrentSlide((p) => Math.min(p + 1, total - 1));
+          const prevSlide = () => setCurrentSlide((p) => Math.max(p - 1, 0));
+
+          const renderIntro = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-6xl mb-4">🌀</div>
+                <h2 className="text-2xl font-bold text-orange-600">大型台風が接近中</h2>
+              </div>
+              <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 space-y-3">
+                <p>すでに停電していて、船も1週間来ない見込みという放送が流れました。おばあの家は4人家族。</p>
+                <p>今、家には紅芋が<strong>12個</strong>、2リットルの水のペットボトルが<strong>10本</strong>あります。</p>
+                <p>家族4人が、1人1日1個ずつ紅芋を食べて、1日2リットルずつ水を飲むとすると、7日間で紅芋は<strong>28個</strong>、水は<strong>28本</strong>必要です。</p>
+                <p className="font-bold text-orange-700">今ある数から、あと何個・何本足りないでしょう？</p>
+              </div>
+              <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600">
+                <p>気をつけて：台風の名前（タイフー1号）・中心気圧（960ヘクトパスカル）・乾パンの値段（1箱600円）は、この問題を解くのには関係ありません。</p>
+              </div>
+            </div>
+          );
+
+          const renderPredict = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">🤔</div>
+                <h2 className="text-2xl font-bold text-blue-600 mb-2">3人のアルパカが予想したよ</h2>
+                <p className="text-gray-600">きみは、誰の予想が正しいと思う？クリックして選んでみよう。</p>
+              </div>
+              <div className="grid gap-4">
+                {threeKeys.map((key) => {
+                  const c = CHARACTERS[key];
+                  const cc = COLOR_MAP[c.color];
+                  const selected = guess === key;
+                  return (
+                    <div
+                      key={key}
+                      onClick={() => setGuess(key)}
+                      className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${cc.bg} ${
+                        selected ? `${cc.border} ring-2 ring-offset-1 ring-${c.color}-400` : "border-gray-200 hover:border-gray-300"
+                      }`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <Avatar charKey={key} />
+                        <div className={`speech-bubble flex-1 rounded-lg p-3 ${cc.text} bg-white/70`}>
+                          <p className={`font-bold ${cc.text}`}>{c.name}編の予想：紅芋あと{c.predict.taro}個・水あと{c.predict.water}本</p>
+                          <p className="text-sm text-gray-700 mt-1">「{c.line}」</p>
+                        </div>
+                        {selected && (
+                          <div className={`w-7 h-7 rounded-full ${cc.solid} flex items-center justify-center text-white text-sm shrink-0`}>✓</div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              {!guess && <p className="text-center text-sm text-orange-500">↑ どれか1つを選ぶと、次に進めるよ</p>}
+            </div>
+          );
+
+          const renderDiscuss = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">💬</div>
+                <h2 className="text-2xl font-bold text-purple-600">どうしてその数字になったのかな？</h2>
+              </div>
+              <div className="space-y-3">
+                {threeKeys.map((key) => {
+                  const c = CHARACTERS[key];
+                  const cc = COLOR_MAP[c.color];
+                  const isYourPick = guess === key;
+                  return (
+                    <div key={key} className={`flex items-start gap-3 p-3 rounded-lg border-2 ${cc.bg} ${isYourPick ? cc.border : "border-transparent"}`}>
+                      <Avatar charKey={key} />
+                      <div className={`speech-bubble flex-1 rounded-lg p-3 bg-white/70 ${cc.text}`}>
+                        <p className={`font-bold ${cc.text}`}>{c.name}{isYourPick ? "（きみが選んだ予想）" : ""}</p>
+                        <p className="text-sm text-gray-700 mt-1">{c.reasonAfter}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="bg-blue-50 rounded-lg p-4 text-sm text-blue-800">
+                <p>3人の予想、それぞれ理由があったね。次は、おばあが実際に計算して確かめるよ。</p>
+              </div>
+            </div>
+          );
+
+          const renderVerify = () => {
+            const guessedCharacter = guess ? CHARACTERS[guess] : null;
+            const wasCorrect = guess === correctKey;
+            return (
+              <div className="space-y-6">
+                <div className="text-center">
+                  <div className="text-5xl mb-4">✅</div>
+                  <h2 className="text-2xl font-bold text-green-600">確かめてみよう</h2>
+                </div>
+                <div className="bg-green-50 border-2 border-green-200 rounded-lg p-6 space-y-2 text-sm">
+                  <p>7日間で必要な数：紅芋 4人×1個×7日＝<strong>28個</strong>、水 4人×2Lずつ×7日＝<strong>28本</strong></p>
+                  <p>今ある数：紅芋<strong>12個</strong>、水<strong>10本</strong></p>
+                  <p className="font-bold text-green-700">足りない数：紅芋 28－12＝あと16個／水 28－10＝あと18本</p>
+                  <p className="text-gray-500 text-xs">台風の名前・気圧・乾パンの値段は、この計算には使わない。</p>
+                </div>
+                {guessedCharacter && (
+                  <div className={`rounded-lg p-4 text-center ${wasCorrect ? "bg-yellow-100" : "bg-gray-100"}`}>
+                    {wasCorrect ? (
+                      <p className="font-bold text-yellow-700">🎉 きみが選んだ{guessedCharacter.name}編の予想、正解だった！</p>
+                    ) : (
+                      <p className="font-bold text-gray-700">きみが選んだ{guessedCharacter.name}編の予想は、正解の「あと16個・18本」とは違っていたね。どこで数字がズレたか、見直してみよう。</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          };
+
+          const renderImagine = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">💭</div>
+                <h2 className="text-2xl font-bold text-pink-600">想像してみよう</h2>
+              </div>
+              <div className="bg-pink-50 rounded-lg p-6">
+                <p className="text-lg">停電して冷蔵庫が使えないとき、水や食べ物をどうやって確保する？</p>
+                <p className="text-sm text-gray-500 mt-2">（近所と分け合う、日持ちする紅芋を先に食べる…正解は一つじゃないよ）</p>
+              </div>
+            </div>
+          );
+
+          const renderBonus = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">{bonusKey ? "🎬" : "🌤️"}</div>
+                <h2 className="text-2xl font-bold text-indigo-600 flex items-center justify-center gap-2">
+                  {bonusKey ? <>ひみつのスピンオフ <Sparkles className="w-6 h-6 text-yellow-400" /></> : "今日はスピンオフはお休み"}
+                </h2>
+              </div>
+              {bonusKey ? (
+                <div className={`rounded-lg p-4 space-y-2 text-sm ${COLOR_MAP[CHARACTERS[bonusKey].color].bg}`}>
+                  <div className="flex items-center gap-3 mb-2">
+                    <Avatar charKey={bonusKey} />
+                    <p className={`font-bold ${COLOR_MAP[CHARACTERS[bonusKey].color].text}`}>
+                      {CHARACTERS[bonusKey].name}編フルストーリー（レア出現）
+                    </p>
+                  </div>
+                  {CHARACTERS[bonusKey].spinoff.map((line, i) => (
+                    <p key={i} className={line.startsWith("（") ? "text-xs text-gray-400 italic" : ""}>{line}</p>
+                  ))}
+                </div>
+              ) : (
+                <div className="bg-gray-100 rounded-lg p-6 text-center text-gray-500">
+                  <p>スピンオフは、たまにしか出てこないよ。また今度チェックしてみてね。</p>
+                </div>
+              )}
+            </div>
+          );
+
+          const renderParent = () => (
+            <div className="space-y-4">
+              <div className="text-center">
+                <div className="text-5xl mb-4">👪</div>
+                <h2 className="text-2xl font-bold text-yellow-700">保護者・支援者の方へ</h2>
+              </div>
+              <div className="bg-yellow-50 rounded-lg p-4">
+                <p className="text-xs font-bold text-yellow-800 mb-2">学習指導要領との対応</p>
+                <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
+                  <li><strong>算数（4年）</strong>：整数の四則混合計算、大きい数の処理、必要量から所持量を引く「不足分」の考え方</li>
+                  <li><strong>社会（4年〜）</strong>：自然災害から人々を守る活動、地域の防災・備蓄の工夫</li>
+                  <li><strong>生活・家庭科</strong>：非常時の食料・水の管理という実生活に直結する内容</li>
+                </ul>
+                <p className="text-xs text-gray-500 mt-2">※ この教材は「仮説実験授業」の型（予想する→理由を話し合う→確かめる）を採用しています。3人のアルパカの予想はランダムに選ばれ、正解が含まれないこともあります。「みんなの予想が外れることもある」という体験も学びの一部です。</p>
+              </div>
+            </div>
+          );
+
+          const slideRenderers = {
+            intro: renderIntro,
+            predict: renderPredict,
+            discuss: renderDiscuss,
+            verify: renderVerify,
+            imagine: renderImagine,
+            bonus: renderBonus,
+            parent: renderParent
+          };
+          const slideTitles = {
+            intro: "🌀 はじまり",
+            predict: "🤔 予想する",
+            discuss: "💬 話し合う",
+            verify: "✅ 確かめる",
+            imagine: "💭 想像する",
+            bonus: bonusKey ? "🎬 スピンオフ" : "🌤️ スピンオフ",
+            parent: "👪 保護者の方へ"
+          };
+
+          const canGoNext = !(slideIds[currentSlide] === "predict" && !guess);
+
+          return (
+            <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50">
+              <div className="container mx-auto px-4 py-8 max-w-2xl">
+                <div className="text-center mb-6">
+                  <h1 className="text-2xl md:text-3xl font-bold text-orange-600">台風がきたら、紅芋はあと何個いる？ 🌀</h1>
+                </div>
+
+                <div className="mb-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm text-gray-600">{slideTitles[slideIds[currentSlide]]}</span>
+                    <span className="text-sm text-gray-600">{currentSlide + 1} / {total}</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="bg-orange-500 h-2 rounded-full transition-all duration-300" style={{ width: `${((currentSlide + 1) / total) * 100}%` }}></div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-6 min-h-96">
+                  {slideRenderers[slideIds[currentSlide]]()}
+                </div>
+
+                <div className="flex justify-between items-center">
+                  <button
+                    onClick={prevSlide}
+                    disabled={currentSlide === 0}
+                    className={`flex items-center px-5 py-3 rounded-lg font-medium transition-all ${
+                      currentSlide === 0 ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-orange-500 text-white hover:bg-orange-600"
+                    }`}
+                  >
+                    <ChevronLeft className="w-5 h-5 mr-1" />まえへ
+                  </button>
+                  <div className="flex space-x-2">
+                    {slideIds.map((id, index) => (
+                      <div key={id} className={`w-2.5 h-2.5 rounded-full ${index === currentSlide ? "bg-orange-500" : "bg-gray-300"}`} />
+                    ))}
+                  </div>
+                  <button
+                    onClick={nextSlide}
+                    disabled={currentSlide === total - 1 || !canGoNext}
+                    className={`flex items-center px-5 py-3 rounded-lg font-medium transition-all ${
+                      currentSlide === total - 1 || !canGoNext ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-orange-500 text-white hover:bg-orange-600"
+                    }`}
+                  >
+                    つぎへ<ChevronRight className="w-5 h-5 ml-1" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        };
+
+        createRoot(document.getElementById("root")).render(<TyphoonPredictionApp />);
+    </script>
+</body>
+</html>
