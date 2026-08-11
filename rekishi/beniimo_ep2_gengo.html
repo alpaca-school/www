@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>台風がきたら、紅芋はあと何個いる？ 🌀</title>
+    <title>紅芋を持ってきたのは誰？【知能の窓 ep2：言語・語学編】 🍠</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -47,30 +47,26 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m15 18-6-6 6-6"/></svg>
         );
 
-        // 4アルパカ（性格は不変。今回から「困りごとを持ち込む役」。全員、惜しいところで間違える）
+        // 4アルパカ（性格は既存シリーズと同じ。困りごとを持ち込む役）
         const ALPACAS = {
           hari: {
             name: "ハーリー", color: "red", emoji: "🔥", img: "../img/characters/harly.png",
-            guess: { taro: 5, water: 8 },
-            line: "台風?停電?そんなん平気っしょ、オレが何とかしてやるさ!紅芋はあと5個、水はあと8本で足りるっしょ!",
-            gag: "（効果音：ズコーッ！ハーリー、勢いよく畳の上ですっ転ぶ）"
+            claim: "きっと昔のスーパーヒーローが、海の向こうから颯爽と持ってきたんっしょ！",
+            gag: "（効果音：ズコーッ！ハーリー、力説しすぎて椅子ごとひっくり返る）"
           },
           sara: {
             name: "サラバンジ", color: "blue", emoji: "⚡", img: "../img/characters/sarabanji.png",
-            guess: { taro: 10, water: 12 },
-            line: "台風か…一発で計算して終わらせるさ。紅芋はあと10個、水はあと12本!",
+            claim: "偉い将軍さまが、自分で畑を耕して育てたに違いないさ！",
             gag: "（サラバンジ、その場でバタン！と大げさに倒れる→3秒後にムクッと起き上がる）"
           },
           gan: {
             name: "ガンジュー", color: "green", emoji: "😴", img: "../img/characters/ganjuu.png",
-            guess: { taro: 24, water: 26 },
-            line: "台風…停電…こわいです…えっと、気圧が960で、台風の名前がタイフー1号で…紅芋はあと24個、水はあと26本、だと思います…",
+            claim: "船が難破して…偶然、海に流れ着いた…んだと思います…",
             gag: "（ガンジュー、立ったまま本気のいびき→徳枝オバーに肩を叩かれてハッと飛び起きる）"
           },
           kaa: {
             name: "カーギー", color: "purple", emoji: "💁‍♀️", img: "../img/characters/carggy.png",
-            guess: { taro: 28, water: 28 },
-            line: "台風の前は、髪が湿気で広がるので気をつけないと。…4人×1個×7日で、紅芋はあと28個、水はあと28本、必要ですね。",
+            claim: "たしか、えらいお坊さんが、はるばる持ち帰ったのでは。",
             gag: "（カーギー、風で乱れた前髪を鏡もなしに一瞬でピシッと直しながら、少し首をかしげる）"
           }
         };
@@ -78,10 +74,10 @@
 
         // 4メンター（オバー・オジー）。多重知能8分類を2つずつ担当する「知能の窓」シリーズの案内役
         const MENTORS = {
-          chinen: { name: "知念オジー", role: "智（論理・言語）", color: "amber", emoji: "🧓" },
-          tokue: { name: "徳枝オバー", role: "徳（対人・内省）", color: "rose", emoji: "👵" },
-          rikiya: { name: "力也オジー", role: "体（音楽・運動）", color: "teal", emoji: "🧓" },
-          misaki: { name: "美咲オバー", role: "感（視覚空間・博物学）", color: "indigo", emoji: "👵" }
+          chinen: { name: "知念オジー", color: "amber", emoji: "🧓" },
+          tokue: { name: "徳枝オバー", color: "rose", emoji: "👵" },
+          rikiya: { name: "力也オジー", color: "teal", emoji: "🧓" },
+          misaki: { name: "美咲オバー", color: "indigo", emoji: "👵" }
         };
 
         const COLOR_MAP = {
@@ -124,27 +120,38 @@
           return arr.slice(0, 3);
         }
 
+        // やってみる：名前と功績のマッチング（クリックで正誤判定）
+        const MATCH_PAIRS = [
+          {
+            name: "野國總管（のぐにそうかん）",
+            correct: "1605年ごろ、中国から紅芋（甘藷）の苗を初めて沖縄に持ち帰った人",
+            wrong: "紅芋を使った料理を100種類考えた人"
+          },
+          {
+            name: "儀間真常（ぎましんじょう）",
+            correct: "野國總管から苗を譲り受け、栽培のしかたを沖縄中に広めた人",
+            wrong: "紅芋を初めて外国に輸出した人"
+          }
+        ];
+
         // COCOLOプラン（ホームスクーラー等の学習記録）向けの教材メタ情報
         const MATERIAL = {
-          title: "台風がきたら、紅芋はあと何個いる？",
-          series: "知能の窓：算数・防災編",
-          subjectGrade: "算数4年・社会4年"
+          title: "紅芋を持ってきたのは誰？",
+          series: "知能の窓 ep2：言語・語学編",
+          subjectGrade: "国語3年・社会3年"
         };
 
-        const TyphoonPredictionApp = () => {
+        const BeniimoEp2App = () => {
           const [threeKeys] = useState(() => shuffledThreeAlpacas());
           const [currentSlide, setCurrentSlide] = useState(0);
-          const [guess, setGuess] = useState(null); // ユーザーが選んだ困りごとのキー
+          const [guess, setGuess] = useState(null);
+          const [matchAnswers, setMatchAnswers] = useState({});
           const [imagineAnswer, setImagineAnswer] = useState("");
           const [childName, setChildName] = useState("");
           const [canDoIt, setCanDoIt] = useState(null);
           const [memoryAnswer, setMemoryAnswer] = useState("");
 
-          const need = { taro: 28, water: 28 }; // 4人×1日1個×7日、4人×2Lずつ×7日
-          const have = { taro: 12, water: 10 };
-          const correct = { taro: need.taro - have.taro, water: need.water - have.water }; // 16個・18本
-
-          const slideIds = ["intro", "trouble", "mentor", "verify", "imagine", "checkin", "parent"];
+          const slideIds = ["intro", "trouble", "mentor", "match", "imagine", "checkin", "parent"];
           const total = slideIds.length;
 
           const nextSlide = () => setCurrentSlide((p) => Math.min(p + 1, total - 1));
@@ -153,18 +160,13 @@
           const renderIntro = () => (
             <div className="space-y-6">
               <div className="text-center">
-                <div className="text-6xl mb-4">🌀</div>
-                <h2 className="text-2xl font-bold text-orange-600">大型台風が接近中</h2>
+                <div className="text-6xl mb-4">🍠</div>
+                <h2 className="text-2xl font-bold text-orange-600">紅芋まつりで、司会に聞かれた</h2>
                 <span className="inline-block mt-2 px-3 py-1 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
               </div>
               <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 space-y-3">
-                <p>すでに停電していて、船も1週間来ない見込みという放送が流れました。おばあの家は4人家族。</p>
-                <p>今、家には紅芋が<strong>12個</strong>、2リットルの水のペットボトルが<strong>10本</strong>あります。</p>
-                <p>家族4人が、1人1日1個ずつ紅芋を食べて、1日2リットルずつ水を飲むとすると、7日間で紅芋は<strong>28個</strong>、水は<strong>28本</strong>必要です。</p>
-                <p className="font-bold text-orange-700">今ある数から、あと何個・何本足りないでしょう？</p>
-              </div>
-              <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600">
-                <p>気をつけて：台風の名前（タイフー1号）・中心気圧（960ヘクトパスカル）・乾パンの値段（1箱600円）は、この問題を解くのには関係ありません。</p>
+                <p>紅芋まつりのステージで、司会の人がアルパカたちにマイクを向けました。「ところで、紅芋って、いつ・誰が沖縄に持ってきたか知ってる人〜？」</p>
+                <p>4人とも、実はちゃんと知りません。でも、大勢の前でマイクを向けられて、何か答えなきゃいけない空気になってしまいました。</p>
               </div>
             </div>
           );
@@ -174,7 +176,7 @@
               <div className="text-center">
                 <div className="text-5xl mb-4">😱</div>
                 <h2 className="text-xl font-bold text-red-600 mb-1">困りごと発生！</h2>
-                <p className="text-gray-600">3人のアルパカが、焦って数字を言いはじめた。きみは、誰の言うことに一番近いと思う？</p>
+                <p className="text-gray-600">3人のアルパカが、その場しのぎで話しはじめた。きみは、誰の話に一番近いと思う？</p>
               </div>
               <div className="grid gap-4">
                 {threeKeys.map((key) => {
@@ -192,8 +194,7 @@
                       <div className="flex items-start gap-3">
                         <Avatar person={c} />
                         <div className={`speech-bubble flex-1 rounded-lg p-3 ${cc.text} bg-white/70`}>
-                          <p className={`font-bold ${cc.text}`}>{c.name}：紅芋あと{c.guess.taro}個・水あと{c.guess.water}本？</p>
-                          <p className="text-sm text-gray-700 mt-1">「{c.line}」</p>
+                          <p className="text-sm text-gray-700">「{c.claim}」</p>
                         </div>
                         {selected && (
                           <div className={`w-7 h-7 rounded-full ${cc.solid} flex items-center justify-center text-white text-sm shrink-0`}>✓</div>
@@ -206,69 +207,87 @@
               {!guess && <p className="text-center text-sm text-orange-500">↑ どれか1つを選ぶと、次に進めるよ</p>}
               {guess && (
                 <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
-                  <p>みんな焦っていて、バラバラの数字を言っている…。ここは、知能の窓シリーズのメンターに聞いてみよう。</p>
+                  <p>みんな、それらしいことを言っているけど…本当のところ、知念オジーに聞いてみよう。</p>
                 </div>
               )}
             </div>
           );
 
-          const renderMentor = () => (
-            <div className="space-y-6">
-              <div className="text-center">
-                <div className="text-5xl mb-4">🧓</div>
-                <h2 className="text-xl font-bold text-amber-600">知念オジーが教えてくれた</h2>
-              </div>
-              <div className={`rounded-lg p-4 space-y-2 ${COLOR_MAP.amber.bg}`}>
-                <div className="flex items-center gap-3 mb-1">
-                  <Avatar person={MENTORS.chinen} />
-                  <p className="font-bold text-amber-700">{MENTORS.chinen.name}</p>
-                </div>
-                <p className="text-sm text-gray-700">「焦らんでいいさぁ。こういうときは、2つだけ順番に考えればいいんだよ」</p>
-                <p className="text-sm text-gray-700">「1つ目：7日間で全部で何個・何本いるか、まず数える。4人が1日1個・1日2本ずつだから…かけ算だね」</p>
-                <p className="text-sm text-gray-700">「2つ目：今もう家にある分を、そこから引く。それが『あと何個・何本足りないか』の答えさ」</p>
-              </div>
-              <div className="grid gap-3">
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.rose.bg}`}>
-                  <Avatar person={MENTORS.tokue} />
-                  <p className="text-sm text-rose-700">「台風で焦った気持ち、みんなよくわかるよ。まずは深呼吸ね」</p>
-                </div>
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.teal.bg}`}>
-                  <Avatar person={MENTORS.rikiya} />
-                  <p className="text-sm text-teal-700">「よし、リズムに乗って数えてみるかー！いち・にい・さん…あ、電卓使お」</p>
-                </div>
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.indigo.bg}`}>
-                  <Avatar person={MENTORS.misaki} />
-                  <p className="text-sm text-indigo-700">「台風がどうやってできるのかは、また今度、たっぷり教えるね」</p>
-                </div>
-              </div>
-            </div>
-          );
-
-          const renderVerify = () => {
+          const renderMentor = () => {
             const guessedAlpaca = guess ? ALPACAS[guess] : null;
             return (
               <div className="space-y-6">
                 <div className="text-center">
-                  <div className="text-5xl mb-4">✅</div>
-                  <h2 className="text-2xl font-bold text-green-600">やってみよう</h2>
-                </div>
-                <div className="bg-green-50 border-2 border-green-200 rounded-lg p-6 space-y-2 text-sm">
-                  <p>1つ目（かけ算）：7日間で必要な数は、紅芋 4人×1個×7日＝<strong>28個</strong>、水 4人×2本ずつ×7日＝<strong>28本</strong></p>
-                  <p>2つ目（ひき算）：今ある紅芋12個・水10本を引く。28－12＝<strong>あと16個</strong>／28－10＝<strong>あと18本</strong></p>
-                  <p className="text-gray-500 text-xs">台風の名前・気圧・乾パンの値段は、この計算には使わない。</p>
+                  <div className="text-5xl mb-4">🧓</div>
+                  <h2 className="text-xl font-bold text-amber-600">知念オジーが教えてくれた</h2>
                 </div>
                 {guessedAlpaca && (
-                  <div className="rounded-lg p-4 text-center bg-gray-100">
-                    <p className="font-bold text-gray-700">きみが選んだ{guessedAlpaca.name}の「紅芋あと{guessedAlpaca.guess.taro}個・水あと{guessedAlpaca.guess.water}本」は、正解の「あと{correct.taro}個・{correct.water}本」とは違っていたね。</p>
-                    <p className="text-xs text-gray-500 mt-2">{guessedAlpaca.gag}</p>
+                  <div className="rounded-lg p-3 text-center bg-gray-100 text-sm text-gray-600">
+                    <p>きみが選んだ「{guessedAlpaca.claim}」は、本当の話とは違っていたみたい。</p>
+                    <p className="text-xs text-gray-500 mt-1">{guessedAlpaca.gag}</p>
                   </div>
                 )}
-                <div className="bg-orange-50 rounded-lg p-4 text-sm text-orange-800 text-center">
-                  <p>紅芋あと16個、水あと18本。停電が続く前に、備蓄を整えておこう。</p>
+                <div className={`rounded-lg p-4 space-y-2 ${COLOR_MAP.amber.bg}`}>
+                  <div className="flex items-center gap-3 mb-1">
+                    <Avatar person={MENTORS.chinen} />
+                    <p className="font-bold text-amber-700">{MENTORS.chinen.name}</p>
+                  </div>
+                  <p className="text-sm text-gray-700">「あわてんでいいさぁ。名前を2つだけ覚えればいいんだよ」</p>
+                  <p className="text-sm text-gray-700">「1人目：野國總管（のぐにそうかん）。1605年ごろ、中国から紅芋の苗を初めて沖縄に持ち帰った人だよ」</p>
+                  <p className="text-sm text-gray-700">「2人目：儀間真常（ぎましんじょう）。野國總管から苗を分けてもらって、育て方を沖縄中の村々に広めた人だよ」</p>
+                  <p className="text-sm text-gray-700">「持ってきた人と、広めた人。2人で1つの仕事をしたんだね」</p>
+                </div>
+                <div className="grid gap-3">
+                  <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.rose.bg}`}>
+                    <Avatar person={MENTORS.tokue} />
+                    <p className="text-sm text-rose-700">「その場しのぎで話しちゃう気持ち、みんなよくわかるよ。知らないときは『知らない』でいいんだよ」</p>
+                  </div>
+                  <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.teal.bg}`}>
+                    <Avatar person={MENTORS.rikiya} />
+                    <p className="text-sm text-teal-700">「の・ぐ・に・そ・う・か・ん！リズムに乗って言うと、覚えやすいぞー！」</p>
+                  </div>
+                  <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.indigo.bg}`}>
+                    <Avatar person={MENTORS.misaki} />
+                    <p className="text-sm text-indigo-700">「紅芋がどこから来た植物なのかは、また別の回でたっぷり教えるね」</p>
+                  </div>
                 </div>
               </div>
             );
           };
+
+          const renderMatch = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">🔤</div>
+                <h2 className="text-2xl font-bold text-green-600">やってみよう</h2>
+                <p className="text-gray-600 text-sm mt-1">名前をクリックすると、正しい説明が光るよ。声に出して読んでみよう。</p>
+              </div>
+              <div className="space-y-4">
+                {MATCH_PAIRS.map((pair, i) => {
+                  const revealed = matchAnswers[i];
+                  return (
+                    <div key={i} className="border-2 border-gray-200 rounded-lg p-4">
+                      <button
+                        onClick={() => setMatchAnswers(prev => ({ ...prev, [i]: true }))}
+                        className="font-bold text-lg text-green-700 hover:underline"
+                      >
+                        {pair.name}
+                      </button>
+                      {revealed && (
+                        <div className="mt-2 space-y-1 text-sm">
+                          <p className="bg-green-50 border border-green-300 rounded p-2 text-green-800">✅ {pair.correct}</p>
+                          <p className="bg-gray-50 border border-gray-200 rounded p-2 text-gray-400 line-through">{pair.wrong}</p>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              {Object.keys(matchAnswers).length < MATCH_PAIRS.length && (
+                <p className="text-center text-sm text-orange-500">↑ 2つとも開いてみよう</p>
+              )}
+            </div>
+          );
 
           const renderImagine = () => (
             <div className="space-y-6">
@@ -277,15 +296,15 @@
                 <h2 className="text-2xl font-bold text-pink-600">想像してみよう</h2>
               </div>
               <div className="bg-pink-50 rounded-lg p-6">
-                <p className="text-lg">停電して冷蔵庫が使えないとき、水や食べ物をどうやって確保する？</p>
-                <p className="text-sm text-gray-500 mt-2">（近所と分け合う、日持ちする紅芋を先に食べる…正解は一つじゃないよ）</p>
+                <p className="text-lg">もし、野國總管が紅芋を沖縄に持ってきていなかったら、沖縄の暮らしはどう違っていたと思う？</p>
+                <p className="text-sm text-gray-500 mt-2">（食べ物が減る・台風のときに困る…正解は一つじゃないよ）</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">きみの考えを書いてみよう（学習記録シートに残せるよ）</label>
                 <textarea
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400 text-sm"
                   rows="3"
-                  placeholder="例：近所のおばあちゃんに氷を分けてもらう"
+                  placeholder="例：台風で他の食べ物がなくなっても、紅芋がないと困ると思う"
                   value={imagineAnswer}
                   onChange={(e) => setImagineAnswer(e.target.value)}
                 ></textarea>
@@ -300,7 +319,7 @@
                 <h2 className="text-2xl font-bold text-teal-600">ふりかえり</h2>
               </div>
               <div className="bg-teal-50 rounded-lg p-6">
-                <p className="font-medium text-teal-800 mb-3">✏️ 知念オジーのやり方、自分でも使えそうだと思った？</p>
+                <p className="font-medium text-teal-800 mb-3">✏️ 2人の名前、自分でも言えそうだと思った？</p>
                 <div className="flex flex-wrap gap-2">
                   {["はい", "いいえ", "わからない"].map((opt) => (
                     <button
@@ -320,13 +339,13 @@
                 <textarea
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400 text-sm"
                   rows="3"
-                  placeholder="例：かけ算のあとにひき算をする、という順番が分かった"
+                  placeholder="例：持ってきた人と広めた人が別々にいたのが意外だった"
                   value={memoryAnswer}
                   onChange={(e) => setMemoryAnswer(e.target.value)}
                 ></textarea>
               </div>
               <div className="bg-indigo-50 rounded-lg p-4 text-sm text-indigo-700 text-center">
-                <p>次の台風が来ても、あわてず「必要な数を出す→今ある数を引く」の順番を思い出してね。</p>
+                <p>次回、知能の窓 ep3（音楽・リズム編）では、紅芋の収穫を歌にのせて覚えるよ。お楽しみに。</p>
               </div>
             </div>
           );
@@ -340,12 +359,12 @@
               <div className="bg-yellow-50 rounded-lg p-4">
                 <p className="text-xs font-bold text-yellow-800 mb-2">学習指導要領との対応</p>
                 <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
-                  <li><strong>算数（4年）</strong>：整数の四則混合計算、大きい数の処理、必要量から所持量を引く「不足分」の考え方</li>
-                  <li><strong>社会（4年〜）</strong>：自然災害から人々を守る活動、地域の防災・備蓄の工夫</li>
-                  <li><strong>生活・家庭科</strong>：非常時の食料・水の管理という実生活に直結する内容</li>
+                  <li><strong>国語（3年）</strong>：人名・固有名詞を読む、聞いたことを自分の言葉で説明する</li>
+                  <li><strong>社会（3年〜）</strong>：地域の歴史上の人物と、その功績</li>
                 </ul>
-                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓」シリーズです。多重知能（MI）理論に基づき、1つのテーマ（今回は台風への備え）を8つの知能の窓（論理・数学／言語／音楽／身体運動／博物学／視覚空間／内省／対人）から順番に描く構成を予定しています。今回は「論理・数学」の窓から、知念オジーが不足数の考え方を教える回でした。</p>
-                <p className="text-xs text-gray-500 mt-1">※ 4アルパカ（ハーリー・サラバンジ・ガンジュー・カーギー）は、「困りごとを持ち込む役」として登場します。3人の予想はランダムに選ばれ、いずれも正解ではありません。「自分たちだけで焦って解こうとすると間違えやすい」「専門家（メンター）に教わって、順序立てて考えると解ける」という体験そのものが、この教材のねらいです。</p>
+                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓」シリーズ ep2です。ep1（論理・数学編）に続き、同じ紅芋というテーマを「言語・語学」の窓から描いています。今回は知念オジーが、歴史上の人物の名前と役割を教える回でした。</p>
+                <p className="text-xs text-gray-500 mt-1">※ 4アルパカ（ハーリー・サラバンジ・ガンジュー・カーギー）は「困りごとを持ち込む役」として登場します。3人の発言はランダムに選ばれ、いずれも史実とは異なります。「知らないことを、それらしく話してしまう」体験と、「専門家に教わって正しく知る」体験を対比させることが、この教材のねらいです。</p>
+                <p className="text-xs text-gray-500 mt-1">※ 野國總管・儀間真常の年代・功績は、沖縄の郷土史で広く伝えられている内容にもとづく代表的な説を採用しています。</p>
               </div>
               <div className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-4">
                 <p className="text-xs font-bold text-gray-700 mb-2">🖨️ 学習記録シートを作る（COCOLOプラン等の学習記録用）</p>
@@ -379,26 +398,25 @@
                   <tr><td className="py-1 pr-4 font-bold w-32">学習日</td><td className="py-1">{todayStr}</td></tr>
                   <tr><td className="py-1 pr-4 font-bold">お子さんの名前</td><td className="py-1">{childName || "＿＿＿＿＿＿＿＿＿＿"}</td></tr>
                   <tr><td className="py-1 pr-4 font-bold">教材名</td><td className="py-1">{MATERIAL.title}（{MATERIAL.series}）</td></tr>
-                  <tr><td className="py-1 pr-4 font-bold">対応教科・学年</td><td className="py-1">{MATERIAL.subjectGrade}（家庭科にも接続）</td></tr>
+                  <tr><td className="py-1 pr-4 font-bold">対応教科・学年</td><td className="py-1">{MATERIAL.subjectGrade}</td></tr>
                 </tbody>
               </table>
               <div className="mb-4 text-xs text-gray-700 bg-gray-50 border border-gray-300 rounded p-3">
                 <p className="font-bold mb-1">学習指導要領との対応</p>
                 <ul className="space-y-0.5 list-disc list-inside">
-                  <li>算数（4年）：整数の四則混合計算、大きい数の処理、必要量から所持量を引く「不足分」の考え方</li>
-                  <li>社会（4年〜）：自然災害から人々を守る活動、地域の防災・備蓄の工夫</li>
-                  <li>生活・家庭科：非常時の食料・水の管理という実生活に直結する内容</li>
+                  <li>国語（3年）：人名・固有名詞を読む、聞いたことを自分の言葉で説明する</li>
+                  <li>社会（3年〜）：地域の歴史上の人物と、その功績</li>
                 </ul>
               </div>
               <div className="mb-4">
-                <p className="font-bold text-sm mb-1">1. アルパカの困りごとで、一番近いと思った数字</p>
+                <p className="font-bold text-sm mb-1">1. アルパカの困りごとで、一番近いと思った話</p>
                 <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">
-                  {guessedForSheet ? `${guessedForSheet.name}の「紅芋あと${guessedForSheet.guess.taro}個・水あと${guessedForSheet.guess.water}本」を選びました。` : "（記入なし）"}
+                  {guessedForSheet ? `${guessedForSheet.name}の「${guessedForSheet.claim}」を選びました。` : "（記入なし）"}
                 </p>
               </div>
               <div className="mb-4">
-                <p className="font-bold text-sm mb-1">2. 知念オジーに教わって、実際に確かめた答え</p>
-                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">紅芋はあと{correct.taro}個、水はあと{correct.water}本足りない（28個・28本必要、今ある12個・10本を引く）。</p>
+                <p className="font-bold text-sm mb-1">2. 知念オジーに教わった、本当の話</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">野國總管が紅芋を持ち帰り、儀間真常が沖縄中に広めた。</p>
               </div>
               <div className="mb-4">
                 <p className="font-bold text-sm mb-1">3. 想像する問題への自分の考え</p>
@@ -418,16 +436,16 @@
             intro: renderIntro,
             trouble: renderTrouble,
             mentor: renderMentor,
-            verify: renderVerify,
+            match: renderMatch,
             imagine: renderImagine,
             checkin: renderCheckin,
             parent: renderParent
           };
           const slideTitles = {
-            intro: "🌀 はじまりの問い",
+            intro: "🍠 はじまりの問い",
             trouble: "😱 困りごと",
             mentor: "🧓 メンター登場",
-            verify: "✅ やってみる",
+            match: "🔤 やってみる",
             imagine: "💭 想像する",
             checkin: "🙋 ふりかえり",
             parent: "👪 保護者の方へ"
@@ -442,8 +460,8 @@
                   <ChevronLeft className="w-4 h-4" />教材一覧へ戻る
                 </a>
                 <div className="text-center mb-6">
-                  <p className="text-xs font-bold text-indigo-500 mb-1">{MATERIAL.series}</p>
-                  <h1 className="text-2xl md:text-3xl font-bold text-orange-600">台風がきたら、紅芋はあと何個いる？ 🌀</h1>
+                  <p className="text-xs font-bold text-indigo-500 mb-1">知能の窓 ep2：言語・語学編</p>
+                  <h1 className="text-2xl md:text-3xl font-bold text-orange-600">紅芋を持ってきたのは誰？ 🍠</h1>
                   <span className="inline-block mt-1 px-2 py-0.5 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
                 </div>
 
@@ -492,7 +510,7 @@
           );
         };
 
-        createRoot(document.getElementById("root")).render(<TyphoonPredictionApp />);
+        createRoot(document.getElementById("root")).render(<BeniimoEp2App />);
     </script>
 </body>
 </html>
