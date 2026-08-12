@@ -15,7 +15,17 @@
             overflow-wrap: break-word;
             line-break: strict;
         }
-        .speech-bubble { position: relative; }
+        .speech-bubble {
+            position: relative;
+            min-width: 0;
+            max-width: 100%;
+        }
+        .speech-bubble p {
+            min-width: 0;
+            max-width: 100%;
+            white-space: normal;
+            overflow-wrap: anywhere;
+        }
         .speech-bubble::after {
             content: "";
             position: absolute;
@@ -183,11 +193,11 @@
                     <div
                       key={key}
                       onClick={() => setGuess(key)}
-                      className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${cc.bg} ${
+                      className={`min-w-0 p-4 rounded-lg border-2 cursor-pointer transition-all ${cc.bg} ${
                         selected ? `${cc.border} ring-2 ring-offset-1 ring-${c.color}-400` : "border-gray-200 hover:border-gray-300"
                       }`}
                     >
-                      <div className="flex items-start gap-3">
+                      <div className="flex min-w-0 items-start gap-3">
                         <Avatar person={c} />
                         <div className={`speech-bubble flex-1 min-w-0 rounded-lg p-3 ${cc.text} bg-white/70`}>
                           <p className={`font-bold ${cc.text}`}>{c.name}：あと{c.guess}袋？</p>
