@@ -21,10 +21,38 @@
             max-width: 100%;
         }
         .speech-bubble p {
+            display: block;
             min-width: 0;
             max-width: 100%;
             white-space: normal;
+            word-break: normal;
             overflow-wrap: anywhere;
+            line-break: anywhere;
+        }
+        .choice-card {
+            min-width: 0;
+        }
+        .choice-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            min-width: 0;
+            max-width: 100%;
+        }
+        .choice-row .speech-bubble {
+            flex: 1 1 0;
+            width: 0;
+        }
+        .choice-check {
+            flex: 0 0 auto;
+        }
+        .progress-dots {
+            display: none;
+        }
+        @media (min-width: 640px) {
+            .progress-dots {
+                display: flex;
+            }
         }
         .speech-bubble::after {
             content: "";
@@ -193,18 +221,18 @@
                     <div
                       key={key}
                       onClick={() => setGuess(key)}
-                      className={`min-w-0 p-4 rounded-lg border-2 cursor-pointer transition-all ${cc.bg} ${
+                      className={`choice-card p-4 rounded-lg border-2 cursor-pointer transition-all ${cc.bg} ${
                         selected ? `${cc.border} ring-2 ring-offset-1 ring-${c.color}-400` : "border-gray-200 hover:border-gray-300"
                       }`}
                     >
-                      <div className="flex min-w-0 items-start gap-3">
+                      <div className="choice-row">
                         <Avatar person={c} />
                         <div className={`speech-bubble flex-1 min-w-0 rounded-lg p-3 ${cc.text} bg-white/70`}>
                           <p className={`font-bold ${cc.text}`}>{c.name}：あと{c.guess}袋？</p>
                           <p className="text-sm text-gray-700 mt-1">「{c.line}」</p>
                         </div>
                         {selected && (
-                          <div className={`w-7 h-7 rounded-full ${cc.solid} flex items-center justify-center text-white text-sm shrink-0`}>✓</div>
+                          <div className={`choice-check w-7 h-7 rounded-full ${cc.solid} flex items-center justify-center text-white text-sm shrink-0`}>✓</div>
                         )}
                       </div>
                     </div>
@@ -477,7 +505,7 @@
                   >
                     <ChevronLeft className="w-5 h-5 mr-1" />まえへ
                   </button>
-                  <div className="hidden sm:flex space-x-2">
+                  <div className="progress-dots space-x-2">
                     {slideIds.map((id, index) => (
                       <div key={id} className={`w-2.5 h-2.5 rounded-full ${index === currentSlide ? "bg-orange-500" : "bg-gray-300"}`} />
                     ))}
