@@ -10,6 +10,7 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        p, .speech-bubble p { word-break: keep-all; overflow-wrap: anywhere; }
         .speech-bubble { position: relative; }
         .speech-bubble::after {
             content: "";
@@ -62,7 +63,7 @@
           gan: {
             name: "ガンジュー", color: "green", emoji: "😴", img: "../img/characters/ganjuu.png",
             claim: "んー…紅芋の話…だっけ…すや…",
-            gag: "（ガンジュー、立ったまま本気のいびき→徳枝オバーに肩を叩かれてハッと飛び起きる）"
+            gag: "（ガンジュー、立ったまま本気のいびき→仲程のヨシおばぁさんに肩を叩かれてハッと飛び起きる）"
           },
           kaa: {
             name: "カーギー", color: "purple", emoji: "💁‍♀️", img: "../img/characters/carggy.png",
@@ -72,12 +73,12 @@
         };
         const ALPACA_KEYS = ["hari", "sara", "gan", "kaa"];
 
-        // 4メンター（オバー・オジー）
+        // 4メンター（おじぃさん・おばぁさん）
         const MENTORS = {
-          chinen: { name: "知念オジー", color: "amber", emoji: "🧓" },
-          tokue: { name: "徳枝オバー", color: "rose", emoji: "👵" },
-          rikiya: { name: "力也オジー", color: "teal", emoji: "🧓" },
-          misaki: { name: "美咲オバー", color: "indigo", emoji: "👵" }
+          chinen: { name: "知念おじぃさん", color: "amber", emoji: "🧓" },
+          tokue: { name: "仲程のヨシおばぁさん", color: "rose", emoji: "👵" },
+          rikiya: { name: "力也おじぃさん", color: "teal", emoji: "🧓" },
+          misaki: { name: "美咲おばぁさん", color: "indigo", emoji: "👵" }
         };
 
         const COLOR_MAP = {
@@ -159,7 +160,7 @@
               </div>
               <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 space-y-3">
                 <p>おばあの畑で、みんなで紅芋を食べていたとき。「はじめて紅芋を食べたのって、いつだった？」と聞かれたアルパカたち。それぞれ、なんだか答えづらそうにしています。</p>
-                <p>徳枝オバーは、いつも「気持ちを正直に振り返る」ことを大事にしているそうです。</p>
+                <p>仲程のヨシおばぁさんは、いつも「気持ちを正直に振り返る」ことを大事にしているそうです。</p>
               </div>
             </div>
           );
@@ -200,7 +201,7 @@
               {!guess && <p className="text-center text-sm text-orange-500">↑ どれか1つを選ぶと、次に進めるよ</p>}
               {guess && (
                 <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
-                  <p>みんな、ごまかしたり話をそらしたりしているだけみたい。正解も不正解もないよ。徳枝オバーに聞いてみよう。</p>
+                  <p>みんな、ごまかしたり話をそらしたりしているだけみたい。正解も不正解もないよ。仲程のヨシおばぁさんに聞いてみよう。</p>
                 </div>
               )}
             </div>
@@ -210,7 +211,7 @@
             <div className="space-y-6">
               <div className="text-center">
                 <div className="text-5xl mb-4">👵</div>
-                <h2 className="text-xl font-bold text-rose-600">徳枝オバーが教えてくれた</h2>
+                <h2 className="text-xl font-bold text-rose-600">仲程のヨシおばぁさんが教えてくれた</h2>
               </div>
               <div className={`rounded-lg p-4 space-y-2 ${COLOR_MAP.rose.bg}`}>
                 <div className="flex items-center gap-3 mb-1">
@@ -350,7 +351,7 @@
                   <li><strong>道徳（3年）</strong>：自分の考えや気持ちを見つめ、正直に表現する態度を養う</li>
                   <li><strong>特別活動（3年〜）</strong>：自己の生活や経験を振り返り、言葉にする習慣づくり</li>
                 </ul>
-                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓」シリーズ ep7です。ep1（論理・数学編）〜ep6に続き、同じ紅芋というテーマを「内省」の窓から描いています。今回は徳枝オバーが、自分の気持ちを正直に振り返ることの大切さを教える回でした。他のエピソードと違い、正解・不正解を判定するクイズ形式ではなく、子ども自身の気持ちを自由に振り返るワーク中心の構成になっています。</p>
+                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓」シリーズ ep7です。ep1（論理・数学編）〜ep6に続き、同じ紅芋というテーマを「内省」の窓から描いています。今回は仲程のヨシおばぁさんが、自分の気持ちを正直に振り返ることの大切さを教える回でした。他のエピソードと違い、正解・不正解を判定するクイズ形式ではなく、子ども自身の気持ちを自由に振り返るワーク中心の構成になっています。</p>
                 <p className="text-xs text-gray-500 mt-1">※ 4アルパカ（ハーリー・サラバンジ・ガンジュー・カーギー）は「困りごとを持ち込む役」として登場します。3人の発言はランダムに選ばれ、いずれも素直に気持ちを話せていない状態を描いたものです。</p>
               </div>
               <div className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-4">

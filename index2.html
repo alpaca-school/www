@@ -33,10 +33,25 @@
         // capital: 文化資本 / 社会関係資本 / 経済資本（ブルデュー3資本。カード上のバッジとして表示、絞り込みには未使用）
         // grades: 対象学年・年齢の配列
         // subjects: 関連教科の配列（絞り込みに使用）
-        // mi: 多重知能4分類（智=論理数学+言語／徳=対人+内省／体=音楽+身体運動／感=視覚空間+博物学）
+        // mi: 多重知能（ガードナーの8分類）。"特別"は単一分類に収まらない特別編（例：ep9）を示す
         // dateAdded: 新着バナー・並び替え用
         // recommended: おすすめ欄に手動で載せるフラグ（将来アクセスデータに置き換え予定）
         const MATERIALS = [
+          {
+            id: "beniimo-ep9",
+            title: "紅芋のことば、誰かに届けてみよう（知能の窓 ep9：集・表現編）",
+            url: "rekishi/beniimo_ep9_hyogen.html",
+            subjectLabel: "国語・特別活動（中学生向け）",
+            grades: ["中学生"],
+            subjects: ["国語", "特別活動"],
+            mi: "特別",
+            capital: "社会関係資本",
+            ladderStep: "中級",
+            status: "published",
+            emoji: "🍠",
+            dateAdded: "2026-08-12",
+            recommended: false,
+          },
           {
             id: "beniimo-ep4",
             title: "紅芋掘り、正しいやり方は？（知能の窓 ep4：身体・運動編）",
@@ -44,7 +59,7 @@
             subjectLabel: "体育3年・生活3年",
             grades: ["小3"],
             subjects: ["生活"],
-            mi: "体",
+            mi: "身体運動",
             capital: "文化資本",
             ladderStep: "初級",
             status: "published",
@@ -59,7 +74,7 @@
             subjectLabel: "理科4年・社会3年",
             grades: ["小3", "小4"],
             subjects: ["理科", "社会"],
-            mi: "感",
+            mi: "博物学",
             capital: "文化資本",
             ladderStep: "初級",
             status: "published",
@@ -74,7 +89,7 @@
             subjectLabel: "理科3年・図画工作3年",
             grades: ["小3"],
             subjects: ["理科", "図画工作"],
-            mi: "感",
+            mi: "視覚空間",
             capital: "文化資本",
             ladderStep: "初級",
             status: "published",
@@ -89,7 +104,7 @@
             subjectLabel: "道徳3年・特別活動3年",
             grades: ["小3"],
             subjects: ["特別活動"],
-            mi: "徳",
+            mi: "内省",
             capital: "文化資本",
             ladderStep: "初級",
             status: "published",
@@ -104,7 +119,7 @@
             subjectLabel: "国語3年・特別活動3年",
             grades: ["小3"],
             subjects: ["国語", "特別活動"],
-            mi: "徳",
+            mi: "対人",
             capital: "社会関係資本",
             ladderStep: "初級",
             status: "published",
@@ -119,7 +134,7 @@
             subjectLabel: "音楽3年・生活3年",
             grades: ["小3"],
             subjects: ["生活"],
-            mi: "体",
+            mi: "音楽",
             capital: "文化資本",
             ladderStep: "初級",
             status: "published",
@@ -134,7 +149,7 @@
             subjectLabel: "国語3年・社会3年",
             grades: ["小3"],
             subjects: ["国語", "社会"],
-            mi: "智",
+            mi: "言語",
             capital: "文化資本",
             ladderStep: "初級",
             status: "published",
@@ -149,7 +164,7 @@
             subjectLabel: "算数3年・社会3年",
             grades: ["小3"],
             subjects: ["算数", "社会"],
-            mi: "智",
+            mi: "論理数学",
             capital: "文化資本",
             ladderStep: "初級",
             status: "published",
@@ -164,7 +179,7 @@
             subjectLabel: "算数4年・社会4年",
             grades: ["小4"],
             subjects: ["算数", "社会"],
-            mi: "智",
+            mi: "論理数学",
             capital: "文化資本",
             ladderStep: "初級",
             status: "published",
@@ -179,7 +194,7 @@
             subjectLabel: "理科5年・算数4年",
             grades: ["小4", "小5"],
             subjects: ["理科", "算数"],
-            mi: "智",
+            mi: "論理数学",
             capital: "文化資本",
             ladderStep: "初級",
             status: "published",
@@ -194,7 +209,7 @@
             subjectLabel: "算数4年・社会4年",
             grades: ["小4"],
             subjects: ["算数", "社会"],
-            mi: "感",
+            mi: "博物学",
             capital: "文化資本",
             ladderStep: "初級",
             status: "published",
@@ -209,7 +224,7 @@
             subjectLabel: "特別活動・自己理解",
             grades: ["小3", "小4", "小5", "小6"],
             subjects: ["特別活動"],
-            mi: "徳",
+            mi: "内省",
             capital: "文化資本",
             ladderStep: "初級",
             status: "coming",
@@ -224,7 +239,7 @@
             subjectLabel: "総合・生活",
             grades: ["小3", "小4", "小5", "小6"],
             subjects: ["総合", "生活"],
-            mi: "感",
+            mi: "博物学",
             capital: "文化資本",
             ladderStep: "初級",
             status: "coming",
@@ -239,7 +254,7 @@
             subjectLabel: "思考・感情の言語化",
             grades: ["小3", "小4", "小5", "小6"],
             subjects: ["国語"],
-            mi: "徳",
+            mi: "内省",
             capital: "文化資本",
             ladderStep: "初級",
             status: "coming",
@@ -254,7 +269,7 @@
             subjectLabel: "表現・発信",
             grades: ["中学生"],
             subjects: ["国語", "図画工作"],
-            mi: "徳",
+            mi: "対人",
             capital: "社会関係資本",
             ladderStep: "中級",
             status: "coming",
@@ -269,7 +284,7 @@
             subjectLabel: "企画・協働",
             grades: ["中学生"],
             subjects: ["特別活動"],
-            mi: "徳",
+            mi: "対人",
             capital: "社会関係資本",
             ladderStep: "中級",
             status: "coming",
@@ -284,7 +299,7 @@
             subjectLabel: "パッケージデザイン",
             grades: ["中学生"],
             subjects: ["図画工作"],
-            mi: "感",
+            mi: "視覚空間",
             capital: "社会関係資本",
             ladderStep: "中級",
             status: "coming",
@@ -299,7 +314,7 @@
             subjectLabel: "実務・自立",
             grades: ["高校生・大人"],
             subjects: ["家庭科"],
-            mi: "体",
+            mi: "対人",
             capital: "経済資本",
             ladderStep: "上級",
             status: "coming",
@@ -314,7 +329,7 @@
             subjectLabel: "実務・自立",
             grades: ["高校生・大人"],
             subjects: ["技術・情報"],
-            mi: "智",
+            mi: "視覚空間",
             capital: "経済資本",
             ladderStep: "上級",
             status: "coming",
@@ -329,7 +344,7 @@
             subjectLabel: "実務・自立",
             grades: ["高校生・大人"],
             subjects: ["総合"],
-            mi: "徳",
+            mi: "対人",
             capital: "経済資本",
             ladderStep: "上級",
             status: "coming",
@@ -342,10 +357,14 @@
         const GRADES = ["小3", "小4", "小5", "小6", "中学生", "高校生・大人"];
         const SUBJECTS = ["国語", "算数", "理科", "社会", "生活", "家庭科", "図画工作", "総合", "特別活動", "技術・情報"];
         const MI_LIST = [
-          { key: "智", label: "智（論理・言語）" },
-          { key: "徳", label: "徳（対人・内省）" },
-          { key: "体", label: "体（音楽・運動）" },
-          { key: "感", label: "感（視覚空間・博物学）" },
+          { key: "論理数学", label: "論理・数学的知能" },
+          { key: "言語", label: "言語・語学的知能" },
+          { key: "音楽", label: "音楽・リズム的知能" },
+          { key: "身体運動", label: "身体・運動感覚的知能" },
+          { key: "博物学", label: "博物学的知能" },
+          { key: "視覚空間", label: "視覚・空間的知能" },
+          { key: "内省", label: "内省的知能" },
+          { key: "対人", label: "対人的知能" },
         ];
         const CAPITALS = [
           { key: "文化資本", color: "orange" },
@@ -508,12 +527,17 @@
               <div className="sticky top-0 z-10 bg-white/90 dark:bg-gray-800/90 backdrop-blur border-b border-gray-200 dark:border-gray-700">
                 <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
                   <span className="font-extrabold text-gray-800 dark:text-gray-100 whitespace-nowrap">🦙 アルパカすく〜る</span>
+                  <nav className="flex items-center gap-1 text-sm font-bold whitespace-nowrap">
+                    <a href="./matrix-library.html" className="px-2 py-1 rounded text-orange-600 dark:text-orange-400">教材一覧</a>
+                    <a href="./characters.html" className="px-2 py-1 rounded text-gray-600 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 transition">キャラクター図鑑</a>
+                    <a href="./concept.html" className="px-2 py-1 rounded text-gray-600 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 transition">このサイトについて</a>
+                  </nav>
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="教材を検索（タイトル・教科）"
-                    className="flex-1 px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                    className="flex-1 min-w-0 px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
                   />
                   <button
                     onClick={() => setDarkMode(d => !d)}
@@ -529,11 +553,11 @@
                 <header className="mb-8 text-center">
                   <h1 className="text-3xl md:text-4xl font-extrabold text-gray-800 dark:text-gray-100 mb-4">アルパカすく〜る 🦙</h1>
                   <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                    「やってみたい」を、<br />勉強・生活・仕事・社会につながる形で試せる場所。
+                    沖縄を教材に、<br />勉強と暮らしの力を育てる。
                   </p>
                   <p className="mt-4 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                    学ぶ・つくる・つながる。<br />
-                    子どもから大人まで、沖縄の雑学を学ぶオンライン学び舎。
+                    子どもから大人まで通える、<br />
+                    オンライン学び舎。
                   </p>
                 </header>
 

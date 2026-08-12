@@ -10,6 +10,7 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        p, .speech-bubble p { word-break: keep-all; overflow-wrap: anywhere; }
         .speech-bubble { position: relative; }
         .speech-bubble::after {
             content: "";
@@ -62,7 +63,7 @@
           gan: {
             name: "ガンジュー", color: "green", emoji: "😴", img: "../img/characters/ganjuu.png",
             claim: "紅芋のことでねぇ…ぼくがちいさいころ畑でねぇ…（お客さんの顔を見ずに、ずっと自分の思い出話）",
-            gag: "（ガンジュー、話しながら立ったまま本気のいびき→徳枝オバーに肩を叩かれてハッと飛び起きる）"
+            gag: "（ガンジュー、話しながら立ったまま本気のいびき→仲程のヨシおばぁさんに肩を叩かれてハッと飛び起きる）"
           },
           kaa: {
             name: "カーギー", color: "purple", emoji: "💁‍♀️", img: "../img/characters/carggy.png",
@@ -72,12 +73,12 @@
         };
         const ALPACA_KEYS = ["hari", "sara", "gan", "kaa"];
 
-        // 4メンター（オバー・オジー）
+        // 4メンター（おじぃさん・おばぁさん）
         const MENTORS = {
-          chinen: { name: "知念オジー", color: "amber", emoji: "🧓" },
-          tokue: { name: "徳枝オバー", color: "rose", emoji: "👵" },
-          rikiya: { name: "力也オジー", color: "teal", emoji: "🧓" },
-          misaki: { name: "美咲オバー", color: "indigo", emoji: "👵" }
+          chinen: { name: "知念おじぃさん", color: "amber", emoji: "🧓" },
+          tokue: { name: "仲程のヨシおばぁさん", color: "rose", emoji: "👵" },
+          rikiya: { name: "力也おじぃさん", color: "teal", emoji: "🧓" },
+          misaki: { name: "美咲おばぁさん", color: "indigo", emoji: "👵" }
         };
 
         const COLOR_MAP = {
@@ -177,7 +178,7 @@
               </div>
               <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 space-y-3">
                 <p>今度の紅芋まつりで、来てくれたお客さんに紅芋のことを紹介する係になったアルパカたち。でも、何をどう話せばいいのか、みんなわからずに困っています。</p>
-                <p>ここまでの旅で、論理・言葉・音楽・体・空間・自然・自分自身…いろんな窓から紅芋を見てきました。最後の窓は「人と人」。徳枝オバーに、伝え方のコツを教わりに行こう。</p>
+                <p>ここまでの旅で、論理・言葉・音楽・体・空間・自然・自分自身…いろんな窓から紅芋を見てきました。最後の窓は「人と人」。仲程のヨシおばぁさんに、伝え方のコツを教わりに行こう。</p>
               </div>
             </div>
           );
@@ -218,7 +219,7 @@
               {!guess && <p className="text-center text-sm text-orange-500">↑ どれか1つを選ぶと、次に進めるよ</p>}
               {guess && (
                 <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
-                  <p>みんな、お客さんに気持ちがちゃんと届いていないみたい。徳枝オバーに聞いてみよう。</p>
+                  <p>みんな、お客さんに気持ちがちゃんと届いていないみたい。仲程のヨシおばぁさんに聞いてみよう。</p>
                 </div>
               )}
             </div>
@@ -228,7 +229,7 @@
             <div className="space-y-6">
               <div className="text-center">
                 <div className="text-5xl mb-4">👵</div>
-                <h2 className="text-xl font-bold text-rose-600">徳枝オバーが教えてくれた</h2>
+                <h2 className="text-xl font-bold text-rose-600">仲程のヨシおばぁさんが教えてくれた</h2>
               </div>
               <div className={`rounded-lg p-4 space-y-2 ${COLOR_MAP.rose.bg}`}>
                 <div className="flex items-center gap-3 mb-1">
@@ -265,7 +266,7 @@
               <div className="text-center">
                 <div className="text-5xl mb-4">🗣️</div>
                 <h2 className="text-2xl font-bold text-green-600">やってみよう</h2>
-                <p className="text-gray-600 text-sm mt-1">紹介文を組み立てよう。それぞれ、徳枝オバーの教えに近いほうを選んでみよう。</p>
+                <p className="text-gray-600 text-sm mt-1">紹介文を組み立てよう。それぞれ、仲程のヨシおばぁさんの教えに近いほうを選んでみよう。</p>
               </div>
 
               <div className="space-y-4">
@@ -331,7 +332,7 @@
                   {isPickPerfect ? (
                     <p className="font-bold text-yellow-700">🎉 いいね！短く区切って、相手が知りたいことから話す紹介文になったね。</p>
                   ) : (
-                    <p className="font-bold text-gray-700">それも1つの紹介の仕方。徳枝オバーの3つのコツと見比べてみよう。</p>
+                    <p className="font-bold text-gray-700">それも1つの紹介の仕方。仲程のヨシおばぁさんの3つのコツと見比べてみよう。</p>
                   )}
                   <button onClick={resetPicks} className="mt-3 text-sm font-bold text-green-600 underline">もう一度えらんでみる</button>
                 </div>
@@ -347,7 +348,7 @@
               </div>
               <div className="bg-pink-50 rounded-lg p-6">
                 <p className="text-lg">紅芋以外に、誰かに紹介してみたいものはあるかな？きみの好きなもの、得意なこと、大事にしているもの――なんでもいいよ。</p>
-                <p className="text-sm text-gray-500 mt-2">（正解は一つじゃないよ。徳枝オバーの3つのコツを使って、どう紹介するか考えてみよう）</p>
+                <p className="text-sm text-gray-500 mt-2">（正解は一つじゃないよ。仲程のヨシおばぁさんの3つのコツを使って、どう紹介するか考えてみよう）</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">きみの考えを書いてみよう（学習記録シートに残せるよ）</label>
@@ -369,7 +370,7 @@
                 <h2 className="text-2xl font-bold text-teal-600">ふりかえり</h2>
               </div>
               <div className="bg-teal-50 rounded-lg p-6">
-                <p className="font-medium text-teal-800 mb-3">✏️ 徳枝オバーの3つのコツ、自分でも使えそうだと思った？</p>
+                <p className="font-medium text-teal-800 mb-3">✏️ 仲程のヨシおばぁさんの3つのコツ、自分でも使えそうだと思った？</p>
                 <div className="flex flex-wrap gap-2">
                   {["はい", "いいえ", "わからない"].map((opt) => (
                     <button
@@ -413,7 +414,7 @@
                   <li><strong>国語（3年）</strong>：相手に伝わるように、話す事柄の順序を考えて話す</li>
                   <li><strong>特別活動（3年〜）</strong>：互いのよさを認め合い、協力して活動する中で伝え合う力を養う</li>
                 </ul>
-                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓」シリーズ ep8（最終話）です。ep1（論理・数学編）からep7まで、同じ紅芋というテーマを8つの窓から描いてきました。今回は徳枝オバーが、人に伝える工夫（相手の顔を見る／短く区切る／相手が知りたいことから話す）を教える回でした。会話文・掛け声・紹介文の例文は教材オリジナルの創作です。</p>
+                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓」シリーズ ep8（最終話）です。ep1（論理・数学編）からep7まで、同じ紅芋というテーマを8つの窓から描いてきました。今回は仲程のヨシおばぁさんが、人に伝える工夫（相手の顔を見る／短く区切る／相手が知りたいことから話す）を教える回でした。会話文・掛け声・紹介文の例文は教材オリジナルの創作です。</p>
                 <p className="text-xs text-gray-500 mt-1">※ 4アルパカ（ハーリー・サラバンジ・ガンジュー・カーギー）は「困りごとを持ち込む役」として登場します。3人の発言はランダムに選ばれ、いずれも伝え方に課題が残る例として描いています。</p>
               </div>
               <div className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-4">
@@ -465,7 +466,7 @@
                 </p>
               </div>
               <div className="mb-4">
-                <p className="font-bold text-sm mb-1">2. 徳枝オバーに教わった、伝え方の3つのコツ</p>
+                <p className="font-bold text-sm mb-1">2. 仲程のヨシおばぁさんに教わった、伝え方の3つのコツ</p>
                 <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">相手の顔を見る／短く区切って話す／相手が知りたいことから話す</p>
               </div>
               <div className="mb-4">

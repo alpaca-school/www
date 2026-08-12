@@ -10,6 +10,7 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        p, .speech-bubble p { word-break: keep-all; overflow-wrap: anywhere; }
         .speech-bubble { position: relative; }
         .speech-bubble::after {
             content: "";
@@ -62,7 +63,7 @@
           gan: {
             name: "ガンジュー", color: "green", emoji: "😴", img: "../img/characters/ganjuu.png",
             claim: "「全部いっぺんに抱えれば、休憩しなくてすむよ…ふわぁ…」",
-            gag: "（ガンジュー、しゃがんだまま本気のいびき→美咲オバーに肩を叩かれてハッと飛び起きる）"
+            gag: "（ガンジュー、しゃがんだまま本気のいびき→美咲おばぁさんに肩を叩かれてハッと飛び起きる）"
           },
           kaa: {
             name: "カーギー", color: "purple", emoji: "💁‍♀️", img: "../img/characters/carggy.png",
@@ -72,12 +73,12 @@
         };
         const ALPACA_KEYS = ["hari", "sara", "gan", "kaa"];
 
-        // 4メンター（オバー・オジー）
+        // 4メンター（おじぃさん・おばぁさん）
         const MENTORS = {
-          chinen: { name: "知念オジー", color: "amber", emoji: "🧓" },
-          tokue: { name: "徳枝オバー", color: "rose", emoji: "👵" },
-          rikiya: { name: "力也オジー", color: "teal", emoji: "🧓" },
-          misaki: { name: "美咲オバー", color: "indigo", emoji: "👵" }
+          chinen: { name: "知念おじぃさん", color: "amber", emoji: "🧓" },
+          tokue: { name: "仲程のヨシおばぁさん", color: "rose", emoji: "👵" },
+          rikiya: { name: "力也おじぃさん", color: "teal", emoji: "🧓" },
+          misaki: { name: "美咲おばぁさん", color: "indigo", emoji: "👵" }
         };
 
         const COLOR_MAP = {
@@ -119,7 +120,7 @@
           return arr.slice(0, 3);
         }
 
-        // 正しい4手順（力也オジーが教える、安全な掘り方・持ち方の動き）
+        // 正しい4手順（力也おじぃさんが教える、安全な掘り方・持ち方の動き）
         const CORRECT_ORDER = ["あしを ひらく", "ひざを まげる", "こしを おとす", "りょうてで もつ"];
         function shuffledSteps() {
           const arr = [...CORRECT_ORDER];
@@ -170,7 +171,7 @@
               </div>
               <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 space-y-3">
                 <p>今日はおばあの畑で、紅芋の収穫を手伝うことになったアルパカたち。でも、どうやって掘ればいいのか、掘った芋をどう運べばいいのか、誰も正しいやり方を知りません。</p>
-                <p>力也オジーは、体の使い方を教えるのが得意だそうです。</p>
+                <p>力也おじぃさんは、体の使い方を教えるのが得意だそうです。</p>
               </div>
             </div>
           );
@@ -211,7 +212,7 @@
               {!guess && <p className="text-center text-sm text-orange-500">↑ どれか1つを選ぶと、次に進めるよ</p>}
               {guess && (
                 <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
-                  <p>みんな、体を痛めそうなやり方をしているみたい。力也オジーに聞いてみよう。</p>
+                  <p>みんな、体を痛めそうなやり方をしているみたい。力也おじぃさんに聞いてみよう。</p>
                 </div>
               )}
             </div>
@@ -221,7 +222,7 @@
             <div className="space-y-6">
               <div className="text-center">
                 <div className="text-5xl mb-4">🧓</div>
-                <h2 className="text-xl font-bold text-teal-600">力也オジーが教えてくれた</h2>
+                <h2 className="text-xl font-bold text-teal-600">力也おじぃさんが教えてくれた</h2>
               </div>
               <div className={`rounded-lg p-4 space-y-2 ${COLOR_MAP.teal.bg}`}>
                 <div className="flex items-center gap-3 mb-1">
@@ -298,7 +299,7 @@
                 <h2 className="text-2xl font-bold text-pink-600">想像してみよう</h2>
               </div>
               <div className="bg-pink-50 rounded-lg p-6">
-                <p className="text-lg">力也オジーが教えてくれた「ひざを曲げて、腰を落として持つ」動き方は、紅芋掘り以外のどんなお手伝いでも使えそうかな？</p>
+                <p className="text-lg">力也おじぃさんが教えてくれた「ひざを曲げて、腰を落として持つ」動き方は、紅芋掘り以外のどんなお手伝いでも使えそうかな？</p>
                 <p className="text-sm text-gray-500 mt-2">（重い荷物を運ぶ・洗濯物を持ち上げる…正解は一つじゃないよ）</p>
               </div>
               <div>
@@ -321,7 +322,7 @@
                 <h2 className="text-2xl font-bold text-teal-600">ふりかえり</h2>
               </div>
               <div className="bg-teal-50 rounded-lg p-6">
-                <p className="font-medium text-teal-800 mb-3">✏️ 力也オジーの動き方、自分でも真似できそうだと思った？</p>
+                <p className="font-medium text-teal-800 mb-3">✏️ 力也おじぃさんの動き方、自分でも真似できそうだと思った？</p>
                 <div className="flex flex-wrap gap-2">
                   {["はい", "いいえ", "わからない"].map((opt) => (
                     <button
@@ -364,7 +365,7 @@
                   <li><strong>体育（3年）</strong>：体つくり運動（体の基本的な動きを身に付ける運動）、けがの防止や安全に気をつけた体の使い方を理解する</li>
                   <li><strong>生活・家庭科（3年〜）</strong>：仕事の手伝いを通して、正しく安全な体の動かし方を理解する</li>
                 </ul>
-                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓」シリーズ ep4です。ep1（論理・数学編）・ep2（言語・語学編）・ep3（音楽・リズム編）に続き、同じ紅芋というテーマを「身体・運動」の窓から描いています。今回は力也オジーが、腰を痛めない安全な掘り方・持ち方を教える回でした。動き方はすべて教材オリジナルの創作で、特定の運動プログラムや団体とは関係ありません。</p>
+                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓」シリーズ ep4です。ep1（論理・数学編）・ep2（言語・語学編）・ep3（音楽・リズム編）に続き、同じ紅芋というテーマを「身体・運動」の窓から描いています。今回は力也おじぃさんが、腰を痛めない安全な掘り方・持ち方を教える回でした。動き方はすべて教材オリジナルの創作で、特定の運動プログラムや団体とは関係ありません。</p>
                 <p className="text-xs text-gray-500 mt-1">※ 4アルパカ（ハーリー・サラバンジ・ガンジュー・カーギー）は「困りごとを持ち込む役」として登場します。3人の発言はランダムに選ばれ、いずれも正しいやり方とは異なります。</p>
               </div>
               <div className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-4">
@@ -416,7 +417,7 @@
                 </p>
               </div>
               <div className="mb-4">
-                <p className="font-bold text-sm mb-1">2. 力也オジーに教わった、正しい動き方</p>
+                <p className="font-bold text-sm mb-1">2. 力也おじぃさんに教わった、正しい動き方</p>
                 <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">あしをひらく → ひざをまげる → こしをおとす → りょうてでもつ</p>
               </div>
               <div className="mb-4">

@@ -10,6 +10,7 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        p, .speech-bubble p { word-break: keep-all; overflow-wrap: anywhere; }
         .speech-bubble { position: relative; }
         .speech-bubble::after {
             content: "";
@@ -62,7 +63,7 @@
           gan: {
             name: "ガンジュー", color: "green", emoji: "😴", img: "../img/characters/ganjuu.png",
             claim: "えっと…洗ってから掘る…いや、掘ってから蒸かして…あれ…",
-            gag: "（ガンジュー、立ったまま本気のいびき→徳枝オバーに肩を叩かれてハッと飛び起きる）"
+            gag: "（ガンジュー、立ったまま本気のいびき→仲程のヨシおばぁさんに肩を叩かれてハッと飛び起きる）"
           },
           kaa: {
             name: "カーギー", color: "purple", emoji: "💁‍♀️", img: "../img/characters/carggy.png",
@@ -72,12 +73,12 @@
         };
         const ALPACA_KEYS = ["hari", "sara", "gan", "kaa"];
 
-        // 4メンター（オバー・オジー）
+        // 4メンター（おじぃさん・おばぁさん）
         const MENTORS = {
-          chinen: { name: "知念オジー", color: "amber", emoji: "🧓" },
-          tokue: { name: "徳枝オバー", color: "rose", emoji: "👵" },
-          rikiya: { name: "力也オジー", color: "teal", emoji: "🧓" },
-          misaki: { name: "美咲オバー", color: "indigo", emoji: "👵" }
+          chinen: { name: "知念おじぃさん", color: "amber", emoji: "🧓" },
+          tokue: { name: "仲程のヨシおばぁさん", color: "rose", emoji: "👵" },
+          rikiya: { name: "力也おじぃさん", color: "teal", emoji: "🧓" },
+          misaki: { name: "美咲おばぁさん", color: "indigo", emoji: "👵" }
         };
 
         const COLOR_MAP = {
@@ -119,7 +120,7 @@
           return arr.slice(0, 3);
         }
 
-        // 正しい4手順（力也オジーオリジナルの掛け声）
+        // 正しい4手順（力也おじぃさんオリジナルの掛け声）
         const CORRECT_ORDER = ["ほって", "あらって", "きって", "むして"];
         function shuffledSteps() {
           const arr = [...CORRECT_ORDER];
@@ -170,7 +171,7 @@
               </div>
               <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 space-y-3">
                 <p>おばあの台所で、紅芋のお菓子づくりを手伝うことになったアルパカたち。でも、掘る・洗う・切る・蒸かす、この4つの手順、どの順番だったか忘れてしまいました。</p>
-                <p>力也オジーは、いつも手順をリズムに乗せて覚えるのが得意だそうです。</p>
+                <p>力也おじぃさんは、いつも手順をリズムに乗せて覚えるのが得意だそうです。</p>
               </div>
             </div>
           );
@@ -211,7 +212,7 @@
               {!guess && <p className="text-center text-sm text-orange-500">↑ どれか1つを選ぶと、次に進めるよ</p>}
               {guess && (
                 <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
-                  <p>みんな、途中で忘れちゃってるみたい。力也オジーに聞いてみよう。</p>
+                  <p>みんな、途中で忘れちゃってるみたい。力也おじぃさんに聞いてみよう。</p>
                 </div>
               )}
             </div>
@@ -221,7 +222,7 @@
             <div className="space-y-6">
               <div className="text-center">
                 <div className="text-5xl mb-4">🧓</div>
-                <h2 className="text-xl font-bold text-teal-600">力也オジーが教えてくれた</h2>
+                <h2 className="text-xl font-bold text-teal-600">力也おじぃさんが教えてくれた</h2>
               </div>
               <div className={`rounded-lg p-4 space-y-2 ${COLOR_MAP.teal.bg}`}>
                 <div className="flex items-center gap-3 mb-1">
@@ -320,7 +321,7 @@
                 <h2 className="text-2xl font-bold text-teal-600">ふりかえり</h2>
               </div>
               <div className="bg-teal-50 rounded-lg p-6">
-                <p className="font-medium text-teal-800 mb-3">✏️ 力也オジーのリズム、自分でも手を叩きながら言えそうだと思った？</p>
+                <p className="font-medium text-teal-800 mb-3">✏️ 力也おじぃさんのリズム、自分でも手を叩きながら言えそうだと思った？</p>
                 <div className="flex flex-wrap gap-2">
                   {["はい", "いいえ", "わからない"].map((opt) => (
                     <button
@@ -363,7 +364,7 @@
                   <li><strong>音楽（3年）</strong>：リズムに合わせて体を動かす、拍を感じて言葉をのせる</li>
                   <li><strong>生活・家庭科（3年〜）</strong>：調理の手順を順序立てて理解する</li>
                 </ul>
-                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓」シリーズ ep3です。ep1（論理・数学編）・ep2（言語・語学編）に続き、同じ紅芋というテーマを「音楽・リズム」の窓から描いています。今回は力也オジーが、手順をリズムで覚える方法を教える回でした。掛け声・リズムは教材オリジナルの創作です。</p>
+                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓」シリーズ ep3です。ep1（論理・数学編）・ep2（言語・語学編）に続き、同じ紅芋というテーマを「音楽・リズム」の窓から描いています。今回は力也おじぃさんが、手順をリズムで覚える方法を教える回でした。掛け声・リズムは教材オリジナルの創作です。</p>
                 <p className="text-xs text-gray-500 mt-1">※ 4アルパカ（ハーリー・サラバンジ・ガンジュー・カーギー）は「困りごとを持ち込む役」として登場します。3人の発言はランダムに選ばれ、いずれも正しい手順とは異なります。</p>
               </div>
               <div className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-4">
@@ -415,7 +416,7 @@
                 </p>
               </div>
               <div className="mb-4">
-                <p className="font-bold text-sm mb-1">2. 力也オジーに教わった、正しい順番</p>
+                <p className="font-bold text-sm mb-1">2. 力也おじぃさんに教わった、正しい順番</p>
                 <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">ほって → あらって → きって → むして</p>
               </div>
               <div className="mb-4">
