@@ -93,14 +93,58 @@ intro（はじまりの問い）
 - 対象は識字に不安のある大人も含む家庭。子ども経由で大人にも届く設計にする
 - 「集（詩文・表現）」のように単一のMI分類に収まらない回（ep9等）は、この限りではない。数値トラップを無理に入れない
 
-## 7. CSS共通ルール
+## 7. CSS・モバイル表示の共通ルール
 
-日本語の不自然な改行（「見わたす」が「見わた／す」で切れる等）を防ぐため、全教材ファイルの`<style>`ブロックに以下を含める：
+全教材はiPhone 12相当の390pxを基準にし、320px以上で横スクロールを発生させない。日本語本文へ`word-break: keep-all`を使用してはいけない。全教材ファイルの`<style>`ブロックには以下を含める：
 
 ```css
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-p, .speech-bubble p { word-break: keep-all; overflow-wrap: anywhere; }
+p, li {
+    word-break: normal;
+    overflow-wrap: break-word;
+    line-break: strict;
+}
+.speech-bubble {
+    position: relative;
+    min-width: 0;
+    max-width: 100%;
+}
+.speech-bubble p {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: anywhere;
+    line-break: anywhere;
+}
+.choice-card { min-width: 0; }
+.choice-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    min-width: 0;
+    max-width: 100%;
+}
+.choice-row .speech-bubble { flex: 1 1 0; width: 0; }
+.choice-check { flex: 0 0 auto; }
+.progress-dots { display: none; }
+@media (min-width: 640px) {
+    .progress-dots { display: flex; }
+}
 ```
+
+選択肢は`choice-card`→`choice-row`→アバター＋`speech-bubble flex-1 min-w-0`＋`choice-check`の順で構成する。メインカードは`p-4 sm:p-6 md:p-8`、前後ボタンは`px-3 sm:px-5`、下部ドットは`progress-dots space-x-2`を標準とする。
+
+LINE内ブラウザの旧HTMLキャッシュ対策として、教材ページには`Cache-Control` / `Pragma` / `Expires`のmeta指定と`pageVersion`付きURLへの自動切替を入れる。教材を更新するときは対象シリーズの`pageVersion`を新しい共通値へ更新する。
+
+編集後は必ず以下を実行する：
+
+```bash
+./scripts/check_material_responsive.sh
+```
+
+加えて320px・375px・390px・430px・768pxで、`document.documentElement.scrollWidth > window.innerWidth`が`false`であること、入力欄・前後ボタン・吹き出しが画面内に収まること、640px未満では進捗ドットが非表示になることを確認する。`.print-sheet`の印刷挙動は変更しない。
 
 ## 8. matrix-library.html / index2.html の同期ルール
 

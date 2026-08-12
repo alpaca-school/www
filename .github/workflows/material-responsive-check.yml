@@ -1,0 +1,13 @@
+name: Material responsive check
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  responsive-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check responsive material rules
+        run: bash scripts/check_material_responsive.sh
