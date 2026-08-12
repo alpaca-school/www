@@ -10,7 +10,11 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-        p, .speech-bubble p { word-break: keep-all; overflow-wrap: anywhere; }
+        p, li {
+            word-break: normal;
+            overflow-wrap: break-word;
+            line-break: strict;
+        }
         .speech-bubble { position: relative; }
         .speech-bubble::after {
             content: "";
@@ -185,7 +189,7 @@
                     >
                       <div className="flex items-start gap-3">
                         <Avatar person={c} />
-                        <div className={`speech-bubble flex-1 rounded-lg p-3 ${cc.text} bg-white/70`}>
+                        <div className={`speech-bubble flex-1 min-w-0 rounded-lg p-3 ${cc.text} bg-white/70`}>
                           <p className={`font-bold ${cc.text}`}>{c.name}：あと{c.guess}袋？</p>
                           <p className="text-sm text-gray-700 mt-1">「{c.line}」</p>
                         </div>
@@ -449,7 +453,7 @@
                   </div>
                 </div>
 
-                <div className="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-6 min-h-96">
+                <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8 mb-6 min-h-96">
                   {slideRenderers[slideIds[currentSlide]]()}
                 </div>
 
@@ -457,13 +461,13 @@
                   <button
                     onClick={prevSlide}
                     disabled={currentSlide === 0}
-                    className={`flex items-center px-5 py-3 rounded-lg font-medium transition-all ${
+                    className={`flex items-center px-3 sm:px-5 py-3 rounded-lg font-medium transition-all ${
                       currentSlide === 0 ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-orange-500 text-white hover:bg-orange-600"
                     }`}
                   >
                     <ChevronLeft className="w-5 h-5 mr-1" />まえへ
                   </button>
-                  <div className="flex space-x-2">
+                  <div className="hidden sm:flex space-x-2">
                     {slideIds.map((id, index) => (
                       <div key={id} className={`w-2.5 h-2.5 rounded-full ${index === currentSlide ? "bg-orange-500" : "bg-gray-300"}`} />
                     ))}
@@ -471,7 +475,7 @@
                   <button
                     onClick={nextSlide}
                     disabled={currentSlide === total - 1 || !canGoNext}
-                    className={`flex items-center px-5 py-3 rounded-lg font-medium transition-all ${
+                    className={`flex items-center px-3 sm:px-5 py-3 rounded-lg font-medium transition-all ${
                       currentSlide === total - 1 || !canGoNext ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-orange-500 text-white hover:bg-orange-600"
                     }`}
                   >
