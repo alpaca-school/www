@@ -17,6 +17,7 @@
         })();
     </script>
     <title>獅子をつくる植物を見てみよう【知能の窓・獅子舞 ep7：博物学編】 🦁🌿</title>
+    <script src="../series-nav-data.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -87,6 +88,8 @@
             .print-sheet, .print-sheet * { visibility: visible; }
             .print-sheet { position: absolute; left: 0; top: 0; width: 100%; }
         }
+        rt { font-size: 0.6em; color: #ea580c; font-weight: 700; }
+        .furigana-off rt { display: none; }
     </style>
 </head>
 <body>
@@ -207,8 +210,12 @@
           const [childName, setChildName] = useState("");
           const [canDoIt, setCanDoIt] = useState(null);
           const [memoryAnswer, setMemoryAnswer] = useState("");
+          const [furiganaOn, setFuriganaOn] = useState(true);
 
           const slideIds = ["intro", "trouble", "mentor", "quiz", "imagine", "checkin", "parent"];
+          const episodeIndex = SHISHIMAI_EPISODES.findIndex((e) => e.id === "shishimai-ep07");
+          const prevEpisode = episodeIndex > 0 ? SHISHIMAI_EPISODES[episodeIndex - 1] : null;
+          const nextEpisode = episodeIndex >= 0 && episodeIndex < SHISHIMAI_EPISODES.length - 1 ? SHISHIMAI_EPISODES[episodeIndex + 1] : null;
           const total = slideIds.length;
 
           const nextSlide = () => setCurrentSlide((p) => Math.min(p + 1, total - 1));
@@ -229,7 +236,7 @@
                 <span className="inline-block mt-2 px-3 py-1 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
               </div>
               <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 space-y-3">
-                <p>練習の合間、道場に置いてある古い獅子頭を見つけたアルパカたち。「これ、何でできてるんだろう？」「毛はふわふわしてるけど、動物の毛かな？」と、話が盛り上がりました。</p>
+                <p>練習の合間、道場に置いてある古い<ruby>獅子頭<rt>ししがしら</rt></ruby>を見つけたアルパカたち。「これ、何でできてるんだろう？」「毛はふわふわしてるけど、動物の毛かな？」と、話が盛り上がりました。</p>
                 <p>物知りの美咲おばぁさんなら、獅子舞をつくる材料について、きっと詳しいはずです。</p>
               </div>
             </div>
@@ -413,6 +420,22 @@
               <div className="bg-indigo-50 rounded-lg p-4 text-sm text-indigo-700 text-center">
                 <p>次回、知能の窓・獅子舞 ep8（内省編）では、十五夜の月を見て何を感じるかを見ていくよ。お楽しみに。</p>
               </div>
+              <div className="mt-6 pt-4 border-t border-gray-200 space-y-2">
+                <p className="text-xs font-bold text-gray-500 text-center">つぎに進む</p>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  {prevEpisode ? (
+                    <a href={"../" + prevEpisode.url} className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-300 text-sm font-bold text-gray-600 hover:bg-gray-50 transition">← {prevEpisode.short}</a>
+                  ) : (
+                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-300">← 最初のエピソード</span>
+                  )}
+                  {nextEpisode ? (
+                    <a href={"../" + nextEpisode.url} className="flex-1 text-center px-3 py-2 rounded-lg bg-orange-500 text-white text-sm font-bold hover:bg-orange-600 transition">{nextEpisode.short} →</a>
+                  ) : (
+                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-300">最終話</span>
+                  )}
+                </div>
+                <a href="../matrix-library.html" className="block text-center text-sm font-bold text-orange-500 hover:text-orange-700 underline">他のテーマも見る（教材一覧）</a>
+              </div>
             </div>
           );
 
@@ -523,11 +546,21 @@
           const canGoNext = !(slideIds[currentSlide] === "trouble" && !guess);
 
           return (
-            <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50">
+            <div className={`min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50 ${furiganaOn ? "" : "furigana-off"}`}>
               <div className="container mx-auto px-4 py-8 max-w-2xl">
-                <a href="../matrix-library.html" className="inline-flex items-center gap-1 text-sm font-bold text-orange-500 hover:text-orange-700 mb-4">
-                  <ChevronLeft className="w-4 h-4" />教材一覧へ戻る
-                </a>
+                <div className="flex items-center justify-between mb-4">
+                  <a href="../matrix-library.html" className="inline-flex items-center gap-1 text-sm font-bold text-orange-500 hover:text-orange-700">
+                    <ChevronLeft className="w-4 h-4" />教材一覧へ戻る
+                  </a>
+                  <button
+                    onClick={() => setFuriganaOn((f) => !f)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border-2 transition ${
+                      furiganaOn ? "bg-orange-500 text-white border-orange-500" : "bg-white text-orange-600 border-orange-300"
+                    }`}
+                  >
+                    🔤 ふりがな {furiganaOn ? "ON" : "OFF"}
+                  </button>
+                </div>
                 <div className="text-center mb-6">
                   <p className="text-xs font-bold text-indigo-500 mb-1">知能の窓・獅子舞 ep7：博物学編</p>
                   <h1 className="text-2xl md:text-3xl font-bold text-orange-600">獅子をつくる植物を見てみよう 🦁</h1>
