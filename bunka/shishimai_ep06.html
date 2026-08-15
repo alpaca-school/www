@@ -219,7 +219,7 @@
                 <span className="inline-block mt-2 px-3 py-1 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
               </div>
               <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 space-y-3">
-                <p>沖縄市の資料では、1人が前足と獅子頭を担当し、もう1人が後ろ足に入り、腰を曲げて踊る例が紹介されています。</p>
+                <p>沖縄市の資料では、1人が前足と<ruby>獅子頭<rt>ししがしら</rt></ruby>を担当し、もう1人が後ろ足に入り、腰を曲げて踊る例が紹介されています。</p>
                 <p>1頭の獅子は、実は2人の人間でできています。前と後ろ、姿が見えない相手と、どうやって「1つの生き物」として動くのでしょう？</p>
               </div>
             </div>
@@ -310,7 +310,7 @@
                   <h2 className="text-2xl font-bold text-green-600">やってみよう</h2>
                 </div>
                 <div className="bg-green-50 border-2 border-green-200 rounded-lg p-6 space-y-2 text-sm">
-                  <p>沖縄市の資料では、1人が前足と獅子頭を担当し、もう1人が後ろ足に入り、腰を曲げて踊る例が紹介されているよ。</p>
+                  <p>沖縄市の資料では、1人が前足と<ruby>獅子頭<rt>ししがしら</rt></ruby>を担当し、もう1人が後ろ足に入り、腰を曲げて踊る例が紹介されているよ。</p>
                   <p>2人で一頭の獅子として動くとき、いちばん大切なのは<strong>「{correctAnswerLabel}」</strong>。</p>
                   <p className="text-gray-500 text-xs">ただし、動画を見ただけで本物の獅子に入り、激しく動く活動はしないこと。実際に体験するときは、地域の指導者と一緒に、安全に行おう。</p>
                 </div>
@@ -383,40 +383,27 @@
                 ></textarea>
               </div>
               <div className="bg-indigo-50 rounded-lg p-4 text-sm text-indigo-700 text-center">
-                <p>次回、知能の窓・獅子舞 ep7（博物学編）では、獅子をつくる植物を見ていくよ。お楽しみに。</p>
-              </div>
-              <div className="mt-6 pt-4 border-t border-gray-200 space-y-2">
-                <p className="text-xs font-bold text-gray-500 text-center">つぎに進む</p>
-                <div className="flex flex-col sm:flex-row gap-2">
-                  {prevEpisode ? (
-                    <a href={"../" + prevEpisode.url} className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-300 text-sm font-bold text-gray-600 hover:bg-gray-50 transition">← {prevEpisode.short}</a>
-                  ) : (
-                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-300">← 最初のエピソード</span>
-                  )}
-                  {nextEpisode ? (
-                    <a href={"../" + nextEpisode.url} className="flex-1 text-center px-3 py-2 rounded-lg bg-orange-500 text-white text-sm font-bold hover:bg-orange-600 transition">{nextEpisode.short} →</a>
-                  ) : (
-                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-300">最終話</span>
-                  )}
-                </div>
-                <a href="../matrix-library.html" className="block text-center text-sm font-bold text-orange-500 hover:text-orange-700 underline">他のテーマも見る（教材一覧）</a>
-              </div>
-            </div>
+                <p>次回、知能の窓・<ruby>獅子舞<rt>ししまい</rt></ruby> ep7（博物学編）では、獅子をつくる植物を見ていくよ。お楽しみに。</p>
+              </div>            </div>
           );
 
           const renderParent = () => (
             <div className="space-y-4">
               <div className="text-center">
-                <div className="text-5xl mb-4">👪</div>
-                <h2 className="text-2xl font-bold text-yellow-700">保護者・支援者の方へ</h2>
+                <div className="text-5xl mb-4">🎬</div>
+                <h2 className="text-2xl font-bold text-yellow-700">おわりに</h2>
+              </div>
+              <div className="bg-orange-50 rounded-lg p-4">
+                <p className="text-xs font-bold text-orange-700 mb-2">🧒 こどもへ</p>
+                <p className="text-sm text-gray-700">きょうは、ふたりで一頭の獅子になって動くとき、いちばん大切なことを考えたね。力也おじぃさんが教えてくれた「合図と安全を確認して動きを合わせる」という考え方、誰かと力を合わせるときに使ってみよう。</p>
               </div>
               <div className="bg-yellow-50 rounded-lg p-4">
-                <p className="text-xs font-bold text-yellow-800 mb-2">学習指導要領との対応</p>
+                <p className="text-xs font-bold text-yellow-800 mb-2">👪 保護者・支援者の方へ（学習指導要領との対応）</p>
                 <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
                   <li><strong>体育（3年〜）</strong>：体つくり運動・表現運動、2人で息を合わせて動く協応的な運動感覚</li>
                   <li><strong>特別活動</strong>：役割分担や合図を通じた協働、相手を信頼して動きを合わせる態度</li>
                 </ul>
-                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓・獅子舞」シリーズ ep6です。紅芋シリーズと同じ多重知能（MI）理論に基づき、1つのテーマ（獅子舞）を8つの知能の窓（論理・数学／言語／音楽／身体運動／博物学／視覚空間／内省／対人）から順番に描く構成です。今回は「身体・運動」の窓から、力也おじぃさんが合図と安全確認の大切さを教える回でした。</p>
+                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓・<ruby>獅子舞<rt>ししまい</rt></ruby>」シリーズ ep6です。紅芋シリーズと同じ多重知能（MI）理論に基づき、1つのテーマ（<ruby>獅子舞<rt>ししまい</rt></ruby>）を8つの知能の窓（論理・数学／言語／音楽／身体運動／博物学／視覚空間／内省／対人）から順番に描く構成です。今回は「身体・運動」の窓から、力也おじぃさんが合図と安全確認の大切さを教える回でした。</p>
                 <p className="text-xs text-gray-500 mt-1">※ 4アルパカ（ハーリー・サラバンジ・ガンジュー・カーギー）は、「困りごとを持ち込む役」として登場します。3人の考えはランダムに選ばれ、いずれも正解ではありません。「自分たちだけで焦って解こうとすると間違えやすい」「専門家（メンター）に教わって、順序立てて考えると解ける」という体験そのものが、この教材のねらいです。</p>
                 <p className="text-xs text-gray-500 mt-1">※ 本教材は安全のための考え方を扱う回であり、動画や紙面を見ただけで実際に本物の獅子に入って激しく動く活動を推奨するものではありません。実際の体験は、必ず地域の指導者のもとで安全に行ってください。</p>
               </div>
@@ -436,6 +423,22 @@
                   学習記録シートを印刷する
                 </button>
                 <p className="text-xs text-gray-400 mt-1">今日の日付・対応教科・取り組んだ内容・保護者確認欄が入った1枚のシートが印刷されます。</p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-gray-200 space-y-2">
+                <p className="text-xs font-bold text-gray-500 text-center">つぎに進む</p>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  {prevEpisode ? (
+                    <a href={"../" + prevEpisode.url} className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-300 text-sm font-bold text-gray-600 hover:bg-gray-50 transition">← {prevEpisode.short}</a>
+                  ) : (
+                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-300">← 最初のエピソード</span>
+                  )}
+                  {nextEpisode ? (
+                    <a href={"../" + nextEpisode.url} className="flex-1 text-center px-3 py-2 rounded-lg bg-orange-500 text-white text-sm font-bold hover:bg-orange-600 transition">{nextEpisode.short} →</a>
+                  ) : (
+                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-300">最終話</span>
+                  )}
+                </div>
+                <a href="../matrix-library.html" className="block text-center text-sm font-bold text-orange-500 hover:text-orange-700 underline">他のテーマも見る（教材一覧）</a>
               </div>
             </div>
           );
@@ -470,7 +473,7 @@
               </div>
               <div className="mb-4">
                 <p className="font-bold text-sm mb-1">2. 力也おじぃさんに教わって、実際に確かめた答え</p>
-                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">合図と安全を確認して、動きを合わせること。（沖縄市の資料には、1人が前足と獅子頭、もう1人が後ろ足に入り、腰を曲げて踊る例が紹介されている）</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">合図と安全を確認して、動きを合わせること。（沖縄市の資料には、1人が前足と<ruby>獅子頭<rt>ししがしら</rt></ruby>、もう1人が後ろ足に入り、腰を曲げて踊る例が紹介されている）</p>
               </div>
               <div className="mb-4">
                 <p className="font-bold text-sm mb-1">3. 想像する問題への自分の考え</p>
@@ -502,7 +505,7 @@
             verify: "✅ やってみる",
             imagine: "💭 想像する",
             checkin: "🙋 ふりかえり",
-            parent: "👪 保護者の方へ"
+            parent: "🎬 おわりに"
           };
 
           const canGoNext = !(slideIds[currentSlide] === "trouble" && !guess);
@@ -524,7 +527,7 @@
                   </button>
                 </div>
                 <div className="text-center mb-6">
-                  <p className="text-xs font-bold text-indigo-500 mb-1">知能の窓・獅子舞 ep6：身体・運動編</p>
+                  <p className="text-xs font-bold text-indigo-500 mb-1">知能の窓・<ruby>獅子舞<rt>ししまい</rt></ruby> ep6：身体・運動編</p>
                   <h1 className="text-2xl md:text-3xl font-bold text-orange-600">ふたりで、一頭の獅子になる 🦁</h1>
                   <span className="inline-block mt-1 px-2 py-0.5 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
                 </div>
@@ -565,7 +568,7 @@
                       currentSlide === total - 1 || !canGoNext ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-orange-500 text-white hover:bg-orange-600"
                     }`}
                   >
-                    つぎへ<ChevronRight className="w-5 h-5 ml-1" />
+                    {slideIds[currentSlide] === "checkin" ? "おわりに" : "つぎへ"}<ChevronRight className="w-5 h-5 ml-1" />
                   </button>
                 </div>
               </div>

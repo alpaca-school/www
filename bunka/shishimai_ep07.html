@@ -178,7 +178,7 @@
           return arr.slice(0, 3);
         }
 
-        // やってみる：獅子舞の材料についての4択クイズ
+        // やってみる：<ruby>獅子舞<rt>ししまい</rt></ruby>の材料についての4択クイズ
         const QUIZ_CHOICES = [
           { id: "q1", text: "デイゴ→獅子頭に使われる例がある／しーさー苧（芭蕉の繊維）→獅子の毛に使われる例がある", correct: true },
           { id: "q2", text: "デイゴ→旧暦の月の名前／しーさー苧→三線の曲名", correct: false },
@@ -232,12 +232,12 @@
             <div className="space-y-6">
               <div className="text-center">
                 <div className="text-6xl mb-4">🦁</div>
-                <h2 className="text-2xl font-bold text-orange-600">獅子頭も獅子の毛も、もとは植物だった</h2>
+                <h2 className="text-2xl font-bold text-orange-600"><ruby>獅子頭<rt>ししがしら</rt></ruby>も獅子の毛も、もとは植物だった</h2>
                 <span className="inline-block mt-2 px-3 py-1 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
               </div>
               <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 space-y-3">
                 <p>練習の合間、道場に置いてある古い<ruby>獅子頭<rt>ししがしら</rt></ruby>を見つけたアルパカたち。「これ、何でできてるんだろう？」「毛はふわふわしてるけど、動物の毛かな？」と、話が盛り上がりました。</p>
-                <p>物知りの美咲おばぁさんなら、獅子舞をつくる材料について、きっと詳しいはずです。</p>
+                <p>物知りの美咲おばぁさんなら、<ruby>獅子舞<rt>ししまい</rt></ruby>をつくる材料について、きっと詳しいはずです。</p>
               </div>
             </div>
           );
@@ -295,9 +295,9 @@
                   <Avatar person={MENTORS.misaki} />
                   <p className="font-bold text-indigo-700">{MENTORS.misaki.name}</p>
                 </div>
-                <p className="text-sm text-gray-700">「獅子頭にはね、デイゴの木が使われている例があるんだよ。彫りやすさや軽さを見て、昔の人が選んできた材料さ」</p>
-                <p className="text-sm text-gray-700">「獅子の毛のほうはね、芭蕉（ばしょう）や麻の糸が使われる例があるんだよ。大宜味村では、糸芭蕉の外側の皮の繊維を『しーさー苧（う）』と呼んでいてね、県内あちこちの獅子舞の毛に使われてきたのさ」</p>
-                <p className="text-sm text-gray-700">「面白いのはねえ、その同じ糸芭蕉の繊維が、着物の生地になる芭蕉布にも使われているということ。獅子舞と芭蕉布は、実は同じ植物からつながっているんだよ」</p>
+                <p className="text-sm text-gray-700">「<ruby>獅子頭<rt>ししがしら</rt></ruby>にはね、デイゴの木が使われている例があるんだよ。彫りやすさや軽さを見て、昔の人が選んできた材料さ」</p>
+                <p className="text-sm text-gray-700">「獅子の毛のほうはね、芭蕉（ばしょう）や麻の糸が使われる例があるんだよ。<ruby>大宜味村<rt>おおぎみそん</rt></ruby>では、糸芭蕉の外側の皮の繊維を『しーさー苧（う）』と呼んでいてね、県内あちこちの<ruby>獅子舞<rt>ししまい</rt></ruby>の毛に使われてきたのさ」</p>
+                <p className="text-sm text-gray-700">「面白いのはねえ、その同じ糸芭蕉の繊維が、着物の生地になる芭蕉布にも使われているということ。<ruby>獅子舞<rt>ししまい</rt></ruby>と芭蕉布は、実は同じ植物からつながっているんだよ」</p>
               </div>
               <div className="grid gap-3">
                 <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.amber.bg}`}>
@@ -321,7 +321,7 @@
               <div className="text-center">
                 <div className="text-5xl mb-4">🌿</div>
                 <h2 className="text-2xl font-bold text-green-600">やってみよう</h2>
-                <p className="text-gray-600 text-sm mt-1">獅子舞の材料について、正しい組み合わせはどれ？</p>
+                <p className="text-gray-600 text-sm mt-1"><ruby>獅子舞<rt>ししまい</rt></ruby>の材料について、正しい組み合わせはどれ？</p>
               </div>
               <div className="grid gap-3">
                 {quizChoices.map((choice) => {
@@ -353,8 +353,8 @@
                 <div className={`rounded-lg p-4 text-center ${isQuizCorrect ? "bg-yellow-100" : "bg-gray-100"}`}>
                   <p className={`font-bold ${isQuizCorrect ? "text-yellow-700" : "text-gray-600"}`}>
                     {isQuizCorrect
-                      ? "🎉 正解！デイゴが獅子頭に、しーさー苧が獅子の毛に使われる例があるんだったね。"
-                      : "正解は「デイゴ→獅子頭の例／しーさー苧→獅子の毛の例」だったよ。"}
+                      ? "🎉 正解！デイゴが<ruby>獅子頭<rt>ししがしら</rt></ruby>に、しーさー苧が獅子の毛に使われる例があるんだったね。"
+                      : "正解は「デイゴ→<ruby>獅子頭<rt>ししがしら</rt></ruby>の例／しーさー苧→獅子の毛の例」だったよ。"}
                   </p>
                   <button onClick={resetQuiz} className="mt-3 text-sm font-bold text-green-600 underline">もう一度やってみる</button>
                 </div>
@@ -418,40 +418,27 @@
                 ></textarea>
               </div>
               <div className="bg-indigo-50 rounded-lg p-4 text-sm text-indigo-700 text-center">
-                <p>次回、知能の窓・獅子舞 ep8（内省編）では、十五夜の月を見て何を感じるかを見ていくよ。お楽しみに。</p>
-              </div>
-              <div className="mt-6 pt-4 border-t border-gray-200 space-y-2">
-                <p className="text-xs font-bold text-gray-500 text-center">つぎに進む</p>
-                <div className="flex flex-col sm:flex-row gap-2">
-                  {prevEpisode ? (
-                    <a href={"../" + prevEpisode.url} className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-300 text-sm font-bold text-gray-600 hover:bg-gray-50 transition">← {prevEpisode.short}</a>
-                  ) : (
-                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-300">← 最初のエピソード</span>
-                  )}
-                  {nextEpisode ? (
-                    <a href={"../" + nextEpisode.url} className="flex-1 text-center px-3 py-2 rounded-lg bg-orange-500 text-white text-sm font-bold hover:bg-orange-600 transition">{nextEpisode.short} →</a>
-                  ) : (
-                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-300">最終話</span>
-                  )}
-                </div>
-                <a href="../matrix-library.html" className="block text-center text-sm font-bold text-orange-500 hover:text-orange-700 underline">他のテーマも見る（教材一覧）</a>
-              </div>
-            </div>
+                <p>次回、知能の窓・<ruby>獅子舞<rt>ししまい</rt></ruby> ep8（内省編）では、<ruby>十五夜<rt>じゅうごや</rt></ruby>の月を見て何を感じるかを見ていくよ。お楽しみに。</p>
+              </div>            </div>
           );
 
           const renderParent = () => (
             <div className="space-y-4">
               <div className="text-center">
-                <div className="text-5xl mb-4">👪</div>
-                <h2 className="text-2xl font-bold text-yellow-700">保護者・支援者の方へ</h2>
+                <div className="text-5xl mb-4">🎬</div>
+                <h2 className="text-2xl font-bold text-yellow-700">おわりに</h2>
+              </div>
+              <div className="bg-orange-50 rounded-lg p-4">
+                <p className="text-xs font-bold text-orange-700 mb-2">🧒 こどもへ</p>
+                <p className="text-sm text-gray-700">きょうは、獅子頭や獅子の毛がもとは何からできているのかを考えたね。美咲おばぁさんが教えてくれた「デイゴが獅子頭に、しーさー苧が獅子の毛に使われる例がある」という話、身の回りのものが何でできているか気にしてみよう。</p>
               </div>
               <div className="bg-yellow-50 rounded-lg p-4">
-                <p className="text-xs font-bold text-yellow-800 mb-2">学習指導要領との対応</p>
+                <p className="text-xs font-bold text-yellow-800 mb-2">👪 保護者・支援者の方へ（学習指導要領との対応）</p>
                 <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
                   <li><strong>理科（発展）</strong>：植物の性質・部位（木材・外皮の繊維）と、加工・利用への入口</li>
                   <li><strong>社会（発展）</strong>：地域の産業・伝統文化を支える資源循環（同じ植物が複数の文化資源に使われる例）</li>
                 </ul>
-                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓・獅子舞」シリーズ ep7です。ep1〜ep6に続き、同じ獅子舞というテーマを「博物学」の窓から描いています。今回は美咲おばぁさんが主役で、獅子頭にデイゴが使われる例、獅子の毛に芭蕉や麻の糸（大宜味村での呼称「しーさー苧」）が使われる例、そしてそれが芭蕉布とも同じ植物資源でつながっているという、一般的に知られている文化的事実のみを扱っています。他の3名のメンターは1〜2行のカメオ出演です。</p>
+                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓・<ruby>獅子舞<rt>ししまい</rt></ruby>」シリーズ ep7です。ep1〜ep6に続き、同じ<ruby>獅子舞<rt>ししまい</rt></ruby>というテーマを「博物学」の窓から描いています。今回は美咲おばぁさんが主役で、<ruby>獅子頭<rt>ししがしら</rt></ruby>にデイゴが使われる例、獅子の毛に芭蕉や麻の糸（<ruby>大宜味村<rt>おおぎみそん</rt></ruby>での呼称「しーさー苧」）が使われる例、そしてそれが芭蕉布とも同じ植物資源でつながっているという、一般的に知られている文化的事実のみを扱っています。他の3名のメンターは1〜2行のカメオ出演です。</p>
                 <p className="text-xs text-gray-500 mt-1">※ 4アルパカ（ハーリー・サラバンジ・ガンジュー・カーギー）は「困りごとを持ち込む役」として登場します。3人の発言はランダムに選ばれ、いずれも正しい説明とは異なります。カーギーの「自然素材は文化に使えない」という発言は、素材への注意そのものは間違っていないものの、結論が逆になってしまう例として設計しています。</p>
               </div>
               <div className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-4">
@@ -470,6 +457,22 @@
                   学習記録シートを印刷する
                 </button>
                 <p className="text-xs text-gray-400 mt-1">今日の日付・対応教科・取り組んだ内容・保護者確認欄が入った1枚のシートが印刷されます。</p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-gray-200 space-y-2">
+                <p className="text-xs font-bold text-gray-500 text-center">つぎに進む</p>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  {prevEpisode ? (
+                    <a href={"../" + prevEpisode.url} className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-300 text-sm font-bold text-gray-600 hover:bg-gray-50 transition">← {prevEpisode.short}</a>
+                  ) : (
+                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-300">← 最初のエピソード</span>
+                  )}
+                  {nextEpisode ? (
+                    <a href={"../" + nextEpisode.url} className="flex-1 text-center px-3 py-2 rounded-lg bg-orange-500 text-white text-sm font-bold hover:bg-orange-600 transition">{nextEpisode.short} →</a>
+                  ) : (
+                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-300">最終話</span>
+                  )}
+                </div>
+                <a href="../matrix-library.html" className="block text-center text-sm font-bold text-orange-500 hover:text-orange-700 underline">他のテーマも見る（教材一覧）</a>
               </div>
             </div>
           );
@@ -504,11 +507,11 @@
               </div>
               <div className="mb-4">
                 <p className="font-bold text-sm mb-1">2. 美咲おばぁさんに教わった、正しい説明</p>
-                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">獅子頭にはデイゴが使われる例があり、獅子の毛には芭蕉や麻の糸（大宜味村での呼称「しーさー苧」）が使われる例がある。この繊維は芭蕉布にも使われており、獅子舞と芭蕉布は同じ植物資源でつながっている。</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]"><ruby>獅子頭<rt>ししがしら</rt></ruby>にはデイゴが使われる例があり、獅子の毛には芭蕉や麻の糸（<ruby>大宜味村<rt>おおぎみそん</rt></ruby>での呼称「しーさー苧」）が使われる例がある。この繊維は芭蕉布にも使われており、<ruby>獅子舞<rt>ししまい</rt></ruby>と芭蕉布は同じ植物資源でつながっている。</p>
               </div>
               <div className="mb-4">
                 <p className="font-bold text-sm mb-1">3. やってみようクイズの結果</p>
-                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">{quizAnswer ? (isQuizCorrect ? "正解できた" : "正解は「デイゴ→獅子頭の例／しーさー苧→獅子の毛の例」") : "（未回答）"}</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">{quizAnswer ? (isQuizCorrect ? "正解できた" : "正解は「デイゴ→<ruby>獅子頭<rt>ししがしら</rt></ruby>の例／しーさー苧→獅子の毛の例」") : "（未回答）"}</p>
               </div>
               <div className="mb-4">
                 <p className="font-bold text-sm mb-1">4. 想像する問題への自分の考え</p>
@@ -540,7 +543,7 @@
             quiz: "🌿 やってみる",
             imagine: "💭 想像する",
             checkin: "🙋 ふりかえり",
-            parent: "👪 保護者の方へ"
+            parent: "🎬 おわりに"
           };
 
           const canGoNext = !(slideIds[currentSlide] === "trouble" && !guess);
@@ -562,7 +565,7 @@
                   </button>
                 </div>
                 <div className="text-center mb-6">
-                  <p className="text-xs font-bold text-indigo-500 mb-1">知能の窓・獅子舞 ep7：博物学編</p>
+                  <p className="text-xs font-bold text-indigo-500 mb-1">知能の窓・<ruby>獅子舞<rt>ししまい</rt></ruby> ep7：博物学編</p>
                   <h1 className="text-2xl md:text-3xl font-bold text-orange-600">獅子をつくる植物を見てみよう 🦁</h1>
                   <span className="inline-block mt-1 px-2 py-0.5 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
                 </div>
@@ -603,7 +606,7 @@
                       currentSlide === total - 1 || !canGoNext ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-orange-500 text-white hover:bg-orange-600"
                     }`}
                   >
-                    つぎへ<ChevronRight className="w-5 h-5 ml-1" />
+                    {slideIds[currentSlide] === "checkin" ? "おわりに" : "つぎへ"}<ChevronRight className="w-5 h-5 ml-1" />
                   </button>
                 </div>
               </div>

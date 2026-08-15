@@ -244,8 +244,8 @@ diff matrix-library.html index2.html  # 差分なしを確認
 - リポジトリルートに`series-nav-data.js`（Babelを通さない素の`<script>`タグで読み込む）を新設。`SHISHIMAI_EPISODES`・`BENIIMO_EPISODES`の配列で、各エピソードの`id`・`short`（一覧表示用の短い見出し）・`title`・`url`（リポジトリルートからの相対パス）を一元管理する。
 - 新しいエピソードを追加するときは、**この配列に1件足すだけ**で全教材ページの「前へ／次へ」ナビが自動更新される設計。個別のHTMLファイルを直接いじる必要はない。
 - 各教材HTMLファイル側では、`<head>`か`<body>`冒頭で`../series-nav-data.js`を読み込み、`slideIds`配列の直後あたりで`episodeIndex`・`prevEpisode`・`nextEpisode`を算出する。
-- 表示場所は**ふりかえり（checkin）スライドの末尾**に固定（2026-08-14、ユーザー確認済み）。「前へ／次へ」ボタン＋「他のテーマも見る」リンク（`matrix-library.html`へ）を配置する。
-- 「保護者・支援者の方へ」スライドを独立ボタン化する案は、履修履歴保存等のB2C有料化を見据えた収益設計を先に行うまで**保留**（実装しないこと）。
+- 表示場所は**「おわりに」（旧parent）スライドの末尾**（2026-08-15、§14の改訂に伴い、当初のふりかえり(checkin)末尾配置から変更）。「前へ／次へ」ボタン＋「他のテーマも見る」リンク（`matrix-library.html`へ）を配置する。理由：ふりかえりスライドに置くと、共通フッターの「つぎへ」ボタン（スライド内ナビ）と視覚的に重複するため。最終スライドに置けば、共通フッターの「つぎへ」が仕様上グレーアウトしており重複しない。
+- 「保護者・支援者の方へ」スライドを独立ボタン化する案は、履修履歴保存等のB2C有料化を見据えた収益設計を先に行うまで**保留**（実装しないこと）。※ただし2026-08-15、この「保護者・支援者の方へ」スライド自体の名称・内容構成は§14の通り「おわりに」に改訂した（独立ボタン化とは別の変更）。
 
 ### 13.2 ふりがなトグル（CSS-onlyアプローチ）
 
@@ -254,3 +254,36 @@ diff matrix-library.html index2.html  # 差分なしを確認
 - Reactの`useState`で`furiganaOn`（初期値`true`）を持ち、ルート要素の`className`に`` `... ${furiganaOn ? "" : "furigana-off"}` ``を出し分ける。個別のルビ用カスタムコンポーネントは作らない（トークン消費・保守コストを抑えるための意図的な簡易実装）。
 - ヘッダー部に「🔤 ふりがな ON/OFF」の切り替えボタンを設置。
 - トークン使用量は、既存教材コピー＋短いルビタグの追加のみで、新規に長文を生成する処理ではないため軽微（1話あたり数個の`<ruby>`タグ挿入程度）。
+
+## 14. 「parent」スライドの改称「おわりに」（UDL方針、2026-08-15設計確定・全10話実装済み）
+
+ユーザーからの提案：「保護者・支援者の方へ」スライドは、実際にはこのエピソードの学びを説明する内容であり、子どもも読める。UDL（Universal Design for Learning）の「エキスパート学習者」思想に基づき、子どもと大人を分断せず、同じページを共有した上で、大人専用のツール部分（学習指導要領コード・印刷用シート）だけをサブセクションとして残す設計に改める。
+
+**全10話（`bunka/shishimai_ep01.html`〜`ep10.html`）で実装済み（2026-08-15）**。新しいエピソードを作るときは、以下の型をそのまま踏襲すること。
+
+### 確定した変更内容（`renderParent`本体・`slideRenderers`前後・`renderCheckin`に関係）
+
+1. **アイコン・見出し**：
+   - `<div className="text-5xl mb-4">👪</div>` → `<div className="text-5xl mb-4">🎬</div>`
+   - `<h2 className="text-2xl font-bold text-yellow-700">保護者・支援者の方へ</h2>` → `<h2 className="text-2xl font-bold text-yellow-700">おわりに</h2>`
+   - `slideTitles`オブジェクト内：`parent: "👪 保護者の方へ"` → `parent: "🎬 おわりに"`
+
+2. **「こどもへ」ボックスの新設**：既存の黄色ブロック（`bg-yellow-50`）の直前に、`<div className="bg-orange-50 rounded-lg p-4">` を挿入し、見出し `<p className="text-xs font-bold text-orange-700 mb-2">🧒 こどもへ</p>` の下に、**そのエピソードで学んだことを子ども向けの言葉で新規に要約した1〜2文**を置く（既存の指導要領・MI理論等の大人向け説明文を流用しない。「きょうは、〜を考えたね。〜が教えてくれた『〜』という考え方、今度〜してみよう」のような、2人称「きみ」で語りかける文体で毎話書き下ろす）。
+   - 黄色ブロック側は変更しない：`<p className="text-xs font-bold text-yellow-800 mb-2">学習指導要領との対応</p>` → `<p className="text-xs font-bold text-yellow-800 mb-2">👪 保護者・支援者の方へ（学習指導要領との対応）</p>`に見出しだけ変更し、`<ul>`・「※」段落は元のまま維持する。
+   - 印刷用学習記録シート（`bg-white border-2 border-dashed`ブロック）は変更しない（大人が実際に使う実務ツールのため）。
+
+3. **共通フッターの「つぎへ」ボタン**（`nextSlide`を呼ぶボタン）：`checkin`スライドの時だけラベルを「おわりに」に変える。
+   ```jsx
+   {slideIds[currentSlide] === "checkin" ? "おわりに" : "つぎへ"}<ChevronRight className="w-5 h-5 ml-1" />
+   ```
+
+4. **エピソード内ナビ（§13.1）の配置は「おわりに」（旧parent）スライドの末尾に移動**：`renderCheckin`からは「つぎに進む」ナビブロックを削除し（次回予告の`bg-indigo-50`ボックスのみ残す）、`renderParent`の印刷シートブロックの直後（`</div>`の後、コンポーネント全体の閉じ`</div>`の前）に、前へ／次へ／他のテーマもボタンのブロックを追加する。最終スライドでは共通フッターの「つぎへ」が仕様上グレーアウトするため、ボタンの重複が起きない。
+
+### 確認手順（実施済み・今後の新規エピソードでも同様に行うこと）
+
+```bash
+python3 -c "s=open('bunka/shishimai_epXX.html').read(); print('OK' if s.count('{')==s.count('}') and s.count('(')==s.count(')') else 'MISMATCH')"
+bash scripts/check_material_responsive.sh
+```
+
+git commit・pushの前に、必ずユーザーへ変更内容を提示し、明示的な許可を得ること（§9参照、勝手なpush厳禁）。作業完了後は、obsidianの日次記録（`【Layer 0】daily-logs`）にも記録すること（ユーザーの秘書AI憲法§10）。

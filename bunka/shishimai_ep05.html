@@ -233,7 +233,7 @@
                 <span className="inline-block mt-2 px-3 py-1 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
               </div>
               <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 space-y-3">
-                <p><ruby>津波古<rt>つはこ</rt></ruby>の獅子舞には、「<ruby>立雲節<rt>たちくむぶし</rt></ruby>」という曲にのせて、獅子ワクヤー（獅子を起こす役）が三線に合わせて、玉で眠っている獅子を起こす演目が伝わっています。</p>
+                <p><ruby>津波古<rt>つはこ</rt></ruby>の<ruby>獅子舞<rt>ししまい</rt></ruby>には、「<ruby>立雲節<rt>たちくむぶし</rt></ruby>」という曲にのせて、獅子ワクヤー（獅子を起こす役）が三線に合わせて、玉で眠っている獅子を起こす演目が伝わっています。</p>
                 <p>音に合わせて獅子が動き出す、その瞬間が見せ場です。地域によって、使われる音や演目は違うそうです。</p>
                 <p>でも、そもそも三線や太鼓から「音」が生まれるとき、物の中では何が起きているのでしょう？</p>
               </div>
@@ -295,12 +295,12 @@
                 </div>
                 <p className="text-sm text-gray-700">「気合いでも勢いでもないさぁ。三線の弦を弾くと、弦が細かくブルブル震えるだろう？あれが『振動』さ」</p>
                 <p className="text-sm text-gray-700">「太鼓の皮も同じ。バチで叩くと皮がふるえて、その震えが空気に伝わって、耳に届く。それが音の正体だよ」</p>
-                <p className="text-sm text-gray-700">「立雲節にのせて獅子ワクヤーが玉を鳴らして獅子を起こすのも、その『震え』が獅子役の人に合図として届くからさ」</p>
+                <p className="text-sm text-gray-700">「<ruby>立雲節<rt>たちくむぶし</rt></ruby>にのせて獅子ワクヤーが玉を鳴らして獅子を起こすのも、その『震え』が獅子役の人に合図として届くからさ」</p>
               </div>
               <div className="grid gap-3">
                 <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.amber.bg}`}>
                   <Avatar person={MENTORS.chinen} />
-                  <p className="text-sm text-amber-700">「地域によって、獅子を起こす曲も演目も違うんだよ。津波古はこの立雲節さ」</p>
+                  <p className="text-sm text-amber-700">「地域によって、獅子を起こす曲も演目も違うんだよ。<ruby>津波古<rt>つはこ</rt></ruby>はこの<ruby>立雲節<rt>たちくむぶし</rt></ruby>さ」</p>
                 </div>
                 <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.rose.bg}`}>
                   <Avatar person={MENTORS.tokue} />
@@ -348,7 +348,7 @@
                   ) : (
                     <p className="font-bold text-gray-700">惜しい！正解は「振動している」だったよ。</p>
                   )}
-                  <p className="text-sm text-gray-600 mt-2">三線の弦、太鼓の皮…震えているものが音を出している。獅子舞の音楽表現の話（どんな曲を選ぶか）と、音が生まれる仕組みの話（振動）は、別の窓（教科）の話だから、ごちゃまぜにしないようにね。</p>
+                  <p className="text-sm text-gray-600 mt-2">三線の弦、太鼓の皮…震えているものが音を出している。<ruby>獅子舞<rt>ししまい</rt></ruby>の音楽表現の話（どんな曲を選ぶか）と、音が生まれる仕組みの話（振動）は、別の窓（教科）の話だから、ごちゃまぜにしないようにね。</p>
                 </div>
               )}
             </div>
@@ -410,40 +410,27 @@
                 ></textarea>
               </div>
               <div className="bg-indigo-50 rounded-lg p-4 text-sm text-indigo-700 text-center">
-                <p>次回、知能の窓・獅子舞 ep6（身体・運動編）では、ふたりで一頭の獅子になる動きを見ていくよ。お楽しみに。</p>
-              </div>
-              <div className="mt-6 pt-4 border-t border-gray-200 space-y-2">
-                <p className="text-xs font-bold text-gray-500 text-center">つぎに進む</p>
-                <div className="flex flex-col sm:flex-row gap-2">
-                  {prevEpisode ? (
-                    <a href={"../" + prevEpisode.url} className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-300 text-sm font-bold text-gray-600 hover:bg-gray-50 transition">← {prevEpisode.short}</a>
-                  ) : (
-                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-300">← 最初のエピソード</span>
-                  )}
-                  {nextEpisode ? (
-                    <a href={"../" + nextEpisode.url} className="flex-1 text-center px-3 py-2 rounded-lg bg-orange-500 text-white text-sm font-bold hover:bg-orange-600 transition">{nextEpisode.short} →</a>
-                  ) : (
-                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-300">最終話</span>
-                  )}
-                </div>
-                <a href="../matrix-library.html" className="block text-center text-sm font-bold text-orange-500 hover:text-orange-700 underline">他のテーマも見る（教材一覧）</a>
-              </div>
-            </div>
+                <p>次回、知能の窓・<ruby>獅子舞<rt>ししまい</rt></ruby> ep6（身体・運動編）では、ふたりで一頭の獅子になる動きを見ていくよ。お楽しみに。</p>
+              </div>            </div>
           );
 
           const renderParent = () => (
             <div className="space-y-4">
               <div className="text-center">
-                <div className="text-5xl mb-4">👪</div>
-                <h2 className="text-2xl font-bold text-yellow-700">保護者・支援者の方へ</h2>
+                <div className="text-5xl mb-4">🎬</div>
+                <h2 className="text-2xl font-bold text-yellow-700">おわりに</h2>
+              </div>
+              <div className="bg-orange-50 rounded-lg p-4">
+                <p className="text-xs font-bold text-orange-700 mb-2">🧒 こどもへ</p>
+                <p className="text-sm text-gray-700">きょうは、三線や太鼓から音が生まれるしくみを考えたね。力也おじぃさんが教えてくれた「音は物が震えて生まれる」という考え方、いろんな音を聞くときに思い出してみよう。</p>
               </div>
               <div className="bg-yellow-50 rounded-lg p-4">
-                <p className="text-xs font-bold text-yellow-800 mb-2">学習指導要領との対応</p>
+                <p className="text-xs font-bold text-yellow-800 mb-2">👪 保護者・支援者の方へ（学習指導要領との対応）</p>
                 <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
                   <li><strong>音楽（3年〜）</strong>：拍やリズムを感じ取り、楽器の音や身体表現とのつながりに気づく</li>
                   <li><strong>理科（発展）</strong>：音は物体の振動によって生じるという、音と振動への入口</li>
                 </ul>
-                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓」シリーズの獅子舞版 ep5です。ep1〜4に続き、同じ獅子舞というテーマを「音楽」の窓から描いています。津波古の獅子舞に伝わる「立雲節」と、獅子ワクヤーが三線に合わせて玉で獅子を起こす演目は、地域に伝わる文化事実として紹介しています（地域によって曲・演目は異なります）。今回は力也おじぃさんが、音楽表現の入口として「音は物体の振動から生じる」という理科の基礎を教える回でした。</p>
+                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓」シリーズの<ruby>獅子舞<rt>ししまい</rt></ruby>版 ep5です。ep1〜4に続き、同じ<ruby>獅子舞<rt>ししまい</rt></ruby>というテーマを「音楽」の窓から描いています。<ruby>津波古<rt>つはこ</rt></ruby>の<ruby>獅子舞<rt>ししまい</rt></ruby>に伝わる「<ruby>立雲節<rt>たちくむぶし</rt></ruby>」と、獅子ワクヤーが三線に合わせて玉で獅子を起こす演目は、地域に伝わる文化事実として紹介しています（地域によって曲・演目は異なります）。今回は力也おじぃさんが、音楽表現の入口として「音は物体の振動から生じる」という理科の基礎を教える回でした。</p>
                 <p className="text-xs text-gray-500 mt-1">※ 4アルパカ（ハーリー・サラバンジ・ガンジュー・カーギー）は「困りごとを持ち込む役」として登場します。3人の発言はランダムに選ばれ、いずれも正解ではありません。カーギーの発言は「振動」に気づきつつも、光や熱まで余計な条件を足してしまう、惜しい間違いです。「自分たちだけで焦って考えると間違えやすい」「専門家（メンター）に教わって、順序立てて考えると解ける」という体験そのものが、この教材のねらいです。</p>
               </div>
               <div className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-4">
@@ -462,6 +449,22 @@
                   学習記録シートを印刷する
                 </button>
                 <p className="text-xs text-gray-400 mt-1">今日の日付・対応教科・取り組んだ内容・保護者確認欄が入った1枚のシートが印刷されます。</p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-gray-200 space-y-2">
+                <p className="text-xs font-bold text-gray-500 text-center">つぎに進む</p>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  {prevEpisode ? (
+                    <a href={"../" + prevEpisode.url} className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-300 text-sm font-bold text-gray-600 hover:bg-gray-50 transition">← {prevEpisode.short}</a>
+                  ) : (
+                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-300">← 最初のエピソード</span>
+                  )}
+                  {nextEpisode ? (
+                    <a href={"../" + nextEpisode.url} className="flex-1 text-center px-3 py-2 rounded-lg bg-orange-500 text-white text-sm font-bold hover:bg-orange-600 transition">{nextEpisode.short} →</a>
+                  ) : (
+                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-300">最終話</span>
+                  )}
+                </div>
+                <a href="../matrix-library.html" className="block text-center text-sm font-bold text-orange-500 hover:text-orange-700 underline">他のテーマも見る（教材一覧）</a>
               </div>
             </div>
           );
@@ -531,7 +534,7 @@
             verify: "✅ やってみる",
             imagine: "💭 想像する",
             checkin: "🙋 ふりかえり",
-            parent: "👪 保護者の方へ"
+            parent: "🎬 おわりに"
           };
 
           const canGoNext = !(slideIds[currentSlide] === "trouble" && !guess);
@@ -553,7 +556,7 @@
                   </button>
                 </div>
                 <div className="text-center mb-6">
-                  <p className="text-xs font-bold text-indigo-500 mb-1">知能の窓・獅子舞 ep5：音楽編</p>
+                  <p className="text-xs font-bold text-indigo-500 mb-1">知能の窓・<ruby>獅子舞<rt>ししまい</rt></ruby> ep5：音楽編</p>
                   <h1 className="text-2xl md:text-3xl font-bold text-orange-600">獅子は、どんな音で動く？ 🦁</h1>
                   <span className="inline-block mt-1 px-2 py-0.5 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
                 </div>
@@ -594,7 +597,7 @@
                       currentSlide === total - 1 || !canGoNext ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-orange-500 text-white hover:bg-orange-600"
                     }`}
                   >
-                    つぎへ<ChevronRight className="w-5 h-5 ml-1" />
+                    {slideIds[currentSlide] === "checkin" ? "おわりに" : "つぎへ"}<ChevronRight className="w-5 h-5 ml-1" />
                   </button>
                 </div>
               </div>
