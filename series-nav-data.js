@@ -28,6 +28,11 @@ const SUPPORT_LINKS = [
   { label: "¥10,000", url: "https://buy.stripe.com/3cI5kC11LcDR9oy1mFgw009" },
 ];
 
+// 知能の窓・台風シリーズ（2026-08-16着手。ep1のみ実装済み、ep2以降は§16の方針に沿って順次追加）
+const TYPHOON_EPISODES = [
+  { id: "typhoon-ep01", short: "ep1：論理・数学編", title: "水は、あと何本？", url: "bousai/typhoon_ep01.html" },
+];
+
 const BENIIMO_EPISODES = [
   { id: "beniimo-ep1", short: "ep1：論理・数学編", title: "紅芋チップス、あと何袋たりない？", url: "rekishi/beniimo_ep1_ronri.html" },
   { id: "beniimo-ep2", short: "ep2：言語編", title: "紅芋を持ってきたのは誰？", url: "rekishi/beniimo_ep2_gengo.html" },

@@ -214,14 +214,15 @@ diff matrix-library.html index2.html  # 差分なしを確認
 
 （このファイルはユーザーのローカルマシン上にあり、本リポジトリには含まれていない。参照時はパスを直接読みに行くか、ユーザーに内容を貼ってもらうこと）
 
-## 11. 完成済み教材一覧（2026-08-15時点）
+## 11. 完成済み教材一覧（2026-08-16時点）
 
 - `rekishi/beniimo_ep1_ronri.html`〜`ep8_taijin.html`：知能の窓 紅芋シリーズ ep1〜8（論理数学・言語・音楽・身体運動・博物学・視覚空間・内省・対人）
 - `rekishi/beniimo_ep9_hyogen.html`：ep9・集（詩文）編（特別編、文芸フリマへの導線あり）
-- `bousai/typhoon_prediction.html`：台風備蓄編（新方式移行済み）
+- `bousai/typhoon_prediction.html`：旧・台風備蓄編（単発版、新方式移行済み）。**知能の窓・台風シリーズ（下記）とは別物。当面は残すが、台風シリーズが揃った段階で整理を検討**
+- `bousai/typhoon_ep01.html`：知能の窓・台風シリーズ ep1（論理数学編）。§0の標準構成に準拠、Layer 1正本（`2026-08-15-知能の窓・台風-MI8全9回再設計.md`）に基づきClaude Codeが新規作成（2026-08-16）。ep2〜9は§16.4の通りGPT側で作業中
 - `bousai/water_filter_prediction.html`：カー濾過編（新方式移行済み）
 - `bunka/shisa_prediction.html`：シーサー編（新方式移行済み、ミルクボーイ型漫才導入）
-- `bunka/shishimai_ep01.html`〜`ep10.html`：知能の窓・獅子舞シリーズ 全10話。§0の標準構成に全話準拠済み（ep2〜10は2026-08-14に標準構成へ全面書き直し完了）。加えて全話に§13の「シリーズ内ナビ」と「ふりがなトグル」を実装済み
+- `bunka/shishimai_ep01.html`〜`ep10.html`：知能の窓・獅子舞シリーズ 全10話。§0の標準構成に全話準拠済み（ep2〜10は2026-08-14に標準構成へ全面書き直し完了）。加えて全話に§13の「シリーズ内ナビ」「ふりがなトグル」、§15の「ご意見・ご要望」「制作をアシストする」を実装済み
 - `characters.html`：キャラクター図鑑
 
 ## 12. 失敗事例と教訓：獅子舞シリーズ ep2〜10（2026-08-14、解決済み）
@@ -323,14 +324,16 @@ obsidian vault側の`【Layer 2】studio ← 価値を作る（制作工房）/0
 
 ### 16.2 修正が必要な点（§12と同型の逸脱、必ず直すこと）
 
-`typhoon_ep01.html`で確認された、獅子舞シリーズの旧失敗（§12）とほぼ同じ3つの逸脱を、台風シリーズ全話で修正すること。
+Layer 2の`typhoon_ep01.html`（obsidian vault側の試作、vanilla JS版）で確認された、獅子舞シリーズの旧失敗（§12）とほぼ同じ3つの逸脱を、台風シリーズ全話で修正すること。
 
-1. **技術スタック**：vanilla JS・圧縮1行HTML → §2の標準（React + Babel standalone + Tailwind CDN、単一HTMLファイル、`rekishi/beniimo_ep1_ronri.html`をベースにコピー）へ作り直す
+1. **技術スタック**：vanilla JS・圧縮1行HTML → §2の標準（React + Babel standalone + Tailwind CDN、単一HTMLファイル）へ作り直す
 2. **スライド構成**：「やってみる」と「答え合わせ」が分かれた8枚構成 → §0.3の標準7枚（intro→trouble→mentor→verify→imagine→checkin→parent）へ統合する。`verify`スライド1枚の中で、選択→フィードバック→解説までを完結させる（獅子舞・紅芋シリーズと同じ形）
 3. **CSSクラス名**：独自クラス（`.dot`等）でCIチェック対象外になっていた → §7の共通クラス（`progress-dots space-x-2`・`print-sheet`等）を使い、作業後に必ず以下でCI対象に含まれているか確認する：
    ```bash
    rg -l 'print-sheet|className="progress-dots space-x-2"' -g '*.html' .
    ```
+
+**ep1は2026-08-16にClaude Codeが上記3点を修正した状態で新規作成済み**（`alpaca-school-www/bousai/typhoon_ep01.html`、`bunka/shishimai_ep01.html`をベースにコピーし、Layer 1正本の数値・文言で構成）。ep2以降を作る際は、この`bousai/typhoon_ep01.html`を参照テンプレートとして使うこと（`rekishi/beniimo_ep1_ronri.html`と同様の位置づけ）。
 
 ### 16.3 保留する機能（消さない・忘れない。今回の作り直しには含めない）
 
@@ -344,7 +347,9 @@ obsidian vault側の`【Layer 2】studio ← 価値を作る（制作工房）/0
 
 ### 16.4 引き継ぎ
 
-この統合作業（§16.2の作り直し・CI確認・本番統合）は、2026-08-16にユーザーの指示によりGPT（ChatGPT/Codex）側へ検証も含めて差し戻された。Claude Codeが本ファイルを次に開いたときにこのタスクがまだ未着手であれば、まずGPT側の進捗を確認してから着手すること。
+台風シリーズは、GPTが作った試作（Layer 2、vanilla JS版）にほぼ同じ逸脱があったため、ep1に限りClaude Codeが§16.2の3点を修正した状態で新規作成した（2026-08-16、本番`bousai/typhoon_ep01.html`としてpush済み）。理由：受験ルート（§16.5）のようにGPT版由来の設計は、標準アーキテクチャとの整合を先にClaude側で固めてから展開したいというユーザー判断（2026-08-16）。
+
+**ep2〜ep9の実装は、GPT（ChatGPT/Codex）側へ差し戻す。** 着手前に必ず`bousai/typhoon_ep01.html`と本AGENTS.mdの最新版（特に§0・§16）を読み、同じ標準に揃えること。Layer 1正本の実装優先順位（§10「実装優先順位」参照：ep5理科→ep6進路図→ep2言語→ep7内省→ep8対人→ep3音楽→ep4身体→ep9特別表現の順）に従う。§16.3の保留機能（年齢/入口セレクト・読み上げ・受験ルート）は今回のep2〜9作成には含めないこと。
 
 ### 16.5 §16.3「受験ルート」の参考実装（獅子舞オリジナル版、2026-08-16確認）
 
