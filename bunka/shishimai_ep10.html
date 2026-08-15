@@ -463,6 +463,13 @@
                 </div>
                 <a href="../matrix-library.html" className="block text-center text-sm font-bold text-orange-500 hover:text-orange-700 underline">他のテーマも見る（教材一覧）</a>
               </div>
+              <div className="mt-6 pt-4 border-t border-dashed border-gray-300">
+                <div className="bg-gray-50 rounded-lg p-4 text-left">
+                  <p className="text-xs font-bold text-gray-700 mb-2 text-center">💬 ご意見・ご要望</p>
+                  <p className="text-xs text-gray-600 mb-3">「こんな機能が欲しい」「ここが使いにくい」などのご意見をお聞かせください。今後の開発の参考にさせていただきます。</p>
+                  <a href={FEEDBACK_FORM_URL} target="_blank" rel="noopener noreferrer" className="block text-center px-4 py-2 bg-gray-700 text-white rounded-full text-sm font-bold hover:bg-gray-800 transition">📋 要望・フィードバックを送る</a>
+                </div>
+              </div>
             </div>
           );
 
@@ -563,6 +570,21 @@
                 <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8 mb-6 min-h-96">
                   {slideRenderers[slideIds[currentSlide]]()}
                 </div>
+
+                {slideIds[currentSlide] === "parent" && (
+                  <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 text-left mb-6">
+                    <p className="text-xs font-bold text-orange-700 mb-2 text-center">🌱 制作をアシストする</p>
+                    <p className="text-xs text-gray-600 mb-3">ここでの学びは、記録され、次の学びへと受け継がれていきます。その循環を支えるちからになっていただけたら嬉しいです。</p>
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      {SUPPORT_LINKS.map((s) => (
+                        <a key={s.label} href={s.url} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-full text-sm font-bold border-2 border-orange-300 text-orange-700 bg-white hover:bg-orange-100 transition">{s.label}</a>
+                      ))}
+                    </div>
+                    <div className="mt-2 text-center">
+                      <a href="../tokushoho.html" className="text-xs text-gray-400 underline">特定商取引法に基づく表記</a>
+                    </div>
+                  </div>
+                )}
 
                 <div className="flex justify-between items-center">
                   <button

@@ -16,6 +16,18 @@ const SHISHIMAI_EPISODES = [
   { id: "shishimai-ep10", short: "ep10：集・表現編（完）", title: "わたしの獅子舞・月文化地図", url: "bunka/shishimai_ep10.html" },
 ];
 
+// ご意見・ご要望フォーム。
+// フォームURLは実際のGoogleフォーム作成後にここだけ書き換えれば全ページに反映される。
+const FEEDBACK_FORM_URL = "【要記入：Googleフォームのリンクをここに設定】";
+
+// 制作アシスト（Stripe Payment Links、支援額を選べる3段階）。
+// world.ryukyu-tane.com側でも同じリンクを使う想定。
+const SUPPORT_LINKS = [
+  { label: "¥500", url: "https://buy.stripe.com/aFa7sK25P5bp6cme9rgw007" },
+  { label: "¥5,000", url: "https://buy.stripe.com/9B600i9yhavJasCc1jgw008" },
+  { label: "¥10,000", url: "https://buy.stripe.com/3cI5kC11LcDR9oy1mFgw009" },
+];
+
 const BENIIMO_EPISODES = [
   { id: "beniimo-ep1", short: "ep1：論理・数学編", title: "紅芋チップス、あと何袋たりない？", url: "rekishi/beniimo_ep1_ronri.html" },
   { id: "beniimo-ep2", short: "ep2：言語編", title: "紅芋を持ってきたのは誰？", url: "rekishi/beniimo_ep2_gengo.html" },
