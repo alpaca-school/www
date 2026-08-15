@@ -118,7 +118,7 @@
           gan: {
             name: "ガンジュー", color: "green", emoji: "😴", img: "../img/characters/ganjuu.png",
             claim: "えっと…土が紫だから、芋も紫になる…んじゃ、ないかなあ…",
-            gag: "（ガンジュー、立ったまま本気のいびき→美咲おばぁさんに肩を叩かれてハッと飛び起きる）"
+            gag: "（ガンジュー、立ったまま本気のいびき→マタグワァのシズおばぁさんに肩を叩かれてハッと飛び起きる）"
           },
           kaa: {
             name: "カーギー", color: "purple", emoji: "💁‍♀️", img: "../img/characters/carggy.png",
@@ -133,7 +133,7 @@
           chinen: { name: "知念おじぃさん", color: "amber", emoji: "🧓" },
           tokue: { name: "仲程のヨシおばぁさん", color: "rose", emoji: "👵" },
           rikiya: { name: "力也おじぃさん", color: "teal", emoji: "🧓" },
-          misaki: { name: "美咲おばぁさん", color: "indigo", emoji: "👵" }
+          misaki: { name: "マタグワァのシズおばぁさん", color: "indigo", emoji: "👵" }
         };
 
         const COLOR_MAP = {
@@ -232,7 +232,7 @@
               </div>
               <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 space-y-3">
                 <p>畑で紅芋を掘り出したアルパカたち。切ってみると、中は鮮やかな紫色でした。「なんでこんな色をしているんだろう？」「なんで沖縄でこんなによく育つんだろう？」と、みんなで話題になりました。</p>
-                <p>物知りの美咲おばぁさんなら、きっと理由を知っているはずです。</p>
+                <p>物知りのマタグワァのシズおばぁさんなら、きっと理由を知っているはずです。</p>
               </div>
             </div>
           );
@@ -273,7 +273,7 @@
               {!guess && <p className="text-center text-sm text-orange-500">↑ どれか1つを選ぶと、次に進めるよ</p>}
               {guess && (
                 <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
-                  <p>みんな、なんとなく答えてるみたい。美咲おばぁさんに聞いてみよう。</p>
+                  <p>みんな、なんとなく答えてるみたい。マタグワァのシズおばぁさんに聞いてみよう。</p>
                 </div>
               )}
             </div>
@@ -283,7 +283,7 @@
             <div className="space-y-6">
               <div className="text-center">
                 <div className="text-5xl mb-4">👵</div>
-                <h2 className="text-xl font-bold text-indigo-600">美咲おばぁさんが教えてくれた</h2>
+                <h2 className="text-xl font-bold text-indigo-600">マタグワァのシズおばぁさんが教えてくれた</h2>
               </div>
               <div className={`rounded-lg p-4 space-y-2 ${COLOR_MAP.indigo.bg}`}>
                 <div className="flex items-center gap-3 mb-1">
@@ -356,7 +356,7 @@
               </div>
               {isSortComplete && (
                 <div className="rounded-lg p-4 text-center bg-yellow-100">
-                  <p className="font-bold text-yellow-700">🎉 {cards.length}問中、{correctCount}問正解！美咲おばぁさんの話をよく聞けていたね。</p>
+                  <p className="font-bold text-yellow-700">🎉 {cards.length}問中、{correctCount}問正解！マタグワァのシズおばぁさんの話をよく聞けていたね。</p>
                   <button onClick={resetSort} className="mt-3 text-sm font-bold text-green-600 underline">もう一度やってみる</button>
                 </div>
               )}
@@ -393,7 +393,7 @@
                 <h2 className="text-2xl font-bold text-teal-600">ふりかえり</h2>
               </div>
               <div className="bg-teal-50 rounded-lg p-6">
-                <p className="font-medium text-teal-800 mb-3">✏️ 美咲おばぁさんが教えてくれたこと、誰かに説明できそうだと思った？</p>
+                <p className="font-medium text-teal-800 mb-3">✏️ マタグワァのシズおばぁさんが教えてくれたこと、誰かに説明できそうだと思った？</p>
                 <div className="flex flex-wrap gap-2">
                   {["はい", "いいえ", "わからない"].map((opt) => (
                     <button
@@ -436,7 +436,7 @@
                   <li><strong>理科（4年）</strong>：植物の成長や特徴を観察し、環境との関わりを考える</li>
                   <li><strong>社会（3年〜）</strong>：地域の特産品（紅芋）が育つ自然条件、伝来の歴史</li>
                 </ul>
-                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓」シリーズ ep5です。ep1（論理・数学編）・ep2（言語・語学編）・ep3（音楽・リズム編）に続き、同じ紅芋というテーマを「博物学」の窓から描いています。今回は美咲おばぁさんが主役で、紅芋の原産地（中南米）・紫色の色素（ポリフェノールの一種であるアントシアニン）・台風に強い理由という、一般的に知られている自然科学的な事実のみを扱っています。他の3名のメンターは1〜2行のカメオ出演です。</p>
+                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓」シリーズ ep5です。ep1（論理・数学編）・ep2（言語・語学編）・ep3（音楽・リズム編）に続き、同じ紅芋というテーマを「博物学」の窓から描いています。今回はマタグワァのシズおばぁさんが主役で、紅芋の原産地（中南米）・紫色の色素（ポリフェノールの一種であるアントシアニン）・台風に強い理由という、一般的に知られている自然科学的な事実のみを扱っています。他の3名のメンターは1〜2行のカメオ出演です。</p>
                 <p className="text-xs text-gray-500 mt-1">※ 4アルパカ（ハーリー・サラバンジ・ガンジュー・カーギー）は「困りごとを持ち込む役」として登場します。3人の発言はランダムに選ばれ、いずれも正しい説明とは異なります。</p>
               </div>
               <div className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-4">
@@ -488,7 +488,7 @@
                 </p>
               </div>
               <div className="mb-4">
-                <p className="font-bold text-sm mb-1">2. 美咲おばぁさんに教わった、正しい理由</p>
+                <p className="font-bold text-sm mb-1">2. マタグワァのシズおばぁさんに教わった、正しい理由</p>
                 <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">紫色はアントシアニン（ポリフェノールの一種）という自然の色素。紅芋はもともと中南米が原産で、大航海時代以降に世界へ広まった。台風で葉が傷んでも土の中の芋は無事なことが多く、「命をつなぐ作物」として大切にされてきた。</p>
               </div>
               <div className="mb-4">

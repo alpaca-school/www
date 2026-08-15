@@ -8,7 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <script>
         (() => {
-            const pageVersion = "20260814-2";
+            const pageVersion = "20260816-1";
             const url = new URL(window.location.href);
             if (url.searchParams.get("v") !== pageVersion) {
                 url.searchParams.set("v", pageVersion);
@@ -16,7 +16,7 @@
             }
         })();
     </script>
-    <title>獅子は、どんな音で動く？【知能の窓・獅子舞 ep5：音楽編】 🦁</title>
+    <title>暗くなる前に、家の中を歩いてみよう【知能の窓・台風 ep4：身体・運動編】 🌀</title>
     <script src="../series-nav-data.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -110,22 +110,22 @@
         const ALPACAS = {
           hari: {
             name: "ハーリー", color: "red", emoji: "🔥", img: "../img/characters/harly.png",
-            claim: "音は気合いで出る！大声なら全部同じっしょ！",
-            gag: "（効果音：ズコーッ！ハーリー、三線を持ったまま道場の前ですっ転ぶ）"
+            claim: "度胸だめしだ！目隠しをして真っ暗な部屋を歩く練習をすれば、停電になっても平気っしょ！",
+            gag: "（効果音：ズコーッ！ハーリー、タオルで目隠ししたままリビングのテーブルにぶつかってすっ転ぶ）"
           },
           sara: {
             name: "サラバンジ", color: "blue", emoji: "⚡", img: "../img/characters/sarabanji.png",
-            claim: "速く弾けば音が出るっしょ！理由は勢いさ！",
+            claim: "台風が近づいてきたら、懐中電灯持って外に出て、庭とか道を確認すればいいっしょ！勢いだ！",
             gag: "（サラバンジ、その場でバタン！と大げさに倒れる→3秒後にムクッと起き上がる）"
           },
           gan: {
             name: "ガンジュー", color: "green", emoji: "😴", img: "../img/characters/ganjuu.png",
-            claim: "三線の音…気持ちいい…スヤァ…",
-            gag: "（ガンジュー、立ったまま本気のいびき→仲程のヨシおばぁさんに肩を叩かれてハッと飛び起きる）"
+            claim: "えっと…部屋を真っ暗にして、手探りで歩く練習をすれば…そのうち慣れると思います…",
+            gag: "（ガンジュー、立ったまま本気のいびき→力也おじぃさんに肩を叩かれてハッと飛び起きる）"
           },
           kaa: {
             name: "カーギー", color: "purple", emoji: "💁‍♀️", img: "../img/characters/carggy.png",
-            claim: "振動だけじゃ不安だから、光と熱も全部必要ってことにしよう。",
+            claim: "廊下さえ確認しておけば十分でしょう。玄関やリビングまでは、別に見なくても大丈夫だと思います。",
             gag: "（カーギー、風で乱れた前髪を鏡もなしに一瞬でピシッと直しながら、少し首をかしげる）"
           }
         };
@@ -179,14 +179,14 @@
           return arr.slice(0, 3);
         }
 
-        // 4択クイズの選択肢（中学理科への軽い橋渡し）
+        // やってみる：安全な室内動線の確認について、正しいやり方を選ぶ4択クイズ
         const QUIZ_CHOICES = [
-          { id: "vibrate", label: "振動している", correct: true },
-          { id: "light", label: "必ず光っている", correct: false },
-          { id: "heat", label: "必ず熱くなる", correct: false },
-          { id: "still", label: "動いていない", correct: false }
+          { id: "q1", text: "台風が来る前の、まだ明るい時間に、家の中を実際に歩いて、玄関・家族が集まる場所・懐中電灯の場所を確認しておく", correct: true },
+          { id: "q2", text: "度胸をつけるために、目隠しをして真っ暗な部屋を歩く練習をする", correct: false },
+          { id: "q3", text: "台風が近づいてきたら、懐中電灯を持って外に出て、庭や道を確認する", correct: false },
+          { id: "q4", text: "確認はめんどうなので、停電になってから、そのとき考える", correct: false }
         ];
-        function shuffledChoices() {
+        function shuffledQuiz() {
           const arr = [...QUIZ_CHOICES];
           for (let i = arr.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -197,17 +197,17 @@
 
         // COCOLOプラン（ホームスクーラー等の学習記録）向けの教材メタ情報
         const MATERIAL = {
-          title: "獅子は、どんな音で動く？",
-          series: "知能の窓・獅子舞 ep5：音楽編",
-          subjectGrade: "音楽3年〜・理科（発展）"
+          title: "暗くなる前に、家の中を歩いてみよう",
+          series: "知能の窓・台風 ep4：身体・運動編",
+          subjectGrade: "体育・保健（安全な生活）3〜6年"
         };
 
-        const ShishimaiEp5App = () => {
+        const TyphoonApp = () => {
           const [threeKeys] = useState(() => shuffledThreeAlpacas());
           const [currentSlide, setCurrentSlide] = useState(0);
           const [guess, setGuess] = useState(null);
-          const [choices] = useState(() => shuffledChoices());
-          const [answer, setAnswer] = useState(null);
+          const [quizChoices] = useState(() => shuffledQuiz());
+          const [quizAnswer, setQuizAnswer] = useState(null);
           const [imagineAnswer, setImagineAnswer] = useState("");
           const [childName, setChildName] = useState("");
           const [canDoIt, setCanDoIt] = useState(null);
@@ -215,27 +215,32 @@
           const [furiganaOn, setFuriganaOn] = useState(true);
 
           const slideIds = ["intro", "trouble", "mentor", "verify", "imagine", "checkin", "parent"];
-          const episodeIndex = SHISHIMAI_EPISODES.findIndex((e) => e.id === "shishimai-ep05");
-          const prevEpisode = episodeIndex > 0 ? SHISHIMAI_EPISODES[episodeIndex - 1] : null;
-          const nextEpisode = episodeIndex >= 0 && episodeIndex < SHISHIMAI_EPISODES.length - 1 ? SHISHIMAI_EPISODES[episodeIndex + 1] : null;
+          const episodeIndex = TYPHOON_EPISODES.findIndex((e) => e.id === "typhoon-ep04");
+          const prevEpisode = episodeIndex > 0 ? TYPHOON_EPISODES[episodeIndex - 1] : null;
+          const nextEpisode = episodeIndex >= 0 && episodeIndex < TYPHOON_EPISODES.length - 1 ? TYPHOON_EPISODES[episodeIndex + 1] : null;
           const total = slideIds.length;
 
           const nextSlide = () => setCurrentSlide((p) => Math.min(p + 1, total - 1));
           const prevSlide = () => setCurrentSlide((p) => Math.max(p - 1, 0));
 
-          const isAnswerCorrect = answer && QUIZ_CHOICES.find((c) => c.id === answer)?.correct;
+          const pickQuiz = (id) => {
+            if (quizAnswer) return;
+            setQuizAnswer(id);
+          };
+          const resetQuiz = () => setQuizAnswer(null);
+          const isQuizCorrect = quizAnswer && quizChoices.find(c => c.id === quizAnswer)?.correct === true;
 
           const renderIntro = () => (
             <div className="space-y-6">
               <div className="text-center">
-                <div className="text-6xl mb-4">🦁</div>
-                <h2 className="text-2xl font-bold text-orange-600">三線が鳴ると、獅子が目を覚ます</h2>
+                <div className="text-6xl mb-4">🚶</div>
+                <h2 className="text-2xl font-bold text-orange-600">停電になっても、迷わず動ける家にしておくには？</h2>
                 <span className="inline-block mt-2 px-3 py-1 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
               </div>
               <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 space-y-3">
-                <p><ruby>津波古<rt>つはこ</rt></ruby>の<ruby>獅子舞<rt>ししまい</rt></ruby>には、「<ruby>立雲節<rt>たちくむぶし</rt></ruby>」という曲にのせて、獅子ワクヤー（獅子を起こす役）が三線に合わせて、玉で眠っている獅子を起こす演目が伝わっています。</p>
-                <p>音に合わせて獅子が動き出す、その瞬間が見せ場です。地域によって、使われる音や演目は違うそうです。</p>
-                <p>でも、そもそも三線や太鼓から「音」が生まれるとき、物の中では何が起きているのでしょう？</p>
+                <p>台風が近づくと、停電で家の中が真っ暗になることがあります。そんなとき、玄関やトイレまで、あわてずに歩いて行けるでしょうか。</p>
+                <p>アルパカたちは「暗くなってから練習したほうが、いざというとき安心なんじゃない？」と話しはじめました。</p>
+                <p>本当に、暗いところで練習するのが正解なのでしょうか。安全な室内の歩き方を、力也おじぃさんに聞いてみましょう。</p>
               </div>
             </div>
           );
@@ -245,7 +250,7 @@
               <div className="text-center">
                 <div className="text-5xl mb-4">😱</div>
                 <h2 className="text-xl font-bold text-red-600 mb-1">困りごと発生！</h2>
-                <p className="text-gray-600">3人のアルパカが、それぞれ違うことを言いはじめた。きみは、誰の言うことに一番近いと思う？</p>
+                <p className="text-gray-600">3人のアルパカが、それぞれ違うやり方を言いはじめた。きみは、誰の言うことに一番近いと思う？</p>
               </div>
               <div className="grid gap-4">
                 {threeKeys.map((key) => {
@@ -276,7 +281,7 @@
               {!guess && <p className="text-center text-sm text-orange-500">↑ どれか1つを選ぶと、次に進めるよ</p>}
               {guess && (
                 <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
-                  <p>みんな、気合いや勢い、眠気で片付けようとしている…。ここは、力也おじぃさんに聞いてみよう。</p>
+                  <p>みんな、なんだか危なっかしいことを言っている…。ここは、体育担当の力也おじぃさんに聞いてみよう。</p>
                 </div>
               )}
             </div>
@@ -293,22 +298,22 @@
                   <Avatar person={MENTORS.rikiya} />
                   <p className="font-bold text-teal-700">{MENTORS.rikiya.name}</p>
                 </div>
-                <p className="text-sm text-gray-700">「気合いでも勢いでもないさぁ。三線の弦を弾くと、弦が細かくブルブル震えるだろう？あれが『振動』さ」</p>
-                <p className="text-sm text-gray-700">「太鼓の皮も同じ。バチで叩くと皮がふるえて、その震えが空気に伝わって、耳に届く。それが音の正体だよ」</p>
-                <p className="text-sm text-gray-700">「<ruby>立雲節<rt>たちくむぶし</rt></ruby>にのせて獅子ワクヤーが玉を鳴らして獅子を起こすのも、その『震え』が獅子役の人に合図として届くからさ」</p>
+                <p className="text-sm text-gray-700">「ちょっと待った！暗闇の中を歩く練習も、目隠しも、台風が近づいてからの外歩きも、絶対にやったらいかんよ。転んでケガをする危険がある」</p>
+                <p className="text-sm text-gray-700">「体を使って安全を確かめるコツはね、<strong>明るいうちに、平常時に</strong>やっておくことさ。台風が来る前の、なんでもない日の昼間でいいんだよ」</p>
+                <p className="text-sm text-gray-700">「玄関までの道、家族が集まる部屋、懐中電灯やライトの置き場所。この3つを、実際に自分の足で歩いて、体に覚えさせておくのさ。目をつぶらなくても、体は覚えてくれるよ」</p>
               </div>
               <div className="grid gap-3">
                 <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.amber.bg}`}>
                   <Avatar person={MENTORS.chinen} />
-                  <p className="text-sm text-amber-700">「地域によって、獅子を起こす曲も演目も違うんだよ。<ruby>津波古<rt>つはこ</rt></ruby>はこの<ruby>立雲節<rt>たちくむぶし</rt></ruby>さ」</p>
+                  <p className="text-sm text-amber-700">「歩いた道すじを、頭の中で順番に思い出せるようにしておくと、なおいいさぁ」</p>
                 </div>
                 <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.rose.bg}`}>
                   <Avatar person={MENTORS.tokue} />
-                  <p className="text-sm text-rose-700">「音を聞き分けるのも、練習が必要だからね。焦らず耳を澄ませてごらん」</p>
+                  <p className="text-sm text-rose-700">「家族みんなで一緒に歩いてみると、『ここ危ないね』って気づきも共有できるねえ」</p>
                 </div>
                 <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.indigo.bg}`}>
                   <Avatar person={MENTORS.misaki} />
-                  <p className="text-sm text-indigo-700">「三線の胴に張ってある皮の模様も面白いよ。また今度、たっぷり教えるね」</p>
+                  <p className="text-sm text-indigo-700">「床に置いてあるものが、暗いとどう見えにくくなるかは、また今度たっぷり教えるね」</p>
                 </div>
               </div>
             </div>
@@ -319,38 +324,47 @@
               <div className="text-center">
                 <div className="text-5xl mb-4">✅</div>
                 <h2 className="text-2xl font-bold text-green-600">やってみよう</h2>
-                <p className="text-gray-600 text-sm mt-1">音が生まれるとき、物体では何が起きている？1つ選んでみよう。</p>
+                <p className="text-gray-600 text-sm mt-1">安全な室内の歩き方を確認するには、どうすればいい？</p>
               </div>
               <div className="grid gap-3">
-                {choices.map((c) => {
-                  const selected = answer === c.id;
-                  const showResult = answer !== null;
-                  let stateClass = "bg-white border-gray-200 text-gray-700 hover:border-gray-300";
-                  if (showResult && selected && c.correct) stateClass = "bg-green-100 border-green-400 text-green-700";
-                  if (showResult && selected && !c.correct) stateClass = "bg-red-50 border-red-300 text-red-600";
-                  if (showResult && !selected && c.correct) stateClass = "bg-green-50 border-green-300 text-green-700";
+                {quizChoices.map((choice) => {
+                  const answered = quizAnswer !== null;
+                  const isSelected = quizAnswer === choice.id;
+                  const showResult = answered && isSelected;
                   return (
                     <button
-                      key={c.id}
-                      onClick={() => !answer && setAnswer(c.id)}
-                      disabled={answer !== null}
-                      className={`text-left px-4 py-3 rounded-lg border-2 font-bold transition-all ${stateClass}`}
+                      key={choice.id}
+                      onClick={() => pickQuiz(choice.id)}
+                      disabled={answered}
+                      className={`text-left p-4 rounded-lg border-2 transition-all ${
+                        showResult
+                          ? (choice.correct ? "bg-green-50 border-green-400" : "bg-red-50 border-red-400")
+                          : "bg-white border-gray-200 hover:border-gray-300"
+                      } ${answered && !isSelected ? "opacity-60" : ""}`}
                     >
-                      {c.label}
+                      <p className="text-sm text-gray-700">{choice.text}</p>
+                      {showResult && (
+                        <p className={`text-xs mt-2 font-bold ${choice.correct ? "text-green-600" : "text-red-600"}`}>
+                          {choice.correct ? "正解！" : "それは危ないよ、違うよ。"}
+                        </p>
+                      )}
                     </button>
                   );
                 })}
               </div>
-              {answer && (
-                <div className={`rounded-lg p-4 text-center ${isAnswerCorrect ? "bg-green-50 border-2 border-green-200" : "bg-gray-100"}`}>
-                  {isAnswerCorrect ? (
-                    <p className="font-bold text-green-700">🎉 正解！音は、物体が「振動」することで生まれるよ。</p>
-                  ) : (
-                    <p className="font-bold text-gray-700">惜しい！正解は「振動している」だったよ。</p>
-                  )}
-                  <p className="text-sm text-gray-600 mt-2">三線の弦、太鼓の皮…震えているものが音を出している。<ruby>獅子舞<rt>ししまい</rt></ruby>の音楽表現の話（どんな曲を選ぶか）と、音が生まれる仕組みの話（振動）は、別の窓（教科）の話だから、ごちゃまぜにしないようにね。</p>
+              {quizAnswer && (
+                <div className={`rounded-lg p-4 text-center ${isQuizCorrect ? "bg-yellow-100" : "bg-gray-100"}`}>
+                  <p className={`font-bold ${isQuizCorrect ? "text-yellow-700" : "text-gray-600"}`}>
+                    {isQuizCorrect
+                      ? "🎉 正解！台風が来る前の、明るい時間に、玄関・集まる場所・懐中電灯の場所を歩いて確認しておくんだったね。"
+                      : "正解は「台風が来る前の、まだ明るい時間に、家の中を実際に歩いて確認しておく」だったよ。暗闇歩行・目隠し・台風接近中の外歩きは、どれも危ないので絶対にしないでね。"}
+                  </p>
+                  <button onClick={resetQuiz} className="mt-3 text-sm font-bold text-green-600 underline">もう一度やってみる</button>
                 </div>
               )}
+              <div className="bg-orange-50 rounded-lg p-4 text-sm text-orange-800 text-center">
+                <p>今日、電気がついているうちに、家族と一緒に玄関まで歩いてみよう。</p>
+              </div>
             </div>
           );
 
@@ -361,15 +375,15 @@
                 <h2 className="text-2xl font-bold text-pink-600">想像してみよう</h2>
               </div>
               <div className="bg-pink-50 rounded-lg p-6">
-                <p className="text-lg">もし、獅子の動きに「自分だけの合図の音」を1つ足すとしたら、どんな音にする？それは、何の合図？</p>
-                <p className="text-sm text-gray-500 mt-2">（鈴の音・手拍子・太鼓の連打…正解は一つじゃないよ）</p>
+                <p className="text-lg">床に物が一つ増えたら、夜の歩きやすさはどう変わる？</p>
+                <p className="text-sm text-gray-500 mt-2">（かばん・スリッパ・おもちゃ…どんな物でもいいよ。正解は一つじゃないよ）</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">きみの考えを書いてみよう（学習記録シートに残せるよ）</label>
                 <textarea
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400 text-sm"
                   rows="3"
-                  placeholder="例：小さな鈴を鳴らして「立ち上がる合図」にする"
+                  placeholder="例：かばんが床に置いてあると、暗いと足に引っかかりそう"
                   value={imagineAnswer}
                   onChange={(e) => setImagineAnswer(e.target.value)}
                 ></textarea>
@@ -384,7 +398,7 @@
                 <h2 className="text-2xl font-bold text-teal-600">ふりかえり</h2>
               </div>
               <div className="bg-teal-50 rounded-lg p-6">
-                <p className="font-medium text-teal-800 mb-3">✏️ 力也おじぃさんの「振動」の話、自分でも人に説明できそうだと思った？</p>
+                <p className="font-medium text-teal-800 mb-3">✏️ 力也おじぃさんのやり方、自分でも今日やってみられそうだと思った？</p>
                 <div className="flex flex-wrap gap-2">
                   {["はい", "いいえ", "わからない"].map((opt) => (
                     <button
@@ -404,14 +418,15 @@
                 <textarea
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400 text-sm"
                   rows="3"
-                  placeholder="例：三線の弦がふるえて音が出ることが分かった"
+                  placeholder="例：暗いところで練習するんじゃなくて、明るいうちに歩いておけばいいと分かった"
                   value={memoryAnswer}
                   onChange={(e) => setMemoryAnswer(e.target.value)}
                 ></textarea>
               </div>
               <div className="bg-indigo-50 rounded-lg p-4 text-sm text-indigo-700 text-center">
-                <p>次回、知能の窓・<ruby>獅子舞<rt>ししまい</rt></ruby> ep6（身体・運動編）では、ふたりで一頭の獅子になる動きを見ていくよ。お楽しみに。</p>
-              </div>            </div>
+                <p>次回、知能の窓・台風 ep5では、また別の窓から台風のテーマを見ていくよ。お楽しみに。</p>
+              </div>
+            </div>
           );
 
           const renderParent = () => (
@@ -422,16 +437,17 @@
               </div>
               <div className="bg-orange-50 rounded-lg p-4">
                 <p className="text-xs font-bold text-orange-700 mb-2">🧑‍🎓 児童生徒のみなさんへ</p>
-                <p className="text-sm text-gray-700">きょうは、三線や太鼓から音が生まれるしくみを考えたね。力也おじぃさんが教えてくれた「音は物が震えて生まれる」という考え方、いろんな音を聞くときに思い出してみよう。</p>
+                <p className="text-sm text-gray-700">きょうは、停電になっても迷わず動けるように、家の中の安全な歩き方を考えたね。力也おじぃさんが教えてくれた「明るいうちに、平常時に、実際に歩いて確かめておく」というやり方、今日電気がついているうちに、家族と一緒にやってみよう。</p>
               </div>
               <div className="bg-yellow-50 rounded-lg p-4">
                 <p className="text-xs font-bold text-yellow-800 mb-2">👪 保護者・支援者の方へ（学習指導要領との対応）</p>
                 <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
-                  <li><strong>音楽（3年〜）</strong>：拍やリズムを感じ取り、楽器の音や身体表現とのつながりに気づく</li>
-                  <li><strong>理科（発展）</strong>：音は物体の振動によって生じるという、音と振動への入口</li>
+                  <li><strong>体育・保健（安全な生活）</strong>：身の回りの危険を予測し、けがや事故を防ぐための行動を考える学習</li>
+                  <li><strong>家庭科</strong>：住まいの中の安全、暮らしやすい住環境への気づき</li>
                 </ul>
-                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓」シリーズの<ruby>獅子舞<rt>ししまい</rt></ruby>版 ep5です。ep1〜4に続き、同じ<ruby>獅子舞<rt>ししまい</rt></ruby>というテーマを「音楽」の窓から描いています。<ruby>津波古<rt>つはこ</rt></ruby>の<ruby>獅子舞<rt>ししまい</rt></ruby>に伝わる「<ruby>立雲節<rt>たちくむぶし</rt></ruby>」と、獅子ワクヤーが三線に合わせて玉で獅子を起こす演目は、地域に伝わる文化事実として紹介しています（地域によって曲・演目は異なります）。今回は力也おじぃさんが、音楽表現の入口として「音は物体の振動から生じる」という理科の基礎を教える回でした。</p>
-                <p className="text-xs text-gray-500 mt-1">※ 4アルパカ（ハーリー・サラバンジ・ガンジュー・カーギー）は「困りごとを持ち込む役」として登場します。3人の発言はランダムに選ばれ、いずれも正解ではありません。カーギーの発言は「振動」に気づきつつも、光や熱まで余計な条件を足してしまう、惜しい間違いです。「自分たちだけで焦って考えると間違えやすい」「専門家（メンター）に教わって、順序立てて考えると解ける」という体験そのものが、この教材のねらいです。</p>
+                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓」シリーズの台風版 ep4です。紅芋・獅子舞シリーズと同じ多重知能（MI）理論に基づき、1つのテーマ（台風）を8つの知能の窓（論理・数学／言語／音楽／身体運動／博物学／視覚空間／内省／対人）から順番に描く構成です。今回は「身体・運動」の窓から、力也おじぃさんが室内の安全な動線を体で確かめる方法を教える回でした。</p>
+                <p className="text-xs text-gray-500 mt-1">※ 4アルパカ（ハーリー・サラバンジ・ガンジュー・カーギー）は、「困りごとを持ち込む役」として登場します。3人の発言はランダムに選ばれ、いずれも安全とは言えないやり方です。「暗いところで練習すれば慣れる」という考え方の誤りに気づき、専門家（メンター）に教わって正しい手順で確かめる、という体験そのものが、この教材のねらいです。</p>
+                <p className="text-xs text-gray-500 mt-1"><strong>※ 安全上の重要な注意：</strong>この教材は、台風が来る前の平常時に、電気がついた明るい室内で、家族と一緒に室内を歩いて確認する活動のみを想定しています。目隠しをしての歩行練習、部屋を真っ暗にしての練習、台風接近中や停電中の屋外での確認は、転倒やけがの危険があるため、絶対に行わないでください。</p>
               </div>
               <div className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-4">
                 <p className="text-xs font-bold text-gray-700 mb-2">🖨️ 学習記録シートを作る（COCOLOプラン等の学習記録用）</p>
@@ -479,7 +495,6 @@
           const today = new Date();
           const todayStr = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
           const guessedForSheet = guess ? ALPACAS[guess] : null;
-          const answerLabel = answer ? QUIZ_CHOICES.find((c) => c.id === answer)?.label : null;
 
           const renderPrintSheet = () => (
             <div className="print-sheet w-[700px] p-10 bg-white text-black">
@@ -495,28 +510,30 @@
               <div className="mb-4 text-xs text-gray-700 bg-gray-50 border border-gray-300 rounded p-3">
                 <p className="font-bold mb-1">学習指導要領との対応</p>
                 <ul className="space-y-0.5 list-disc list-inside">
-                  <li>音楽（3年〜）：拍やリズムを感じ取り、楽器の音や身体表現とのつながりに気づく</li>
-                  <li>理科（発展）：音は物体の振動によって生じるという、音と振動への入口</li>
+                  <li>体育・保健（安全な生活）：身の回りの危険を予測し、けがや事故を防ぐための行動を考える学習</li>
+                  <li>家庭科：住まいの中の安全、暮らしやすい住環境への気づき</li>
                 </ul>
               </div>
               <div className="mb-4">
-                <p className="font-bold text-sm mb-1">1. アルパカの困りごとで、一番近いと思った発言</p>
+                <p className="font-bold text-sm mb-1">1. アルパカの困りごとで、一番近いと思ったやり方</p>
                 <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">
                   {guessedForSheet ? `${guessedForSheet.name}の「${guessedForSheet.claim}」を選びました。` : "（記入なし）"}
                 </p>
               </div>
               <div className="mb-4">
-                <p className="font-bold text-sm mb-1">2. クイズで選んだ答えと、力也おじぃさんに教わった正解</p>
-                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">
-                  {answerLabel ? `選んだ答え：「${answerLabel}」。` : "（記入なし）"}正解は「振動している」（三線の弦や太鼓の皮がふるえることで音が生まれる）。
-                </p>
+                <p className="font-bold text-sm mb-1">2. 力也おじぃさんに教わった、正しいやり方</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">台風が来る前の、明るい時間に、玄関・家族が集まる場所・懐中電灯の場所を、実際に歩いて確認しておく。暗闇歩行・目隠し・台風接近中の外歩きは絶対にしない。</p>
               </div>
               <div className="mb-4">
-                <p className="font-bold text-sm mb-1">3. 想像する問題への自分の考え</p>
+                <p className="font-bold text-sm mb-1">3. やってみようクイズの結果</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">{quizAnswer ? (isQuizCorrect ? "正解できた" : "正解は「台風が来る前の、まだ明るい時間に、家の中を実際に歩いて確認しておく」") : "（未回答）"}</p>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">4. 想像する問題への自分の考え</p>
                 <p className="text-sm border border-gray-400 rounded p-2 min-h-[3rem]">{imagineAnswer || "（記入なし）"}</p>
               </div>
               <div className="mb-4">
-                <p className="font-bold text-sm mb-1">4. 今日一番心に残ったこと</p>
+                <p className="font-bold text-sm mb-1">5. 今日一番心に残ったこと</p>
                 <p className="text-sm border border-gray-400 rounded p-2 min-h-[3rem]">{memoryAnswer || "（記入なし）"}</p>
               </div>
               <div className="mt-8 pt-4 border-t border-gray-400">
@@ -535,7 +552,7 @@
             parent: renderParent
           };
           const slideTitles = {
-            intro: "🦁 はじまりの問い",
+            intro: "🚶 はじまりの問い",
             trouble: "😱 困りごと",
             mentor: "🧓 メンター登場",
             verify: "✅ やってみる",
@@ -563,8 +580,8 @@
                   </button>
                 </div>
                 <div className="text-center mb-6">
-                  <p className="text-xs font-bold text-indigo-500 mb-1">知能の窓・<ruby>獅子舞<rt>ししまい</rt></ruby> ep5：音楽編</p>
-                  <h1 className="text-2xl md:text-3xl font-bold text-orange-600">獅子は、どんな音で動く？ 🦁</h1>
+                  <p className="text-xs font-bold text-indigo-500 mb-1">知能の窓・台風 ep4：身体・運動編</p>
+                  <h1 className="text-2xl md:text-3xl font-bold text-orange-600">暗くなる前に、家の中を歩いてみよう 🚶</h1>
                   <span className="inline-block mt-1 px-2 py-0.5 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
                 </div>
 
@@ -628,7 +645,7 @@
           );
         };
 
-        createRoot(document.getElementById("root")).render(<ShishimaiEp5App />);
+        createRoot(document.getElementById("root")).render(<TyphoonApp />);
     </script>
 </body>
 </html>

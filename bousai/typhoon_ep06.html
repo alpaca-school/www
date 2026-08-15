@@ -8,7 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <script>
         (() => {
-            const pageVersion = "20260812-6";
+            const pageVersion = "20260816-1";
             const url = new URL(window.location.href);
             if (url.searchParams.get("v") !== pageVersion) {
                 url.searchParams.set("v", pageVersion);
@@ -16,7 +16,8 @@
             }
         })();
     </script>
-    <title>紅芋のこと、うまく紹介できるかな？【知能の窓 ep8：対人編（完）】 🍠</title>
+    <title>台風の進路図、どこを見ればいい？【知能の窓・台風 ep6：視覚・空間編】 🌀</title>
+    <script src="../series-nav-data.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -87,6 +88,8 @@
             .print-sheet, .print-sheet * { visibility: visible; }
             .print-sheet { position: absolute; left: 0; top: 0; width: 100%; }
         }
+        rt { font-size: 0.6em; color: #ea580c; font-weight: 700; }
+        .furigana-off rt { display: none; }
     </style>
 </head>
 <body>
@@ -103,37 +106,41 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m15 18-6-6 6-6"/></svg>
         );
 
-        // 4アルパカ（性格は既存シリーズと同じ。困りごとを持ち込む役）
+        // 4アルパカ（困りごとを持ち込む役。誰も正解を知らない）
         const ALPACAS = {
           hari: {
             name: "ハーリー", color: "red", emoji: "🔥", img: "../img/characters/harly.png",
-            claim: "べにいもはねはたけでできてあまくてムラサキでじゃがいもとちがってでんぷんがおおくてあとねあとねあとね…（早口でまくしたてる）",
-            gag: "（効果音：ズコーッ！ハーリー、早口すぎて自分の舌がもつれてすっ転ぶ）"
+            guess: "線の上を必ず通るっしょ！",
+            line: "進路図の線、まっすぐアルパカ島に向かってる！絶対この線の上を通るっしょ！",
+            gag: "（効果音：ズコーッ！ハーリー、進路図を指さしたまま勢いよくすっ転ぶ）"
           },
           sara: {
             name: "サラバンジ", color: "blue", emoji: "⚡", img: "../img/characters/sarabanji.png",
-            claim: "紅芋はアントシアニンとでんぷん質を豊富に含有する塊根作物でありまして…",
-            gag: "（サラバンジ、難しい言葉を言い切った瞬間にバタン！と大げさに倒れる→3秒後にムクッと起き上がる）"
+            guess: "丸が大きいから何も分からない！",
+            line: "予報円がこんなに大きいなら、どこに行くかなんて何も分からないってことっしょ！",
+            gag: "（サラバンジ、その場でバタン！と大げさに倒れる→3秒後にムクッと起き上がる）"
           },
           gan: {
             name: "ガンジュー", color: "green", emoji: "😴", img: "../img/characters/ganjuu.png",
-            claim: "紅芋のことでねぇ…ぼくがちいさいころ畑でねぇ…（お客さんの顔を見ずに、ずっと自分の思い出話）",
-            gag: "（ガンジュー、話しながら立ったまま本気のいびき→仲程のヨシおばぁさんに肩を叩かれてハッと飛び起きる）"
+            guess: "…昨日の位置と同じ",
+            line: "えっと…台風は昨日もこの辺にいたから…今日も同じ場所、だと思います…",
+            gag: "（ガンジュー、進路図を見ながら本気のいびき→マタグワァのシズおばぁさんに肩を叩かれてハッと飛び起きる）"
           },
           kaa: {
             name: "カーギー", color: "purple", emoji: "💁‍♀️", img: "../img/characters/carggy.png",
-            claim: "（下を向いて、暗記した紹介文を一字一句、棒読みで…）「紅芋は、沖縄で、育つ、芋、です」",
-            gag: "（カーギー、原稿を読み終えて顔を上げた瞬間、乱れた前髪を鏡もなしに一瞬でピシッと直す）"
+            guess: "丸の外は絶対安全！",
+            line: "予報円の外側なら絶対に安全ってことですよね。…あ、その外側も油断できないんですか？",
+            gag: "（カーギー、風で乱れた前髪を鏡もなしに一瞬でピシッと直しながら、進路図の前で首をかしげる）"
           }
         };
         const ALPACA_KEYS = ["hari", "sara", "gan", "kaa"];
 
-        // 4メンター（おじぃさん・おばぁさん）
+        // 4メンター（おじぃさん・おばぁさん）。多重知能8分類を2つずつ担当する「知能の窓」シリーズの案内役
         const MENTORS = {
-          chinen: { name: "知念おじぃさん", color: "amber", emoji: "🧓" },
-          tokue: { name: "仲程のヨシおばぁさん", color: "rose", emoji: "👵" },
-          rikiya: { name: "力也おじぃさん", color: "teal", emoji: "🧓" },
-          misaki: { name: "マタグワァのシズおばぁさん", color: "indigo", emoji: "👵" }
+          chinen: { name: "知念おじぃさん", role: "智（論理・言語）", color: "amber", emoji: "🧓" },
+          tokue: { name: "仲程のヨシおばぁさん", role: "徳（対人・内省）", color: "rose", emoji: "👵" },
+          rikiya: { name: "力也おじぃさん", role: "体（音楽・運動）", color: "teal", emoji: "🧓" },
+          misaki: { name: "マタグワァのシズおばぁさん", role: "感（視覚空間・博物学）", color: "indigo", emoji: "👵" }
         };
 
         const COLOR_MAP = {
@@ -147,6 +154,7 @@
           indigo: { bg: "bg-indigo-50", border: "border-indigo-300", text: "text-indigo-700", solid: "bg-indigo-500" }
         };
 
+        // キャラ画像。アルパカは画像→失敗時絵文字。メンターは画像未整備のため絵文字のみ
         const Avatar = ({ person }) => {
           const [failed, setFailed] = useState(false);
           if (!person.img || failed) {
@@ -175,65 +183,45 @@
           return arr.slice(0, 3);
         }
 
-        // 紹介文の組み立てワーク（穴埋め選択式）
-        const BLANK_OPTIONS = {
-          what: [
-            { id: "what1", text: "紅芋" },
-            { id: "what2", text: "沖縄でとれる、むらさき色のお芋" }
-          ],
-          why: [
-            { id: "why1", text: "あまくて、色がきれいだから" },
-            { id: "why2", text: "アントシアニンという成分が豊富で、蒸すと甘みが強くなるから" }
-          ],
-          first: [
-            { id: "first1", text: "お客さんが今いちばん知りたいこと（味・見た目）から話す" },
-            { id: "first2", text: "自分が話したい順番どおりに、思いつくまま話す" }
-          ]
-        };
-        const GOOD_PICK = { what: "what1", why: "why1", first: "first1" };
-
+        // COCOLOプラン（ホームスクーラー等の学習記録）向けの教材メタ情報
         const MATERIAL = {
-          title: "紅芋のこと、うまく紹介できるかな？",
-          series: "知能の窓 ep8：対人編（完）",
-          subjectGrade: "国語3年・特別活動3年"
+          title: "台風の進路図、どこを見ればいい？",
+          series: "知能の窓・台風 ep6：視覚・空間編",
+          subjectGrade: "社会3〜6年・理科・算数"
         };
 
-        const BeniimoEp8App = () => {
+        const CORRECT_ANSWER = "予報円には幅があり、線は必ず通る道ではない";
+
+        const TyphoonEp6App = () => {
           const [threeKeys] = useState(() => shuffledThreeAlpacas());
           const [currentSlide, setCurrentSlide] = useState(0);
           const [guess, setGuess] = useState(null);
-          const [picks, setPicks] = useState({ what: null, why: null, first: null });
           const [imagineAnswer, setImagineAnswer] = useState("");
           const [childName, setChildName] = useState("");
           const [canDoIt, setCanDoIt] = useState(null);
           const [memoryAnswer, setMemoryAnswer] = useState("");
+          const [furiganaOn, setFuriganaOn] = useState(true);
 
-          const slideIds = ["intro", "trouble", "mentor", "workshop", "imagine", "checkin", "parent"];
+          const slideIds = ["intro", "trouble", "mentor", "verify", "imagine", "checkin", "parent"];
+          const episodeIndex = TYPHOON_EPISODES.findIndex((e) => e.id === "typhoon-ep06");
+          const prevEpisode = episodeIndex > 0 ? TYPHOON_EPISODES[episodeIndex - 1] : null;
+          const nextEpisode = episodeIndex >= 0 && episodeIndex < TYPHOON_EPISODES.length - 1 ? TYPHOON_EPISODES[episodeIndex + 1] : null;
           const total = slideIds.length;
 
           const nextSlide = () => setCurrentSlide((p) => Math.min(p + 1, total - 1));
           const prevSlide = () => setCurrentSlide((p) => Math.max(p - 1, 0));
 
-          const pickBlank = (kind, id) => setPicks((prev) => ({ ...prev, [kind]: id }));
-          const resetPicks = () => setPicks({ what: null, why: null, first: null });
-          const isPickComplete = picks.what && picks.why && picks.first;
-          const isPickPerfect = isPickComplete
-            && picks.what === GOOD_PICK.what
-            && picks.why === GOOD_PICK.why
-            && picks.first === GOOD_PICK.first;
-
-          const findText = (kind, id) => BLANK_OPTIONS[kind].find((o) => o.id === id)?.text || "";
-
           const renderIntro = () => (
             <div className="space-y-6">
               <div className="text-center">
-                <div className="text-6xl mb-4">🍠</div>
-                <h2 className="text-2xl font-bold text-orange-600">紅芋まつりの、紹介係になった</h2>
+                <div className="text-6xl mb-4">🗺️</div>
+                <h2 className="text-2xl font-bold text-orange-600">台風の<ruby>進路図<rt>しんろず</rt></ruby>、どこを見ればいい？</h2>
                 <span className="inline-block mt-2 px-3 py-1 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
               </div>
               <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 space-y-3">
-                <p>今度の紅芋まつりで、来てくれたお客さんに紅芋のことを紹介する係になったアルパカたち。でも、何をどう話せばいいのか、みんなわからずに困っています。</p>
-                <p>ここまでの旅で、論理・言葉・音楽・体・空間・自然・自分自身…いろんな窓から紅芋を見てきました。最後の窓は「人と人」。仲程のヨシおばぁさんに、伝え方のコツを教わりに行こう。</p>
+                <p>気象庁が出す台風の<ruby>進路図<rt>しんろず</rt></ruby>には、いま台風がいる場所、これまで通った線、そしてこれから台風が動きそうな範囲を示す大きな丸（予報円）が描かれています。</p>
+                <p>台風「アルパカ2号」は、いまアルパカ島の南の海の上にいます。地図には、今日から3日後までの丸が4つ並んでいて、丸はだんだん大きくなっています。</p>
+                <p>さて、この<ruby>進路図<rt>しんろず</rt></ruby>から、どんなことが読み取れるでしょう？</p>
               </div>
             </div>
           );
@@ -243,7 +231,7 @@
               <div className="text-center">
                 <div className="text-5xl mb-4">😱</div>
                 <h2 className="text-xl font-bold text-red-600 mb-1">困りごと発生！</h2>
-                <p className="text-gray-600">3人のアルパカが、それぞれの紹介の仕方でお客さんを困らせてしまった。きみは、誰の紹介が一番惜しいと思う？</p>
+                <p className="text-gray-600">進路図を見た3人のアルパカが、焦って自分の考えを言いはじめた。きみは、誰の言うことに一番近いと思う？</p>
               </div>
               <div className="grid gap-4">
                 {threeKeys.map((key) => {
@@ -261,7 +249,8 @@
                       <div className="choice-row">
                         <Avatar person={c} />
                         <div className={`speech-bubble flex-1 min-w-0 rounded-lg p-3 ${cc.text} bg-white/70`}>
-                          <p className="text-sm text-gray-700">「{c.claim}」</p>
+                          <p className={`font-bold ${cc.text}`}>{c.name}：「{c.guess}」</p>
+                          <p className="text-sm text-gray-700 mt-1">「{c.line}」</p>
                         </div>
                         {selected && (
                           <div className={`choice-check w-7 h-7 rounded-full ${cc.solid} flex items-center justify-center text-white text-sm shrink-0`}>✓</div>
@@ -274,7 +263,7 @@
               {!guess && <p className="text-center text-sm text-orange-500">↑ どれか1つを選ぶと、次に進めるよ</p>}
               {guess && (
                 <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
-                  <p>みんな、お客さんに気持ちがちゃんと届いていないみたい。仲程のヨシおばぁさんに聞いてみよう。</p>
+                  <p>みんな焦っていて、進路図の見方がバラバラになっている…。ここは、知能の窓シリーズのメンターに聞いてみよう。</p>
                 </div>
               )}
             </div>
@@ -284,116 +273,74 @@
             <div className="space-y-6">
               <div className="text-center">
                 <div className="text-5xl mb-4">👵</div>
-                <h2 className="text-xl font-bold text-rose-600">仲程のヨシおばぁさんが教えてくれた</h2>
+                <h2 className="text-xl font-bold text-indigo-600">マタグワァのシズおばぁさんが教えてくれた</h2>
               </div>
-              <div className={`rounded-lg p-4 space-y-2 ${COLOR_MAP.rose.bg}`}>
+              <div className={`rounded-lg p-4 space-y-2 ${COLOR_MAP.indigo.bg}`}>
                 <div className="flex items-center gap-3 mb-1">
-                  <Avatar person={MENTORS.tokue} />
-                  <p className="font-bold text-rose-700">{MENTORS.tokue.name}</p>
+                  <Avatar person={MENTORS.misaki} />
+                  <p className="font-bold text-indigo-700">{MENTORS.misaki.name}</p>
                 </div>
-                <p className="text-sm text-gray-700">「早口でも、難しい言葉でも、下を向いたままでも、お客さんには届かないさ。伝えるときのコツは3つだけよ」</p>
-                <ul className="text-sm text-gray-800 space-y-1 list-disc list-inside py-2">
-                  <li><strong>相手の顔を見る</strong>――話す前に、まずお客さんの顔をひとつ見る</li>
-                  <li><strong>短く区切って話す</strong>――一度にたくさん言おうとしない</li>
-                  <li><strong>相手が知りたいことから話す</strong>――自分が言いたい順番じゃなくていい</li>
-                </ul>
-                <p className="text-sm text-gray-700">「これだけで、紅芋のことも、きみの気持ちも、ちゃんと相手に届くよ」</p>
+                <p className="text-sm text-gray-700">「<ruby>進路図<rt>しんろず</rt></ruby>で大事なのは3つ。いまの場所、これまで通ってきた線、そしてこれから動きそうな『予報円』という丸だよ」</p>
+                <p className="text-sm text-gray-700">「あの真ん中の線は『必ずこの上を通る道』じゃないさぁ。台風の中心は丸の中のどこかに来る、という意味の丸なんだよ」</p>
+                <p className="text-sm text-gray-700">「丸が大きいのは、先の日ほど『まだよく分からない』ということ。でも『何も分からない』わけじゃない。丸の中には来る、というのは分かっているんだよ」</p>
               </div>
               <div className="grid gap-3">
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.teal.bg}`}>
-                  <Avatar person={MENTORS.rikiya} />
-                  <p className="text-sm text-teal-700">「リズムよく話すといいよ。ほって、あらって、きって、むして――みたいにね」</p>
-                </div>
                 <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.amber.bg}`}>
                   <Avatar person={MENTORS.chinen} />
-                  <p className="text-sm text-amber-700">「難しい言葉は言い換えるといいよ。『アントシアニン』は『きれいなムラサキのもと』でじゅうぶんさ」</p>
+                  <p className="text-sm text-amber-700">「線の上だけを見て安心したり、丸の外だから大丈夫と決めつけたりしないことさぁ」</p>
                 </div>
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.indigo.bg}`}>
-                  <Avatar person={MENTORS.misaki} />
-                  <p className="text-sm text-indigo-700">「実物を見せながら話すといいよ。切った断面を見せるだけで、言葉より早く伝わることもあるさ」</p>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.rose.bg}`}>
+                  <Avatar person={MENTORS.tokue} />
+                  <p className="text-sm text-rose-700">「『分からない』って聞くと不安になるよね。でも、備えをしておけば大丈夫だよ」</p>
+                </div>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.teal.bg}`}>
+                  <Avatar person={MENTORS.rikiya} />
+                  <p className="text-sm text-teal-700">「台風がどんな音を立てて近づいてくるかは、また今度、たっぷり教えるね」</p>
                 </div>
               </div>
             </div>
           );
 
-          const renderWorkshop = () => (
-            <div className="space-y-6">
-              <div className="text-center">
-                <div className="text-5xl mb-4">🗣️</div>
-                <h2 className="text-2xl font-bold text-green-600">やってみよう</h2>
-                <p className="text-gray-600 text-sm mt-1">紹介文を組み立てよう。それぞれ、仲程のヨシおばぁさんの教えに近いほうを選んでみよう。</p>
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <p className="text-sm font-bold text-gray-700 mb-2">1.「これは○○です」の○○</p>
-                  <div className="grid gap-2">
-                    {BLANK_OPTIONS.what.map((o) => (
-                      <button
-                        key={o.id}
-                        onClick={() => pickBlank("what", o.id)}
-                        className={`text-left px-4 py-3 rounded-lg font-medium border-2 transition ${
-                          picks.what === o.id ? "bg-green-500 text-white border-green-500" : "bg-white text-gray-700 border-green-200 hover:bg-green-50"
-                        }`}
-                      >
-                        {o.text}
-                      </button>
-                    ))}
-                  </div>
+          const renderVerify = () => {
+            const guessedAlpaca = guess ? ALPACAS[guess] : null;
+            const choices = [
+              "線の上を必ず通る",
+              "予報円には幅があり、線は必ず通る道ではない",
+              "予報円が大きい日は何も分からない",
+              "予報円の外側なら絶対に安全"
+            ];
+            return (
+              <div className="space-y-6">
+                <div className="text-center">
+                  <div className="text-5xl mb-4">✅</div>
+                  <h2 className="text-2xl font-bold text-green-600">やってみよう</h2>
                 </div>
-                <div>
-                  <p className="text-sm font-bold text-gray-700 mb-2">2.「なぜなら○○だからです」の○○</p>
-                  <div className="grid gap-2">
-                    {BLANK_OPTIONS.why.map((o) => (
-                      <button
-                        key={o.id}
-                        onClick={() => pickBlank("why", o.id)}
-                        className={`text-left px-4 py-3 rounded-lg font-medium border-2 transition ${
-                          picks.why === o.id ? "bg-green-500 text-white border-green-500" : "bg-white text-gray-700 border-green-200 hover:bg-green-50"
-                        }`}
+                <div className="bg-green-50 border-2 border-green-200 rounded-lg p-6 space-y-2 text-sm">
+                  <p className="font-bold text-gray-700">問い：台風の<ruby>進路図<rt>しんろず</rt></ruby>について、いちばん正しい言い方はどれ？</p>
+                  <ul className="space-y-1">
+                    {choices.map((choice) => (
+                      <li
+                        key={choice}
+                        className={choice === CORRECT_ANSWER ? "font-bold text-green-700" : "text-gray-400 line-through"}
                       >
-                        {o.text}
-                      </button>
+                        {choice === CORRECT_ANSWER ? "✅ " : "・"}{choice}
+                      </li>
                     ))}
-                  </div>
+                  </ul>
+                  <p className="text-gray-500 text-xs">アルパカ島がいまの予報円のどのあたりにあるか、地図で自分の場所を指さしてみよう。台風名「アルパカ2号」自体は、この読み取りには使わない。</p>
                 </div>
-                <div>
-                  <p className="text-sm font-bold text-gray-700 mb-2">3. どちらの話し方がいいと思う？</p>
-                  <div className="grid gap-2">
-                    {BLANK_OPTIONS.first.map((o) => (
-                      <button
-                        key={o.id}
-                        onClick={() => pickBlank("first", o.id)}
-                        className={`text-left px-4 py-3 rounded-lg font-medium border-2 transition ${
-                          picks.first === o.id ? "bg-green-500 text-white border-green-500" : "bg-white text-gray-700 border-green-200 hover:bg-green-50"
-                        }`}
-                      >
-                        {o.text}
-                      </button>
-                    ))}
+                {guessedAlpaca && (
+                  <div className="rounded-lg p-4 text-center bg-gray-100">
+                    <p className="font-bold text-gray-700">きみが選んだ{guessedAlpaca.name}の「{guessedAlpaca.guess}」は、正解の「{CORRECT_ANSWER}」とは違っていたね。</p>
+                    <p className="text-xs text-gray-500 mt-2">{guessedAlpaca.gag}</p>
                   </div>
+                )}
+                <div className="bg-orange-50 rounded-lg p-4 text-sm text-orange-800 text-center">
+                  <p>丸の中のどこかに来る、というのが<ruby>進路図<rt>しんろず</rt></ruby>の正しい読み方だ。線の上だけを信じず、丸全体を見て備えよう。</p>
                 </div>
               </div>
-
-              {isPickComplete && (
-                <div className="bg-orange-50 border-2 border-orange-200 rounded-lg p-4">
-                  <p className="text-xs font-bold text-orange-500 mb-1">きみの紹介文</p>
-                  <p className="text-sm text-gray-800">「これは{findText("what", picks.what)}です。なぜなら{findText("why", picks.why)}からです。」</p>
-                </div>
-              )}
-
-              {isPickComplete && (
-                <div className={`rounded-lg p-4 text-center ${isPickPerfect ? "bg-yellow-100" : "bg-gray-100"}`}>
-                  {isPickPerfect ? (
-                    <p className="font-bold text-yellow-700">🎉 いいね！短く区切って、相手が知りたいことから話す紹介文になったね。</p>
-                  ) : (
-                    <p className="font-bold text-gray-700">それも1つの紹介の仕方。仲程のヨシおばぁさんの3つのコツと見比べてみよう。</p>
-                  )}
-                  <button onClick={resetPicks} className="mt-3 text-sm font-bold text-green-600 underline">もう一度えらんでみる</button>
-                </div>
-              )}
-            </div>
-          );
+            );
+          };
 
           const renderImagine = () => (
             <div className="space-y-6">
@@ -402,15 +349,15 @@
                 <h2 className="text-2xl font-bold text-pink-600">想像してみよう</h2>
               </div>
               <div className="bg-pink-50 rounded-lg p-6">
-                <p className="text-lg">紅芋以外に、誰かに紹介してみたいものはあるかな？きみの好きなもの、得意なこと、大事にしているもの――なんでもいいよ。</p>
-                <p className="text-sm text-gray-500 mt-2">（正解は一つじゃないよ。仲程のヨシおばぁさんの3つのコツを使って、どう紹介するか考えてみよう）</p>
+                <p className="text-lg">明日の予報円が今日よりずっと大きかったら、それは「何も分からない」という意味かな？</p>
+                <p className="text-sm text-gray-500 mt-2">（丸の中には来ると分かっている・準備する日数がある…正解は一つじゃないよ）</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">きみの考えを書いてみよう（学習記録シートに残せるよ）</label>
                 <textarea
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400 text-sm"
                   rows="3"
-                  placeholder="例：飼っている犬のことを、友だちに紹介したい"
+                  placeholder="例：丸が大きくても、丸の中には来ると分かっているから備えられる"
                   value={imagineAnswer}
                   onChange={(e) => setImagineAnswer(e.target.value)}
                 ></textarea>
@@ -425,7 +372,7 @@
                 <h2 className="text-2xl font-bold text-teal-600">ふりかえり</h2>
               </div>
               <div className="bg-teal-50 rounded-lg p-6">
-                <p className="font-medium text-teal-800 mb-3">✏️ 仲程のヨシおばぁさんの3つのコツ、自分でも使えそうだと思った？</p>
+                <p className="font-medium text-teal-800 mb-3">✏️ マタグワァのシズおばぁさんのやり方、自分でも使えそうだと思った？</p>
                 <div className="flex flex-wrap gap-2">
                   {["はい", "いいえ", "わからない"].map((opt) => (
                     <button
@@ -445,14 +392,13 @@
                 <textarea
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400 text-sm"
                   rows="3"
-                  placeholder="例：相手の顔を見て話すだけで、伝わり方が変わりそうだと思った"
+                  placeholder="例：予報円の線は必ず通る道じゃないと分かった"
                   value={memoryAnswer}
                   onChange={(e) => setMemoryAnswer(e.target.value)}
                 ></textarea>
               </div>
-              <div className="bg-indigo-50 rounded-lg p-4 text-sm text-indigo-700 text-center space-y-1">
-                <p className="font-bold">🍠「知能の窓」シリーズ、これでおしまい。</p>
-                <p>論理で仕組みを考え、言葉で物語を語り、音楽でリズムを覚え、体で動きをつかみ、色や形で見つめ、自然とのつながりを知り、自分の気持ちに気づき、そして人に伝える――同じ紅芋ひとつでも、見る窓が変わると、こんなにたくさんの学び方があったね。</p>
+              <div className="bg-indigo-50 rounded-lg p-4 text-sm text-indigo-700 text-center">
+                <p>次回、知能の窓・台風 ep7（内省編）では、台風の夜に感じた気持ちをふりかえっていくよ。お楽しみに。</p>
               </div>
             </div>
           );
@@ -460,17 +406,24 @@
           const renderParent = () => (
             <div className="space-y-4">
               <div className="text-center">
-                <div className="text-5xl mb-4">👪</div>
-                <h2 className="text-2xl font-bold text-yellow-700">保護者・支援者の方へ</h2>
+                <div className="text-5xl mb-4">🎬</div>
+                <h2 className="text-2xl font-bold text-yellow-700">おわりに</h2>
+              </div>
+              <div className="bg-orange-50 rounded-lg p-4">
+                <p className="text-xs font-bold text-orange-700 mb-2">🧑‍🎓 児童生徒のみなさんへ</p>
+                <p className="text-sm text-gray-700">きょうは、台風の<ruby>進路図<rt>しんろず</rt></ruby>から、いまの位置・進む向き・予報円の意味を考えたね。マタグワァのシズおばぁさんが教えてくれた「線は必ず通る道じゃなく、丸の中に来る」という考え方、今度天気予報を見るときにも使ってみよう。</p>
               </div>
               <div className="bg-yellow-50 rounded-lg p-4">
-                <p className="text-xs font-bold text-yellow-800 mb-2">学習指導要領との対応</p>
+                <p className="text-xs font-bold text-yellow-800 mb-2">👪 保護者・支援者の方へ（学習指導要領との対応）</p>
                 <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
-                  <li><strong>国語（3年）</strong>：相手に伝わるように、話す事柄の順序を考えて話す</li>
-                  <li><strong>特別活動（3年〜）</strong>：互いのよさを認め合い、協力して活動する中で伝え合う力を養う</li>
+                  <li><strong>社会（3〜6年）</strong>：地図・図表の読み取り</li>
+                  <li><strong>理科</strong>：天気の変化、台風の進み方</li>
+                  <li><strong>算数</strong>：位置・距離・範囲の見方</li>
                 </ul>
-                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓」シリーズ ep8（最終話）です。ep1（論理・数学編）からep7まで、同じ紅芋というテーマを8つの窓から描いてきました。今回は仲程のヨシおばぁさんが、人に伝える工夫（相手の顔を見る／短く区切る／相手が知りたいことから話す）を教える回でした。会話文・掛け声・紹介文の例文は教材オリジナルの創作です。</p>
-                <p className="text-xs text-gray-500 mt-1">※ 4アルパカ（ハーリー・サラバンジ・ガンジュー・カーギー）は「困りごとを持ち込む役」として登場します。3人の発言はランダムに選ばれ、いずれも伝え方に課題が残る例として描いています。</p>
+                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓」シリーズの台風版 ep6です。紅芋・獅子舞シリーズと同じ多重知能（MI）理論に基づき、1つのテーマ（台風）を8つの知能の窓（論理・数学／言語／音楽／身体運動／博物学／視覚空間／内省／対人）から順番に描く構成です。今回は「視覚・空間」の窓から、マタグワァのシズおばぁさんが進路図の読み方を教える回でした。</p>
+                <p className="text-xs text-gray-500 mt-1">※ 4アルパカ（ハーリー・サラバンジ・ガンジュー・カーギー）は、「困りごとを持ち込む役」として登場します。3人の予想はランダムに選ばれ、いずれも正解ではありません。「自分たちだけで焦って解こうとすると間違えやすい」「専門家（メンター）に教わって、順序立てて考えると解ける」という体験そのものが、この教材のねらいです。</p>
+                <p className="text-xs text-gray-500 mt-1">※ 台風の進路予報には幅（予報円）があり、中心を示す線は「必ず通る道」ではないことは、気象庁の解説に基づく一般的な説明です。台風名「アルパカ2号」・具体的な丸の数や大きさは、この教材のための架空設定です。</p>
+                <p className="text-xs text-gray-500 mt-1">※ この学習は、台風が来る前の平常時に、安全な室内で家族と一緒に行うことを想定しています。実際の台風接近中は、気象庁・沖縄気象台が発表する最新の進路情報を確認し、不要な外出は控えてください。</p>
               </div>
               <div className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-4">
                 <p className="text-xs font-bold text-gray-700 mb-2">🖨️ 学習記録シートを作る（COCOLOプラン等の学習記録用）</p>
@@ -488,6 +441,29 @@
                   学習記録シートを印刷する
                 </button>
                 <p className="text-xs text-gray-400 mt-1">今日の日付・対応教科・取り組んだ内容・保護者確認欄が入った1枚のシートが印刷されます。</p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-gray-200 space-y-2">
+                <p className="text-xs font-bold text-gray-500 text-center">つぎに進む</p>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  {prevEpisode ? (
+                    <a href={"../" + prevEpisode.url} className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-300 text-sm font-bold text-gray-600 hover:bg-gray-50 transition">← {prevEpisode.short}</a>
+                  ) : (
+                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-300">← 最初のエピソード</span>
+                  )}
+                  {nextEpisode ? (
+                    <a href={"../" + nextEpisode.url} className="flex-1 text-center px-3 py-2 rounded-lg bg-orange-500 text-white text-sm font-bold hover:bg-orange-600 transition">{nextEpisode.short} →</a>
+                  ) : (
+                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-300">最終話</span>
+                  )}
+                </div>
+                <a href="../matrix-library.html" className="block text-center text-sm font-bold text-orange-500 hover:text-orange-700 underline">他のテーマも見る（教材一覧）</a>
+              </div>
+              <div className="mt-6 pt-4 border-t border-dashed border-gray-300">
+                <div className="bg-gray-50 rounded-lg p-4 text-left">
+                  <p className="text-xs font-bold text-gray-700 mb-2 text-center">💬 ご意見・ご要望</p>
+                  <p className="text-xs text-gray-600 mb-3">「こんな機能が欲しい」「ここが使いにくい」などのご意見をお聞かせください。今後の開発の参考にさせていただきます。</p>
+                  <a href={FEEDBACK_FORM_URL} target="_blank" rel="noopener noreferrer" className="block text-center px-4 py-2 bg-gray-700 text-white rounded-full text-sm font-bold hover:bg-gray-800 transition">📋 要望・フィードバックを送る</a>
+                </div>
               </div>
             </div>
           );
@@ -510,19 +486,20 @@
               <div className="mb-4 text-xs text-gray-700 bg-gray-50 border border-gray-300 rounded p-3">
                 <p className="font-bold mb-1">学習指導要領との対応</p>
                 <ul className="space-y-0.5 list-disc list-inside">
-                  <li>国語（3年）：相手に伝わるように、話す事柄の順序を考えて話す</li>
-                  <li>特別活動（3年〜）：互いのよさを認め合い、協力して活動する中で伝え合う力を養う</li>
+                  <li>社会（3〜6年）：地図・図表の読み取り</li>
+                  <li>理科：天気の変化、台風の進み方</li>
+                  <li>算数：位置・距離・範囲の見方</li>
                 </ul>
               </div>
               <div className="mb-4">
-                <p className="font-bold text-sm mb-1">1. アルパカの困りごとで、一番惜しいと思った紹介</p>
+                <p className="font-bold text-sm mb-1">1. アルパカの困りごとで、一番近いと思った考え</p>
                 <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">
-                  {guessedForSheet ? `${guessedForSheet.name}の「${guessedForSheet.claim}」を選びました。` : "（記入なし）"}
+                  {guessedForSheet ? `${guessedForSheet.name}の「${guessedForSheet.guess}」を選びました。` : "（記入なし）"}
                 </p>
               </div>
               <div className="mb-4">
-                <p className="font-bold text-sm mb-1">2. 仲程のヨシおばぁさんに教わった、伝え方の3つのコツ</p>
-                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">相手の顔を見る／短く区切って話す／相手が知りたいことから話す</p>
+                <p className="font-bold text-sm mb-1">2. マタグワァのシズおばぁさんに教わって、実際に確かめた答え</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">予報円には幅があり、線は必ず通る道ではない（丸の中のどこかに台風の中心が来る、という意味の丸）。</p>
               </div>
               <div className="mb-4">
                 <p className="font-bold text-sm mb-1">3. 想像する問題への自分の考え</p>
@@ -542,32 +519,42 @@
             intro: renderIntro,
             trouble: renderTrouble,
             mentor: renderMentor,
-            workshop: renderWorkshop,
+            verify: renderVerify,
             imagine: renderImagine,
             checkin: renderCheckin,
             parent: renderParent
           };
           const slideTitles = {
-            intro: "🍠 はじまりの問い",
+            intro: "🗺️ はじまりの問い",
             trouble: "😱 困りごと",
             mentor: "👵 メンター登場",
-            workshop: "🗣️ やってみる",
+            verify: "✅ やってみる",
             imagine: "💭 想像する",
             checkin: "🙋 ふりかえり",
-            parent: "👪 保護者の方へ"
+            parent: "🎬 おわりに"
           };
 
           const canGoNext = !(slideIds[currentSlide] === "trouble" && !guess);
 
           return (
-            <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50">
+            <div className={`min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50 ${furiganaOn ? "" : "furigana-off"}`}>
               <div className="container mx-auto px-4 py-8 max-w-2xl">
-                <a href="../matrix-library.html" className="inline-flex items-center gap-1 text-sm font-bold text-orange-500 hover:text-orange-700 mb-4">
-                  <ChevronLeft className="w-4 h-4" />教材一覧へ戻る
-                </a>
+                <div className="flex items-center justify-between mb-4">
+                  <a href="../matrix-library.html" className="inline-flex items-center gap-1 text-sm font-bold text-orange-500 hover:text-orange-700">
+                    <ChevronLeft className="w-4 h-4" />教材一覧へ戻る
+                  </a>
+                  <button
+                    onClick={() => setFuriganaOn((f) => !f)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border-2 transition ${
+                      furiganaOn ? "bg-orange-500 text-white border-orange-500" : "bg-white text-orange-600 border-orange-300"
+                    }`}
+                  >
+                    🔤 ふりがな {furiganaOn ? "ON" : "OFF"}
+                  </button>
+                </div>
                 <div className="text-center mb-6">
-                  <p className="text-xs font-bold text-indigo-500 mb-1">知能の窓 ep8：対人編（完）</p>
-                  <h1 className="text-2xl md:text-3xl font-bold text-orange-600">紅芋のこと、うまく紹介できるかな？ 🍠</h1>
+                  <p className="text-xs font-bold text-indigo-500 mb-1">知能の窓・台風 ep6：視覚・空間編</p>
+                  <h1 className="text-2xl md:text-3xl font-bold text-orange-600">台風の進路図、どこを見ればいい？ 🌀</h1>
                   <span className="inline-block mt-1 px-2 py-0.5 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
                 </div>
 
@@ -584,6 +571,21 @@
                 <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8 mb-6 min-h-96">
                   {slideRenderers[slideIds[currentSlide]]()}
                 </div>
+
+                {slideIds[currentSlide] === "parent" && (
+                  <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 text-left mb-6">
+                    <p className="text-xs font-bold text-orange-700 mb-2 text-center">🌱 制作をアシストする</p>
+                    <p className="text-xs text-gray-600 mb-3">ここでの学びは、記録され、次の学びへと受け継がれていきます。その循環を支えるちからになっていただけたら嬉しいです。</p>
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      {SUPPORT_LINKS.map((s) => (
+                        <a key={s.label} href={s.url} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-full text-sm font-bold border-2 border-orange-300 text-orange-700 bg-white hover:bg-orange-100 transition">{s.label}</a>
+                      ))}
+                    </div>
+                    <div className="mt-2 text-center">
+                      <a href="../tokushoho.html" className="text-xs text-gray-400 underline">特定商取引法に基づく表記</a>
+                    </div>
+                  </div>
+                )}
 
                 <div className="flex justify-between items-center">
                   <button
@@ -607,7 +609,7 @@
                       currentSlide === total - 1 || !canGoNext ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-orange-500 text-white hover:bg-orange-600"
                     }`}
                   >
-                    つぎへ<ChevronRight className="w-5 h-5 ml-1" />
+                    {slideIds[currentSlide] === "checkin" ? "おわりに" : "つぎへ"}<ChevronRight className="w-5 h-5 ml-1" />
                   </button>
                 </div>
               </div>
@@ -616,7 +618,7 @@
           );
         };
 
-        createRoot(document.getElementById("root")).render(<BeniimoEp8App />);
+        createRoot(document.getElementById("root")).render(<TyphoonEp6App />);
     </script>
 </body>
 </html>

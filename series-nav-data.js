@@ -28,9 +28,17 @@ const SUPPORT_LINKS = [
   { label: "¥10,000", url: "https://buy.stripe.com/3cI5kC11LcDR9oy1mFgw009" },
 ];
 
-// 知能の窓・台風シリーズ（2026-08-16着手。ep1のみ実装済み、ep2以降は§16の方針に沿って順次追加）
+// 知能の窓・台風シリーズ（2026-08-16、全9話完成）
 const TYPHOON_EPISODES = [
   { id: "typhoon-ep01", short: "ep1：論理・数学編", title: "水は、あと何本？", url: "bousai/typhoon_ep01.html" },
+  { id: "typhoon-ep02", short: "ep2：言語編", title: "その台風情報、どこから来た？", url: "bousai/typhoon_ep02.html" },
+  { id: "typhoon-ep03", short: "ep3：音楽編", title: "台風の日、家の中にはどんな音がある？", url: "bousai/typhoon_ep03.html" },
+  { id: "typhoon-ep04", short: "ep4：身体・運動編", title: "暗くなる前に、家の中を歩いてみよう", url: "bousai/typhoon_ep04.html" },
+  { id: "typhoon-ep05", short: "ep5：博物学編", title: "台風は、どこで力をもらう？", url: "bousai/typhoon_ep05.html" },
+  { id: "typhoon-ep06", short: "ep6：視覚・空間編", title: "台風の進路図、どこを見ればいい？", url: "bousai/typhoon_ep06.html" },
+  { id: "typhoon-ep07", short: "ep7：内省編", title: "台風がこわいとき、心はどうなる？", url: "bousai/typhoon_ep07.html" },
+  { id: "typhoon-ep08", short: "ep8：対人編", title: "家族で、誰が何をする？", url: "bousai/typhoon_ep08.html" },
+  { id: "typhoon-ep09", short: "ep9：集・表現編（完）", title: "わが家の台風知恵カードをつくろう", url: "bousai/typhoon_ep09.html" },
 ];
 
 const BENIIMO_EPISODES = [

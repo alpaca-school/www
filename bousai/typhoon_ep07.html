@@ -8,7 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <script>
         (() => {
-            const pageVersion = "20260814-2";
+            const pageVersion = "20260816-1";
             const url = new URL(window.location.href);
             if (url.searchParams.get("v") !== pageVersion) {
                 url.searchParams.set("v", pageVersion);
@@ -16,7 +16,7 @@
             }
         })();
     </script>
-    <title>獅子は、どんな音で動く？【知能の窓・獅子舞 ep5：音楽編】 🦁</title>
+    <title>台風がこわいとき、心はどうなる？【知能の窓・台風 ep7：内省編】 🌀</title>
     <script src="../series-nav-data.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -106,27 +106,32 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m15 18-6-6 6-6"/></svg>
         );
 
-        // 4アルパカ（困りごとを持ち込む役。誰も正解を知らない）
+        // 4アルパカ（困りごとを持ち込む役）。このエピソードは「正解」がないため、
+        // guessは正誤判定ではなく「台風のときの気持ち」の一例として扱う。
         const ALPACAS = {
           hari: {
             name: "ハーリー", color: "red", emoji: "🔥", img: "../img/characters/harly.png",
-            claim: "音は気合いで出る！大声なら全部同じっしょ！",
-            gag: "（効果音：ズコーッ！ハーリー、三線を持ったまま道場の前ですっ転ぶ）"
+            guess: "わくわく",
+            line: "台風の日って、なんかテンション上がるっしょ！早く来ないかなー！",
+            gag: "（効果音：ズコーッ！ハーリー、そわそわ歩き回っていて廊下ですっ転ぶ）"
           },
           sara: {
             name: "サラバンジ", color: "blue", emoji: "⚡", img: "../img/characters/sarabanji.png",
-            claim: "速く弾けば音が出るっしょ！理由は勢いさ！",
-            gag: "（サラバンジ、その場でバタン！と大げさに倒れる→3秒後にムクッと起き上がる）"
+            guess: "退屈",
+            line: "早く終わってほしいなー。家の中でじっとしてるの、退屈すぎる！",
+            gag: "（サラバンジ、ソファにバタン！と大げさに倒れる→3秒後にムクッと起き上がる）"
           },
           gan: {
             name: "ガンジュー", color: "green", emoji: "😴", img: "../img/characters/ganjuu.png",
-            claim: "三線の音…気持ちいい…スヤァ…",
-            gag: "（ガンジュー、立ったまま本気のいびき→仲程のヨシおばぁさんに肩を叩かれてハッと飛び起きる）"
+            guess: "家族といると安心",
+            line: "みんな家にいるから…なんか安心して、眠くなってきました…",
+            gag: "（ガンジュー、座ったまま本気のいびき→マタグワァのシズおばぁさんに肩を叩かれてハッと飛び起きる）"
           },
           kaa: {
             name: "カーギー", color: "purple", emoji: "💁‍♀️", img: "../img/characters/carggy.png",
-            claim: "振動だけじゃ不安だから、光と熱も全部必要ってことにしよう。",
-            gag: "（カーギー、風で乱れた前髪を鏡もなしに一瞬でピシッと直しながら、少し首をかしげる）"
+            guess: "音が苦手・怖い",
+            line: "窓がガタガタ鳴る音、ちょっと…苦手かも。怖いっていうか、心配になる",
+            gag: "（カーギー、風で乱れた前髪を鏡もなしに一瞬でピシッと直しながら、少し不安そうな顔）"
           }
         };
         const ALPACA_KEYS = ["hari", "sara", "gan", "kaa"];
@@ -179,63 +184,57 @@
           return arr.slice(0, 3);
         }
 
-        // 4択クイズの選択肢（中学理科への軽い橋渡し）
-        const QUIZ_CHOICES = [
-          { id: "vibrate", label: "振動している", correct: true },
-          { id: "light", label: "必ず光っている", correct: false },
-          { id: "heat", label: "必ず熱くなる", correct: false },
-          { id: "still", label: "動いていない", correct: false }
+        // 台風のとき、からだに出てくる反応の例（正解のない観察リスト）
+        const BODY_REACTIONS = [
+          { key: "dokidoki", label: "ドキドキする" },
+          { key: "mimi", label: "耳をふさぎたくなる" },
+          { key: "hanasu", label: "誰かと話したくなる" },
+          { key: "nemui", label: "眠くなる" }
         ];
-        function shuffledChoices() {
-          const arr = [...QUIZ_CHOICES];
-          for (let i = arr.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [arr[i], arr[j]] = [arr[j], arr[i]];
-          }
-          return arr;
-        }
 
         // COCOLOプラン（ホームスクーラー等の学習記録）向けの教材メタ情報
         const MATERIAL = {
-          title: "獅子は、どんな音で動く？",
-          series: "知能の窓・獅子舞 ep5：音楽編",
-          subjectGrade: "音楽3年〜・理科（発展）"
+          title: "台風がこわいとき、心はどうなる？",
+          series: "知能の窓・台風 ep7：内省編",
+          subjectGrade: "道徳・特別活動・保健 3〜6年"
         };
 
-        const ShishimaiEp5App = () => {
+        const TyphoonApp = () => {
           const [threeKeys] = useState(() => shuffledThreeAlpacas());
           const [currentSlide, setCurrentSlide] = useState(0);
           const [guess, setGuess] = useState(null);
-          const [choices] = useState(() => shuffledChoices());
-          const [answer, setAnswer] = useState(null);
+          const [bodyReactions, setBodyReactions] = useState([]);
           const [imagineAnswer, setImagineAnswer] = useState("");
           const [childName, setChildName] = useState("");
           const [canDoIt, setCanDoIt] = useState(null);
           const [memoryAnswer, setMemoryAnswer] = useState("");
+          const [nextActionAnswer, setNextActionAnswer] = useState("");
           const [furiganaOn, setFuriganaOn] = useState(true);
 
           const slideIds = ["intro", "trouble", "mentor", "verify", "imagine", "checkin", "parent"];
-          const episodeIndex = SHISHIMAI_EPISODES.findIndex((e) => e.id === "shishimai-ep05");
-          const prevEpisode = episodeIndex > 0 ? SHISHIMAI_EPISODES[episodeIndex - 1] : null;
-          const nextEpisode = episodeIndex >= 0 && episodeIndex < SHISHIMAI_EPISODES.length - 1 ? SHISHIMAI_EPISODES[episodeIndex + 1] : null;
+          const episodeIndex = TYPHOON_EPISODES.findIndex((e) => e.id === "typhoon-ep07");
+          const prevEpisode = episodeIndex > 0 ? TYPHOON_EPISODES[episodeIndex - 1] : null;
+          const nextEpisode = episodeIndex >= 0 && episodeIndex < TYPHOON_EPISODES.length - 1 ? TYPHOON_EPISODES[episodeIndex + 1] : null;
           const total = slideIds.length;
 
           const nextSlide = () => setCurrentSlide((p) => Math.min(p + 1, total - 1));
           const prevSlide = () => setCurrentSlide((p) => Math.max(p - 1, 0));
 
-          const isAnswerCorrect = answer && QUIZ_CHOICES.find((c) => c.id === answer)?.correct;
+          const toggleBodyReaction = (key) => {
+            setBodyReactions((prev) => prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]);
+          };
 
           const renderIntro = () => (
             <div className="space-y-6">
               <div className="text-center">
-                <div className="text-6xl mb-4">🦁</div>
-                <h2 className="text-2xl font-bold text-orange-600">三線が鳴ると、獅子が目を覚ます</h2>
+                <div className="text-6xl mb-4">🌀</div>
+                <h2 className="text-2xl font-bold text-orange-600">台風の音を聞いているとき、きみの心はどんな感じ？</h2>
                 <span className="inline-block mt-2 px-3 py-1 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
               </div>
               <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 space-y-3">
-                <p><ruby>津波古<rt>つはこ</rt></ruby>の<ruby>獅子舞<rt>ししまい</rt></ruby>には、「<ruby>立雲節<rt>たちくむぶし</rt></ruby>」という曲にのせて、獅子ワクヤー（獅子を起こす役）が三線に合わせて、玉で眠っている獅子を起こす演目が伝わっています。</p>
-                <p>音に合わせて獅子が動き出す、その瞬間が見せ場です。地域によって、使われる音や演目は違うそうです。</p>
-                <p>でも、そもそも三線や太鼓から「音」が生まれるとき、物の中では何が起きているのでしょう？</p>
+                <p>台風が近づくと、風の音が強くなったり、雨戸がガタガタ鳴ったりする。</p>
+                <p>そのとき、こわいと感じる人もいれば、なんだかわくわくする人、退屈だと思う人、家族がそばにいて安心する人もいる。</p>
+                <p>今日は、そういう自分の気持ちに、そっと気づいてみよう。</p>
               </div>
             </div>
           );
@@ -243,9 +242,9 @@
           const renderTrouble = () => (
             <div className="space-y-6">
               <div className="text-center">
-                <div className="text-5xl mb-4">😱</div>
-                <h2 className="text-xl font-bold text-red-600 mb-1">困りごと発生！</h2>
-                <p className="text-gray-600">3人のアルパカが、それぞれ違うことを言いはじめた。きみは、誰の言うことに一番近いと思う？</p>
+                <div className="text-5xl mb-4">🌬️</div>
+                <h2 className="text-xl font-bold text-red-600 mb-1">3人のアルパカの気持ち</h2>
+                <p className="text-gray-600">台風の日、3人のアルパカがそれぞれ違う気持ちを話している。きみの気持ちに一番近いのは、どれ？</p>
               </div>
               <div className="grid gap-4">
                 {threeKeys.map((key) => {
@@ -263,7 +262,8 @@
                       <div className="choice-row">
                         <Avatar person={c} />
                         <div className={`speech-bubble flex-1 min-w-0 rounded-lg p-3 ${cc.text} bg-white/70`}>
-                          <p className="text-sm text-gray-700">「{c.claim}」</p>
+                          <p className={`font-bold ${cc.text}`}>{c.name}：{c.guess}</p>
+                          <p className="text-sm text-gray-700 mt-1">「{c.line}」</p>
                         </div>
                         {selected && (
                           <div className={`choice-check w-7 h-7 rounded-full ${cc.solid} flex items-center justify-center text-white text-sm shrink-0`}>✓</div>
@@ -276,7 +276,7 @@
               {!guess && <p className="text-center text-sm text-orange-500">↑ どれか1つを選ぶと、次に進めるよ</p>}
               {guess && (
                 <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
-                  <p>みんな、気合いや勢い、眠気で片付けようとしている…。ここは、力也おじぃさんに聞いてみよう。</p>
+                  <p>3人とも、それぞれ違う気持ちを話している。どれかが「まちがい」というわけではなさそうだ。仲程のヨシおばぁさんに聞いてみよう。</p>
                 </div>
               )}
             </div>
@@ -285,74 +285,78 @@
           const renderMentor = () => (
             <div className="space-y-6">
               <div className="text-center">
-                <div className="text-5xl mb-4">🧓</div>
-                <h2 className="text-xl font-bold text-teal-600">力也おじぃさんが教えてくれた</h2>
+                <div className="text-5xl mb-4">👵</div>
+                <h2 className="text-xl font-bold text-rose-600">仲程のヨシおばぁさんが教えてくれた</h2>
               </div>
-              <div className={`rounded-lg p-4 space-y-2 ${COLOR_MAP.teal.bg}`}>
+              <div className={`rounded-lg p-4 space-y-2 ${COLOR_MAP.rose.bg}`}>
                 <div className="flex items-center gap-3 mb-1">
-                  <Avatar person={MENTORS.rikiya} />
-                  <p className="font-bold text-teal-700">{MENTORS.rikiya.name}</p>
+                  <Avatar person={MENTORS.tokue} />
+                  <p className="font-bold text-rose-700">{MENTORS.tokue.name}</p>
                 </div>
-                <p className="text-sm text-gray-700">「気合いでも勢いでもないさぁ。三線の弦を弾くと、弦が細かくブルブル震えるだろう？あれが『振動』さ」</p>
-                <p className="text-sm text-gray-700">「太鼓の皮も同じ。バチで叩くと皮がふるえて、その震えが空気に伝わって、耳に届く。それが音の正体だよ」</p>
-                <p className="text-sm text-gray-700">「<ruby>立雲節<rt>たちくむぶし</rt></ruby>にのせて獅子ワクヤーが玉を鳴らして獅子を起こすのも、その『震え』が獅子役の人に合図として届くからさ」</p>
+                <p className="text-sm text-gray-700">「同じ風の音を聞いても、こわいと思う子もいれば、わくわくする子もいる。それは、どっちが正しいとか、そういうことじゃないんだよ」</p>
+                <p className="text-sm text-gray-700">「大事なのは、自分の気持ちに、まず自分で気づいてあげること。こわいならこわい、退屈なら退屈、それでいい」</p>
+                <p className="text-sm text-gray-700">「あとね、心だけじゃなくて、からだにも気持ちが出ることがある。ドキドキしたり、耳をふさぎたくなったり。それも、ちゃんとしたサインさ」</p>
               </div>
               <div className="grid gap-3">
                 <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.amber.bg}`}>
                   <Avatar person={MENTORS.chinen} />
-                  <p className="text-sm text-amber-700">「地域によって、獅子を起こす曲も演目も違うんだよ。<ruby>津波古<rt>つはこ</rt></ruby>はこの<ruby>立雲節<rt>たちくむぶし</rt></ruby>さ」</p>
+                  <p className="text-sm text-amber-700">「気持ちに理由をつけて説明できなくても、大丈夫さぁ」</p>
                 </div>
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.rose.bg}`}>
-                  <Avatar person={MENTORS.tokue} />
-                  <p className="text-sm text-rose-700">「音を聞き分けるのも、練習が必要だからね。焦らず耳を澄ませてごらん」</p>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.teal.bg}`}>
+                  <Avatar person={MENTORS.rikiya} />
+                  <p className="text-sm text-teal-700">「怖いときは、好きな歌を口ずさむのもいいリズムになるさー」</p>
                 </div>
                 <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.indigo.bg}`}>
                   <Avatar person={MENTORS.misaki} />
-                  <p className="text-sm text-indigo-700">「三線の胴に張ってある皮の模様も面白いよ。また今度、たっぷり教えるね」</p>
+                  <p className="text-sm text-indigo-700">「台風の目のしくみは、また今度、たっぷり教えるね」</p>
                 </div>
               </div>
             </div>
           );
 
-          const renderVerify = () => (
-            <div className="space-y-6">
-              <div className="text-center">
-                <div className="text-5xl mb-4">✅</div>
-                <h2 className="text-2xl font-bold text-green-600">やってみよう</h2>
-                <p className="text-gray-600 text-sm mt-1">音が生まれるとき、物体では何が起きている？1つ選んでみよう。</p>
-              </div>
-              <div className="grid gap-3">
-                {choices.map((c) => {
-                  const selected = answer === c.id;
-                  const showResult = answer !== null;
-                  let stateClass = "bg-white border-gray-200 text-gray-700 hover:border-gray-300";
-                  if (showResult && selected && c.correct) stateClass = "bg-green-100 border-green-400 text-green-700";
-                  if (showResult && selected && !c.correct) stateClass = "bg-red-50 border-red-300 text-red-600";
-                  if (showResult && !selected && c.correct) stateClass = "bg-green-50 border-green-300 text-green-700";
-                  return (
-                    <button
-                      key={c.id}
-                      onClick={() => !answer && setAnswer(c.id)}
-                      disabled={answer !== null}
-                      className={`text-left px-4 py-3 rounded-lg border-2 font-bold transition-all ${stateClass}`}
-                    >
-                      {c.label}
-                    </button>
-                  );
-                })}
-              </div>
-              {answer && (
-                <div className={`rounded-lg p-4 text-center ${isAnswerCorrect ? "bg-green-50 border-2 border-green-200" : "bg-gray-100"}`}>
-                  {isAnswerCorrect ? (
-                    <p className="font-bold text-green-700">🎉 正解！音は、物体が「振動」することで生まれるよ。</p>
-                  ) : (
-                    <p className="font-bold text-gray-700">惜しい！正解は「振動している」だったよ。</p>
-                  )}
-                  <p className="text-sm text-gray-600 mt-2">三線の弦、太鼓の皮…震えているものが音を出している。<ruby>獅子舞<rt>ししまい</rt></ruby>の音楽表現の話（どんな曲を選ぶか）と、音が生まれる仕組みの話（振動）は、別の窓（教科）の話だから、ごちゃまぜにしないようにね。</p>
+          const renderVerify = () => {
+            const guessedAlpaca = guess ? ALPACAS[guess] : null;
+            return (
+              <div className="space-y-6">
+                <div className="text-center">
+                  <div className="text-5xl mb-4">🫶</div>
+                  <h2 className="text-2xl font-bold text-green-600">やってみよう</h2>
                 </div>
-              )}
-            </div>
-          );
+                <div className="bg-green-50 border-2 border-green-200 rounded-lg p-6 space-y-2 text-sm">
+                  <p>このエピソードには「正解」の気持ちはありません。こわいも、わくわくも、退屈も、安心も、音が苦手なのも、どれもそのままでいい気持ちです。</p>
+                </div>
+                {guessedAlpaca && (
+                  <div className="rounded-lg p-4 text-center bg-gray-100">
+                    <p className="font-bold text-gray-700">きみが選んだ{guessedAlpaca.name}の「{guessedAlpaca.guess}」も、大切な気持ちのひとつだよ。</p>
+                    <p className="text-xs text-gray-500 mt-2">{guessedAlpaca.gag}</p>
+                  </div>
+                )}
+                <div className="bg-rose-50 rounded-lg p-4 text-sm text-rose-800 text-center">
+                  <p>仲程のヨシおばぁさん：「どの気持ちも、そのままでいいんだよ」</p>
+                </div>
+                <div className="bg-white border-2 border-gray-200 rounded-lg p-4">
+                  <p className="text-sm font-bold text-gray-700 mb-3">きみのからだには、どんな反応が出てる？（いくつ選んでもいいよ）</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {BODY_REACTIONS.map((r) => {
+                      const on = bodyReactions.includes(r.key);
+                      return (
+                        <button
+                          key={r.key}
+                          onClick={() => toggleBodyReaction(r.key)}
+                          className={`px-3 py-2 rounded-lg text-sm font-bold border-2 transition text-left ${
+                            on ? "bg-green-500 text-white border-green-500" : "bg-white text-gray-600 border-gray-200"
+                          }`}
+                        >
+                          {on ? "✓ " : ""}{r.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <p className="text-xs text-gray-400 mt-3">どれにもチェックがつかなくても、それで大丈夫。からだの感じは人によって違うよ。</p>
+                </div>
+              </div>
+            );
+          };
 
           const renderImagine = () => (
             <div className="space-y-6">
@@ -361,15 +365,15 @@
                 <h2 className="text-2xl font-bold text-pink-600">想像してみよう</h2>
               </div>
               <div className="bg-pink-50 rounded-lg p-6">
-                <p className="text-lg">もし、獅子の動きに「自分だけの合図の音」を1つ足すとしたら、どんな音にする？それは、何の合図？</p>
-                <p className="text-sm text-gray-500 mt-2">（鈴の音・手拍子・太鼓の連打…正解は一つじゃないよ）</p>
+                <p className="text-lg">同じ風の音を聞いても、友だちと気持ちが違うのはなぜだろう？</p>
+                <p className="text-sm text-gray-500 mt-2">（前に怖い思いをしたことがあるから・家族が近くにいるかどうか・音への慣れ方…正解は一つじゃないよ）</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">きみの考えを書いてみよう（学習記録シートに残せるよ）</label>
                 <textarea
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400 text-sm"
                   rows="3"
-                  placeholder="例：小さな鈴を鳴らして「立ち上がる合図」にする"
+                  placeholder="例：怖い思いをしたことがあるかどうかで、感じ方が違うのかもしれない"
                   value={imagineAnswer}
                   onChange={(e) => setImagineAnswer(e.target.value)}
                 ></textarea>
@@ -384,7 +388,7 @@
                 <h2 className="text-2xl font-bold text-teal-600">ふりかえり</h2>
               </div>
               <div className="bg-teal-50 rounded-lg p-6">
-                <p className="font-medium text-teal-800 mb-3">✏️ 力也おじぃさんの「振動」の話、自分でも人に説明できそうだと思った？</p>
+                <p className="font-medium text-teal-800 mb-3">✏️ 自分の気持ちを、評価せずに言葉にしてみられた？</p>
                 <div className="flex flex-wrap gap-2">
                   {["はい", "いいえ", "わからない"].map((opt) => (
                     <button
@@ -404,14 +408,30 @@
                 <textarea
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400 text-sm"
                   rows="3"
-                  placeholder="例：三線の弦がふるえて音が出ることが分かった"
+                  placeholder="例：気持ちに正解がないと言われて、少しほっとした"
                   value={memoryAnswer}
                   onChange={(e) => setMemoryAnswer(e.target.value)}
                 ></textarea>
               </div>
+              <div className="bg-rose-50 rounded-lg p-4">
+                <p className="text-sm font-bold text-rose-700 mb-2">🌱 今日から、ひとつだけやってみよう</p>
+                <p className="text-xs text-gray-600 mb-2">「私は○○だと少し安心する」の○○に入る言葉を考えて、家族に一つ伝えてみよう。</p>
+                <div className="flex items-center gap-1 text-sm flex-wrap">
+                  <span className="text-gray-600">私は</span>
+                  <input
+                    type="text"
+                    className="px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-400 text-sm flex-1 min-w-[6rem]"
+                    placeholder="例：明かりがついていると"
+                    value={nextActionAnswer}
+                    onChange={(e) => setNextActionAnswer(e.target.value)}
+                  />
+                  <span className="text-gray-600">だと少し安心する</span>
+                </div>
+              </div>
               <div className="bg-indigo-50 rounded-lg p-4 text-sm text-indigo-700 text-center">
-                <p>次回、知能の窓・<ruby>獅子舞<rt>ししまい</rt></ruby> ep6（身体・運動編）では、ふたりで一頭の獅子になる動きを見ていくよ。お楽しみに。</p>
-              </div>            </div>
+                <p>次回、知能の窓・台風 ep8（対人編）では、家族やまわりの人とどう助け合うかを見ていくよ。お楽しみに。</p>
+              </div>
+            </div>
           );
 
           const renderParent = () => (
@@ -422,16 +442,18 @@
               </div>
               <div className="bg-orange-50 rounded-lg p-4">
                 <p className="text-xs font-bold text-orange-700 mb-2">🧑‍🎓 児童生徒のみなさんへ</p>
-                <p className="text-sm text-gray-700">きょうは、三線や太鼓から音が生まれるしくみを考えたね。力也おじぃさんが教えてくれた「音は物が震えて生まれる」という考え方、いろんな音を聞くときに思い出してみよう。</p>
+                <p className="text-sm text-gray-700">きょうは、台風のときの自分の気持ちに、評価せずに気づいてみたね。仲程のヨシおばぁさんが教えてくれた「どの気持ちも、そのままでいい」という考え方、今度こわいなと感じたときにも思い出してみよう。</p>
               </div>
               <div className="bg-yellow-50 rounded-lg p-4">
                 <p className="text-xs font-bold text-yellow-800 mb-2">👪 保護者・支援者の方へ（学習指導要領との対応）</p>
                 <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
-                  <li><strong>音楽（3年〜）</strong>：拍やリズムを感じ取り、楽器の音や身体表現とのつながりに気づく</li>
-                  <li><strong>理科（発展）</strong>：音は物体の振動によって生じるという、音と振動への入口</li>
+                  <li><strong>道徳</strong>：自分の感情への気づき、多様な感じ方の尊重</li>
+                  <li><strong>特別活動</strong>：不安な気持ちとの付き合い方、学級での安心できる伝え方</li>
+                  <li><strong>保健（3〜6年）</strong>：自己理解、心とからだのつながりへの気づき</li>
                 </ul>
-                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓」シリーズの<ruby>獅子舞<rt>ししまい</rt></ruby>版 ep5です。ep1〜4に続き、同じ<ruby>獅子舞<rt>ししまい</rt></ruby>というテーマを「音楽」の窓から描いています。<ruby>津波古<rt>つはこ</rt></ruby>の<ruby>獅子舞<rt>ししまい</rt></ruby>に伝わる「<ruby>立雲節<rt>たちくむぶし</rt></ruby>」と、獅子ワクヤーが三線に合わせて玉で獅子を起こす演目は、地域に伝わる文化事実として紹介しています（地域によって曲・演目は異なります）。今回は力也おじぃさんが、音楽表現の入口として「音は物体の振動から生じる」という理科の基礎を教える回でした。</p>
-                <p className="text-xs text-gray-500 mt-1">※ 4アルパカ（ハーリー・サラバンジ・ガンジュー・カーギー）は「困りごとを持ち込む役」として登場します。3人の発言はランダムに選ばれ、いずれも正解ではありません。カーギーの発言は「振動」に気づきつつも、光や熱まで余計な条件を足してしまう、惜しい間違いです。「自分たちだけで焦って考えると間違えやすい」「専門家（メンター）に教わって、順序立てて考えると解ける」という体験そのものが、この教材のねらいです。</p>
+                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓」シリーズの台風版 ep7です。今回は「内省」の窓から、仲程のヨシおばぁさんが自分の気持ちに気づく方法を教える回でした。他のエピソードのような「正解・不正解」の判定はあえて設けていません。子どもが表現した気持ちを、大人が否定したり、評価し直したりしないようご配慮ください。</p>
+                <p className="text-xs text-gray-500 mt-1">※ 4アルパカ（ハーリー・サラバンジ・ガンジュー・カーギー）は、「困りごとを持ち込む役」として登場します。今回の3人の発言は、いずれも「まちがい」ではなく、台風のときに感じうる気持ちの一例として提示しています。</p>
+                <p className="text-xs text-gray-500 mt-1">※ 実際に強い不安や恐怖を感じているお子さんには、この教材だけでなく、そばにいて安心できる声かけを優先してください。台風接近中の安全確保については気象庁・沖縄気象台の案内に準拠してください。</p>
               </div>
               <div className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-4">
                 <p className="text-xs font-bold text-gray-700 mb-2">🖨️ 学習記録シートを作る（COCOLOプラン等の学習記録用）</p>
@@ -479,7 +501,7 @@
           const today = new Date();
           const todayStr = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
           const guessedForSheet = guess ? ALPACAS[guess] : null;
-          const answerLabel = answer ? QUIZ_CHOICES.find((c) => c.id === answer)?.label : null;
+          const bodyReactionsForSheet = bodyReactions.map((k) => BODY_REACTIONS.find((r) => r.key === k)?.label).filter(Boolean).join("、");
 
           const renderPrintSheet = () => (
             <div className="print-sheet w-[700px] p-10 bg-white text-black">
@@ -495,21 +517,20 @@
               <div className="mb-4 text-xs text-gray-700 bg-gray-50 border border-gray-300 rounded p-3">
                 <p className="font-bold mb-1">学習指導要領との対応</p>
                 <ul className="space-y-0.5 list-disc list-inside">
-                  <li>音楽（3年〜）：拍やリズムを感じ取り、楽器の音や身体表現とのつながりに気づく</li>
-                  <li>理科（発展）：音は物体の振動によって生じるという、音と振動への入口</li>
+                  <li>道徳：自分の感情への気づき、多様な感じ方の尊重</li>
+                  <li>特別活動：不安な気持ちとの付き合い方</li>
+                  <li>保健（3〜6年）：自己理解、心とからだのつながり</li>
                 </ul>
               </div>
               <div className="mb-4">
-                <p className="font-bold text-sm mb-1">1. アルパカの困りごとで、一番近いと思った発言</p>
+                <p className="font-bold text-sm mb-1">1. 3人のアルパカの中で、自分の気持ちに一番近いと思ったもの</p>
                 <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">
-                  {guessedForSheet ? `${guessedForSheet.name}の「${guessedForSheet.claim}」を選びました。` : "（記入なし）"}
+                  {guessedForSheet ? `${guessedForSheet.name}の「${guessedForSheet.guess}」を選びました。` : "（記入なし）"}
                 </p>
               </div>
               <div className="mb-4">
-                <p className="font-bold text-sm mb-1">2. クイズで選んだ答えと、力也おじぃさんに教わった正解</p>
-                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">
-                  {answerLabel ? `選んだ答え：「${answerLabel}」。` : "（記入なし）"}正解は「振動している」（三線の弦や太鼓の皮がふるえることで音が生まれる）。
-                </p>
+                <p className="font-bold text-sm mb-1">2. 自分のからだに出ていた反応</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">{bodyReactionsForSheet || "（記入なし）"}</p>
               </div>
               <div className="mb-4">
                 <p className="font-bold text-sm mb-1">3. 想像する問題への自分の考え</p>
@@ -518,6 +539,10 @@
               <div className="mb-4">
                 <p className="font-bold text-sm mb-1">4. 今日一番心に残ったこと</p>
                 <p className="text-sm border border-gray-400 rounded p-2 min-h-[3rem]">{memoryAnswer || "（記入なし）"}</p>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">5. 家族に伝える「私は○○だと少し安心する」</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">{nextActionAnswer ? `私は${nextActionAnswer}だと少し安心する` : "（記入なし）"}</p>
               </div>
               <div className="mt-8 pt-4 border-t border-gray-400">
                 <p className="text-sm">保護者確認サイン：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
@@ -535,10 +560,10 @@
             parent: renderParent
           };
           const slideTitles = {
-            intro: "🦁 はじまりの問い",
-            trouble: "😱 困りごと",
-            mentor: "🧓 メンター登場",
-            verify: "✅ やってみる",
+            intro: "🌀 はじまりの問い",
+            trouble: "🌬️ 困りごと",
+            mentor: "👵 メンター登場",
+            verify: "🫶 やってみる",
             imagine: "💭 想像する",
             checkin: "🙋 ふりかえり",
             parent: "🎬 おわりに"
@@ -563,8 +588,8 @@
                   </button>
                 </div>
                 <div className="text-center mb-6">
-                  <p className="text-xs font-bold text-indigo-500 mb-1">知能の窓・<ruby>獅子舞<rt>ししまい</rt></ruby> ep5：音楽編</p>
-                  <h1 className="text-2xl md:text-3xl font-bold text-orange-600">獅子は、どんな音で動く？ 🦁</h1>
+                  <p className="text-xs font-bold text-indigo-500 mb-1">知能の窓・台風 ep7：内省編</p>
+                  <h1 className="text-2xl md:text-3xl font-bold text-orange-600">台風がこわいとき、心はどうなる？ 🌀</h1>
                   <span className="inline-block mt-1 px-2 py-0.5 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
                 </div>
 
@@ -628,7 +653,7 @@
           );
         };
 
-        createRoot(document.getElementById("root")).render(<ShishimaiEp5App />);
+        createRoot(document.getElementById("root")).render(<TyphoonApp />);
     </script>
 </body>
 </html>
