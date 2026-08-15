@@ -268,7 +268,7 @@ diff matrix-library.html index2.html  # 差分なしを確認
    - `<h2 className="text-2xl font-bold text-yellow-700">保護者・支援者の方へ</h2>` → `<h2 className="text-2xl font-bold text-yellow-700">おわりに</h2>`
    - `slideTitles`オブジェクト内：`parent: "👪 保護者の方へ"` → `parent: "🎬 おわりに"`
 
-2. **「こどもへ」ボックスの新設**：既存の黄色ブロック（`bg-yellow-50`）の直前に、`<div className="bg-orange-50 rounded-lg p-4">` を挿入し、見出し `<p className="text-xs font-bold text-orange-700 mb-2">🧒 こどもへ</p>` の下に、**そのエピソードで学んだことを子ども向けの言葉で新規に要約した1〜2文**を置く（既存の指導要領・MI理論等の大人向け説明文を流用しない。「きょうは、〜を考えたね。〜が教えてくれた『〜』という考え方、今度〜してみよう」のような、2人称「きみ」で語りかける文体で毎話書き下ろす）。
+2. **「児童生徒のみなさんへ」ボックスの新設**：既存の黄色ブロック（`bg-yellow-50`）の直前に、`<div className="bg-orange-50 rounded-lg p-4">` を挿入し、見出し `<p className="text-xs font-bold text-orange-700 mb-2">🧑‍🎓 児童生徒のみなさんへ</p>` の下に、**そのエピソードで学んだことを子ども向けの言葉で新規に要約した1〜2文**を置く（既存の指導要領・MI理論等の大人向け説明文を流用しない。「きょうは、〜を考えたね。〜が教えてくれた『〜』という考え方、今度〜してみよう」のような、2人称「きみ」で語りかける文体で毎話書き下ろす）。※旧「🧒 こどもへ」表記は「子ども扱いしている印象がある」との指摘（2026-08-15）を受け、この表記に変更した。今後もこの見出し文言を使うこと。
    - 黄色ブロック側は変更しない：`<p className="text-xs font-bold text-yellow-800 mb-2">学習指導要領との対応</p>` → `<p className="text-xs font-bold text-yellow-800 mb-2">👪 保護者・支援者の方へ（学習指導要領との対応）</p>`に見出しだけ変更し、`<ul>`・「※」段落は元のまま維持する。
    - 印刷用学習記録シート（`bg-white border-2 border-dashed`ブロック）は変更しない（大人が実際に使う実務ツールのため）。
 
