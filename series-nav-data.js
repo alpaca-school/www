@@ -46,6 +46,19 @@ const YAGO_EPISODES = [
   { id: "yago-ep01", short: "ep1：論理・数学編", title: "同じ名字が3軒！どうやって呼び分ける？", url: "bunka/yago_ep01.html" },
 ];
 
+// 知能の窓・沖縄の綱引きシリーズ（2026-08-16、全9話完成）
+const TSUNAHIKI_EPISODES = [
+  { id: "tsunahiki-ep01", short: "ep1：論理・数学編", title: "大綱づくり、わら束はあといくつ？", url: "bunka/tsunahiki_ep01.html" },
+  { id: "tsunahiki-ep02", short: "ep2：言語編", title: "引く？曳く？挽く？—綱引きの名前を読む", url: "bunka/tsunahiki_ep02.html" },
+  { id: "tsunahiki-ep03", short: "ep3：音楽編", title: "綱引きは、どんな音で動く？", url: "bunka/tsunahiki_ep03.html" },
+  { id: "tsunahiki-ep04", short: "ep4：身体・運動編", title: "みんなの力を、どうやってそろえる？", url: "bunka/tsunahiki_ep04.html" },
+  { id: "tsunahiki-ep05", short: "ep5：博物学編", title: "稲わらが、どうして大綱になる？", url: "bunka/tsunahiki_ep05.html" },
+  { id: "tsunahiki-ep06", short: "ep6：視覚・空間編", title: "雄綱・雌綱は、どうつながる？", url: "bunka/tsunahiki_ep06.html" },
+  { id: "tsunahiki-ep07", short: "ep7：内省編", title: "勝つ・負けると、わたしの心はどう動く？", url: "bunka/tsunahiki_ep07.html" },
+  { id: "tsunahiki-ep08", short: "ep8：対人編", title: "どうして地域みんなで大綱を作れる？", url: "bunka/tsunahiki_ep08.html" },
+  { id: "tsunahiki-ep09", short: "ep9：集・表現編（完）", title: "わたしの地域の綱引き文化地図をつくろう", url: "bunka/tsunahiki_ep09.html" },
+];
+
 const BENIIMO_EPISODES = [
   { id: "beniimo-ep1", short: "ep1：論理・数学編", title: "紅芋チップス、あと何袋たりない？", url: "rekishi/beniimo_ep1_ronri.html" },
   { id: "beniimo-ep2", short: "ep2：言語編", title: "紅芋を持ってきたのは誰？", url: "rekishi/beniimo_ep2_gengo.html" },
