@@ -41,6 +41,11 @@ const TYPHOON_EPISODES = [
   { id: "typhoon-ep09", short: "ep9：集・表現編（完）", title: "わが家の台風知恵カードをつくろう", url: "bousai/typhoon_ep09.html" },
 ];
 
+// 知能の窓・沖縄の屋号シリーズ（2026-08-16着手、中学生以上対象。ep1のみ実装済み、ep2以降は順次追加）
+const YAGO_EPISODES = [
+  { id: "yago-ep01", short: "ep1：論理・数学編", title: "同じ名字が3軒！どうやって呼び分ける？", url: "bunka/yago_ep01.html" },
+];
+
 const BENIIMO_EPISODES = [
   { id: "beniimo-ep1", short: "ep1：論理・数学編", title: "紅芋チップス、あと何袋たりない？", url: "rekishi/beniimo_ep1_ronri.html" },
   { id: "beniimo-ep2", short: "ep2：言語編", title: "紅芋を持ってきたのは誰？", url: "rekishi/beniimo_ep2_gengo.html" },
