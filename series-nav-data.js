@@ -85,6 +85,19 @@ const PORK_EPISODES = [
   { id: "pork-ep09", short: "ep9：集・表現編（完）", title: "沖縄の豚文化を伝えよう", url: "bunka/buta_ep09.html" },
 ];
 
+// 知能の窓・グルクンシリーズ（2026-08-17、全9話完成）
+const GURUKUN_EPISODES = [
+  { id: "gurukun-ep01", short: "ep1：論理・数学編", title: "グルクン、何箱できる？", url: "bunka/gurukun_ep01.html" },
+  { id: "gurukun-ep02", short: "ep2：言語編", title: "グルクンって、魚の名前？", url: "bunka/gurukun_ep02.html" },
+  { id: "gurukun-ep03", short: "ep3：音楽編", title: "群れの動きを、リズムにできる？", url: "bunka/gurukun_ep03.html" },
+  { id: "gurukun-ep04", short: "ep4：身体・運動編", title: "追い込み漁って、どう動く？", url: "bunka/gurukun_ep04.html" },
+  { id: "gurukun-ep05", short: "ep5：博物学編", title: "グルクンは、どんな海で暮らす？", url: "bunka/gurukun_ep05.html" },
+  { id: "gurukun-ep06", short: "ep6：視覚・空間編", title: "魚・人・網を、上から見たら？", url: "bunka/gurukun_ep06.html" },
+  { id: "gurukun-ep07", short: "ep7：内省編", title: "わたしにとって「県魚」って何？", url: "bunka/gurukun_ep07.html" },
+  { id: "gurukun-ep08", short: "ep8：対人編", title: "一尾のグルクンに、何人が関わる？", url: "bunka/gurukun_ep08.html" },
+  { id: "gurukun-ep09", short: "ep9：集・表現編（完）", title: "「一尾の旅」を伝えよう", url: "bunka/gurukun_ep09.html" },
+];
+
 const BENIIMO_EPISODES = [
   { id: "beniimo-ep1", short: "ep1：論理・数学編", title: "紅芋チップス、あと何袋たりない？", url: "rekishi/beniimo_ep1_ronri.html" },
   { id: "beniimo-ep2", short: "ep2：言語編", title: "紅芋を持ってきたのは誰？", url: "rekishi/beniimo_ep2_gengo.html" },
