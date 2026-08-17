@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <script>
+        (() => {
+            const pageVersion = "20260816-3";
+            const url = new URL(window.location.href);
+            if (url.searchParams.get("v") !== pageVersion) {
+                url.searchParams.set("v", pageVersion);
+                window.location.replace(url.toString());
+            }
+        })();
+    </script>
+    <title>わたしのゴーヤー文化カードをつくろう【知能の窓・ゴーヤー ep9：集・表現編（完）】 🥒</title>
+    <script src="../series-nav-data.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        p, li {
+            word-break: normal;
+            overflow-wrap: break-word;
+            line-break: strict;
+        }
+        .speech-bubble {
+            position: relative;
+            min-width: 0;
+            max-width: 100%;
+        }
+        .speech-bubble p {
+            display: block;
+            min-width: 0;
+            max-width: 100%;
+            white-space: normal;
+            word-break: normal;
+            overflow-wrap: anywhere;
+            line-break: anywhere;
+        }
+        .choice-card {
+            min-width: 0;
+        }
+        .choice-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            min-width: 0;
+            max-width: 100%;
+        }
+        .choice-row .speech-bubble {
+            flex: 1 1 0;
+            width: 0;
+        }
+        .choice-check {
+            flex: 0 0 auto;
+        }
+        .progress-dots {
+            display: none;
+        }
+        @media (min-width: 640px) {
+            .progress-dots {
+                display: flex;
+            }
+        }
+        .speech-bubble::after {
+            content: "";
+            position: absolute;
+            left: -10px;
+            top: 18px;
+            border-width: 8px 10px 8px 0;
+            border-style: solid;
+            border-color: transparent currentColor transparent transparent;
+        }
+        .chara-avatar {
+            width: 56px; height: 56px; border-radius: 9999px; object-fit: cover;
+            border: 2px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.15); background: #fff;
+            flex-shrink: 0;
+        }
+        .print-sheet { position: fixed; left: -9999px; top: 0; }
+        @media print {
+            body * { visibility: hidden; }
+            .print-sheet, .print-sheet * { visibility: visible; }
+            .print-sheet { position: absolute; left: 0; top: 0; width: 100%; }
+        }
+        rt { font-size: 0.6em; color: #ea580c; font-weight: 700; }
+        .furigana-off rt { display: none; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+        const { createRoot } = ReactDOM;
+
+        const ChevronRight = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m9 18 6-6-6-6"/></svg>
+        );
+        const ChevronLeft = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m15 18-6-6 6-6"/></svg>
+        );
+
+        // 4アルパカ（性格は既存シリーズと同じ。この回は「まとめ・表現の仕方」を間違える困りごと）
+        const ALPACAS = {
+          hari: {
+            name: "ハーリー", color: "red", emoji: "🔥", img: "../img/characters/harly.png",
+            claim: "全部覚えてるから、確かめなくてもオレの記憶で書けばいいっしょ！出典なんていちいち見なくていいっしょ！",
+            gag: "（効果音：ズコーッ！ハーリー、カードとペンを持ったまま畑ですっ転ぶ）"
+          },
+          sara: {
+            name: "サラバンジ", color: "blue", emoji: "⚡", img: "../img/characters/sarabanji.png",
+            claim: "カードは一発勝負！見直しゼロで出すっしょ！勢いが大事さ！",
+            gag: "（サラバンジ、その場でバタン！と大げさに倒れる→3秒後にムクッと起き上がる）"
+          },
+          gan: {
+            name: "ガンジュー", color: "green", emoji: "😴", img: "../img/characters/ganjuu.png",
+            claim: "好きな言葉を並べて…畝、つる、花…最後に『おいしい』も入れようかな…",
+            gag: "（ガンジュー、ペンを持ったまま本気のいびき→力也おじぃさんに肩を叩かれてハッと飛び起きる）"
+          },
+          kaa: {
+            name: "カーギー", color: "purple", emoji: "💁‍♀️", img: "../img/characters/carggy.png",
+            claim: "正解のカードを作らなきゃ。自由な作品なのに、採点基準を100個作ろうと思います。",
+            gag: "（カーギー、風で乱れた前髪を鏡もなしに一瞬でピシッと直しながら、少し首をかしげる）"
+          }
+        };
+        const ALPACA_KEYS = ["hari", "sara", "gan", "kaa"];
+
+        // 4メンター（おじぃさん・おばぁさん）。この回は全員で登場し、シリーズ最終回のふりかえり役を担う
+        const MENTORS = {
+          chinen: { name: "知念おじぃさん", color: "amber", emoji: "🧓" },
+          tokue: { name: "仲程のヨシおばぁさん", color: "rose", emoji: "👵" },
+          rikiya: { name: "力也おじぃさん", color: "teal", emoji: "🧓" },
+          misaki: { name: "マタグワァのシズおばぁさん", color: "indigo", emoji: "👵" }
+        };
+
+        const COLOR_MAP = {
+          red: { bg: "bg-red-50", border: "border-red-300", text: "text-red-700", solid: "bg-red-500" },
+          blue: { bg: "bg-blue-50", border: "border-blue-300", text: "text-blue-700", solid: "bg-blue-500" },
+          green: { bg: "bg-green-50", border: "border-green-300", text: "text-green-700", solid: "bg-green-500" },
+          purple: { bg: "bg-purple-50", border: "border-purple-300", text: "text-purple-700", solid: "bg-purple-500" },
+          amber: { bg: "bg-amber-50", border: "border-amber-300", text: "text-amber-700", solid: "bg-amber-500" },
+          rose: { bg: "bg-rose-50", border: "border-rose-300", text: "text-rose-700", solid: "bg-rose-500" },
+          teal: { bg: "bg-teal-50", border: "border-teal-300", text: "text-teal-700", solid: "bg-teal-500" },
+          indigo: { bg: "bg-indigo-50", border: "border-indigo-300", text: "text-indigo-700", solid: "bg-indigo-500" }
+        };
+
+        // キャラ画像。アルパカは画像→失敗時絵文字。メンターは画像未整備のため絵文字のみ
+        const Avatar = ({ person }) => {
+          const [failed, setFailed] = useState(false);
+          if (!person.img || failed) {
+            return (
+              <div className={`chara-avatar flex items-center justify-center text-2xl ${COLOR_MAP[person.color].bg}`}>
+                {person.emoji}
+              </div>
+            );
+          }
+          return (
+            <img
+              src={person.img}
+              alt={person.name}
+              className="chara-avatar"
+              onError={() => setFailed(true)}
+            />
+          );
+        };
+
+        function shuffledThreeAlpacas() {
+          const arr = [...ALPACA_KEYS];
+          for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+          }
+          return arr.slice(0, 3);
+        }
+
+        // カードに入れる6つの視点（ep1〜8で扱ってきた窓を、子ども向けの言葉にまとめたもの）
+        const CARD_CATEGORIES = [
+          { key: "suuji", label: "数字" },
+          { key: "kotoba", label: "ことば" },
+          { key: "shokubutsu", label: "植物" },
+          { key: "oto", label: "音／動き" },
+          { key: "kanjikata", label: "自分の感じ方" },
+          { key: "tsunagari", label: "人とのつながり" }
+        ];
+
+        // ep1〜8のふりかえりから拾った「ことばのたね」
+        const WORD_SEEDS = ["畝", "つる", "花", "受粉", "緑のカーテン", "チャンプルー", "苦味", "農家", "直売所", "産地表示"];
+
+        const MATERIAL = {
+          title: "わたしのゴーヤー文化カードをつくろう",
+          series: "知能の窓・ゴーヤー ep9：集・表現編（完）",
+          subjectGrade: "国語・図画工作・特別活動"
+        };
+
+        const GoyaEp09App = () => {
+          const [threeKeys] = useState(() => shuffledThreeAlpacas());
+          const [currentSlide, setCurrentSlide] = useState(0);
+          const [guess, setGuess] = useState(null);
+          const [selectedCategories, setSelectedCategories] = useState([]);
+          const [cardText, setCardText] = useState("");
+          const [imagineAnswer, setImagineAnswer] = useState("");
+          const [childName, setChildName] = useState("");
+          const [canDoIt, setCanDoIt] = useState(null);
+          const [memoryAnswer, setMemoryAnswer] = useState("");
+          const [furiganaOn, setFuriganaOn] = useState(true);
+
+          const slideIds = ["intro", "trouble", "mentor", "create", "imagine", "checkin", "parent"];
+          const GOYA_LIST = typeof GOYA_EPISODES !== "undefined" ? GOYA_EPISODES : [];
+          const episodeIndex = GOYA_LIST.findIndex((e) => e.id === "goya-ep09");
+          const prevEpisode = episodeIndex > 0 ? GOYA_LIST[episodeIndex - 1] : null;
+          const nextEpisode = episodeIndex >= 0 && episodeIndex < GOYA_LIST.length - 1 ? GOYA_LIST[episodeIndex + 1] : null;
+          const total = slideIds.length;
+
+          const nextSlide = () => setCurrentSlide((p) => Math.min(p + 1, total - 1));
+          const prevSlide = () => setCurrentSlide((p) => Math.max(p - 1, 0));
+
+          const toggleCategory = (key) => {
+            setSelectedCategories((prev) => (prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]));
+          };
+
+          const insertSeed = (seed) => {
+            setCardText((prev) => (prev ? `${prev}${prev.endsWith("\n") ? "" : "\n"}${seed}` : seed));
+          };
+
+          const renderIntro = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-6xl mb-4">🥒</div>
+                <h2 className="text-2xl font-bold text-orange-600">ep1からここまで、歩いてきた道を、1枚のカードにしてみないか</h2>
+                <span className="inline-block mt-2 px-3 py-1 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
+              </div>
+              <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 space-y-3">
+                <p>数字、ことば、音、動き、植物、気持ち、人とのつながり。ep1〜8で、アルパカたちはゴーヤーについて、たくさんのことを知ってきました。</p>
+                <p>最終回の今日は、それを「わたしのゴーヤー文化カード」として、自分の言葉と絵でまとめ直してみます。数字の正解はもうありません。ここからは、きみ自身の表現です。</p>
+              </div>
+            </div>
+          );
+
+          const renderTrouble = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">😱</div>
+                <h2 className="text-xl font-bold text-red-600 mb-1">困りごと発生！</h2>
+                <p className="text-gray-600">3人のアルパカが、それぞれ違うやり方でカードをまとめようとした。きみは、誰のやり方に一番近いと思う？</p>
+              </div>
+              <div className="grid gap-4">
+                {threeKeys.map((key) => {
+                  const c = ALPACAS[key];
+                  const cc = COLOR_MAP[c.color];
+                  const selected = guess === key;
+                  return (
+                    <div
+                      key={key}
+                      onClick={() => setGuess(key)}
+                      className={`choice-card p-4 rounded-lg border-2 cursor-pointer transition-all ${cc.bg} ${
+                        selected ? `${cc.border} ring-2 ring-offset-1 ring-${c.color}-400` : "border-gray-200 hover:border-gray-300"
+                      }`}
+                    >
+                      <div className="choice-row">
+                        <Avatar person={c} />
+                        <div className={`speech-bubble flex-1 min-w-0 rounded-lg p-3 ${cc.text} bg-white/70`}>
+                          <p className="text-sm text-gray-700">「{c.claim}」</p>
+                        </div>
+                        {selected && (
+                          <div className={`choice-check w-7 h-7 rounded-full ${cc.solid} flex items-center justify-center text-white text-sm shrink-0`}>✓</div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              {!guess && <p className="text-center text-sm text-orange-500">↑ どれか1つを選ぶと、次に進めるよ</p>}
+              {guess && (
+                <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
+                  <p>記憶だけを正解にする、見直しゼロで出す、言葉を並べるだけ、基準を100個作る。どれも少し違うみたい。4人のメンターに、まとめて聞いてみよう。</p>
+                </div>
+              )}
+            </div>
+          );
+
+          const renderMentor = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">👪</div>
+                <h2 className="text-xl font-bold text-gray-700">4人のメンターが、集まった</h2>
+              </div>
+              <div className="grid gap-3">
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.amber.bg}`}>
+                  <Avatar person={MENTORS.chinen} />
+                  <p className="text-sm text-amber-700">「わしはきみに、数字の考え方（ep1）と、伝える言葉の順番（ep2）を教えたね」</p>
+                </div>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.teal.bg}`}>
+                  <Avatar person={MENTORS.rikiya} />
+                  <p className="text-sm text-teal-700">「わしはリズムと動き、収穫のしぐさ（ep3・ep4）を教えたな」</p>
+                </div>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.indigo.bg}`}>
+                  <Avatar person={MENTORS.misaki} />
+                  <p className="text-sm text-indigo-700">「わたしは植物としてのゴーヤーの仕組みと、畑や地図の見方（ep5・ep6）を教えたね」</p>
+                </div>
+              </div>
+              <div className={`rounded-lg p-4 space-y-2 ${COLOR_MAP.rose.bg}`}>
+                <div className="flex items-center gap-3 mb-1">
+                  <Avatar person={MENTORS.tokue} />
+                  <p className="font-bold text-rose-700">{MENTORS.tokue.name}</p>
+                </div>
+                <p className="text-sm text-gray-700">「そして私は、きみの気持ち（ep7）と、いろんな人がつながっていること（ep8）を聞いたね」</p>
+                <p className="text-sm text-gray-700">「記憶と事実は、少し違うものだよ。ゴーヤーの育ち方や届き方のような事実には出典を、感想や作品には自分の言葉を使おう。家族の話を書くときは『◯◯さんの経験』と書いて、みんながそうだと決めつけないようにね」</p>
+                <p className="text-sm text-gray-700">「見直しは1回でいい。基準は100個もいらない。数字・ことば・植物・音／動き・自分の感じ方・人とのつながりから、3つ以上選んで、自由に1枚にまとめてごらん」</p>
+              </div>
+            </div>
+          );
+
+          const renderCreate = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">✏️</div>
+                <h2 className="text-2xl font-bold text-green-600">やってみよう</h2>
+                <p className="text-gray-600 text-sm mt-1">下の6つから3つ以上選んで、下の「ことばのたね」も使いながら、自分のゴーヤー文化カードを作ってみよう。</p>
+              </div>
+              <div className="flex flex-wrap gap-2 justify-center">
+                {CARD_CATEGORIES.map((cat) => {
+                  const selected = selectedCategories.includes(cat.key);
+                  return (
+                    <button
+                      key={cat.key}
+                      onClick={() => toggleCategory(cat.key)}
+                      className={`px-3 py-1.5 rounded-full text-sm font-bold border-2 transition ${
+                        selected ? "bg-green-500 text-white border-green-500" : "bg-white text-green-700 border-green-300 hover:bg-green-50"
+                      }`}
+                    >
+                      {selected ? "✓ " : ""}{cat.label}
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="text-center text-xs text-gray-500">
+                {selectedCategories.length >= 3
+                  ? `${selectedCategories.length}つ選んだね。もう十分だよ。`
+                  : `あと${3 - selectedCategories.length}つ選んでみよう（3つ以上）`}
+              </p>
+              <div className="flex flex-wrap gap-2 justify-center">
+                {WORD_SEEDS.map((seed) => (
+                  <button
+                    key={seed}
+                    onClick={() => insertSeed(seed)}
+                    className="px-3 py-1.5 rounded-full text-sm font-bold border-2 border-emerald-300 text-emerald-700 bg-white hover:bg-emerald-50 transition"
+                  >
+                    {seed}
+                  </button>
+                ))}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">選んだ視点やことばを使って、カードの中身（絵の説明・短文）を書いてみよう</label>
+                <textarea
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400 text-sm"
+                  rows="5"
+                  placeholder="例：畝に植えたつるが伸びて、黄色い花が咲いた。受粉すると小さな実になる。チャンプルーにすると苦味がやみつきになる。"
+                  value={cardText}
+                  onChange={(e) => setCardText(e.target.value)}
+                ></textarea>
+              </div>
+              <div className="bg-yellow-50 rounded-lg p-4 text-xs text-yellow-800">
+                <p>家族や地域の話を入れるときは「（例：おばあちゃんの経験）」のように、誰の経験かを書こう。「沖縄の人はみんな〜」のように、一般化しないようにしよう。</p>
+              </div>
+            </div>
+          );
+
+          const renderImagine = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">💭</div>
+                <h2 className="text-2xl font-bold text-pink-600">想像してみよう</h2>
+              </div>
+              <div className="bg-pink-50 rounded-lg p-6">
+                <p className="text-lg">もし、きみのゴーヤー文化カードを誰かが見たら、どんな気持ちになってほしい？</p>
+                <p className="text-sm text-gray-500 mt-2">（懐かしくなる・ゴーヤーを育ててみたくなる・自分の家の料理を思い出す…正解は一つじゃないよ）</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">きみの考えを書いてみよう（学習記録シートに残せるよ）</label>
+                <textarea
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400 text-sm"
+                  rows="3"
+                  placeholder="例：自分の家でもゴーヤーを育ててみたいと思ってほしい"
+                  value={imagineAnswer}
+                  onChange={(e) => setImagineAnswer(e.target.value)}
+                ></textarea>
+              </div>
+            </div>
+          );
+
+          const renderCheckin = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">🙋</div>
+                <h2 className="text-2xl font-bold text-teal-600">ふりかえり</h2>
+              </div>
+              <div className="bg-teal-50 rounded-lg p-6">
+                <p className="font-medium text-teal-800 mb-3">✏️ 自分のゴーヤー文化カード、誰かに見せてみたいと思った？</p>
+                <div className="flex flex-wrap gap-2">
+                  {["はい", "いいえ", "わからない"].map((opt) => (
+                    <button
+                      key={opt}
+                      onClick={() => setCanDoIt(opt)}
+                      className={`px-4 py-2 rounded-lg font-bold border-2 transition ${
+                        canDoIt === opt ? "bg-teal-500 text-white border-teal-500" : "bg-white text-teal-700 border-teal-200"
+                      }`}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">✏️ 今日書いたカード、気に入っているところはどこ？</label>
+                <textarea
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400 text-sm"
+                  rows="3"
+                  placeholder="例：「緑のカーテン」のところを、自分らしく書けたと思った"
+                  value={memoryAnswer}
+                  onChange={(e) => setMemoryAnswer(e.target.value)}
+                ></textarea>
+              </div>
+              <div className="bg-emerald-50 border-2 border-emerald-200 rounded-lg p-4 text-center space-y-2">
+                <p className="text-sm text-emerald-800">ep1〜ep9、知能の窓・ゴーヤーシリーズはこれで完結。カードができたら、家族や学校の友だち、地域のイベントなどで、誰か一人に見せてみよう。</p>
+                <p className="text-sm text-emerald-800">見せたら、相手から「知らなかったゴーヤーの経験」や「新しい疑問」を1つ聞いてみよう。それが、きみの次の学びの入口になる。</p>
+                <a
+                  href="https://furima.ryukyu-tane.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block px-4 py-2 bg-emerald-500 text-white rounded-lg font-bold hover:bg-emerald-600 transition"
+                >
+                  文芸フリマを見てみる
+                </a>
+              </div>
+              <div className="bg-indigo-50 rounded-lg p-4 text-sm text-indigo-700 text-center space-y-2">
+                <p>次回予告はありません。ゴーヤーシリーズは、ここで一区切りです。ありがとう。</p>
+                <a
+                  href="./goya_ep01.html"
+                  className="inline-flex items-center gap-1 font-bold text-indigo-600 hover:text-indigo-800"
+                >
+                  もう一度：ep1へ<ChevronRight className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+          );
+
+          const renderParent = () => (
+            <div className="space-y-4">
+              <div className="text-center">
+                <div className="text-5xl mb-4">🎬</div>
+                <h2 className="text-2xl font-bold text-yellow-700">おわりに</h2>
+              </div>
+              <div className="bg-orange-50 rounded-lg p-4">
+                <p className="text-xs font-bold text-orange-700 mb-2">🧑‍🎓 児童生徒のみなさんへ</p>
+                <p className="text-sm text-gray-700">きょうで、ゴーヤーをめぐる9つの窓の旅がおわったね。数字の正解がない「集・表現」の窓では、自分の言葉と絵で文化カードを作ってみたね。これからも、事実と自分の感想を分けながら、自分らしい表現を続けてみよう。</p>
+              </div>
+              <div className="bg-yellow-50 rounded-lg p-4">
+                <p className="text-xs font-bold text-yellow-800 mb-2">👪 保護者・支援者の方へ（学習指導要領との対応）</p>
+                <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
+                  <li><strong>国語</strong>：短い言葉で自分の考えや情景を表現する、言葉を選ぶ・推敲する</li>
+                  <li><strong>図画工作／美術</strong>：カードや絵として、学んだ事実を自分なりに再構成する</li>
+                  <li><strong>社会・理科</strong>：ep1〜8で扱った郷土の食文化・農業・自然環境の知識を振り返る</li>
+                  <li><strong>特別活動</strong>：自己表現、他者に向けた発信の経験</li>
+                </ul>
+                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓・ゴーヤー」シリーズ ep9・最終回（集・表現編）です。ep1〜8が多重知能理論の8分類（智・徳・体・感）に沿った学びだったのに対し、ep9はそれらを踏まえて「短い言葉やカードで表現し、人に届ける」という、いずれの分類にも一対一で対応しない働き（東洋の伝統的な学問分類でいう「集＝詩文」に近いもの）を扱う特別回です。そのため、他のepと違い数値の正解・不正解を扱う問題（ポラード方式のトラップ情報）は含みません。</p>
+                <p className="text-xs text-gray-500 mt-1">※ 4アルパカ（ハーリー・サラバンジ・ガンジュー・カーギー）は、「困りごとを持ち込む役」として登場します。3人の困りごとはランダムに選ばれ、いずれも自由な表現の趣旨からは少しずれています。「記憶と事実の混同」「見直しをしない」「まとまりのない発想」「基準を作りすぎる」など、それぞれの性格に忠実な間違え方をします。</p>
+                <p className="text-xs text-gray-500 mt-1">※ 家族や地域の体験を教材内・カードに書き込む場合は、本人の同意なく個人が特定される内容を公開しないでください。「◯◯さんの経験」として記録し、一般化した決めつけにしないことをおすすめします。</p>
+                <p className="text-xs text-gray-500 mt-1">※ 「文芸フリマを見てみる」リンクは外部サイト（furima.ryukyu-tane.com）に接続します。実際の出展には別途、大人の方の確認・同行をおすすめします。</p>
+              </div>
+              <div className="bg-slate-50 rounded-lg p-4">
+                <p className="text-xs font-bold text-slate-700 mb-2">📚 出典・参考資料</p>
+                <ul className="text-xs text-gray-700 space-y-2 list-disc list-inside">
+                  <li>
+                    沖縄県「沖縄の野菜」
+                    {" "}
+                    <a
+                      href="https://www.pref.okinawa.jp/kyoiku/kodomo/1002669/1002673/1002675.html"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 underline break-all"
+                    >
+                      https://www.pref.okinawa.jp/kyoiku/kodomo/1002669/1002673/1002675.html
+                    </a>
+                  </li>
+                  <li>
+                    農林水産省「うちの郷土料理 ゴーヤーチャンプルー」
+                    {" "}
+                    <a
+                      href="https://www.maff.go.jp/j/keikaku/syokubunka/k_ryouri/search_menu/menu/47_11_okinawa.html"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 underline break-all"
+                    >
+                      https://www.maff.go.jp/j/keikaku/syokubunka/k_ryouri/search_menu/menu/47_11_okinawa.html
+                    </a>
+                  </li>
+                  <li>
+                    環境省「グリーンカーテンプロジェクト」
+                    {" "}
+                    <a
+                      href="https://ondankataisaku.env.go.jp/coolchoice/green/making.html"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 underline break-all"
+                    >
+                      https://ondankataisaku.env.go.jp/coolchoice/green/making.html
+                    </a>
+                  </li>
+                  <li>
+                    農林水産省アグリサーチャー（ニガウリの雄花・雌花、受粉・着果）
+                    {" "}
+                    <a
+                      href="https://agresearcher.maff.go.jp/seika/show/223295"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 underline break-all"
+                    >
+                      https://agresearcher.maff.go.jp/seika/show/223295
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-4">
+                <p className="text-xs font-bold text-gray-700 mb-2">🖨️ 学習記録シートを作る（COCOLOプラン等の学習記録用）</p>
+                <input
+                  type="text"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 text-sm mb-2"
+                  placeholder="お子さんの名前（記入は任意）"
+                  value={childName}
+                  onChange={(e) => setChildName(e.target.value)}
+                />
+                <button
+                  onClick={() => window.print()}
+                  className="w-full px-4 py-2 bg-yellow-500 text-white rounded-lg font-medium hover:bg-yellow-600 transition-all text-sm"
+                >
+                  学習記録シートを印刷する
+                </button>
+                <p className="text-xs text-gray-400 mt-1">今日の日付・対応教科・取り組んだ内容・保護者確認欄が入った1枚のシートが印刷されます。</p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-gray-200 space-y-2">
+                <p className="text-xs font-bold text-gray-500 text-center">つぎに進む</p>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  {prevEpisode ? (
+                    <a href={"../" + prevEpisode.url} className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-300 text-sm font-bold text-gray-600 hover:bg-gray-50 transition">← {prevEpisode.short}</a>
+                  ) : (
+                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-300">← 最初のエピソード</span>
+                  )}
+                  {nextEpisode ? (
+                    <a href={"../" + nextEpisode.url} className="flex-1 text-center px-3 py-2 rounded-lg bg-orange-500 text-white text-sm font-bold hover:bg-orange-600 transition">{nextEpisode.short} →</a>
+                  ) : (
+                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-300">最終話</span>
+                  )}
+                </div>
+                <a href="../matrix-library.html" className="block text-center text-sm font-bold text-orange-500 hover:text-orange-700 underline">他のテーマも見る（教材一覧）</a>
+              </div>
+              <div className="mt-6 pt-4 border-t border-dashed border-gray-300">
+                <div className="bg-gray-50 rounded-lg p-4 text-left">
+                  <p className="text-xs font-bold text-gray-700 mb-2 text-center">💬 ご意見・ご要望</p>
+                  <p className="text-xs text-gray-600 mb-3">「こんな機能が欲しい」「ここが使いにくい」などのご意見をお聞かせください。今後の開発の参考にさせていただきます。</p>
+                  <a href={FEEDBACK_FORM_URL} target="_blank" rel="noopener noreferrer" className="block text-center px-4 py-2 bg-gray-700 text-white rounded-full text-sm font-bold hover:bg-gray-800 transition">📋 要望・フィードバックを送る</a>
+                </div>
+              </div>
+            </div>
+          );
+
+          const today = new Date();
+          const todayStr = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
+          const selectedLabels = CARD_CATEGORIES.filter((cat) => selectedCategories.includes(cat.key)).map((cat) => cat.label).join("・");
+
+          const renderPrintSheet = () => (
+            <div className="print-sheet w-[700px] p-10 bg-white text-black">
+              <h1 className="text-xl font-bold border-b-2 border-black pb-2 mb-4">学習記録シート</h1>
+              <table className="w-full text-sm mb-4">
+                <tbody>
+                  <tr><td className="py-1 pr-4 font-bold w-32">学習日</td><td className="py-1">{todayStr}</td></tr>
+                  <tr><td className="py-1 pr-4 font-bold">お子さんの名前</td><td className="py-1">{childName || "＿＿＿＿＿＿＿＿＿＿"}</td></tr>
+                  <tr><td className="py-1 pr-4 font-bold">教材名</td><td className="py-1">{MATERIAL.title}（{MATERIAL.series}）</td></tr>
+                  <tr><td className="py-1 pr-4 font-bold">対応教科・学年</td><td className="py-1">{MATERIAL.subjectGrade}</td></tr>
+                </tbody>
+              </table>
+              <div className="mb-4 text-xs text-gray-700 bg-gray-50 border border-gray-300 rounded p-3">
+                <p className="font-bold mb-1">学習指導要領との対応</p>
+                <ul className="space-y-0.5 list-disc list-inside">
+                  <li>国語：短い言葉で自分の考えや情景を表現する、言葉を選ぶ・推敲する</li>
+                  <li>図画工作／美術：カードや絵として、学んだ事実を自分なりに再構成する</li>
+                  <li>社会・理科：郷土の食文化・農業・自然環境の知識を振り返る</li>
+                  <li>特別活動：自己表現、他者に向けた発信の経験</li>
+                </ul>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">1. カードに選んだ視点</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">{selectedLabels || "（記入なし）"}</p>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">2. カードに書いた内容</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[3rem] whitespace-pre-wrap">{cardText || "（記入なし）"}</p>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">3. 想像する問題への自分の考え</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">{imagineAnswer || "（記入なし）"}</p>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">4. 気に入っているところ</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[3rem]">{memoryAnswer || "（記入なし）"}</p>
+              </div>
+              <div className="mt-8 pt-4 border-t border-gray-400">
+                <p className="text-sm">保護者確認サイン：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+              </div>
+            </div>
+          );
+
+          const slideRenderers = {
+            intro: renderIntro,
+            trouble: renderTrouble,
+            mentor: renderMentor,
+            create: renderCreate,
+            imagine: renderImagine,
+            checkin: renderCheckin,
+            parent: renderParent
+          };
+          const slideTitles = {
+            intro: "🥒 はじまりの問い",
+            trouble: "😱 困りごと",
+            mentor: "👪 メンター登場",
+            create: "✏️ やってみる",
+            imagine: "💭 想像する",
+            checkin: "🙋 ふりかえり",
+            parent: "🎬 おわりに"
+          };
+
+          const canGoNext = !(slideIds[currentSlide] === "trouble" && !guess);
+
+          return (
+            <div className={`min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50 ${furiganaOn ? "" : "furigana-off"}`}>
+              <div className="container mx-auto px-4 py-8 max-w-2xl">
+                <div className="flex items-center justify-between mb-4">
+                  <a href="../matrix-library.html" className="inline-flex items-center gap-1 text-sm font-bold text-orange-500 hover:text-orange-700">
+                    <ChevronLeft className="w-4 h-4" />教材一覧へ戻る
+                  </a>
+                  <button
+                    onClick={() => setFuriganaOn((f) => !f)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border-2 transition ${
+                      furiganaOn ? "bg-orange-500 text-white border-orange-500" : "bg-white text-orange-600 border-orange-300"
+                    }`}
+                  >
+                    🔤 ふりがな {furiganaOn ? "ON" : "OFF"}
+                  </button>
+                </div>
+                <div className="text-center mb-6">
+                  <p className="text-xs font-bold text-indigo-500 mb-1">知能の窓・ゴーヤー ep9：集・表現編（完）</p>
+                  <h1 className="text-2xl md:text-3xl font-bold text-orange-600">わたしのゴーヤー文化カードをつくろう 🥒</h1>
+                  <span className="inline-block mt-1 px-2 py-0.5 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
+                </div>
+
+                <div className="mb-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm text-gray-600">{slideTitles[slideIds[currentSlide]]}</span>
+                    <span className="text-sm text-gray-600">{currentSlide + 1} / {total}</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="bg-orange-500 h-2 rounded-full transition-all duration-300" style={{ width: `${((currentSlide + 1) / total) * 100}%` }}></div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8 mb-6 min-h-96">
+                  {slideRenderers[slideIds[currentSlide]]()}
+                </div>
+
+                {slideIds[currentSlide] === "parent" && (
+                  <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 text-left mb-6">
+                    <p className="text-xs font-bold text-orange-700 mb-2 text-center">🌱 制作をアシストする</p>
+                    <p className="text-xs text-gray-600 mb-3">ここでの学びは、記録され、次の学びへと受け継がれていきます。その循環を支えるちからになっていただけたら嬉しいです。</p>
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      {SUPPORT_LINKS.map((s) => (
+                        <a key={s.label} href={s.url} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-full text-sm font-bold border-2 border-orange-300 text-orange-700 bg-white hover:bg-orange-100 transition">{s.label}</a>
+                      ))}
+                    </div>
+                    <div className="mt-2 text-center">
+                      <a href="../tokushoho.html" className="text-xs text-gray-400 underline">特定商取引法に基づく表記</a>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex justify-between items-center">
+                  <button
+                    onClick={prevSlide}
+                    disabled={currentSlide === 0}
+                    className={`flex items-center px-3 sm:px-5 py-3 rounded-lg font-medium transition-all ${
+                      currentSlide === 0 ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-orange-500 text-white hover:bg-orange-600"
+                    }`}
+                  >
+                    <ChevronLeft className="w-5 h-5 mr-1" />まえへ
+                  </button>
+                  <div className="progress-dots space-x-2">
+                    {slideIds.map((id, index) => (
+                      <div key={id} className={`w-2.5 h-2.5 rounded-full ${index === currentSlide ? "bg-orange-500" : "bg-gray-300"}`} />
+                    ))}
+                  </div>
+                  <button
+                    onClick={nextSlide}
+                    disabled={currentSlide === total - 1 || !canGoNext}
+                    className={`flex items-center px-3 sm:px-5 py-3 rounded-lg font-medium transition-all ${
+                      currentSlide === total - 1 || !canGoNext ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-orange-500 text-white hover:bg-orange-600"
+                    }`}
+                  >
+                    {slideIds[currentSlide] === "checkin" ? "おわりに" : "つぎへ"}<ChevronRight className="w-5 h-5 ml-1" />
+                  </button>
+                </div>
+              </div>
+              {renderPrintSheet()}
+            </div>
+          );
+        };
+
+        createRoot(document.getElementById("root")).render(<GoyaEp09App />);
+    </script>
+</body>
+</html>
