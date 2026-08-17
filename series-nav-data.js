@@ -75,6 +75,7 @@ const GOYA_EPISODES = [
 // 知能の窓・沖縄の豚シリーズ（2026-08-17着手。ep1のみ実装済み）
 const PORK_EPISODES = [
   { id: "pork-ep01", short: "ep1：論理・数学編", title: "550頭から、2万頭をこえる？", url: "bunka/buta_ep01.html" },
+  { id: "pork-ep02", short: "ep2：言語編", title: "ミミガーって、どこのこと？", url: "bunka/buta_ep02.html" },
 ];
 
 const BENIIMO_EPISODES = [
