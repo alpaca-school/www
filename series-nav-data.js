@@ -76,6 +76,13 @@ const GOYA_EPISODES = [
 const PORK_EPISODES = [
   { id: "pork-ep01", short: "ep1：論理・数学編", title: "550頭から、2万頭をこえる？", url: "bunka/buta_ep01.html" },
   { id: "pork-ep02", short: "ep2：言語編", title: "ミミガーって、どこのこと？", url: "bunka/buta_ep02.html" },
+  { id: "pork-ep03", short: "ep3：音楽編", title: "ミミガー、チラガー、どんなリズム？", url: "bunka/buta_ep03.html" },
+  { id: "pork-ep04", short: "ep4：身体・運動編", title: "豚は、どう動く？", url: "bunka/buta_ep04.html" },
+  { id: "pork-ep05", short: "ep5：博物学編", title: "『鳴き声以外』って、本当？", url: "bunka/buta_ep05.html" },
+  { id: "pork-ep06", short: "ep6：視覚・空間編", title: "一頭の豚を、地図にしよう", url: "bunka/buta_ep06.html" },
+  { id: "pork-ep07", short: "ep7：内省編", title: "『いただきます』を考える", url: "bunka/buta_ep07.html" },
+  { id: "pork-ep08", short: "ep8：対人編", title: "豚料理は、なぜみんなで食べる？", url: "bunka/buta_ep08.html" },
+  { id: "pork-ep09", short: "ep9：集・表現編（完）", title: "沖縄の豚文化を伝えよう", url: "bunka/buta_ep09.html" },
 ];
 
 const BENIIMO_EPISODES = [
