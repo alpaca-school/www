@@ -59,6 +59,19 @@ const TSUNAHIKI_EPISODES = [
   { id: "tsunahiki-ep09", short: "ep9：集・表現編（完）", title: "わたしの地域の綱引き文化地図をつくろう", url: "bunka/tsunahiki_ep09.html" },
 ];
 
+// 知能の窓・ゴーヤーシリーズ（2026-08-17、全9話完成）
+const GOYA_EPISODES = [
+  { id: "goya-ep01", short: "ep1：論理・数学編", title: "出荷できるゴーヤーは何本？", url: "bunka/goya_ep01.html" },
+  { id: "goya-ep02", short: "ep2：言語編", title: "ゴーヤーって、どんな野菜？", url: "bunka/goya_ep02.html" },
+  { id: "goya-ep03", short: "ep3：音楽編", title: "ゴーヤーチャンプルーの台所は、どんな音？", url: "bunka/goya_ep03.html" },
+  { id: "goya-ep04", short: "ep4：身体・運動編", title: "つるは、どうやって上へ行く？", url: "bunka/goya_ep04.html" },
+  { id: "goya-ep05", short: "ep5：博物学編", title: "ゴーヤーは、どうやって実になる？", url: "bunka/goya_ep05.html" },
+  { id: "goya-ep06", short: "ep6：視覚・空間編", title: "緑のカーテンを設計しよう", url: "bunka/goya_ep06.html" },
+  { id: "goya-ep07", short: "ep7：内省編", title: "苦いって、きらいでいい？", url: "bunka/goya_ep07.html" },
+  { id: "goya-ep08", short: "ep8：対人編", title: "畑から食卓まで、誰がつないでいる？", url: "bunka/goya_ep08.html" },
+  { id: "goya-ep09", short: "ep9：集・表現編（完）", title: "わたしのゴーヤー文化カードをつくろう", url: "bunka/goya_ep09.html" },
+];
+
 const BENIIMO_EPISODES = [
   { id: "beniimo-ep1", short: "ep1：論理・数学編", title: "紅芋チップス、あと何袋たりない？", url: "rekishi/beniimo_ep1_ronri.html" },
   { id: "beniimo-ep2", short: "ep2：言語編", title: "紅芋を持ってきたのは誰？", url: "rekishi/beniimo_ep2_gengo.html" },

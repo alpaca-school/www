@@ -210,7 +210,7 @@
           const [memoryAnswer, setMemoryAnswer] = useState("");
           const [furiganaOn, setFuriganaOn] = useState(true);
 
-          const slideIds = ["intro", "trouble", "mentor", "create", "imagine", "checkin", "parent"];
+          const slideIds = ["intro", "trouble", "mentor", "verify", "imagine", "checkin", "parent"];
           const GOYA_LIST = typeof GOYA_EPISODES !== "undefined" ? GOYA_EPISODES : [];
           const episodeIndex = GOYA_LIST.findIndex((e) => e.id === "goya-ep09");
           const prevEpisode = episodeIndex > 0 ? GOYA_LIST[episodeIndex - 1] : null;
@@ -619,7 +619,7 @@
             intro: renderIntro,
             trouble: renderTrouble,
             mentor: renderMentor,
-            create: renderCreate,
+            verify: renderCreate,
             imagine: renderImagine,
             checkin: renderCheckin,
             parent: renderParent
@@ -628,7 +628,7 @@
             intro: "🥒 はじまりの問い",
             trouble: "😱 困りごと",
             mentor: "👪 メンター登場",
-            create: "✏️ やってみる",
+            verify: "✏️ やってみる",
             imagine: "💭 想像する",
             checkin: "🙋 ふりかえり",
             parent: "🎬 おわりに"
