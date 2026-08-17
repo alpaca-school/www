@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <script>
+        (() => {
+            const pageVersion = "20260817-2";
+            const url = new URL(window.location.href);
+            if (url.searchParams.get("v") !== pageVersion) {
+                url.searchParams.set("v", pageVersion);
+                window.location.replace(url.toString());
+            }
+        })();
+    </script>
+    <title>豚は、どう動く？【知能の窓・沖縄の豚 ep4：身体・運動編】 🐖</title>
+    <script src="../series-nav-data.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        p, li { word-break: normal; overflow-wrap: break-word; line-break: strict; }
+        .speech-bubble { position: relative; min-width: 0; max-width: 100%; }
+        .speech-bubble p { display: block; min-width: 0; max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+        .choice-card { min-width: 0; }
+        .choice-row { display: flex; align-items: flex-start; gap: .75rem; min-width: 0; max-width: 100%; }
+        .choice-row .speech-bubble { flex: 1 1 0; width: 0; }
+        .choice-check { flex: 0 0 auto; }
+        .progress-dots { display: none; }
+        @media (min-width: 640px) { .progress-dots { display: flex; } }
+        .chara-avatar { width: 56px; height: 56px; border-radius: 9999px; object-fit: cover; flex-shrink: 0; }
+        .print-sheet { position: fixed; left: -9999px; top: 0; }
+        @media print {
+            body * { visibility: hidden; }
+            .print-sheet, .print-sheet * { visibility: visible; }
+            .print-sheet { position: absolute; left: 0; top: 0; width: 100%; }
+        }
+        rt { font-size: .6em; color: #ea580c; font-weight: 700; }
+        .furigana-off rt { display: none; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState } = React;
+        const { createRoot } = ReactDOM;
+
+        const MATERIAL = {
+            title: "豚は、どう動く？",
+            series: "知能の窓・沖縄の豚 ep4：身体・運動編",
+            episode: "04",
+            kind: "身体・運動編",
+            subjectGrade: "体育・理科・生活",
+            mi: "身体運動"
+        };
+
+        const INTRO_LINES = [
+  "豚は歩くだけでなく、止まる、鼻先で探す、横になって休むなど、いろいろな動きをする。",
+  "写真や動画を観察し、安全な室内や広場で動きの特徴を身体で表してみよう。"
+];
+        const MENTOR_TEXT = "写真や動画をよく見て、歩く・止まる・鼻先で探す・横になる動きを、安全な場所で小さく表現しよう。実際の豚へ近づく必要はないよ。";
+        const VERIFY_TEXT = "安全な間隔を取り、歩く→止まる→鼻先で探す→横になる、をゆっくり表現しよう。";
+        const IMAGINE_PROMPT = "豚と人の身体で、似ている動きと違う動きを1つずつ挙げるなら？";
+        const STUDENT_MESSAGE = "豚の動きを観察し、身体を観察道具として使ったね。実物へ近づかなくても学べるよ。";
+        const STANDARDS = [
+  "体育：表現運動",
+  "理科・生活：動物の観察"
+];
+        const NOTES = [
+  "実際の豚へ近づく・触る活動を前提にしません。安全な場所で、周囲と距離を取って行います。"
+];
+        const HAS_SINGLE_CORRECT_ANSWER = true;
+
+        const SOURCES = [
+
+        ];
+
+        const ALPACAS = {
+            hari: {
+                name: "ハーリー", color: "red", emoji: "🔥", img: "../img/characters/harly.png",
+                claim: "本物の豚に急に近づいて触れば分かる！",
+                gag: "ズコーッ！と勢いよくすっ転ぶ"
+            },
+            sara: {
+                name: "サラバンジ", color: "blue", emoji: "⚡", img: "../img/characters/sarabanji.png",
+                claim: "速く走る動きだけまねすれば十分！",
+                gag: "バタン！と倒れ、3秒後にムクッ"
+            },
+            gan: {
+                name: "ガンジュー", color: "green", emoji: "😴", img: "../img/characters/ganjuu.png",
+                claim: "目を閉じて想像だけで決める！",
+                gag: "立ったままいびき。肩を叩かれて起きる"
+            },
+            kaa: {
+                name: "カーギー", color: "purple", emoji: "💁‍♀️", img: "../img/characters/carggy.png",
+                claim: "狭い場所でも大きく走り回りましょう！",
+                gag: "前髪を鏡なしでピシッと直す"
+            }
+        };
+        const ALPACA_KEYS = ["hari", "sara", "gan", "kaa"];
+
+        const MENTORS = {
+            chinen: { name: "知念おじぃさん", role: "智（論理・言語）", color: "amber", emoji: "🧓" },
+            tokue: { name: "仲程のヨシおばぁさん", role: "徳（対人・内省）", color: "rose", emoji: "👵" },
+            rikiya: { name: "力也おじぃさん", role: "体（音楽・運動）", color: "teal", emoji: "🧓" },
+            misaki: { name: "マタグワァのシズおばぁさん", role: "感（視覚空間・博物学）", color: "indigo", emoji: "👵" }
+        };
+
+        const QUIZ_CHOICES = [
+            { id: "q1", text: "写真や動画を見て、歩く・止まる・鼻で探す動きを小さく表す", correct: true },
+            { id: "q2", text: "本物の豚へ後ろから急に近づく", correct: false },
+            { id: "q3", text: "机や人にぶつかるほど大きく走る", correct: false },
+            { id: "q4", text: "観察せず豚の動きを一つに決める", correct: false }
+        ];
+
+        function shuffledThreeAlpacas() {
+            const arr = [...ALPACA_KEYS];
+            for (let i = arr.length - 1; i > 0; i -= 1) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr.slice(0, 3);
+        }
+
+        function shuffledQuiz() {
+            const arr = [...QUIZ_CHOICES];
+            for (let i = arr.length - 1; i > 0; i -= 1) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        const SERIES_LIST = typeof PORK_EPISODES !== "undefined" ? PORK_EPISODES : [];
+
+        const PorkEp04App = () => {
+            const [threeKeys] = useState(() => shuffledThreeAlpacas());
+            const [currentSlide, setCurrentSlide] = useState(0);
+            const [guess, setGuess] = useState(null);
+            const [quizChoices] = useState(() => shuffledQuiz());
+            const [quizAnswer, setQuizAnswer] = useState(null);
+            const [imagineAnswer, setImagineAnswer] = useState("");
+            const [memoryAnswer, setMemoryAnswer] = useState("");
+            const [childName, setChildName] = useState("");
+            const [furiganaOn, setFuriganaOn] = useState(true);
+
+            const slideIds = ["intro", "trouble", "mentor", "verify", "imagine", "checkin", "parent"];
+            const episodeIndex = SERIES_LIST.findIndex((episode) => episode.id === "pork-ep04");
+            const prevEpisode = episodeIndex > 0 ? SERIES_LIST[episodeIndex - 1] : null;
+            const nextEpisode = episodeIndex >= 0 && episodeIndex < SERIES_LIST.length - 1 ? SERIES_LIST[episodeIndex + 1] : null;
+            const selectedChoice = quizChoices.find((choice) => choice.id === quizAnswer);
+            const mentor = MENTORS.rikiya;
+
+            const renderIntro = () => (
+                <div className="space-y-6">
+                    <div className="text-center">
+                        <div className="text-6xl mb-4">🐖</div>
+                        <h2 className="text-2xl font-bold text-orange-600">{MATERIAL.title}</h2>
+                        <span className="inline-block mt-2 px-3 py-1 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
+                    </div>
+                    <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 space-y-3">
+                        {INTRO_LINES.map((line) => <p key={line}>{line}</p>)}
+                    </div>
+                </div>
+            );
+
+            const renderTrouble = () => (
+                <div className="space-y-5">
+                    <h2 className="text-2xl font-bold text-red-600 text-center">😱 困りごと</h2>
+                    {threeKeys.map((key) => {
+                        const alpaca = ALPACAS[key];
+                        return (
+                            <button
+                                key={key}
+                                onClick={() => setGuess(key)}
+                                className={`choice-card w-full text-left p-4 rounded-lg border-2 ${guess === key ? "border-orange-500 bg-orange-50" : "border-gray-200"}`}
+                            >
+                                <div className="choice-row">
+                                    <img className="chara-avatar" src={alpaca.img} alt={alpaca.name} />
+                                    <div className="speech-bubble flex-1 min-w-0">
+                                        <p className="font-bold">{alpaca.name}</p>
+                                        <p className="text-sm">「{alpaca.claim}」</p>
+                                        <p className="text-xs text-gray-500">{alpaca.gag}</p>
+                                    </div>
+                                    <span className="choice-check">{guess === key ? "✓" : ""}</span>
+                                </div>
+                            </button>
+                        );
+                    })}
+                    {guess === null && <p className="text-center text-sm text-orange-500">どれかを選ぶと次へ進めるよ</p>}
+                </div>
+            );
+
+            const renderMentor = () => (
+                <div className="space-y-5">
+                    <div className="text-center text-5xl">{mentor.emoji}</div>
+                    <h2 className="text-xl font-bold text-amber-700 text-center">{mentor.name}が教えてくれた</h2>
+                    <div className="bg-amber-50 rounded-lg p-5"><p>{MENTOR_TEXT}</p></div>
+                    <div className="grid gap-2 text-sm">
+                        {Object.entries(MENTORS)
+                            .filter(([key]) => false || key !== "rikiya")
+                            .slice(0, 3)
+                            .map(([key, person]) => (
+                                <p key={key} className="bg-gray-50 p-3 rounded">{person.name}「それぞれの知能の窓からも確かめてみよう」</p>
+                            ))}
+                    </div>
+                </div>
+            );
+
+            const renderVerify = () => (
+                <div className="space-y-5">
+                    <h2 className="text-2xl font-bold text-green-600 text-center">✅ やってみよう</h2>
+                    <p className="bg-green-50 p-4 rounded">{VERIFY_TEXT}</p>
+                    <div className="grid gap-2">
+                        {quizChoices.map((choice) => (
+                            <button
+                                key={choice.id}
+                                onClick={() => setQuizAnswer(choice.id)}
+                                className={`choice-card p-3 rounded-lg border-2 text-left ${quizAnswer === choice.id ? "border-green-500 bg-green-50" : "border-gray-200"}`}
+                            >
+                                {choice.text}
+                            </button>
+                        ))}
+                    </div>
+                    {selectedChoice && (
+                        <div className="bg-gray-100 p-4 rounded text-sm">
+                            {!HAS_SINGLE_CORRECT_ANSWER
+                                ? "どの選択にも正解・不正解はないよ。選んだ理由を大切にしよう。"
+                                : selectedChoice.correct
+                                    ? "⭕ 資料と活動の目的に合った選び方だね。"
+                                    : "もう一度、メンターの説明と安全・尊重の約束を確かめよう。"}
+                        </div>
+                    )}
+                </div>
+            );
+
+            const renderImagine = () => (
+                <div className="space-y-5">
+                    <h2 className="text-2xl font-bold text-pink-600 text-center">💭 想像する</h2>
+                    <p className="bg-pink-50 p-5 rounded">{IMAGINE_PROMPT}</p>
+                    <textarea
+                        value={imagineAnswer}
+                        onChange={(event) => setImagineAnswer(event.target.value)}
+                        rows="4"
+                        className="w-full border rounded p-3"
+                        placeholder="きみの考え（正解は一つではありません）"
+                    />
+                </div>
+            );
+
+            const renderCheckin = () => (
+                <div className="space-y-5">
+                    <h2 className="text-2xl font-bold text-teal-600 text-center">🙋 ふりかえり</h2>
+                    <textarea
+                        value={memoryAnswer}
+                        onChange={(event) => setMemoryAnswer(event.target.value)}
+                        rows="4"
+                        className="w-full border rounded p-3"
+                        placeholder="今日、心に残ったこと"
+                    />
+                    <p className="bg-indigo-50 p-4 rounded text-sm text-center">
+                        {MATERIAL.episode === "09" ? "沖縄の豚シリーズは、ここで一区切りです。ありがとう。" : `次回はep${Number(MATERIAL.episode) + 1}へ進むよ。`}
+                    </p>
+                </div>
+            );
+
+            const renderParent = () => (
+                <div className="space-y-4">
+                    <h2 className="text-2xl font-bold text-yellow-700 text-center">🎬 おわりに</h2>
+                    <div className="bg-orange-50 p-4 rounded">
+                        <p className="text-xs font-bold text-orange-700">🧑‍🎓 児童生徒のみなさんへ</p>
+                        <p className="text-sm">{STUDENT_MESSAGE}</p>
+                    </div>
+                    <div className="bg-yellow-50 p-4 rounded">
+                        <p className="text-xs font-bold">👪 保護者・支援者の方へ（学習指導要領との対応）</p>
+                        <ul className="text-xs list-disc list-inside">
+                            {STANDARDS.map((item) => <li key={item}>{item}</li>)}
+                        </ul>
+                        {NOTES.map((note) => <p key={note} className="text-xs text-gray-500 mt-2">※ {note}</p>)}
+                    </div>
+                    {SOURCES.length > 0 && (
+                        <div className="bg-yellow-50 p-4 rounded">
+                            <p className="text-xs font-bold">📚 出典・参考資料</p>
+                            <ul className="text-xs list-disc list-inside">
+                                {SOURCES.map((source) => (
+                                    <li key={source.url}>
+                                        <a className="text-blue-600 underline" href={source.url} target="_blank" rel="noopener noreferrer">{source.label}</a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                    <div className="bg-white border-2 border-dashed p-4 rounded">
+                        <input value={childName} onChange={(event) => setChildName(event.target.value)} className="w-full border rounded p-2 mb-2" placeholder="名前（任意）" />
+                        <button onClick={() => window.print()} className="w-full bg-yellow-500 text-white rounded p-2">学習記録シートを印刷</button>
+                    </div>
+                    <div className="border-t pt-4">
+                        <div className="flex gap-2">
+                            {prevEpisode
+                                ? <a className="flex-1 border p-2 rounded text-center" href={`../${prevEpisode.url}`}>← {prevEpisode.short}</a>
+                                : <span className="flex-1 border p-2 text-gray-300 text-center">最初</span>}
+                            {nextEpisode
+                                ? <a className="flex-1 bg-orange-500 text-white p-2 rounded text-center" href={`../${nextEpisode.url}`}>{nextEpisode.short} →</a>
+                                : <span className="flex-1 border p-2 text-gray-300 text-center">最終話</span>}
+                        </div>
+                        <a className="block text-center underline text-orange-600 mt-2" href="../matrix-library.html">他のテーマも見る（教材一覧）</a>
+                    </div>
+                    <div className="border-t border-dashed pt-4">
+                        <a className="block text-center bg-gray-700 text-white rounded-full p-2" href={FEEDBACK_FORM_URL}>💬 ご意見・ご要望</a>
+                    </div>
+                </div>
+            );
+
+            const renderSlide = () => {
+                const renderers = {
+                    intro: renderIntro,
+                    trouble: renderTrouble,
+                    mentor: renderMentor,
+                    verify: renderVerify,
+                    imagine: renderImagine,
+                    checkin: renderCheckin,
+                    parent: renderParent
+                };
+                const Renderer = renderers[slideIds[currentSlide]];
+                return <Renderer />;
+            };
+
+            return (
+                <div className={`min-h-screen bg-orange-50 ${furiganaOn ? "" : "furigana-off"}`}>
+                    <main className="max-w-2xl mx-auto p-4 sm:p-6">
+                        <div className="flex justify-between mb-4">
+                            <a href="../matrix-library.html">← 教材一覧</a>
+                            <button onClick={() => setFuriganaOn(!furiganaOn)} className="border rounded px-2">🔤 ふりがな {furiganaOn ? "ON" : "OFF"}</button>
+                        </div>
+                        <header className="text-center mb-5">
+                            <p className="text-xs text-indigo-500 font-bold">知能の窓・沖縄の豚 ep{Number(MATERIAL.episode)}：{MATERIAL.kind}</p>
+                            <h1 className="text-2xl font-bold text-orange-600">{MATERIAL.title} 🐖</h1>
+                        </header>
+                        <div className="mb-4">
+                            <div className="h-2 bg-gray-200 rounded">
+                                <div className="h-2 bg-orange-500 rounded" style={{ width: `${(currentSlide + 1) / 7 * 100}%` }} />
+                            </div>
+                        </div>
+                        <section className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8 mb-6 min-h-96">{renderSlide()}</section>
+                        {slideIds[currentSlide] === "parent" && (
+                            <div className="bg-orange-50 border p-4 rounded mb-5 text-center">
+                                <p className="font-bold text-orange-700">🌱 制作をアシストする</p>
+                                <p className="text-xs my-2">ここでの学びは、記録され、次の学びへと受け継がれていきます。その循環を支えるちからになっていただけたら嬉しいです。</p>
+                                {SUPPORT_LINKS.map((support) => <a key={support.label} className="inline-block border rounded-full px-3 py-1 m-1" href={support.url}>{support.label}</a>)}
+                                <a className="block text-xs underline mt-2" href="../tokushoho.html">特定商取引法に基づく表記</a>
+                            </div>
+                        )}
+                        <nav className="flex justify-between items-center">
+                            <button disabled={currentSlide === 0} onClick={() => setCurrentSlide(currentSlide - 1)} className="px-3 sm:px-5 py-3 bg-orange-500 text-white rounded disabled:bg-gray-200">まえへ</button>
+                            <div className="progress-dots space-x-2">
+                                {slideIds.map((id, index) => <i key={id} className={`w-2 h-2 rounded-full ${index === currentSlide ? "bg-orange-500" : "bg-gray-300"}`} />)}
+                            </div>
+                            <button
+                                disabled={currentSlide === 6 || (slideIds[currentSlide] === "trouble" && guess === null)}
+                                onClick={() => setCurrentSlide(currentSlide + 1)}
+                                className="px-3 sm:px-5 py-3 bg-orange-500 text-white rounded disabled:bg-gray-200"
+                            >
+                                {slideIds[currentSlide] === "checkin" ? "おわりに" : "つぎへ"}
+                            </button>
+                        </nav>
+                    </main>
+                    <div className="print-sheet w-[700px] p-10 bg-white">
+                        <h1 className="text-xl font-bold">学習記録シート</h1>
+                        <p>教材：{MATERIAL.title}（{MATERIAL.series}）</p>
+                        <p>名前：{childName || "＿＿＿＿＿＿"}</p>
+                        <p>想像する問題：{imagineAnswer || "（記入なし）"}</p>
+                        <p>ふりかえり：{memoryAnswer || "（記入なし）"}</p>
+                    </div>
+                </div>
+            );
+        };
+
+        createRoot(document.getElementById("root")).render(<PorkEp04App />);
+    </script>
+</body>
+</html>

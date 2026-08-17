@@ -46,6 +46,71 @@ const YAGO_EPISODES = [
   { id: "yago-ep01", short: "ep1：論理・数学編", title: "同じ名字が3軒！どうやって呼び分ける？", url: "bunka/yago_ep01.html" },
 ];
 
+// 知能の窓・沖縄の綱引きシリーズ（2026-08-16、全9話完成）
+const TSUNAHIKI_EPISODES = [
+  { id: "tsunahiki-ep01", short: "ep1：論理・数学編", title: "大綱づくり、わら束はあといくつ？", url: "bunka/tsunahiki_ep01.html" },
+  { id: "tsunahiki-ep02", short: "ep2：言語編", title: "引く？曳く？挽く？—綱引きの名前を読む", url: "bunka/tsunahiki_ep02.html" },
+  { id: "tsunahiki-ep03", short: "ep3：音楽編", title: "綱引きは、どんな音で動く？", url: "bunka/tsunahiki_ep03.html" },
+  { id: "tsunahiki-ep04", short: "ep4：身体・運動編", title: "みんなの力を、どうやってそろえる？", url: "bunka/tsunahiki_ep04.html" },
+  { id: "tsunahiki-ep05", short: "ep5：博物学編", title: "稲わらが、どうして大綱になる？", url: "bunka/tsunahiki_ep05.html" },
+  { id: "tsunahiki-ep06", short: "ep6：視覚・空間編", title: "雄綱・雌綱は、どうつながる？", url: "bunka/tsunahiki_ep06.html" },
+  { id: "tsunahiki-ep07", short: "ep7：内省編", title: "勝つ・負けると、わたしの心はどう動く？", url: "bunka/tsunahiki_ep07.html" },
+  { id: "tsunahiki-ep08", short: "ep8：対人編", title: "どうして地域みんなで大綱を作れる？", url: "bunka/tsunahiki_ep08.html" },
+  { id: "tsunahiki-ep09", short: "ep9：集・表現編（完）", title: "わたしの地域の綱引き文化地図をつくろう", url: "bunka/tsunahiki_ep09.html" },
+];
+
+// 知能の窓・ゴーヤーシリーズ（2026-08-17、全9話完成）
+const GOYA_EPISODES = [
+  { id: "goya-ep01", short: "ep1：論理・数学編", title: "出荷できるゴーヤーは何本？", url: "bunka/goya_ep01.html" },
+  { id: "goya-ep02", short: "ep2：言語編", title: "ゴーヤーって、どんな野菜？", url: "bunka/goya_ep02.html" },
+  { id: "goya-ep03", short: "ep3：音楽編", title: "ゴーヤーチャンプルーの台所は、どんな音？", url: "bunka/goya_ep03.html" },
+  { id: "goya-ep04", short: "ep4：身体・運動編", title: "つるは、どうやって上へ行く？", url: "bunka/goya_ep04.html" },
+  { id: "goya-ep05", short: "ep5：博物学編", title: "ゴーヤーは、どうやって実になる？", url: "bunka/goya_ep05.html" },
+  { id: "goya-ep06", short: "ep6：視覚・空間編", title: "緑のカーテンを設計しよう", url: "bunka/goya_ep06.html" },
+  { id: "goya-ep07", short: "ep7：内省編", title: "苦いって、きらいでいい？", url: "bunka/goya_ep07.html" },
+  { id: "goya-ep08", short: "ep8：対人編", title: "畑から食卓まで、誰がつないでいる？", url: "bunka/goya_ep08.html" },
+  { id: "goya-ep09", short: "ep9：集・表現編（完）", title: "わたしのゴーヤー文化カードをつくろう", url: "bunka/goya_ep09.html" },
+];
+
+// 知能の窓・沖縄の豚シリーズ（2026-08-17着手。ep1のみ実装済み）
+const PORK_EPISODES = [
+  { id: "pork-ep01", short: "ep1：論理・数学編", title: "550頭から、2万頭をこえる？", url: "bunka/buta_ep01.html" },
+  { id: "pork-ep02", short: "ep2：言語編", title: "ミミガーって、どこのこと？", url: "bunka/buta_ep02.html" },
+  { id: "pork-ep03", short: "ep3：音楽編", title: "ミミガー、チラガー、どんなリズム？", url: "bunka/buta_ep03.html" },
+  { id: "pork-ep04", short: "ep4：身体・運動編", title: "豚は、どう動く？", url: "bunka/buta_ep04.html" },
+  { id: "pork-ep05", short: "ep5：博物学編", title: "『鳴き声以外』って、本当？", url: "bunka/buta_ep05.html" },
+  { id: "pork-ep06", short: "ep6：視覚・空間編", title: "一頭の豚を、地図にしよう", url: "bunka/buta_ep06.html" },
+  { id: "pork-ep07", short: "ep7：内省編", title: "『いただきます』を考える", url: "bunka/buta_ep07.html" },
+  { id: "pork-ep08", short: "ep8：対人編", title: "豚料理は、なぜみんなで食べる？", url: "bunka/buta_ep08.html" },
+  { id: "pork-ep09", short: "ep9：集・表現編（完）", title: "沖縄の豚文化を伝えよう", url: "bunka/buta_ep09.html" },
+];
+
+// 知能の窓・グルクンシリーズ（2026-08-17、全9話完成）
+const GURUKUN_EPISODES = [
+  { id: "gurukun-ep01", short: "ep1：論理・数学編", title: "グルクン、何箱できる？", url: "bunka/gurukun_ep01.html" },
+  { id: "gurukun-ep02", short: "ep2：言語編", title: "グルクンって、魚の名前？", url: "bunka/gurukun_ep02.html" },
+  { id: "gurukun-ep03", short: "ep3：音楽編", title: "群れの動きを、リズムにできる？", url: "bunka/gurukun_ep03.html" },
+  { id: "gurukun-ep04", short: "ep4：身体・運動編", title: "追い込み漁って、どう動く？", url: "bunka/gurukun_ep04.html" },
+  { id: "gurukun-ep05", short: "ep5：博物学編", title: "グルクンは、どんな海で暮らす？", url: "bunka/gurukun_ep05.html" },
+  { id: "gurukun-ep06", short: "ep6：視覚・空間編", title: "魚・人・網を、上から見たら？", url: "bunka/gurukun_ep06.html" },
+  { id: "gurukun-ep07", short: "ep7：内省編", title: "わたしにとって「県魚」って何？", url: "bunka/gurukun_ep07.html" },
+  { id: "gurukun-ep08", short: "ep8：対人編", title: "一尾のグルクンに、何人が関わる？", url: "bunka/gurukun_ep08.html" },
+  { id: "gurukun-ep09", short: "ep9：集・表現編（完）", title: "「一尾の旅」を伝えよう", url: "bunka/gurukun_ep09.html" },
+];
+
+// 知能の窓・ムーチーシリーズ（2026-08-17、全9話完成）
+const MUCHI_EPISODES = [
+  { id: "muchi-ep01", short: "ep1：論理・数学編", title: "ムーチー、いくつ作る？", url: "bunka/muchi_ep01.html" },
+  { id: "muchi-ep02", short: "ep2：言語編", title: "ムーチーって、どんな行事？", url: "bunka/muchi_ep02.html" },
+  { id: "muchi-ep03", short: "ep3：音楽編", title: "ムーチーを作る音、いくつ聞こえる？", url: "bunka/muchi_ep03.html" },
+  { id: "muchi-ep04", short: "ep4：身体・運動編", title: "月桃の葉で、どう包む？", url: "bunka/muchi_ep04.html" },
+  { id: "muchi-ep05", short: "ep5：博物学編", title: "月桃って、どんな植物？", url: "bunka/muchi_ep05.html" },
+  { id: "muchi-ep06", short: "ep6：視覚・空間編", title: "ムーチーの包み方を図にしてみよう", url: "bunka/muchi_ep06.html" },
+  { id: "muchi-ep07", short: "ep7：内省編", title: "願うって、どんな気持ち？", url: "bunka/muchi_ep07.html" },
+  { id: "muchi-ep08", short: "ep8：対人編", title: "ムーチーは、誰と誰をつなぐ？", url: "bunka/muchi_ep08.html" },
+  { id: "muchi-ep09", short: "ep9：集・表現編（完）", title: "わたしの家のムーチー記録を残そう", url: "bunka/muchi_ep09.html" },
+];
+
 const BENIIMO_EPISODES = [
   { id: "beniimo-ep1", short: "ep1：論理・数学編", title: "紅芋チップス、あと何袋たりない？", url: "rekishi/beniimo_ep1_ronri.html" },
   { id: "beniimo-ep2", short: "ep2：言語編", title: "紅芋を持ってきたのは誰？", url: "rekishi/beniimo_ep2_gengo.html" },

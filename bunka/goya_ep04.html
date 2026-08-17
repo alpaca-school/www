@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <script>
+        (() => {
+            const pageVersion = "20260816-3";
+            const url = new URL(window.location.href);
+            if (url.searchParams.get("v") !== pageVersion) {
+                url.searchParams.set("v", pageVersion);
+                window.location.replace(url.toString());
+            }
+        })();
+    </script>
+    <title>つるは、どうやって上へ行く？【知能の窓・ゴーヤー ep4：身体・運動編】 🥒</title>
+    <script src="../series-nav-data.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        p, li {
+            word-break: normal;
+            overflow-wrap: break-word;
+            line-break: strict;
+        }
+        .speech-bubble {
+            position: relative;
+            min-width: 0;
+            max-width: 100%;
+        }
+        .speech-bubble p {
+            display: block;
+            min-width: 0;
+            max-width: 100%;
+            white-space: normal;
+            word-break: normal;
+            overflow-wrap: anywhere;
+            line-break: anywhere;
+        }
+        .choice-card {
+            min-width: 0;
+        }
+        .choice-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            min-width: 0;
+            max-width: 100%;
+        }
+        .choice-row .speech-bubble {
+            flex: 1 1 0;
+            width: 0;
+        }
+        .choice-check {
+            flex: 0 0 auto;
+        }
+        .progress-dots {
+            display: none;
+        }
+        @media (min-width: 640px) {
+            .progress-dots {
+                display: flex;
+            }
+        }
+        .speech-bubble::after {
+            content: "";
+            position: absolute;
+            left: -10px;
+            top: 18px;
+            border-width: 8px 10px 8px 0;
+            border-style: solid;
+            border-color: transparent currentColor transparent transparent;
+        }
+        .chara-avatar {
+            width: 56px; height: 56px; border-radius: 9999px; object-fit: cover;
+            border: 2px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.15); background: #fff;
+            flex-shrink: 0;
+        }
+        .print-sheet { position: fixed; left: -9999px; top: 0; }
+        @media print {
+            body * { visibility: hidden; }
+            .print-sheet, .print-sheet * { visibility: visible; }
+            .print-sheet { position: absolute; left: 0; top: 0; width: 100%; }
+        }
+        rt { font-size: 0.6em; color: #15803d; font-weight: 700; }
+        .furigana-off rt { display: none; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+        const { createRoot } = ReactDOM;
+
+        // series-nav-data.jsに「知能の窓・ゴーヤー」シリーズはまだ登録されていないため、
+        // 存在すればそれを使い、無ければこのファイル内のフォールバックを使う防御的な参照にする。
+        const GOYA_LIST = (typeof GOYA_EPISODES !== "undefined") ? GOYA_EPISODES : [
+          { id: "goya-ep04", short: "ep4：身体・運動編", title: "つるは、どうやって上へ行く？", url: "bunka/goya_ep04.html" }
+        ];
+        const SAFE_FEEDBACK_FORM_URL = (typeof FEEDBACK_FORM_URL !== "undefined") ? FEEDBACK_FORM_URL : "【要記入：Googleフォームのリンクをここに設定】";
+        const SAFE_SUPPORT_LINKS = (typeof SUPPORT_LINKS !== "undefined") ? SUPPORT_LINKS : [];
+
+        const ChevronRight = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m9 18 6-6-6-6"/></svg>
+        );
+        const ChevronLeft = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m15 18-6-6 6-6"/></svg>
+        );
+
+        // 4アルパカ（困りごとを持ち込む役。誰も正解を知らない）
+        const ALPACAS = {
+          hari: {
+            name: "ハーリー", color: "red", emoji: "🔥", img: "../img/characters/harly.png",
+            guess: "まっすぐ上にしか伸びない",
+            line: "つるは絶対まっすぐ上にしか伸びないっしょ！横になんか行かないさ！",
+            gag: "（効果音：ズコーッ！ハーリー、ネットにひっかかって勢いよくすっ転ぶ）"
+          },
+          sara: {
+            name: "サラバンジ", color: "blue", emoji: "⚡", img: "../img/characters/sarabanji.png",
+            guess: "勝手にどこにでも巻きつく",
+            line: "つるって生き物っしょ！勝手にどこでも好きな場所に巻きつくから、放っておけば大丈夫さ！",
+            gag: "（サラバンジ、その場でバタン！と大げさに倒れる→3秒後にムクッと起き上がる）"
+          },
+          gan: {
+            name: "ガンジュー", color: "green", emoji: "😴", img: "../img/characters/ganjuu.png",
+            guess: "1回巻きついたら、もう動かない",
+            line: "えっと…一度どこかに巻きついたら、そのつるはもう…そこから動かない、と思います…",
+            gag: "（ガンジュー、立ったまま本気のいびき→力也おじぃさんに肩を叩かれてハッと飛び起きる）"
+          },
+          kaa: {
+            name: "カーギー", color: "purple", emoji: "💁‍♀️", img: "../img/characters/carggy.png",
+            guess: "とにかく一番高い場所を目指す",
+            line: "つるはきっと、一番高いところだけを目指してまっすぐ進むはずです。回り道はしないはず。",
+            gag: "（カーギー、風で乱れた前髪を鏡もなしに一瞬でピシッと直しながら、少し首をかしげる）"
+          }
+        };
+        const ALPACA_KEYS = ["hari", "sara", "gan", "kaa"];
+
+        // 4メンター（おじぃさん・おばぁさん）。多重知能8分類を2つずつ担当する「知能の窓」シリーズの案内役
+        const MENTORS = {
+          chinen: { name: "知念おじぃさん", role: "智（論理・言語）", color: "amber", emoji: "🧓" },
+          tokue: { name: "仲程のヨシおばぁさん", role: "徳（対人・内省）", color: "rose", emoji: "👵" },
+          rikiya: { name: "力也おじぃさん", role: "体（音楽・運動）", color: "teal", emoji: "🧓" },
+          shizu: { name: "マタグワァのシズおばぁさん", role: "感（視覚空間・博物学）", color: "indigo", emoji: "👵" }
+        };
+
+        const COLOR_MAP = {
+          red: { bg: "bg-red-50", border: "border-red-300", text: "text-red-700", solid: "bg-red-500" },
+          blue: { bg: "bg-blue-50", border: "border-blue-300", text: "text-blue-700", solid: "bg-blue-500" },
+          green: { bg: "bg-green-50", border: "border-green-300", text: "text-green-700", solid: "bg-green-500" },
+          purple: { bg: "bg-purple-50", border: "border-purple-300", text: "text-purple-700", solid: "bg-purple-500" },
+          amber: { bg: "bg-amber-50", border: "border-amber-300", text: "text-amber-700", solid: "bg-amber-500" },
+          rose: { bg: "bg-rose-50", border: "border-rose-300", text: "text-rose-700", solid: "bg-rose-500" },
+          teal: { bg: "bg-teal-50", border: "border-teal-300", text: "text-teal-700", solid: "bg-teal-500" },
+          indigo: { bg: "bg-indigo-50", border: "border-indigo-300", text: "text-indigo-700", solid: "bg-indigo-500" }
+        };
+
+        // キャラ画像。アルパカは画像→失敗時絵文字。メンターは画像未整備のため絵文字のみ
+        const Avatar = ({ person }) => {
+          const [failed, setFailed] = useState(false);
+          if (!person.img || failed) {
+            return (
+              <div className={`chara-avatar flex items-center justify-center text-2xl ${COLOR_MAP[person.color].bg}`}>
+                {person.emoji}
+              </div>
+            );
+          }
+          return (
+            <img
+              src={person.img}
+              alt={person.name}
+              className="chara-avatar"
+              onError={() => setFailed(true)}
+            />
+          );
+        };
+
+        function shuffledThreeAlpacas() {
+          const arr = [...ALPACA_KEYS];
+          for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+          }
+          return arr.slice(0, 3);
+        }
+
+        // COCOLOプラン（ホームスクーラー等の学習記録）向けの教材メタ情報
+        const MATERIAL = {
+          title: "つるは、どうやって上へ行く？",
+          series: "知能の窓・ゴーヤー ep4：身体・運動編",
+          subjectGrade: "理科・生活（小学生〜）"
+        };
+
+        const GoyaApp = () => {
+          const [threeKeys] = useState(() => shuffledThreeAlpacas());
+          const [currentSlide, setCurrentSlide] = useState(0);
+          const [guess, setGuess] = useState(null);
+          const [imagineAnswer, setImagineAnswer] = useState("");
+          const [childName, setChildName] = useState("");
+          const [canDoIt, setCanDoIt] = useState(null);
+          const [memoryAnswer, setMemoryAnswer] = useState("");
+          const [furiganaOn, setFuriganaOn] = useState(true);
+          const [quizChoice, setQuizChoice] = useState(null);
+
+          const QUIZ_CHOICES = [
+            { id: "a", label: "まっすぐ上にだけ伸びる", correct: false },
+            { id: "b", label: "上へ・横へ・からむ、を組み合わせながら広がる", correct: true },
+            { id: "c", label: "一度巻きついたら、二度と動かない", correct: false },
+            { id: "d", label: "一番高い場所だけを目指して一直線に進む", correct: false },
+          ];
+          const isQuizCorrect = quizChoice ? QUIZ_CHOICES.find((c) => c.id === quizChoice).correct : null;
+
+          const slideIds = ["intro", "trouble", "mentor", "verify", "imagine", "checkin", "parent"];
+          const episodeIndex = GOYA_LIST.findIndex((e) => e.id === "goya-ep04");
+          const prevEpisode = episodeIndex > 0 ? GOYA_LIST[episodeIndex - 1] : null;
+          const nextEpisode = episodeIndex >= 0 && episodeIndex < GOYA_LIST.length - 1 ? GOYA_LIST[episodeIndex + 1] : null;
+          const total = slideIds.length;
+
+          const nextSlide = () => setCurrentSlide((p) => Math.min(p + 1, total - 1));
+          const prevSlide = () => setCurrentSlide((p) => Math.max(p - 1, 0));
+
+          const renderIntro = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-6xl mb-4">🥒</div>
+                <h2 className="text-2xl font-bold text-green-600">ゴーヤーの<ruby>蔓<rt>つる</rt></ruby>、上へ行きたいだけ？</h2>
+                <span className="inline-block mt-2 px-3 py-1 text-xs font-bold rounded-full bg-green-100 text-green-700">📚 {MATERIAL.subjectGrade}</span>
+              </div>
+              <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 space-y-3">
+                <p>プランターのゴーヤーが育ってきて、細い<ruby>蔓<rt>つる</rt></ruby>がにょきにょき伸びてきました。近くにはネットと支柱が立ててあります。</p>
+                <p>この<ruby>蔓<rt>つる</rt></ruby>は、これからどうやってネットや支柱を使って広がっていくのでしょう。</p>
+                <p>きみの体を使って、その動きを再現できるかな？</p>
+              </div>
+            </div>
+          );
+
+          const renderTrouble = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">😱</div>
+                <h2 className="text-xl font-bold text-red-600 mb-1">困りごと発生！</h2>
+                <p className="text-gray-600">3人のアルパカが、それぞれ違う予想でゴーヤーの<ruby>蔓<rt>つる</rt></ruby>の動きを説明しようとした。きみは、誰の考え方に一番近いと思う？</p>
+              </div>
+              <div className="grid gap-4">
+                {threeKeys.map((key) => {
+                  const c = ALPACAS[key];
+                  const cc = COLOR_MAP[c.color];
+                  const selected = guess === key;
+                  return (
+                    <div
+                      key={key}
+                      onClick={() => setGuess(key)}
+                      className={`choice-card p-4 rounded-lg border-2 cursor-pointer transition-all ${cc.bg} ${
+                        selected ? `${cc.border} ring-2 ring-offset-1 ring-${c.color}-400` : "border-gray-200 hover:border-gray-300"
+                      }`}
+                    >
+                      <div className="choice-row">
+                        <Avatar person={c} />
+                        <div className={`speech-bubble flex-1 min-w-0 rounded-lg p-3 ${cc.text} bg-white/70`}>
+                          <p className={`font-bold ${cc.text}`}>{c.name}：{c.guess}？</p>
+                          <p className="text-sm text-gray-700 mt-1">「{c.line}」</p>
+                        </div>
+                        {selected && (
+                          <div className={`choice-check w-7 h-7 rounded-full ${cc.solid} flex items-center justify-center text-white text-sm shrink-0`}>✓</div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              {!guess && <p className="text-center text-sm text-green-600">↑ どれか1つを選ぶと、次に進めるよ</p>}
+              {guess && (
+                <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
+                  <p>みんな、それぞれ違う予想をしている…。ここは、体育担当の力也おじぃさんに聞いてみよう。</p>
+                </div>
+              )}
+            </div>
+          );
+
+          const renderMentor = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">🧓</div>
+                <h2 className="text-xl font-bold text-teal-600">力也おじぃさんが教えてくれた</h2>
+              </div>
+              <div className={`rounded-lg p-4 space-y-2 ${COLOR_MAP.teal.bg}`}>
+                <div className="flex items-center gap-3 mb-1">
+                  <Avatar person={MENTORS.rikiya} />
+                  <p className="font-bold text-teal-700">{MENTORS.rikiya.name}</p>
+                </div>
+                <p className="text-sm text-gray-700">「よーし、体を動かして確かめてみるかー！ゴーヤーの<ruby>蔓<rt>つる</rt></ruby>は、実は1つの動きだけじゃないんだよ」</p>
+                <p className="text-sm text-gray-700">「まっすぐ『上へ』伸びる場面もあれば、支柱がないところでは『横へ』広がる場面もある。そして、ネットや支柱を見つけたら、くるくると『からむ』んだ」</p>
+                <p className="text-sm text-gray-700">「上へ・横へ・からむ、この3つを組み合わせながら、少しずつ広がっていく。今日はきみの体で、この3つを表現してみよう」</p>
+              </div>
+              <div className="grid gap-3">
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.amber.bg}`}>
+                  <Avatar person={MENTORS.chinen} />
+                  <p className="text-sm text-amber-700">「3つの動きの順番を、頭の中で整理してから体を動かすと分かりやすいさぁ」</p>
+                </div>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.rose.bg}`}>
+                  <Avatar person={MENTORS.tokue} />
+                  <p className="text-sm text-rose-700">「お友達や家族と一緒にやると、もっと楽しくなるはずよ」</p>
+                </div>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.indigo.bg}`}>
+                  <Avatar person={MENTORS.shizu} />
+                  <p className="text-sm text-indigo-700">「<ruby>蔓<rt>つる</rt></ruby>の形をよーく観察する話は、また今度、たっぷり教えるね」</p>
+                </div>
+              </div>
+            </div>
+          );
+
+          const renderVerify = () => {
+            const guessedAlpaca = guess ? ALPACAS[guess] : null;
+            return (
+              <div className="space-y-6">
+                <div className="text-center">
+                  <div className="text-5xl mb-4">✅</div>
+                  <h2 className="text-2xl font-bold text-green-600">やってみよう</h2>
+                </div>
+                <div className="bg-green-50 border-2 border-green-200 rounded-lg p-4 space-y-2">
+                  <p className="font-bold text-green-700 text-sm">体を使って表現してみよう（教室・お部屋の安全な場所で）</p>
+                  <ul className="text-sm text-gray-700 space-y-1 list-disc list-inside">
+                    <li>ひもを1本、ネットに見立てて床や壁に置く（または誰かに持ってもらう）</li>
+                    <li>「上へ」：両手をまっすぐ上にのばして立つ</li>
+                    <li>「横へ」：両手を体の横にゆっくり広げる</li>
+                    <li>「からむ」：ひもに沿って、手や腕をくるくると巻きつけるしぐさをする</li>
+                    <li>この3つを自分の好きな順番で組み合わせて、ゴーヤーの<ruby>蔓<rt>つる</rt></ruby>になりきってみよう</li>
+                  </ul>
+                  <p className="text-xs text-gray-500">※ 実際の誘引・剪定作業（本物のゴーヤーを触る作業）は、この教材では必須にしません。まずは体の動きで理解することが目標です。</p>
+                </div>
+                <div className="bg-white border-2 border-gray-200 rounded-lg p-6">
+                  <p className="font-bold text-gray-700 mb-3">体で表現してみて、ゴーヤーの<ruby>蔓<rt>つる</rt></ruby>がネットや支柱を使って広がる様子を一番よく表しているのはどれ？</p>
+                  <div className="space-y-2">
+                    {QUIZ_CHOICES.map((c) => (
+                      <button
+                        key={c.id}
+                        onClick={() => setQuizChoice(c.id)}
+                        className={`w-full text-left px-4 py-3 rounded-lg border-2 font-medium transition ${
+                          quizChoice === c.id
+                            ? c.correct ? "bg-green-50 border-green-400 text-green-700" : "bg-red-50 border-red-400 text-red-700"
+                            : "bg-white border-gray-200 hover:border-gray-300 text-gray-700"
+                        }`}
+                      >
+                        {c.label}
+                      </button>
+                    ))}
+                  </div>
+                  {quizChoice && (
+                    <p className={`mt-3 text-sm font-bold ${isQuizCorrect ? "text-green-600" : "text-red-500"}`}>
+                      {isQuizCorrect ? "その通り！上へ・横へ・からむ、この3つの動きを組み合わせながら、ゴーヤーの蔓は少しずつ広がっていくんだ。" : "おしい。蔓は1つの動きだけじゃなく、いくつかの動きを組み合わせて広がるよ。もう一度考えてみよう。"}
+                    </p>
+                  )}
+                </div>
+                {guessedAlpaca && (
+                  <div className="rounded-lg p-4 text-center bg-gray-100">
+                    <p className="font-bold text-gray-700">きみが選んだ{guessedAlpaca.name}の「{guessedAlpaca.guess}」という予想は、実際の<ruby>蔓<rt>つる</rt></ruby>の動きとは違っていたね。</p>
+                    <p className="text-xs text-gray-500 mt-2">{guessedAlpaca.gag}</p>
+                  </div>
+                )}
+                <div className="bg-orange-50 rounded-lg p-4 text-sm text-orange-800 text-center">
+                  <p>「1つの動きだけ」ではなく、「上へ・横へ・からむ」を組み合わせるのが、ゴーヤーの<ruby>蔓<rt>つる</rt></ruby>の広がり方だ。</p>
+                </div>
+              </div>
+            );
+          };
+
+          const renderImagine = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">💭</div>
+                <h2 className="text-2xl font-bold text-pink-600">想像してみよう</h2>
+              </div>
+              <div className="bg-pink-50 rounded-lg p-6 space-y-2">
+                <p className="text-lg">安全な場所から、つる性の植物を1つ見つけて観察してみよう。</p>
+                <p className="text-sm text-gray-600">その<ruby>蔓<rt>つる</rt></ruby>は「どこにつかまっている？」フェンス？木の枝？他の植物？　見つけたことを記録してみよう。</p>
+                <p className="text-sm text-gray-500">（正解は一つじゃないよ。見つけたままを書いてみよう）</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">きみの発見を書いてみよう（学習記録シートに残せるよ）</label>
+                <textarea
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400 text-sm"
+                  rows="3"
+                  placeholder="例：庭のフェンスにアサガオの蔓がくるくる巻きついていた"
+                  value={imagineAnswer}
+                  onChange={(e) => setImagineAnswer(e.target.value)}
+                ></textarea>
+              </div>
+            </div>
+          );
+
+          const renderCheckin = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">🙋</div>
+                <h2 className="text-2xl font-bold text-teal-600">ふりかえり</h2>
+              </div>
+              <div className="bg-teal-50 rounded-lg p-6">
+                <p className="font-medium text-teal-800 mb-3">✏️ 力也おじぃさんの「上へ・横へ・からむ」、自分の体で表現できたと思った？</p>
+                <div className="flex flex-wrap gap-2">
+                  {["はい", "いいえ", "わからない"].map((opt) => (
+                    <button
+                      key={opt}
+                      onClick={() => setCanDoIt(opt)}
+                      className={`px-4 py-2 rounded-lg font-bold border-2 transition ${
+                        canDoIt === opt ? "bg-teal-500 text-white border-teal-500" : "bg-white text-teal-700 border-teal-200"
+                      }`}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">✏️ 今日一番心に残ったことを書いてみよう</label>
+                <textarea
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400 text-sm"
+                  rows="3"
+                  placeholder="例：蔓は1つの動きだけじゃなくて、組み合わせて広がると分かった"
+                  value={memoryAnswer}
+                  onChange={(e) => setMemoryAnswer(e.target.value)}
+                ></textarea>
+              </div>
+              <div className="bg-indigo-50 rounded-lg p-4 text-sm text-indigo-700 text-center">
+                <p>次回、知能の窓・ゴーヤー ep5（博物学編）では、ゴーヤーの体そのものをじっくり観察していくよ。お楽しみに。</p>
+              </div>
+            </div>
+          );
+
+          const renderParent = () => (
+            <div className="space-y-4">
+              <div className="text-center">
+                <div className="text-5xl mb-4">🎬</div>
+                <h2 className="text-2xl font-bold text-yellow-700">おわりに</h2>
+              </div>
+              <div className="bg-orange-50 rounded-lg p-4">
+                <p className="text-xs font-bold text-orange-700 mb-2">🧑‍🎓 児童生徒のみなさんへ</p>
+                <p className="text-sm text-gray-700">きょうは、ゴーヤーの<ruby>蔓<rt>つる</rt></ruby>がネットや支柱を使って広がる様子を、体を動かして考えたね。力也おじぃさんが教えてくれた「上へ・横へ・からむ」を組み合わせる考え方、今度、外でつる性の植物を見つけたときにも思い出してみよう。</p>
+              </div>
+              <div className="bg-yellow-50 rounded-lg p-4">
+                <p className="text-xs font-bold text-yellow-800 mb-2">👪 保護者・支援者の方へ（学習指導要領との対応）</p>
+                <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
+                  <li><strong>理科</strong>：植物の成長と体のつくり（つる性植物の特性）</li>
+                  <li><strong>体育</strong>：身体表現、方向・順序を意識した動き</li>
+                  <li><strong>生活科</strong>：身近な自然の観察</li>
+                  <li><strong>総合的な学習の時間</strong>：体験を通した気づきの記録</li>
+                </ul>
+                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓」シリーズのゴーヤー版 ep4です。紅芋・獅子舞・台風シリーズと同じ多重知能（MI）理論に基づき、1つのテーマ（ゴーヤー）を8つの知能の窓（論理・数学／言語／音楽／身体運動／博物学／視覚空間／内省／対人）から順番に描く構成を予定しています。今回は「身体・運動」の窓から、力也おじぃさんがつるの広がり方を体で確かめる方法を教える回でした。</p>
+                <p className="text-xs text-gray-500 mt-1">※ 4アルパカ（ハーリー・サラバンジ・ガンジュー・カーギー）は、「困りごとを持ち込む役」として登場します。3人の予想はランダムに選ばれ、いずれも正解ではありません。「自分たちだけで焦って考えると間違えやすい」「メンターに教わって、体を動かしながら確かめると分かる」という体験そのものが、この教材のねらいです。</p>
+                <p className="text-xs text-gray-500 mt-1">※ 実際にゴーヤーの誘引・剪定作業を行うことは、この教材では必須にしていません。ご家庭や教室で無理のない範囲で、身体表現・ひも・紙などを使って安全に再現することを想定しています。</p>
+              </div>
+              <div className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-4">
+                <p className="text-xs font-bold text-gray-700 mb-2">🖨️ 学習記録シートを作る（COCOLOプラン等の学習記録用）</p>
+                <input
+                  type="text"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 text-sm mb-2"
+                  placeholder="お子さんの名前（記入は任意）"
+                  value={childName}
+                  onChange={(e) => setChildName(e.target.value)}
+                />
+                <button
+                  onClick={() => window.print()}
+                  className="w-full px-4 py-2 bg-yellow-500 text-white rounded-lg font-medium hover:bg-yellow-600 transition-all text-sm"
+                >
+                  学習記録シートを印刷する
+                </button>
+                <p className="text-xs text-gray-400 mt-1">今日の日付・対応教科・取り組んだ内容・保護者確認欄が入った1枚のシートが印刷されます。</p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-gray-200 space-y-2">
+                <p className="text-xs font-bold text-gray-500 text-center">つぎに進む</p>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  {prevEpisode ? (
+                    <a href={"../" + prevEpisode.url} className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-300 text-sm font-bold text-gray-600 hover:bg-gray-50 transition">← {prevEpisode.short}</a>
+                  ) : (
+                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-300">← 最初のエピソード</span>
+                  )}
+                  {nextEpisode ? (
+                    <a href={"../" + nextEpisode.url} className="flex-1 text-center px-3 py-2 rounded-lg bg-green-600 text-white text-sm font-bold hover:bg-green-700 transition">{nextEpisode.short} →</a>
+                  ) : (
+                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-300">最終話</span>
+                  )}
+                </div>
+                <a href="../matrix-library.html" className="block text-center text-sm font-bold text-green-600 hover:text-green-800 underline">他のテーマも見る（教材一覧）</a>
+              </div>
+              <div className="mt-6 pt-4 border-t border-dashed border-gray-300">
+                <div className="bg-gray-50 rounded-lg p-4 text-left">
+                  <p className="text-xs font-bold text-gray-700 mb-2 text-center">💬 ご意見・ご要望</p>
+                  <p className="text-xs text-gray-600 mb-3">「こんな機能が欲しい」「ここが使いにくい」などのご意見をお聞かせください。今後の開発の参考にさせていただきます。</p>
+                  <a href={SAFE_FEEDBACK_FORM_URL} target="_blank" rel="noopener noreferrer" className="block text-center px-4 py-2 bg-gray-700 text-white rounded-full text-sm font-bold hover:bg-gray-800 transition">📋 要望・フィードバックを送る</a>
+                </div>
+              </div>
+            </div>
+          );
+
+          const today = new Date();
+          const todayStr = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
+          const guessedForSheet = guess ? ALPACAS[guess] : null;
+
+          const renderPrintSheet = () => (
+            <div className="print-sheet w-[700px] p-10 bg-white text-black">
+              <h1 className="text-xl font-bold border-b-2 border-black pb-2 mb-4">学習記録シート</h1>
+              <table className="w-full text-sm mb-4">
+                <tbody>
+                  <tr><td className="py-1 pr-4 font-bold w-32">学習日</td><td className="py-1">{todayStr}</td></tr>
+                  <tr><td className="py-1 pr-4 font-bold">お子さんの名前</td><td className="py-1">{childName || "＿＿＿＿＿＿＿＿＿＿"}</td></tr>
+                  <tr><td className="py-1 pr-4 font-bold">教材名</td><td className="py-1">{MATERIAL.title}（{MATERIAL.series}）</td></tr>
+                  <tr><td className="py-1 pr-4 font-bold">対応教科・学年</td><td className="py-1">{MATERIAL.subjectGrade}</td></tr>
+                </tbody>
+              </table>
+              <div className="mb-4 text-xs text-gray-700 bg-gray-50 border border-gray-300 rounded p-3">
+                <p className="font-bold mb-1">学習指導要領との対応</p>
+                <ul className="space-y-0.5 list-disc list-inside">
+                  <li>理科：植物の成長と体のつくり（つる性植物の特性）</li>
+                  <li>体育・生活科・総合：身体表現、身近な自然の観察と記録</li>
+                </ul>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">1. アルパカの困りごとで、一番近いと思った予想</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">
+                  {guessedForSheet ? `${guessedForSheet.name}の「${guessedForSheet.guess}」を選びました。` : "（記入なし）"}
+                </p>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">2. 力也おじぃさんに教わって、実際に確かめた答え</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">ゴーヤーの蔓は「上へ・横へ・からむ」を組み合わせながら、ネットや支柱を使って広がっていく。</p>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">3. 想像する問題への自分の発見</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[3rem]">{imagineAnswer || "（記入なし）"}</p>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">4. 今日一番心に残ったこと</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[3rem]">{memoryAnswer || "（記入なし）"}</p>
+              </div>
+              <div className="mt-8 pt-4 border-t border-gray-400">
+                <p className="text-sm">保護者確認サイン：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+              </div>
+            </div>
+          );
+
+          const slideRenderers = {
+            intro: renderIntro,
+            trouble: renderTrouble,
+            mentor: renderMentor,
+            verify: renderVerify,
+            imagine: renderImagine,
+            checkin: renderCheckin,
+            parent: renderParent
+          };
+          const slideTitles = {
+            intro: "🥒 はじまりの問い",
+            trouble: "😱 困りごと",
+            mentor: "🧓 メンター登場",
+            verify: "✅ やってみる",
+            imagine: "💭 想像する",
+            checkin: "🙋 ふりかえり",
+            parent: "🎬 おわりに"
+          };
+
+          const canGoNext = !(slideIds[currentSlide] === "trouble" && !guess);
+
+          return (
+            <div className={`min-h-screen bg-gradient-to-br from-green-50 to-lime-50 ${furiganaOn ? "" : "furigana-off"}`}>
+              <div className="container mx-auto px-4 py-8 max-w-2xl">
+                <div className="flex items-center justify-between mb-4">
+                  <a href="../matrix-library.html" className="inline-flex items-center gap-1 text-sm font-bold text-green-600 hover:text-green-800">
+                    <ChevronLeft className="w-4 h-4" />教材一覧へ戻る
+                  </a>
+                  <button
+                    onClick={() => setFuriganaOn((f) => !f)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border-2 transition ${
+                      furiganaOn ? "bg-green-600 text-white border-green-600" : "bg-white text-green-700 border-green-300"
+                    }`}
+                  >
+                    🔤 ふりがな {furiganaOn ? "ON" : "OFF"}
+                  </button>
+                </div>
+                <div className="text-center mb-6">
+                  <p className="text-xs font-bold text-indigo-500 mb-1">知能の窓・ゴーヤー ep4：身体・運動編</p>
+                  <h1 className="text-2xl md:text-3xl font-bold text-green-600">つるは、どうやって上へ行く？ 🥒</h1>
+                  <span className="inline-block mt-1 px-2 py-0.5 text-xs font-bold rounded-full bg-green-100 text-green-700">📚 {MATERIAL.subjectGrade}</span>
+                </div>
+
+                <div className="mb-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm text-gray-600">{slideTitles[slideIds[currentSlide]]}</span>
+                    <span className="text-sm text-gray-600">{currentSlide + 1} / {total}</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="bg-green-600 h-2 rounded-full transition-all duration-300" style={{ width: `${((currentSlide + 1) / total) * 100}%` }}></div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8 mb-6 min-h-96">
+                  {slideRenderers[slideIds[currentSlide]]()}
+                </div>
+
+                {slideIds[currentSlide] === "parent" && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-left mb-6">
+                    <p className="text-xs font-bold text-green-700 mb-2 text-center">🌱 制作をアシストする</p>
+                    <p className="text-xs text-gray-600 mb-3">ここでの学びは、記録され、次の学びへと受け継がれていきます。その循環を支えるちからになっていただけたら嬉しいです。</p>
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      {SAFE_SUPPORT_LINKS.map((s) => (
+                        <a key={s.label} href={s.url} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-full text-sm font-bold border-2 border-green-300 text-green-700 bg-white hover:bg-green-100 transition">{s.label}</a>
+                      ))}
+                    </div>
+                    <div className="mt-2 text-center">
+                      <a href="../tokushoho.html" className="text-xs text-gray-400 underline">特定商取引法に基づく表記</a>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex justify-between items-center">
+                  <button
+                    onClick={prevSlide}
+                    disabled={currentSlide === 0}
+                    className={`flex items-center px-3 sm:px-5 py-3 rounded-lg font-medium transition-all ${
+                      currentSlide === 0 ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-green-600 text-white hover:bg-green-700"
+                    }`}
+                  >
+                    <ChevronLeft className="w-5 h-5 mr-1" />まえへ
+                  </button>
+                  <div className="progress-dots space-x-2">
+                    {slideIds.map((id, index) => (
+                      <div key={id} className={`w-2.5 h-2.5 rounded-full ${index === currentSlide ? "bg-green-600" : "bg-gray-300"}`} />
+                    ))}
+                  </div>
+                  <button
+                    onClick={nextSlide}
+                    disabled={currentSlide === total - 1 || !canGoNext}
+                    className={`flex items-center px-3 sm:px-5 py-3 rounded-lg font-medium transition-all ${
+                      currentSlide === total - 1 || !canGoNext ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-green-600 text-white hover:bg-green-700"
+                    }`}
+                  >
+                    {slideIds[currentSlide] === "checkin" ? "おわりに" : "つぎへ"}<ChevronRight className="w-5 h-5 ml-1" />
+                  </button>
+                </div>
+              </div>
+              {renderPrintSheet()}
+            </div>
+          );
+        };
+
+        createRoot(document.getElementById("root")).render(<GoyaApp />);
+    </script>
+</body>
+</html>
