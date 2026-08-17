@@ -98,6 +98,19 @@ const GURUKUN_EPISODES = [
   { id: "gurukun-ep09", short: "ep9：集・表現編（完）", title: "「一尾の旅」を伝えよう", url: "bunka/gurukun_ep09.html" },
 ];
 
+// 知能の窓・ムーチーシリーズ（2026-08-17、全9話完成）
+const MUCHI_EPISODES = [
+  { id: "muchi-ep01", short: "ep1：論理・数学編", title: "ムーチー、いくつ作る？", url: "bunka/muchi_ep01.html" },
+  { id: "muchi-ep02", short: "ep2：言語編", title: "ムーチーって、どんな行事？", url: "bunka/muchi_ep02.html" },
+  { id: "muchi-ep03", short: "ep3：音楽編", title: "ムーチーを作る音、いくつ聞こえる？", url: "bunka/muchi_ep03.html" },
+  { id: "muchi-ep04", short: "ep4：身体・運動編", title: "月桃の葉で、どう包む？", url: "bunka/muchi_ep04.html" },
+  { id: "muchi-ep05", short: "ep5：博物学編", title: "月桃って、どんな植物？", url: "bunka/muchi_ep05.html" },
+  { id: "muchi-ep06", short: "ep6：視覚・空間編", title: "ムーチーの包み方を図にしてみよう", url: "bunka/muchi_ep06.html" },
+  { id: "muchi-ep07", short: "ep7：内省編", title: "願うって、どんな気持ち？", url: "bunka/muchi_ep07.html" },
+  { id: "muchi-ep08", short: "ep8：対人編", title: "ムーチーは、誰と誰をつなぐ？", url: "bunka/muchi_ep08.html" },
+  { id: "muchi-ep09", short: "ep9：集・表現編（完）", title: "わたしの家のムーチー記録を残そう", url: "bunka/muchi_ep09.html" },
+];
+
 const BENIIMO_EPISODES = [
   { id: "beniimo-ep1", short: "ep1：論理・数学編", title: "紅芋チップス、あと何袋たりない？", url: "rekishi/beniimo_ep1_ronri.html" },
   { id: "beniimo-ep2", short: "ep2：言語編", title: "紅芋を持ってきたのは誰？", url: "rekishi/beniimo_ep2_gengo.html" },
