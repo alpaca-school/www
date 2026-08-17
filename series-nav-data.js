@@ -72,6 +72,11 @@ const GOYA_EPISODES = [
   { id: "goya-ep09", short: "ep9：集・表現編（完）", title: "わたしのゴーヤー文化カードをつくろう", url: "bunka/goya_ep09.html" },
 ];
 
+// 知能の窓・沖縄の豚シリーズ（2026-08-17着手。ep1のみ実装済み）
+const PORK_EPISODES = [
+  { id: "pork-ep01", short: "ep1：論理・数学編", title: "550頭から、2万頭をこえる？", url: "bunka/buta_ep01.html" },
+];
+
 const BENIIMO_EPISODES = [
   { id: "beniimo-ep1", short: "ep1：論理・数学編", title: "紅芋チップス、あと何袋たりない？", url: "rekishi/beniimo_ep1_ronri.html" },
   { id: "beniimo-ep2", short: "ep2：言語編", title: "紅芋を持ってきたのは誰？", url: "rekishi/beniimo_ep2_gengo.html" },
