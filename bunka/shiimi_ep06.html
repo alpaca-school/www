@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <script>
+        (() => {
+            const pageVersion = "20260818-1";
+            const url = new URL(window.location.href);
+            if (url.searchParams.get("v") !== pageVersion) {
+                url.searchParams.set("v", pageVersion);
+                window.location.replace(url.toString());
+            }
+        })();
+    </script>
+    <title>沖縄のどこで、どう違う？【知能の窓・シーミー ep6：視覚・空間編】 🗺️</title>
+    <script src="../series-nav-data.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        p, li { word-break: normal; overflow-wrap: break-word; line-break: strict; }
+        .speech-bubble { position: relative; min-width: 0; max-width: 100%; }
+        .speech-bubble p { display: block; min-width: 0; max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+        .choice-card { min-width: 0; }
+        .choice-row { display: flex; align-items: flex-start; gap: .75rem; min-width: 0; max-width: 100%; }
+        .choice-row .speech-bubble { flex: 1 1 0; width: 0; }
+        .choice-check { flex: 0 0 auto; }
+        .progress-dots { display: none; }
+        @media (min-width: 640px) { .progress-dots { display: flex; } }
+        .chara-avatar { width: 56px; height: 56px; border-radius: 9999px; object-fit: cover; flex-shrink: 0; }
+        .print-sheet { position: fixed; left: -9999px; top: 0; }
+        @media print {
+            body * { visibility: hidden; }
+            .print-sheet, .print-sheet * { visibility: visible; }
+            .print-sheet { position: absolute; left: 0; top: 0; width: 100%; }
+        }
+        rt { font-size: .6em; color: #ea580c; font-weight: 700; }
+        .furigana-off rt { display: none; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState } = React;
+        const { createRoot } = ReactDOM;
+
+        const MATERIAL = {
+            title: "沖縄のどこで、どう違う？",
+            series: "知能の窓・シーミー ep6：視覚・空間編",
+            episode: "06",
+            kind: "視覚・空間編",
+            subjectGrade: "社会・図画工作",
+            mi: "視覚空間"
+        };
+        const INTRO_LINES = [
+            "シーミー（清明祭）は、沖縄のどこでも同じ形で行われているのかな？地図に色や記号を置いて、確かめてみよう。",
+            "ここで使うのは、公的な資料でわかっている広い地域の違いだけ。1軒1軒のお墓の場所は地図に置かないよ。"
+        ];
+        const MENTOR_TEXT = "地図はね、『ぜんぶ塗りつぶす道具』じゃないんだよ。わかっている場所とわからない場所を、はっきり分けて置くのが大事さ。確かめられない場所を、なんとなくで塗ってはいけないよ。";
+        const VERIFY_TEXT = "沖縄県公文書館の資料をもとに地図へ色分けするなら、どれが一番資料に合っている？";
+        const IMAGINE_PROMPT = "旧盆・エイサー・獅子舞・十六日祭など、シーミー以外の沖縄の行事を一つ選ぶなら、どれを選んで、どこで盛んかをどうやって調べる？";
+        const STUDENT_MESSAGE = "きょうは、シーミーが沖縄のどこでも同じではないことを、地図の色分けで確かめたね。マタグワァのシズおばぁさんが教えてくれた『わかる場所だけ塗って、わからない場所は空けておく』という考え方、地図以外のことを調べるときにも使ってみよう。";
+        const STANDARDS = [
+            "社会（地図・地域の特色、都道府県内の地域差）",
+            "図画工作・美術（情報の配置・記号化、色や記号での表現）"
+        ];
+        const NOTES = [
+            "この教材で扱う地域差は、沖縄県公文書館が紹介する範囲にとどめています。実在する個人のお墓の位置・住所・門中名は地図に入力させません。",
+            "確認できていない地域は、推測で色を塗らず、空欄のままにしています。"
+        ];
+        const HAS_SINGLE_CORRECT_ANSWER = true;
+        const SOURCES = [
+            { label: "沖縄県公文書館「清明祭（シーミー・ウシーミー）」", url: "https://www.archives.pref.okinawa.jp/news/that_day/1027" }
+        ];
+        const ALPACAS = {
+            hari: { name: "ハーリー", color: "red", emoji: "🔥", img: "../img/characters/harly.png", claim: "沖縄はどこでもシーミー一色でしょ！全島おなじお墓参りのはずさ！", gag: "（効果音：ズコーッ！ハーリー、地図を持ったまま勢いよくすっ転ぶ）" },
+            sara: { name: "サラバンジ", color: "blue", emoji: "⚡", img: "../img/characters/sarabanji.png", claim: "宮古・八重山が、シーミーの本場だと思う！なんとなく南の方が盛んっしょ！", gag: "（サラバンジ、その場でバタン！と大げさに倒れる→3秒後にムクッと起き上がる）" },
+            gan: { name: "ガンジュー", color: "green", emoji: "😴", img: "../img/characters/ganjuu.png", claim: "えっと…北部が中心、だと思います…なんとなく", gag: "（ガンジュー、立ったまま本気のいびき→マタグワァのシズおばぁさんに肩を叩かれてハッと飛び起きる）" },
+            kaa: { name: "カーギー", color: "purple", emoji: "💁‍♀️", img: "../img/characters/carggy.png", claim: "本島中南部が中心で、宮古・八重山も同じくらいシーミーが盛んなんですよね", gag: "（カーギー、風で乱れた前髪を鏡もなしに一瞬でピシッと直しながら、少し首をかしげる）" }
+        };
+        const ALPACA_KEYS = ["hari", "sara", "gan", "kaa"];
+        const MENTORS = {
+            chinen: { name: "知念おじぃさん", role: "智（論理・言語）", color: "amber", emoji: "🧓" },
+            tokue: { name: "仲程のヨシおばぁさん", role: "徳（対人・内省）", color: "rose", emoji: "👵" },
+            rikiya: { name: "力也おじぃさん", role: "体（音楽・運動）", color: "teal", emoji: "🧓" },
+            misaki: { name: "マタグワァのシズおばぁさん", role: "感（視覚空間・博物学）", color: "indigo", emoji: "👵" }
+        };
+        const QUIZ_CHOICES = [
+            { id: "q1", text: "本島中南部＝シーミーが中心、首里周辺＝ウシーミーと呼ぶ、本島の一部・宮古・八重山＝十六日祭が盛んな地域もある、と色分けし、それ以外は空欄にする", correct: true },
+            { id: "q2", text: "沖縄本島・宮古・八重山を全部同じ色で塗り、『沖縄はどこでもシーミー』とする", correct: false },
+            { id: "q3", text: "資料に出てこない離島も、たぶん同じだろうと予想して同じ色で塗る", correct: false },
+            { id: "q4", text: "一番にぎやからしい地域だけ目立つ色で塗り、他の地域は無視する", correct: false }
+        ];
+
+        function shuffledThreeAlpacas() {
+            const arr = [...ALPACA_KEYS];
+            for (let i = arr.length - 1; i > 0; i -= 1) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr.slice(0, 3);
+        }
+
+        function shuffledQuiz() {
+            const arr = [...QUIZ_CHOICES];
+            for (let i = arr.length - 1; i > 0; i -= 1) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        const SHIIMI_LIST = typeof SHIIMI_EPISODES !== "undefined" ? SHIIMI_EPISODES : [];
+
+        const ShiimiEp06App = () => {
+            const [threeKeys] = useState(() => shuffledThreeAlpacas());
+            const [currentSlide, setCurrentSlide] = useState(0);
+            const [guess, setGuess] = useState(null);
+            const [quizChoices] = useState(() => shuffledQuiz());
+            const [quizAnswer, setQuizAnswer] = useState(null);
+            const [imagineAnswer, setImagineAnswer] = useState("");
+            const [memoryAnswer, setMemoryAnswer] = useState("");
+            const [childName, setChildName] = useState("");
+            const [furiganaOn, setFuriganaOn] = useState(true);
+
+            const slideIds = ["intro", "trouble", "mentor", "verify", "imagine", "checkin", "parent"];
+            const episodeIndex = SHIIMI_LIST.findIndex((episode) => episode.id === "shiimi-ep06");
+            const prevEpisode = episodeIndex > 0 ? SHIIMI_LIST[episodeIndex - 1] : null;
+            const nextEpisode = episodeIndex >= 0 && episodeIndex < SHIIMI_LIST.length - 1 ? SHIIMI_LIST[episodeIndex + 1] : null;
+            const selectedChoice = quizChoices.find((choice) => choice.id === quizAnswer);
+            const mentor = MENTORS.misaki;
+
+            const renderIntro = () => (
+                <div className="space-y-6">
+                    <div className="text-center">
+                        <div className="text-6xl mb-4">🗺️</div>
+                        <h2 className="text-2xl font-bold text-orange-600">{MATERIAL.title}</h2>
+                        <span className="inline-block mt-2 px-3 py-1 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
+                    </div>
+                    <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 space-y-3">
+                        {INTRO_LINES.map((line) => <p key={line}>{line}</p>)}
+                    </div>
+                </div>
+            );
+
+            const renderTrouble = () => (
+                <div className="space-y-5">
+                    <h2 className="text-2xl font-bold text-red-600 text-center">😱 困りごと</h2>
+                    <p className="text-center text-gray-600 text-sm">3人のアルパカが、地図の塗り方でモメている。きみは、誰の言うことに一番近いと思う？</p>
+                    {threeKeys.map((key) => {
+                        const alpaca = ALPACAS[key];
+                        return (
+                            <button
+                                key={key}
+                                onClick={() => setGuess(key)}
+                                className={`choice-card w-full text-left p-4 rounded-lg border-2 ${guess === key ? "border-orange-500 bg-orange-50" : "border-gray-200"}`}
+                            >
+                                <div className="choice-row">
+                                    <img className="chara-avatar" src={alpaca.img} alt={alpaca.name} />
+                                    <div className="speech-bubble flex-1 min-w-0">
+                                        <p className="font-bold">{alpaca.name}</p>
+                                        <p className="text-sm">「{alpaca.claim}」</p>
+                                        <p className="text-xs text-gray-500">{alpaca.gag}</p>
+                                    </div>
+                                    <span className="choice-check">{guess === key ? "✓" : ""}</span>
+                                </div>
+                            </button>
+                        );
+                    })}
+                    {guess === null && <p className="text-center text-sm text-orange-500">どれかを選ぶと次へ進めるよ</p>}
+                    {guess !== null && (
+                        <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
+                            <p>みんな、思い込みや「なんとなく」で言っている…。ここは、マタグワァのシズおばぁさんに聞いてみよう。</p>
+                        </div>
+                    )}
+                </div>
+            );
+
+            const renderMentor = () => (
+                <div className="space-y-5">
+                    <div className="text-center text-5xl">{mentor.emoji}</div>
+                    <h2 className="text-xl font-bold text-indigo-700 text-center">{mentor.name}が教えてくれた</h2>
+                    <div className="bg-indigo-50 rounded-lg p-5"><p>{MENTOR_TEXT}</p></div>
+                    <div className="grid gap-2 text-sm">
+                        <p className="bg-amber-50 p-3 rounded">{MENTORS.chinen.name}「資料に書いてあることと、書いていないことを区別するのは、ことばの勉強でも同じだね」</p>
+                        <p className="bg-rose-50 p-3 rounded">{MENTORS.tokue.name}「地域によってやり方が違うのは、どっちが正しいとかじゃないからね」</p>
+                        <p className="bg-teal-50 p-3 rounded">{MENTORS.rikiya.name}「地図を描くときも、慌てず一つずつ確かめてから塗ろうねー」</p>
+                    </div>
+                </div>
+            );
+
+            const renderVerify = () => (
+                <div className="space-y-5">
+                    <h2 className="text-2xl font-bold text-green-600 text-center">✅ やってみよう</h2>
+                    <p className="bg-green-50 p-4 rounded">{VERIFY_TEXT}</p>
+                    <div className="grid gap-2">
+                        {quizChoices.map((choice) => (
+                            <button
+                                key={choice.id}
+                                onClick={() => setQuizAnswer(choice.id)}
+                                className={`choice-card p-3 rounded-lg border-2 text-left ${quizAnswer === choice.id ? "border-green-500 bg-green-50" : "border-gray-200"}`}
+                            >
+                                {choice.text}
+                            </button>
+                        ))}
+                    </div>
+                    {selectedChoice && (
+                        <div className="bg-gray-100 p-4 rounded text-sm">
+                            {!HAS_SINGLE_CORRECT_ANSWER
+                                ? "どの選択にも正解・不正解はないよ。選んだ理由を大切にしよう。"
+                                : selectedChoice.correct
+                                    ? "⭕ 沖縄県公文書館の資料に合った塗り方だね。本島中南部が中心、首里周辺はウシーミーという呼び名、本島の一部・宮古・八重山では十六日祭のほうが盛んな地域もある。それ以外の地域は、今回の資料だけでは確かめられないから、空けておくのが正しいよ。"
+                                    : "もう一度、マタグワァのシズおばぁさんの話を思い出そう。『わかる場所だけ塗って、わからない場所は空けておく』がポイントだよ。"}
+                        </div>
+                    )}
+                </div>
+            );
+
+            const renderImagine = () => (
+                <div className="space-y-5">
+                    <h2 className="text-2xl font-bold text-pink-600 text-center">💭 想像する</h2>
+                    <p className="bg-pink-50 p-5 rounded">{IMAGINE_PROMPT}</p>
+                    <textarea
+                        value={imagineAnswer}
+                        onChange={(event) => setImagineAnswer(event.target.value)}
+                        rows="4"
+                        className="w-full border rounded p-3"
+                        placeholder="きみの考え（正解は一つではありません）"
+                    />
+                </div>
+            );
+
+            const renderCheckin = () => (
+                <div className="space-y-5">
+                    <h2 className="text-2xl font-bold text-teal-600 text-center">🙋 ふりかえり</h2>
+                    <p className="font-medium text-teal-800 text-center mb-1">✏️ マタグワァのシズおばぁさんの「わからない場所は塗らない」という考え方、自分でも使えそうだと思った？</p>
+                    <textarea
+                        value={memoryAnswer}
+                        onChange={(event) => setMemoryAnswer(event.target.value)}
+                        rows="4"
+                        className="w-full border rounded p-3"
+                        placeholder="今日、心に残ったこと"
+                    />
+                    <p className="bg-indigo-50 p-4 rounded text-sm text-center">次回、知能の窓・シーミー ep7（内省編）では、会ったことのないご先祖に何を聞きたいかを考えていくよ。お楽しみに。</p>
+                </div>
+            );
+
+            const renderParent = () => (
+                <div className="space-y-4">
+                    <h2 className="text-2xl font-bold text-yellow-700 text-center">🎬 おわりに</h2>
+                    <div className="bg-orange-50 p-4 rounded">
+                        <p className="text-xs font-bold text-orange-700">🧑‍🎓 児童生徒のみなさんへ</p>
+                        <p className="text-sm">{STUDENT_MESSAGE}</p>
+                    </div>
+                    <div className="bg-yellow-50 p-4 rounded">
+                        <p className="text-xs font-bold">👪 保護者・支援者の方へ（学習指導要領との対応）</p>
+                        <ul className="text-xs list-disc list-inside">
+                            {STANDARDS.map((item) => <li key={item}>{item}</li>)}
+                        </ul>
+                        {NOTES.map((note) => <p key={note} className="text-xs text-gray-500 mt-2">※ {note}</p>)}
+                    </div>
+                    {SOURCES.length > 0 && (
+                        <div className="bg-yellow-50 p-4 rounded">
+                            <p className="text-xs font-bold">📚 出典・参考資料</p>
+                            <ul className="text-xs list-disc list-inside">
+                                {SOURCES.map((source) => (
+                                    <li key={source.url}>
+                                        <a className="text-blue-600 underline" href={source.url} target="_blank" rel="noopener noreferrer">{source.label}</a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                    <div className="bg-white border-2 border-dashed p-4 rounded">
+                        <input value={childName} onChange={(event) => setChildName(event.target.value)} className="w-full border rounded p-2 mb-2" placeholder="名前（任意）" />
+                        <button onClick={() => window.print()} className="w-full bg-yellow-500 text-white rounded p-2">学習記録シートを印刷</button>
+                    </div>
+                    <div className="border-t pt-4">
+                        <div className="flex gap-2">
+                            {prevEpisode
+                                ? <a className="flex-1 border p-2 rounded text-center" href={`../${prevEpisode.url}`}>← {prevEpisode.short}</a>
+                                : <span className="flex-1 border p-2 text-gray-300 text-center">最初</span>}
+                            {nextEpisode
+                                ? <a className="flex-1 bg-orange-500 text-white p-2 rounded text-center" href={`../${nextEpisode.url}`}>{nextEpisode.short} →</a>
+                                : <span className="flex-1 border p-2 text-gray-300 text-center">最終話</span>}
+                        </div>
+                        <a className="block text-center underline text-orange-600 mt-2" href="../matrix-library.html">他のテーマも見る（教材一覧）</a>
+                    </div>
+                    <div className="border-t border-dashed pt-4">
+                        <a className="block text-center bg-gray-700 text-white rounded-full p-2" href={FEEDBACK_FORM_URL} target="_blank" rel="noopener noreferrer">💬 ご意見・ご要望</a>
+                    </div>
+                </div>
+            );
+
+            const renderSlide = () => {
+                const renderers = {
+                    intro: renderIntro,
+                    trouble: renderTrouble,
+                    mentor: renderMentor,
+                    verify: renderVerify,
+                    imagine: renderImagine,
+                    checkin: renderCheckin,
+                    parent: renderParent
+                };
+                const Renderer = renderers[slideIds[currentSlide]];
+                return <Renderer />;
+            };
+
+            const canGoNext = !(slideIds[currentSlide] === "trouble" && guess === null);
+
+            return (
+                <div className={`min-h-screen bg-orange-50 ${furiganaOn ? "" : "furigana-off"}`}>
+                    <main className="max-w-2xl mx-auto p-4 sm:p-6">
+                        <div className="flex justify-between mb-4">
+                            <a href="../matrix-library.html">← 教材一覧</a>
+                            <button onClick={() => setFuriganaOn(!furiganaOn)} className="border rounded px-2">🔤 ふりがな {furiganaOn ? "ON" : "OFF"}</button>
+                        </div>
+                        <header className="text-center mb-5">
+                            <p className="text-xs text-indigo-500 font-bold">知能の窓・シーミー ep{Number(MATERIAL.episode)}：{MATERIAL.kind}</p>
+                            <h1 className="text-2xl font-bold text-orange-600">{MATERIAL.title} 🗺️</h1>
+                            <span className="inline-block mt-1 px-2 py-0.5 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
+                        </header>
+                        <div className="mb-4">
+                            <div className="flex justify-between items-center mb-2">
+                                <span className="text-sm text-gray-600">{currentSlide + 1} / {slideIds.length}</span>
+                            </div>
+                            <div className="h-2 bg-gray-200 rounded">
+                                <div className="h-2 bg-orange-500 rounded" style={{ width: `${(currentSlide + 1) / slideIds.length * 100}%` }} />
+                            </div>
+                        </div>
+                        <section className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8 mb-6 min-h-96">{renderSlide()}</section>
+                        {slideIds[currentSlide] === "parent" && (
+                            <div className="bg-orange-50 border p-4 rounded mb-5 text-center">
+                                <p className="font-bold text-orange-700">🌱 制作をアシストする</p>
+                                <p className="text-xs my-2">ここでの学びは、記録され、次の学びへと受け継がれていきます。その循環を支えるちからになっていただけたら嬉しいです。</p>
+                                {SUPPORT_LINKS.map((support) => <a key={support.label} className="inline-block border rounded-full px-3 py-1 m-1" href={support.url} target="_blank" rel="noopener noreferrer">{support.label}</a>)}
+                                <a className="block text-xs underline mt-2" href="../tokushoho.html">特定商取引法に基づく表記</a>
+                            </div>
+                        )}
+                        <nav className="flex justify-between items-center">
+                            <button disabled={currentSlide === 0} onClick={() => setCurrentSlide(currentSlide - 1)} className="flex items-center px-3 sm:px-5 py-3 bg-orange-500 text-white rounded-lg disabled:bg-gray-200 disabled:text-gray-400">まえへ</button>
+                            <div className="progress-dots space-x-2">
+                                {slideIds.map((id, index) => <i key={id} className={`w-2.5 h-2.5 rounded-full ${index === currentSlide ? "bg-orange-500" : "bg-gray-300"}`} />)}
+                            </div>
+                            <button
+                                disabled={currentSlide === slideIds.length - 1 || !canGoNext}
+                                onClick={() => setCurrentSlide(currentSlide + 1)}
+                                className="flex items-center px-3 sm:px-5 py-3 bg-orange-500 text-white rounded-lg disabled:bg-gray-200 disabled:text-gray-400"
+                            >
+                                {slideIds[currentSlide] === "checkin" ? "おわりに" : "つぎへ"}
+                            </button>
+                        </nav>
+                    </main>
+                    <div className="print-sheet w-[700px] p-10 bg-white">
+                        <h1 className="text-xl font-bold">学習記録シート</h1>
+                        <p>教材：{MATERIAL.title}（{MATERIAL.series}）</p>
+                        <p>名前：{childName || "＿＿＿＿＿＿"}</p>
+                        <p>想像する問題：{imagineAnswer || "（記入なし）"}</p>
+                        <p>ふりかえり：{memoryAnswer || "（記入なし）"}</p>
+                    </div>
+                </div>
+            );
+        };
+
+        createRoot(document.getElementById("root")).render(<ShiimiEp06App />);
+    </script>
+</body>
+</html>

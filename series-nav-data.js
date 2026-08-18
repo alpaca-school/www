@@ -134,3 +134,15 @@ const YACHIMUN_EPISODES = [
   { id: "yachimun-ep08", short: "ep8：対人編", title: "やちむんは、一人でできる？", url: "bunka/yachimun_ep08.html" },
   { id: "yachimun-ep09", short: "ep9：集・表現編（完）", title: "わたしのやちむん企画展", url: "bunka/yachimun_ep09.html" },
 ];
+// 知能の窓・シーミーシリーズ（2026-08-18、全9話完成）
+const SHIIMI_EPISODES = [
+  { id: "shiimi-ep01", short: "ep1：論理・数学編", title: "ウサンミ、何個分けられる？", url: "bunka/shiimi_ep01.html" },
+  { id: "shiimi-ep02", short: "ep2：言語編", title: "シーミーって、どんな行事？", url: "bunka/shiimi_ep02.html" },
+  { id: "shiimi-ep03", short: "ep3：音楽・リズム編", title: "シーミーの日には、どんな音がある？", url: "bunka/shiimi_ep03.html" },
+  { id: "shiimi-ep04", short: "ep4：身体・運動編", title: "みんなで準備するには、どう動く？", url: "bunka/shiimi_ep04.html" },
+  { id: "shiimi-ep05", short: "ep5：博物学編", title: "清明って、月の満ち欠けで決まるの？", url: "bunka/shiimi_ep05.html" },
+  { id: "shiimi-ep06", short: "ep6：視覚・空間編", title: "沖縄のどこで、どう違う？", url: "bunka/shiimi_ep06.html" },
+  { id: "shiimi-ep07", short: "ep7：内省編", title: "会ったことのないご先祖に、何を聞く？", url: "bunka/shiimi_ep07.html" },
+  { id: "shiimi-ep08", short: "ep8：対人編", title: "親族が集まるとき、どう役割を分ける？", url: "bunka/shiimi_ep08.html" },
+  { id: "shiimi-ep09", short: "ep9：集・表現編（完）", title: "シーミー文化カードを残そう", url: "bunka/shiimi_ep09.html" },
+];

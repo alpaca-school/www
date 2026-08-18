@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <script>
+        (() => {
+            const pageVersion = "20260818-1";
+            const url = new URL(window.location.href);
+            if (url.searchParams.get("v") !== pageVersion) {
+                url.searchParams.set("v", pageVersion);
+                window.location.replace(url.toString());
+            }
+        })();
+    </script>
+    <title>清明って、月の満ち欠けで決まるの？【知能の窓・シーミー ep5：博物学編】 🌺</title>
+    <script src="../series-nav-data.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        p, li {
+            word-break: normal;
+            overflow-wrap: break-word;
+            line-break: strict;
+        }
+        .speech-bubble {
+            position: relative;
+            min-width: 0;
+            max-width: 100%;
+        }
+        .speech-bubble p {
+            display: block;
+            min-width: 0;
+            max-width: 100%;
+            white-space: normal;
+            word-break: normal;
+            overflow-wrap: anywhere;
+            line-break: anywhere;
+        }
+        .choice-card {
+            min-width: 0;
+        }
+        .choice-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            min-width: 0;
+            max-width: 100%;
+        }
+        .choice-row .speech-bubble {
+            flex: 1 1 0;
+            width: 0;
+        }
+        .choice-check {
+            flex: 0 0 auto;
+        }
+        .progress-dots {
+            display: none;
+        }
+        @media (min-width: 640px) {
+            .progress-dots {
+                display: flex;
+            }
+        }
+        .speech-bubble::after {
+            content: "";
+            position: absolute;
+            left: -10px;
+            top: 18px;
+            border-width: 8px 10px 8px 0;
+            border-style: solid;
+            border-color: transparent currentColor transparent transparent;
+        }
+        .chara-avatar {
+            width: 56px; height: 56px; border-radius: 9999px; object-fit: cover;
+            border: 2px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.15); background: #fff;
+            flex-shrink: 0;
+        }
+        .print-sheet { position: fixed; left: -9999px; top: 0; }
+        @media print {
+            body * { visibility: hidden; }
+            .print-sheet, .print-sheet * { visibility: visible; }
+            .print-sheet { position: absolute; left: 0; top: 0; width: 100%; }
+        }
+        rt { font-size: 0.6em; color: #ea580c; font-weight: 700; }
+        .furigana-off rt { display: none; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+        const { createRoot } = ReactDOM;
+
+        const ChevronRight = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m9 18 6-6-6-6"/></svg>
+        );
+        const ChevronLeft = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m15 18-6-6 6-6"/></svg>
+        );
+
+        // 4アルパカ（困りごとを持ち込む役。誰も正解を知らない）
+        const ALPACAS = {
+          hari: {
+            name: "ハーリー", color: "red", emoji: "🔥", img: "../img/characters/harly.png",
+            claim: "清明は満月の日っしょ！シーミーもお月さまが丸くなる日に合わせて決めるに決まってる！",
+            gag: "（効果音：ズコーッ！ハーリー、資料カードを持ったまま勢いよくすっ転ぶ）"
+          },
+          sara: {
+            name: "サラバンジ", color: "blue", emoji: "⚡", img: "../img/characters/sarabanji.png",
+            claim: "「旧暦3月」って書いてあるっしょ！だったら毎年、数字も日にちもぜんぶ同じで決まりさ！",
+            gag: "（サラバンジ、その場でバタン！と大げさに倒れる→3秒後にムクッと起き上がる）"
+          },
+          gan: {
+            name: "ガンジュー", color: "green", emoji: "😴", img: "../img/characters/ganjuu.png",
+            claim: "えっと…旧暦も二十四節気も、結局ぜんぶお月さまが決めてるんですよね…たぶん…",
+            gag: "（ガンジュー、立ったまま本気のいびき→マタグワァのシズおばぁさんに肩を叩かれてハッと飛び起きる）"
+          },
+          kaa: {
+            name: "カーギー", color: "purple", emoji: "💁‍♀️", img: "../img/characters/carggy.png",
+            claim: "清明は太陽の位置で決まる二十四節気…だから、シーミーの日もかならず清明と同じ日になるはずですよね。",
+            gag: "（カーギー、風で乱れた前髪を鏡もなしに一瞬でピシッと直しながら、少し首をかしげる）"
+          }
+        };
+        const ALPACA_KEYS = ["hari", "sara", "gan", "kaa"];
+
+        // 4メンター（おじぃさん・おばぁさん）。多重知能8分類を2つずつ担当する「知能の窓」シリーズの案内役
+        const MENTORS = {
+          chinen: { name: "知念おじぃさん", role: "智（論理・言語）", color: "amber", emoji: "🧓" },
+          tokue: { name: "仲程のヨシおばぁさん", role: "徳（対人・内省）", color: "rose", emoji: "👵" },
+          rikiya: { name: "力也おじぃさん", role: "体（音楽・運動）", color: "teal", emoji: "🧓" },
+          misaki: { name: "マタグワァのシズおばぁさん", role: "感（視覚空間・博物学）", color: "indigo", emoji: "👵" }
+        };
+
+        const COLOR_MAP = {
+          red: { bg: "bg-red-50", border: "border-red-300", text: "text-red-700", solid: "bg-red-500" },
+          blue: { bg: "bg-blue-50", border: "border-blue-300", text: "text-blue-700", solid: "bg-blue-500" },
+          green: { bg: "bg-green-50", border: "border-green-300", text: "text-green-700", solid: "bg-green-500" },
+          purple: { bg: "bg-purple-50", border: "border-purple-300", text: "text-purple-700", solid: "bg-purple-500" },
+          amber: { bg: "bg-amber-50", border: "border-amber-300", text: "text-amber-700", solid: "bg-amber-500" },
+          rose: { bg: "bg-rose-50", border: "border-rose-300", text: "text-rose-700", solid: "bg-rose-500" },
+          teal: { bg: "bg-teal-50", border: "border-teal-300", text: "text-teal-700", solid: "bg-teal-500" },
+          indigo: { bg: "bg-indigo-50", border: "border-indigo-300", text: "text-indigo-700", solid: "bg-indigo-500" }
+        };
+
+        // キャラ画像。アルパカは画像→失敗時絵文字。メンターは画像未整備のため絵文字のみ
+        const Avatar = ({ person }) => {
+          const [failed, setFailed] = useState(false);
+          if (!person.img || failed) {
+            return (
+              <div className={`chara-avatar flex items-center justify-center text-2xl ${COLOR_MAP[person.color].bg}`}>
+                {person.emoji}
+              </div>
+            );
+          }
+          return (
+            <img
+              src={person.img}
+              alt={person.name}
+              className="chara-avatar"
+              onError={() => setFailed(true)}
+            />
+          );
+        };
+
+        function shuffledThreeAlpacas() {
+          const arr = [...ALPACA_KEYS];
+          for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+          }
+          return arr.slice(0, 3);
+        }
+
+        // COCOLOプラン（ホームスクーラー等の学習記録）向けの教材メタ情報
+        const MATERIAL = {
+          title: "清明って、月の満ち欠けで決まるの？",
+          series: "知能の窓・シーミー ep5：博物学編",
+          subjectGrade: "理科・社会 3〜6年"
+        };
+
+        // 実際に使用した出典・参考資料のみ（AGENTS.md §17準拠）
+        const SOURCES = [
+          { label: "沖縄県公文書館「清明祭（シーミー・ウシーミー）」", url: "https://www.archives.pref.okinawa.jp/news/that_day/1027" },
+          { label: "国立天文台暦計算室「二十四節気・雑節」", url: "https://eco.mtk.nao.ac.jp/koyomi/faq/24sekki.html" },
+          { label: "国立天文台暦計算室「令和8年（2026）暦要項」", url: "https://eco.mtk.nao.ac.jp/koyomi/yoko/2026/rekiyou262.html" }
+        ];
+
+        // シリーズ内ナビは防御的に参照する（他エピソード未実装でもエラーにしない）
+        const SHIIMI_LIST = typeof SHIIMI_EPISODES !== "undefined" ? SHIIMI_EPISODES : [];
+
+        const ShiimiEp05App = () => {
+          const [threeKeys] = useState(() => shuffledThreeAlpacas());
+          const [currentSlide, setCurrentSlide] = useState(0);
+          const [guess, setGuess] = useState(null);
+          const [imagineAnswer, setImagineAnswer] = useState("");
+          const [childName, setChildName] = useState("");
+          const [wasSurprised, setWasSurprised] = useState(null);
+          const [memoryAnswer, setMemoryAnswer] = useState("");
+          const [furiganaOn, setFuriganaOn] = useState(true);
+
+          const slideIds = ["intro", "trouble", "mentor", "verify", "imagine", "checkin", "parent"];
+          const episodeIndex = SHIIMI_LIST.findIndex((e) => e.id === "shiimi-ep05");
+          const prevEpisode = episodeIndex > 0 ? SHIIMI_LIST[episodeIndex - 1] : null;
+          const nextEpisode = episodeIndex >= 0 && episodeIndex < SHIIMI_LIST.length - 1 ? SHIIMI_LIST[episodeIndex + 1] : null;
+          const total = slideIds.length;
+
+          const nextSlide = () => setCurrentSlide((p) => Math.min(p + 1, total - 1));
+          const prevSlide = () => setCurrentSlide((p) => Math.max(p - 1, 0));
+
+          const renderIntro = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-6xl mb-4">🌺</div>
+                <h2 className="text-2xl font-bold text-orange-600">シーミーは、旧暦3月上旬ごろの行事。じゃあ「清明」の日は、何で決まる？</h2>
+                <span className="inline-block mt-2 px-3 py-1 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
+              </div>
+              <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 space-y-3">
+                <p>シーミー（清明祭）は、旧暦3月上旬ごろに行われる、沖縄本島中南部を中心とした祖先供養の行事だと、沖縄県公文書館は紹介している。</p>
+                <p>ところで、「清明」という日そのものは、いったい何を基準に決まっているんだろう？お月さまの形かな、それとも別のものかな。</p>
+                <p>マタグワァのシズおばぁさんと一緒に、資料で確かめてみよう。</p>
+              </div>
+            </div>
+          );
+
+          const renderTrouble = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">😱</div>
+                <h2 className="text-xl font-bold text-red-600 mb-1">困りごと発生！</h2>
+                <p className="text-gray-600">3人のアルパカが、清明とシーミーの決まり方について言い合いを始めた。きみは、誰の考えに一番近いと思う？</p>
+              </div>
+              <div className="grid gap-4">
+                {threeKeys.map((key) => {
+                  const c = ALPACAS[key];
+                  const cc = COLOR_MAP[c.color];
+                  const selected = guess === key;
+                  return (
+                    <div
+                      key={key}
+                      onClick={() => setGuess(key)}
+                      className={`choice-card p-4 rounded-lg border-2 cursor-pointer transition-all ${cc.bg} ${
+                        selected ? `${cc.border} ring-2 ring-offset-1 ring-${c.color}-400` : "border-gray-200 hover:border-gray-300"
+                      }`}
+                    >
+                      <div className="choice-row">
+                        <Avatar person={c} />
+                        <div className={`speech-bubble flex-1 min-w-0 rounded-lg p-3 ${cc.text} bg-white/70`}>
+                          <p className={`font-bold ${cc.text}`}>{c.name}</p>
+                          <p className="text-sm text-gray-700 mt-1">「{c.claim}」</p>
+                        </div>
+                        {selected && (
+                          <div className={`choice-check w-7 h-7 rounded-full ${cc.solid} flex items-center justify-center text-white text-sm shrink-0`}>✓</div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              {!guess && <p className="text-center text-sm text-orange-500">↑ どれか1つを選ぶと、次に進めるよ</p>}
+              {guess && (
+                <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
+                  <p>みんな、少しずつ違うことを言っている…。ここは、知能の窓シリーズのメンターに聞いてみよう。</p>
+                </div>
+              )}
+            </div>
+          );
+
+          const renderMentor = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">👵</div>
+                <h2 className="text-xl font-bold text-indigo-600">マタグワァのシズおばぁさんが教えてくれた</h2>
+              </div>
+              <div className={`rounded-lg p-4 space-y-2 ${COLOR_MAP.indigo.bg}`}>
+                <div className="flex items-center gap-3 mb-1">
+                  <Avatar person={MENTORS.misaki} />
+                  <p className="font-bold text-indigo-700">{MENTORS.misaki.name}</p>
+                </div>
+                <p className="text-sm text-gray-700">「暦には、実は2つの見方が重なっているんだよ。焦らず1つずつ見てみようね」</p>
+                <p className="text-sm text-gray-700">「1つ目：シーミーは、旧暦3月上旬ごろに行う沖縄の年中行事。旧暦は月の満ち欠けをもとにした暦さ」</p>
+                <p className="text-sm text-gray-700">「2つ目：清明は『二十四節気』の一つ。国立天文台によると、太陽の位置（太陽黄経15度）で決まる季節の節目なんだよ。お月さまの形は関係ないさ」</p>
+                <p className="text-sm text-gray-700">「だから、旧暦＝ぜんぶお月さま、清明＝シーミーと同じ日、と決めつけずに、資料で確かめる。それが博物学の窓さ」</p>
+              </div>
+              <div className="grid gap-3">
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.amber.bg}`}>
+                  <Avatar person={MENTORS.chinen} />
+                  <p className="text-sm text-amber-700">「数字が2つ出てきても、それぞれ何を基準にしているかを整理すればいいさぁ」</p>
+                </div>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.rose.bg}`}>
+                  <Avatar person={MENTORS.tokue} />
+                  <p className="text-sm text-rose-700">「難しく感じても大丈夫。わからないことは、わからないままメモしておいていいのよ」</p>
+                </div>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.teal.bg}`}>
+                  <Avatar person={MENTORS.rikiya} />
+                  <p className="text-sm text-teal-700">「太陽のリズム、お月さまのリズム、体で感じるとちょっと分かりやすいかもなー」</p>
+                </div>
+              </div>
+            </div>
+          );
+
+          const renderVerify = () => {
+            const guessedAlpaca = guess ? ALPACAS[guess] : null;
+            return (
+              <div className="space-y-6">
+                <div className="text-center">
+                  <div className="text-5xl mb-4">✅</div>
+                  <h2 className="text-2xl font-bold text-green-600">やってみよう</h2>
+                </div>
+                <div className="bg-green-50 border-2 border-green-200 rounded-lg p-6 space-y-3 text-sm">
+                  <div className="bg-white rounded-lg p-3 border border-green-200">
+                    <p className="font-bold text-green-800">資料カード1：沖縄県公文書館</p>
+                    <p className="text-gray-700 mt-1">シーミー（清明祭）は、旧暦3月上旬ごろに、沖縄本島中南部を中心に行われる祖先供養の行事。首里近辺ではウシーミーとも呼ばれる。</p>
+                  </div>
+                  <div className="bg-white rounded-lg p-3 border border-green-200">
+                    <p className="font-bold text-green-800">資料カード2：国立天文台暦計算室</p>
+                    <p className="text-gray-700 mt-1">「清明」は二十四節気の一つで、太陽黄経15度になる時点として定義される。2025年は4月4日、2026年は4月5日（3時40分・日本標準時）、2027年は4月5日ごろ。</p>
+                  </div>
+                  <p className="text-gray-700">日付が毎年少しずつ変わるのは、太陽の動きに合わせて決めているから。お月さまが丸いか欠けているかは、清明の日付には関係がない。</p>
+                  <p className="text-gray-500 text-xs">「シーミー」と「清明」は名前が似ているけれど、決め方の基準がちがう別々のことば。同じ日をぴったり指すとは限らない。</p>
+                </div>
+                {guessedAlpaca && (
+                  <div className="rounded-lg p-4 text-center bg-gray-100">
+                    <p className="font-bold text-gray-700">きみが選んだ{guessedAlpaca.name}の考えも、資料と比べると少しちがっていたね。</p>
+                    <p className="text-xs text-gray-500 mt-2">{guessedAlpaca.gag}</p>
+                  </div>
+                )}
+                <div className="bg-orange-50 rounded-lg p-4 text-sm text-orange-800 text-center">
+                  <p>シーミーは旧暦（お月さま）ベースの行事の時期、清明は太陽の位置で決まる二十四節気。2つの暦の見方が重なっているだけで、どちらか一方だけで全部が決まっているわけではない。</p>
+                </div>
+              </div>
+            );
+          };
+
+          const renderImagine = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">💭</div>
+                <h2 className="text-2xl font-bold text-pink-600">想像してみよう</h2>
+              </div>
+              <div className="bg-pink-50 rounded-lg p-6">
+                <p className="text-lg">「知能の窓」には、旧暦の月日そのものを見ていく「月の窓」もある。今日学んだ「清明は太陽で決まる」ということと、月の窓で学ぶ「旧暦は月の満ち欠けで決まる」ということ、この2つのちがいを、きみならどう説明する？</p>
+                <p className="text-sm text-gray-500 mt-2">（正解は一つじゃないよ。自分の言葉で書いてみよう）</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">きみの考えを書いてみよう（学習記録シートに残せるよ）</label>
+                <textarea
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400 text-sm"
+                  rows="3"
+                  placeholder="例：清明はお日さまの位置、旧暦はお月さまの形で決まると思う"
+                  value={imagineAnswer}
+                  onChange={(e) => setImagineAnswer(e.target.value)}
+                ></textarea>
+              </div>
+            </div>
+          );
+
+          const renderCheckin = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">🙋</div>
+                <h2 className="text-2xl font-bold text-teal-600">ふりかえり</h2>
+              </div>
+              <div className="bg-teal-50 rounded-lg p-6">
+                <p className="font-medium text-teal-800 mb-3">✏️ 「清明はお月さまじゃなくて太陽で決まる」と聞いて、意外だった？</p>
+                <div className="flex flex-wrap gap-2">
+                  {["はい", "いいえ", "わからない"].map((opt) => (
+                    <button
+                      key={opt}
+                      onClick={() => setWasSurprised(opt)}
+                      className={`px-4 py-2 rounded-lg font-bold border-2 transition ${
+                        wasSurprised === opt ? "bg-teal-500 text-white border-teal-500" : "bg-white text-teal-700 border-teal-200"
+                      }`}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">✏️ 今日一番心に残ったことを書いてみよう</label>
+                <textarea
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400 text-sm"
+                  rows="3"
+                  placeholder="例：似たことばでも、決め方がちがうことがあると分かった"
+                  value={memoryAnswer}
+                  onChange={(e) => setMemoryAnswer(e.target.value)}
+                ></textarea>
+              </div>
+              <div className="bg-indigo-50 rounded-lg p-4 text-sm text-indigo-700 text-center">
+                <p>次回、知能の窓・シーミー ep6（視覚・空間編）では、沖縄のどこでシーミーの形が違うのかを、地図で見ていくよ。お楽しみに。</p>
+              </div>
+            </div>
+          );
+
+          const renderParent = () => (
+            <div className="space-y-4">
+              <div className="text-center">
+                <div className="text-5xl mb-4">🎬</div>
+                <h2 className="text-2xl font-bold text-yellow-700">おわりに</h2>
+              </div>
+              <div className="bg-orange-50 rounded-lg p-4">
+                <p className="text-xs font-bold text-orange-700 mb-2">🧑‍🎓 児童生徒のみなさんへ</p>
+                <p className="text-sm text-gray-700">きょうは、シーミーの日と「清明」という日を比べて、お月さまの形と太陽の位置、どちらを基準に決まっているのか考えたね。清明は太陽の位置（太陽黄経15度）で決まる二十四節気で、シーミーは旧暦3月上旬ごろに行われる沖縄の年中行事。似たことばでも決め方がちがうんだ。この先「月の窓」で旧暦の月日を学ぶときも、今日の「清明は太陽で決まる」を思い出して、ごちゃまぜにしないようにしよう。</p>
+              </div>
+              <div className="bg-yellow-50 rounded-lg p-4">
+                <p className="text-xs font-bold text-yellow-800 mb-2">👪 保護者・支援者の方へ（学習指導要領との対応）</p>
+                <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
+                  <li><strong>理科（3〜6年）</strong>：季節と生き物・太陽の動き。中学理科「地球と宇宙」への入口としても扱えます</li>
+                  <li><strong>社会・総合</strong>：暦と年中行事、地域文化の観察</li>
+                </ul>
+                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓」シリーズのシーミー版 ep5です。8つの知能の窓（論理・数学／言語／音楽／身体運動／博物学／視覚空間／内省／対人）の一つ、「博物学」の窓から、マタグワァのシズおばぁさんが暦の仕組みを教える回でした。</p>
+                <p className="text-xs text-gray-500 mt-1">※ 4アルパカ（ハーリー・サラバンジ・ガンジュー・カーギー）は、「困りごとを持ち込む役」として登場します。3人の考えはランダムに選ばれ、いずれも資料と照らすと不正確でした。「似た響きのことばを、資料で1つずつ確かめる」という体験そのものが、この教材のねらいです。</p>
+                <p className="text-xs text-gray-500 mt-1">※ シーミーは旧暦3月上旬ごろに行われる沖縄の年中行事、清明は太陽の位置（太陽黄経15度）で決まる二十四節気です。この教材では、この2つを別概念として比較しており、「シーミー＝満月の日」「清明＝月の形で決まる」という説明はしていません。</p>
+                <p className="text-xs text-gray-500 mt-1">※ 沖縄県公文書館は、沖縄本島の一部や宮古・八重山では、清明祭より旧暦1月のジュウルクニチー（十六日祭）が盛大に行われる地域があることも紹介しています。地域によって重なり方が異なるため、「沖縄では全部同じ」と一般化していません。</p>
+                <p className="text-xs text-gray-500 mt-1">※ 入試演習としての深入りはこの教材ではあえて行わず、詳しく学びたい場合は国立天文台暦計算室など、公的機関の解説へ接続することをおすすめします。</p>
+              </div>
+              {SOURCES.length > 0 && (
+                <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
+                  <p className="text-xs font-bold text-slate-700 mb-3">📚 出典・参考資料</p>
+                  <ul className="space-y-2 text-xs text-gray-700">
+                    {SOURCES.map((source) => (
+                      <li key={source.url} className="leading-relaxed">
+                        <a className="text-blue-600 underline" href={source.url} target="_blank" rel="noopener noreferrer">{source.label} ↗</a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <div className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-4">
+                <p className="text-xs font-bold text-gray-700 mb-2">🖨️ 学習記録シートを作る（COCOLOプラン等の学習記録用）</p>
+                <input
+                  type="text"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 text-sm mb-2"
+                  placeholder="お子さんの名前（記入は任意）"
+                  value={childName}
+                  onChange={(e) => setChildName(e.target.value)}
+                />
+                <button
+                  onClick={() => window.print()}
+                  className="w-full px-4 py-2 bg-yellow-500 text-white rounded-lg font-medium hover:bg-yellow-600 transition-all text-sm"
+                >
+                  学習記録シートを印刷する
+                </button>
+                <p className="text-xs text-gray-400 mt-1">今日の日付・対応教科・取り組んだ内容・保護者確認欄が入った1枚のシートが印刷されます。</p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-gray-200 space-y-2">
+                <p className="text-xs font-bold text-gray-500 text-center">つぎに進む</p>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  {prevEpisode ? (
+                    <a href={"../" + prevEpisode.url} className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-300 text-sm font-bold text-gray-600 hover:bg-gray-50 transition">← {prevEpisode.short}</a>
+                  ) : (
+                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-300">← 最初のエピソード</span>
+                  )}
+                  {nextEpisode ? (
+                    <a href={"../" + nextEpisode.url} className="flex-1 text-center px-3 py-2 rounded-lg bg-orange-500 text-white text-sm font-bold hover:bg-orange-600 transition">{nextEpisode.short} →</a>
+                  ) : (
+                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-300">最終話</span>
+                  )}
+                </div>
+                <a href="../matrix-library.html" className="block text-center text-sm font-bold text-orange-500 hover:text-orange-700 underline">他のテーマも見る（教材一覧）</a>
+              </div>
+              <div className="mt-6 pt-4 border-t border-dashed border-gray-300">
+                <div className="bg-gray-50 rounded-lg p-4 text-left">
+                  <p className="text-xs font-bold text-gray-700 mb-2 text-center">💬 ご意見・ご要望</p>
+                  <p className="text-xs text-gray-600 mb-3">「こんな機能が欲しい」「ここが使いにくい」などのご意見をお聞かせください。今後の開発の参考にさせていただきます。</p>
+                  <a href={FEEDBACK_FORM_URL} target="_blank" rel="noopener noreferrer" className="block text-center px-4 py-2 bg-gray-700 text-white rounded-full text-sm font-bold hover:bg-gray-800 transition">📋 要望・フィードバックを送る</a>
+                </div>
+              </div>
+            </div>
+          );
+
+          const today = new Date();
+          const todayStr = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
+          const guessedForSheet = guess ? ALPACAS[guess] : null;
+
+          const renderPrintSheet = () => (
+            <div className="print-sheet w-[700px] p-10 bg-white text-black">
+              <h1 className="text-xl font-bold border-b-2 border-black pb-2 mb-4">学習記録シート</h1>
+              <table className="w-full text-sm mb-4">
+                <tbody>
+                  <tr><td className="py-1 pr-4 font-bold w-32">学習日</td><td className="py-1">{todayStr}</td></tr>
+                  <tr><td className="py-1 pr-4 font-bold">お子さんの名前</td><td className="py-1">{childName || "＿＿＿＿＿＿＿＿＿＿"}</td></tr>
+                  <tr><td className="py-1 pr-4 font-bold">教材名</td><td className="py-1">{MATERIAL.title}（{MATERIAL.series}）</td></tr>
+                  <tr><td className="py-1 pr-4 font-bold">対応教科・学年</td><td className="py-1">{MATERIAL.subjectGrade}</td></tr>
+                </tbody>
+              </table>
+              <div className="mb-4 text-xs text-gray-700 bg-gray-50 border border-gray-300 rounded p-3">
+                <p className="font-bold mb-1">学習指導要領との対応</p>
+                <ul className="space-y-0.5 list-disc list-inside">
+                  <li>理科（3〜6年）：季節と生き物・太陽の動き。中学理科「地球と宇宙」への入口</li>
+                  <li>社会・総合：暦と年中行事、地域文化の観察</li>
+                </ul>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">1. アルパカの困りごとで、一番近いと思った考え</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">
+                  {guessedForSheet ? `${guessedForSheet.name}の考え「${guessedForSheet.claim}」を選びました。` : "（記入なし）"}
+                </p>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">2. マタグワァのシズおばぁさんに教わって、資料で確かめたこと</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">シーミーは旧暦3月上旬ごろの沖縄の年中行事、清明は太陽の位置（太陽黄経15度）で決まる二十四節気。決め方がちがう別々のことばだと確かめた。</p>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">3. 想像する問題への自分の考え</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[3rem]">{imagineAnswer || "（記入なし）"}</p>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">4. 今日一番心に残ったこと</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[3rem]">{memoryAnswer || "（記入なし）"}</p>
+              </div>
+              <div className="mt-8 pt-4 border-t border-gray-400">
+                <p className="text-sm">保護者確認サイン：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+              </div>
+            </div>
+          );
+
+          const slideRenderers = {
+            intro: renderIntro,
+            trouble: renderTrouble,
+            mentor: renderMentor,
+            verify: renderVerify,
+            imagine: renderImagine,
+            checkin: renderCheckin,
+            parent: renderParent
+          };
+          const slideTitles = {
+            intro: "🌺 はじまりの問い",
+            trouble: "😱 困りごと",
+            mentor: "👵 メンター登場",
+            verify: "✅ やってみる",
+            imagine: "💭 想像する",
+            checkin: "🙋 ふりかえり",
+            parent: "🎬 おわりに"
+          };
+
+          const canGoNext = !(slideIds[currentSlide] === "trouble" && !guess);
+
+          return (
+            <div className={`min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50 ${furiganaOn ? "" : "furigana-off"}`}>
+              <div className="container mx-auto px-4 py-8 max-w-2xl">
+                <div className="flex items-center justify-between mb-4">
+                  <a href="../matrix-library.html" className="inline-flex items-center gap-1 text-sm font-bold text-orange-500 hover:text-orange-700">
+                    <ChevronLeft className="w-4 h-4" />教材一覧へ戻る
+                  </a>
+                  <button
+                    onClick={() => setFuriganaOn((f) => !f)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border-2 transition ${
+                      furiganaOn ? "bg-orange-500 text-white border-orange-500" : "bg-white text-orange-600 border-orange-300"
+                    }`}
+                  >
+                    🔤 ふりがな {furiganaOn ? "ON" : "OFF"}
+                  </button>
+                </div>
+                <div className="text-center mb-6">
+                  <p className="text-xs font-bold text-indigo-500 mb-1">知能の窓・シーミー ep5：博物学編</p>
+                  <h1 className="text-2xl md:text-3xl font-bold text-orange-600">清明って、月の満ち欠けで決まるの？ 🌺</h1>
+                  <span className="inline-block mt-1 px-2 py-0.5 text-xs font-bold rounded-full bg-orange-100 text-orange-700">📚 {MATERIAL.subjectGrade}</span>
+                </div>
+
+                <div className="mb-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm text-gray-600">{slideTitles[slideIds[currentSlide]]}</span>
+                    <span className="text-sm text-gray-600">{currentSlide + 1} / {total}</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="bg-orange-500 h-2 rounded-full transition-all duration-300" style={{ width: `${((currentSlide + 1) / total) * 100}%` }}></div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8 mb-6 min-h-96">
+                  {slideRenderers[slideIds[currentSlide]]()}
+                </div>
+
+                {slideIds[currentSlide] === "parent" && (
+                  <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 text-left mb-6">
+                    <p className="text-xs font-bold text-orange-700 mb-2 text-center">🌱 制作をアシストする</p>
+                    <p className="text-xs text-gray-600 mb-3">ここでの学びは、記録され、次の学びへと受け継がれていきます。その循環を支えるちからになっていただけたら嬉しいです。</p>
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      {SUPPORT_LINKS.map((s) => (
+                        <a key={s.label} href={s.url} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-full text-sm font-bold border-2 border-orange-300 text-orange-700 bg-white hover:bg-orange-100 transition">{s.label}</a>
+                      ))}
+                    </div>
+                    <div className="mt-2 text-center">
+                      <a href="../tokushoho.html" className="text-xs text-gray-400 underline">特定商取引法に基づく表記</a>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex justify-between items-center">
+                  <button
+                    onClick={prevSlide}
+                    disabled={currentSlide === 0}
+                    className={`flex items-center px-3 sm:px-5 py-3 rounded-lg font-medium transition-all ${
+                      currentSlide === 0 ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-orange-500 text-white hover:bg-orange-600"
+                    }`}
+                  >
+                    <ChevronLeft className="w-5 h-5 mr-1" />まえへ
+                  </button>
+                  <div className="progress-dots space-x-2">
+                    {slideIds.map((id, index) => (
+                      <div key={id} className={`w-2.5 h-2.5 rounded-full ${index === currentSlide ? "bg-orange-500" : "bg-gray-300"}`} />
+                    ))}
+                  </div>
+                  <button
+                    onClick={nextSlide}
+                    disabled={currentSlide === total - 1 || !canGoNext}
+                    className={`flex items-center px-3 sm:px-5 py-3 rounded-lg font-medium transition-all ${
+                      currentSlide === total - 1 || !canGoNext ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-orange-500 text-white hover:bg-orange-600"
+                    }`}
+                  >
+                    {slideIds[currentSlide] === "checkin" ? "おわりに" : "つぎへ"}<ChevronRight className="w-5 h-5 ml-1" />
+                  </button>
+                </div>
+              </div>
+              {renderPrintSheet()}
+            </div>
+          );
+        };
+
+        createRoot(document.getElementById("root")).render(<ShiimiEp05App />);
+    </script>
+</body>
+</html>

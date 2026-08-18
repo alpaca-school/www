@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <script>
+        (() => {
+            const pageVersion = "20260818-1";
+            const url = new URL(window.location.href);
+            if (url.searchParams.get("v") !== pageVersion) {
+                url.searchParams.set("v", pageVersion);
+                window.location.replace(url.toString());
+            }
+        })();
+    </script>
+    <title>シーミーって、どんな行事？【知能の窓・シーミー ep2：言語編】🌸</title>
+    <script src="../series-nav-data.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        p, li {
+            word-break: normal;
+            overflow-wrap: break-word;
+            line-break: strict;
+        }
+        .speech-bubble {
+            position: relative;
+            min-width: 0;
+            max-width: 100%;
+        }
+        .speech-bubble p {
+            display: block;
+            min-width: 0;
+            max-width: 100%;
+            white-space: normal;
+            word-break: normal;
+            overflow-wrap: anywhere;
+            line-break: anywhere;
+        }
+        .choice-card {
+            min-width: 0;
+        }
+        .choice-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            min-width: 0;
+            max-width: 100%;
+        }
+        .choice-row .speech-bubble {
+            flex: 1 1 0;
+            width: 0;
+        }
+        .choice-check {
+            flex: 0 0 auto;
+        }
+        .progress-dots {
+            display: none;
+        }
+        @media (min-width: 640px) {
+            .progress-dots {
+                display: flex;
+            }
+        }
+        .speech-bubble::after {
+            content: "";
+            position: absolute;
+            left: -10px;
+            top: 18px;
+            border-width: 8px 10px 8px 0;
+            border-style: solid;
+            border-color: transparent currentColor transparent transparent;
+        }
+        .chara-avatar {
+            width: 56px; height: 56px; border-radius: 9999px; object-fit: cover;
+            border: 2px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.15); background: #fff;
+            flex-shrink: 0;
+        }
+        .print-sheet { position: fixed; left: -9999px; top: 0; }
+        @media print {
+            body * { visibility: hidden; }
+            .print-sheet, .print-sheet * { visibility: visible; }
+            .print-sheet { position: absolute; left: 0; top: 0; width: 100%; }
+        }
+        rt { font-size: 0.6em; color: #ea580c; font-weight: 700; }
+        .furigana-off rt { display: none; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+        const { createRoot } = ReactDOM;
+
+        const ChevronRight = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m9 18 6-6-6-6"/></svg>
+        );
+        const ChevronLeft = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m15 18-6-6 6-6"/></svg>
+        );
+
+        // 4アルパカ（困りごとを持ち込む役。誰も正解を知らない）
+        const ALPACAS = {
+          hari: {
+            name: "ハーリー", color: "red", emoji: "🔥", img: "../img/characters/harly.png",
+            claim: "たぶんお花見みたいな行事っしょ！春に外で集まるから、それで決まり！",
+            gag: "（効果音：ズコーッ！ハーリー、資料のプリントを持ったまま廊下ですっ転ぶ）"
+          },
+          sara: {
+            name: "サラバンジ", color: "blue", emoji: "⚡", img: "../img/characters/sarabanji.png",
+            claim: "お墓のお祭りって言えばそれで十分っしょ！短く済ませて次行こう！短期決戦！",
+            gag: "（サラバンジ、その場でバタン！と大げさに倒れる→3秒後にムクッと起き上がる）"
+          },
+          gan: {
+            name: "ガンジュー", color: "green", emoji: "😴", img: "../img/characters/ganjuu.png",
+            claim: "えっと…春にやる何かの行事、だったような…名前まではちょっと思い出せません…",
+            gag: "（ガンジュー、プリントを持ったまま本気のいびき→知念おじぃさんに肩を叩かれてハッと飛び起きる）"
+          },
+          kaa: {
+            name: "カーギー", color: "purple", emoji: "💁‍♀️", img: "../img/characters/carggy.png",
+            claim: "たしか、親族が集まってごちそうを食べる行事よね。…あ、お墓やご先祖のことを言うの忘れてました。",
+            gag: "（カーギー、風で乱れた前髪を鏡もなしに一瞬でピシッと直しながら、少し首をかしげる）"
+          }
+        };
+        const ALPACA_KEYS = ["hari", "sara", "gan", "kaa"];
+
+        // 4メンター（おじぃさん・おばぁさん）。多重知能8分類を2つずつ担当する「知能の窓」シリーズの案内役
+        const MENTORS = {
+          chinen: { name: "知念おじぃさん", role: "智（論理・言語）", color: "amber", emoji: "🧓" },
+          tokue: { name: "仲程のヨシおばぁさん", role: "徳（対人・内省）", color: "rose", emoji: "👵" },
+          rikiya: { name: "力也おじぃさん", role: "体（音楽・運動）", color: "teal", emoji: "🧓" },
+          shizu: { name: "マタグワァのシズおばぁさん", role: "感（視覚空間・博物学）", color: "indigo", emoji: "👵" }
+        };
+
+        const COLOR_MAP = {
+          red: { bg: "bg-red-50", border: "border-red-300", text: "text-red-700", solid: "bg-red-500" },
+          blue: { bg: "bg-blue-50", border: "border-blue-300", text: "text-blue-700", solid: "bg-blue-500" },
+          green: { bg: "bg-green-50", border: "border-green-300", text: "text-green-700", solid: "bg-green-500" },
+          purple: { bg: "bg-purple-50", border: "border-purple-300", text: "text-purple-700", solid: "bg-purple-500" },
+          amber: { bg: "bg-amber-50", border: "border-amber-300", text: "text-amber-700", solid: "bg-amber-500" },
+          rose: { bg: "bg-rose-50", border: "border-rose-300", text: "text-rose-700", solid: "bg-rose-500" },
+          teal: { bg: "bg-teal-50", border: "border-teal-300", text: "text-teal-700", solid: "bg-teal-500" },
+          indigo: { bg: "bg-indigo-50", border: "border-indigo-300", text: "text-indigo-700", solid: "bg-indigo-500" }
+        };
+
+        // キャラ画像。アルパカは画像→失敗時絵文字。メンターは画像未整備のため絵文字のみ
+        const Avatar = ({ person }) => {
+          const [failed, setFailed] = useState(false);
+          if (!person.img || failed) {
+            return (
+              <div className={`chara-avatar flex items-center justify-center text-2xl ${COLOR_MAP[person.color].bg}`}>
+                {person.emoji}
+              </div>
+            );
+          }
+          return (
+            <img
+              src={person.img}
+              alt={person.name}
+              className="chara-avatar"
+              onError={() => setFailed(true)}
+            />
+          );
+        };
+
+        function shuffledThreeAlpacas() {
+          const arr = [...ALPACA_KEYS];
+          for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+          }
+          return arr.slice(0, 3);
+        }
+
+        // やってみる：ことばカードと意味カードを対応させる（正本ep2の「資料カードと意味カードで対応させる」活動）
+        const WORD_ITEMS = [
+          {
+            key: "shiimi",
+            word: "シーミー／ウシーミー",
+            options: [
+              { key: "a", text: "旧暦3月上旬ごろ、門中墓に一族が集まって行う祖先供養の行事。首里近辺では『ウシーミー』とも呼ばれる。", correct: true },
+              { key: "b", text: "毎週日曜日に、家族でお花見をする行事。", correct: false },
+              { key: "c", text: "夏休みに海辺で行われる、地域のお祭り。", correct: false },
+              { key: "d", text: "学校の運動会の、別の呼び方。", correct: false }
+            ]
+          },
+          {
+            key: "munchu",
+            word: "門中（むんちゅう）",
+            options: [
+              { key: "a", text: "同じ苗字の人なら誰でも入れる、地域の団体。", correct: false },
+              { key: "b", text: "同じ祖先を持つ、父方の血筋でつながる親族の集まり。", correct: true },
+              { key: "c", text: "お墓を管理する市役所の部署。", correct: false },
+              { key: "d", text: "料理を運ぶ係の人たちのこと。", correct: false }
+            ]
+          },
+          {
+            key: "usanmi",
+            word: "ウサンミ",
+            options: [
+              { key: "a", text: "お墓の掃除に使う道具のこと。", correct: false },
+              { key: "b", text: "シーミーの日に着る、特別な服のこと。", correct: false },
+              { key: "c", text: "重箱に詰めて供える、行事用のお祝い料理。", correct: true },
+              { key: "d", text: "親族が集まる時間を知らせる合図のこと。", correct: false }
+            ]
+          },
+          {
+            key: "usandee",
+            word: "ウサンデー",
+            options: [
+              { key: "a", text: "お供えした料理を、集まった皆でいただくこと。", correct: true },
+              { key: "b", text: "お墓の場所を、親族に教えてもらうこと。", correct: false },
+              { key: "c", text: "行事の最後にみんなで歌う歌のこと。", correct: false },
+              { key: "d", text: "料理を作る前に手を洗うこと。", correct: false }
+            ]
+          }
+        ];
+
+        // 出典・参考文献（この話で実際に使う資料だけ）
+        const SOURCES = [
+          {
+            kind: "出典",
+            organization: "沖縄県公文書館",
+            title: "清明祭（シーミー・ウシーミー）",
+            url: "https://www.archives.pref.okinawa.jp/news/that_day/1027"
+          }
+        ];
+
+        // シリーズ内ナビ用（series-nav-data.jsに未追加でも壊れないよう防御的に参照する）
+        const SHIIMI_LIST = typeof SHIIMI_EPISODES !== "undefined" ? SHIIMI_EPISODES : [];
+
+        // COCOLOプラン（ホームスクーラー等の学習記録）向けの教材メタ情報
+        const MATERIAL = {
+          title: "シーミーって、どんな行事？",
+          series: "知能の窓・シーミー ep2：言語編",
+          subjectGrade: "国語3〜6年・社会科（郷土学習）"
+        };
+
+        const ShiimiApp = () => {
+          const [threeKeys] = useState(() => shuffledThreeAlpacas());
+          const [currentSlide, setCurrentSlide] = useState(0);
+          const [guess, setGuess] = useState(null);
+          const [wordAnswers, setWordAnswers] = useState({});
+          const [imagineAnswer, setImagineAnswer] = useState("");
+          const [childName, setChildName] = useState("");
+          const [canDoIt, setCanDoIt] = useState(null);
+          const [memoryAnswer, setMemoryAnswer] = useState("");
+          const [furiganaOn, setFuriganaOn] = useState(true);
+
+          const slideIds = ["intro", "trouble", "mentor", "verify", "imagine", "checkin", "parent"];
+          const episodeIndex = SHIIMI_LIST.findIndex((e) => e.id === "shiimi-ep02");
+          const prevEpisode = episodeIndex > 0 ? SHIIMI_LIST[episodeIndex - 1] : null;
+          const nextEpisode = episodeIndex >= 0 && episodeIndex < SHIIMI_LIST.length - 1 ? SHIIMI_LIST[episodeIndex + 1] : null;
+          const total = slideIds.length;
+
+          const nextSlide = () => setCurrentSlide((p) => Math.min(p + 1, total - 1));
+          const prevSlide = () => setCurrentSlide((p) => Math.max(p - 1, 0));
+
+          const pickWordOption = (wordKey, optKey) => {
+            if (wordAnswers[wordKey]) return;
+            setWordAnswers((prev) => ({ ...prev, [wordKey]: optKey }));
+          };
+          const answeredCount = WORD_ITEMS.filter((w) => wordAnswers[w.key]).length;
+          const correctCount = WORD_ITEMS.filter((w) => {
+            const ans = wordAnswers[w.key];
+            return ans && w.options.find((o) => o.key === ans)?.correct === true;
+          }).length;
+          const allWordsAnswered = answeredCount === WORD_ITEMS.length;
+
+          const renderIntro = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-6xl mb-4">🌸</div>
+                <h2 className="text-2xl font-bold text-violet-600">シーミーということばを、知らない人にどう説明する？</h2>
+                <span className="inline-block mt-2 px-3 py-1 text-xs font-bold rounded-full bg-violet-100 text-violet-700">📚 {MATERIAL.subjectGrade}</span>
+              </div>
+              <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 space-y-3">
+                <p>沖縄には「シーミー」という行事がある。首里近辺では「ウシーミー」とも呼ばれる。門中（一族）が集まって、お墓にウサンミ（重箱料理）やお酒、花を供え、そのあとみんなでウサンデー（お供えをいただくこと）をする。</p>
+                <p>県外から来たお友だちに「シーミーって、どんな行事？」と聞かれた。アルパカたちが、それぞれの言葉で説明しようとしている。</p>
+              </div>
+            </div>
+          );
+
+          const renderTrouble = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">😱</div>
+                <h2 className="text-xl font-bold text-red-600 mb-1">困りごと発生！</h2>
+                <p className="text-gray-600">3人のアルパカが、資料を確かめずに、思いつきでシーミーの説明をしはじめた。きみは、誰の言うことに一番近いと思う？</p>
+              </div>
+              <div className="grid gap-4">
+                {threeKeys.map((key) => {
+                  const c = ALPACAS[key];
+                  const cc = COLOR_MAP[c.color];
+                  const selected = guess === key;
+                  return (
+                    <div
+                      key={key}
+                      onClick={() => setGuess(key)}
+                      className={`choice-card p-4 rounded-lg border-2 cursor-pointer transition-all ${cc.bg} ${
+                        selected ? `${cc.border} ring-2 ring-offset-1 ring-${c.color}-400` : "border-gray-200 hover:border-gray-300"
+                      }`}
+                    >
+                      <div className="choice-row">
+                        <Avatar person={c} />
+                        <div className={`speech-bubble flex-1 min-w-0 rounded-lg p-3 ${cc.text} bg-white/70`}>
+                          <p className="text-sm text-gray-700">「{c.claim}」</p>
+                        </div>
+                        {selected && (
+                          <div className={`choice-check w-7 h-7 rounded-full ${cc.solid} flex items-center justify-center text-white text-sm shrink-0`}>✓</div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              {!guess && <p className="text-center text-sm text-violet-500">↑ どれか1つを選ぶと、次に進めるよ</p>}
+              {guess && (
+                <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
+                  <p>みんな、思いつきで話していて、資料をまだ確かめていないみたい…。ここは、知能の窓シリーズのメンターに聞いてみよう。</p>
+                </div>
+              )}
+            </div>
+          );
+
+          const renderMentor = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">🧓</div>
+                <h2 className="text-xl font-bold text-amber-600">知念おじぃさんが教えてくれた</h2>
+              </div>
+              <div className={`rounded-lg p-4 space-y-2 ${COLOR_MAP.amber.bg}`}>
+                <div className="flex items-center gap-3 mb-1">
+                  <Avatar person={MENTORS.chinen} />
+                  <p className="font-bold text-amber-700">{MENTORS.chinen.name}</p>
+                </div>
+                <p className="text-sm text-gray-700">「焦らんでいいさぁ。知らないことばに出会ったら、まず資料で『いつ・どこで・誰が・何をする』の4つを確かめるといいんだよ」</p>
+                <p className="text-sm text-gray-700">「沖縄県公文書館によると、シーミー（清明祭）は、旧暦3月上旬ごろ、沖縄本島中南部を中心に、門中（一族）が集まって行う祖先供養の行事だよ。お墓にウサンミ（重箱料理）やお酒、花を供えて、そのあとみんなでウサンデー（いただくこと）をするんだ」</p>
+                <p className="text-sm text-gray-700">「首里近辺では『ウシーミー』とも呼ばれるよ。呼び方が違うのは、間違いじゃなくて、地域のことばの違いなんだ」</p>
+              </div>
+              <div className="grid gap-3">
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.rose.bg}`}>
+                  <Avatar person={MENTORS.tokue} />
+                  <p className="text-sm text-rose-700">「分からないことばを、恥ずかしがらずに『これ、何のことば？』って聞けるの、すてきなことだよ」</p>
+                </div>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.teal.bg}`}>
+                  <Avatar person={MENTORS.rikiya} />
+                  <p className="text-sm text-teal-700">「シーミー、ウシーミー、ウサンミ、ウサンデー…リズムに乗せて声に出してみるかー！」</p>
+                </div>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.indigo.bg}`}>
+                  <Avatar person={MENTORS.shizu} />
+                  <p className="text-sm text-indigo-700">「清明が暦のどこで決まるのかは、また今度、たっぷり教えるね」</p>
+                </div>
+              </div>
+            </div>
+          );
+
+          const renderVerify = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">✅</div>
+                <h2 className="text-2xl font-bold text-green-600">やってみよう</h2>
+                <p className="text-gray-600 text-sm mt-1">ことばカードと、意味カードを対応させよう</p>
+              </div>
+              <div className="space-y-4">
+                {WORD_ITEMS.map((item) => {
+                  const answered = !!wordAnswers[item.key];
+                  return (
+                    <div key={item.key} className="bg-white border-2 border-gray-200 rounded-lg p-4">
+                      <p className="font-bold text-violet-700 mb-3">{item.word}</p>
+                      <div className="grid gap-2">
+                        {item.options.map((opt) => {
+                          const isSelected = wordAnswers[item.key] === opt.key;
+                          const showResult = answered;
+                          let style = "border-gray-200 hover:border-gray-300 bg-white";
+                          if (showResult && isSelected && opt.correct) style = "border-green-400 bg-green-50";
+                          else if (showResult && isSelected && !opt.correct) style = "border-red-400 bg-red-50";
+                          else if (showResult && opt.correct) style = "border-green-300 bg-green-50";
+                          return (
+                            <button
+                              key={opt.key}
+                              onClick={() => pickWordOption(item.key, opt.key)}
+                              disabled={answered}
+                              className={`text-left p-3 rounded-lg border-2 text-sm transition ${style} ${answered && !isSelected && !opt.correct ? "opacity-60" : ""}`}
+                            >
+                              {opt.text}
+                              {showResult && opt.correct && <span className="ml-2 text-green-600 font-bold">◯ 正解</span>}
+                              {showResult && isSelected && !opt.correct && <span className="ml-2 text-red-500 font-bold">✕</span>}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              {allWordsAnswered && (
+                <div className="rounded-lg p-4 text-center bg-yellow-100">
+                  <p className="font-bold text-yellow-700">🎉 {correctCount} / {WORD_ITEMS.length} 問正解！資料で確かめると、ことばの意味がはっきりするね。</p>
+                </div>
+              )}
+              <div className="bg-violet-50 border-2 border-violet-200 rounded-lg p-4 text-sm text-violet-800 space-y-2">
+                <p className="font-bold">地域を比べてみよう</p>
+                <p>首里近辺では「シーミー」ではなく「ウシーミー」と呼ばれる。また、沖縄本島の一部や宮古・八重山では、シーミーより「十六日祭（じゅうるくにちー、旧暦1月16日ごろ）」が盛んな地域もあるんだ。</p>
+                <p className="text-violet-600 text-xs">「沖縄はどこも同じ」と決めつけないようにしよう。</p>
+              </div>
+              {guess && (
+                <div className="rounded-lg p-4 text-center bg-gray-100">
+                  <p className="font-bold text-gray-700">きみが選んだ{ALPACAS[guess].name}の説明は、資料を確かめる前の思いつきだったね。</p>
+                  <p className="text-xs text-gray-500 mt-2">{ALPACAS[guess].gag}</p>
+                </div>
+              )}
+            </div>
+          );
+
+          const renderImagine = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">💭</div>
+                <h2 className="text-2xl font-bold text-pink-600">想像してみよう</h2>
+              </div>
+              <div className="bg-pink-50 rounded-lg p-6">
+                <p className="text-lg">家族や地域の人に「シーミーのことを何と呼んでいる？」と一つだけ聞いてみたら、どんな答えが返ってくると思う？</p>
+                <p className="text-sm text-gray-500 mt-2">（「ウシーミー」と呼ぶ家もあれば、シーミーより十六日祭のほうが身近な家もあるかもしれない。聞いた答えは「○○さんの経験」として書いてみよう）</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">きみの考えを書いてみよう（学習記録シートに残せるよ）</label>
+                <textarea
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400 text-sm"
+                  rows="3"
+                  placeholder="例：おばぁは『ウシーミー』と呼んでいそうな気がする（○○さんの経験、として書いてみよう）"
+                  value={imagineAnswer}
+                  onChange={(e) => setImagineAnswer(e.target.value)}
+                ></textarea>
+              </div>
+            </div>
+          );
+
+          const renderCheckin = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">🙋</div>
+                <h2 className="text-2xl font-bold text-teal-600">ふりかえり</h2>
+              </div>
+              <div className="bg-teal-50 rounded-lg p-6">
+                <p className="font-medium text-teal-800 mb-3">✏️ 知念おじぃさんの「資料で、いつ・どこで・誰が・何をするを確かめる」やり方、自分でも使えそうだと思った？</p>
+                <div className="flex flex-wrap gap-2">
+                  {["はい", "いいえ", "わからない"].map((opt) => (
+                    <button
+                      key={opt}
+                      onClick={() => setCanDoIt(opt)}
+                      className={`px-4 py-2 rounded-lg font-bold border-2 transition ${
+                        canDoIt === opt ? "bg-teal-500 text-white border-teal-500" : "bg-white text-teal-700 border-teal-200"
+                      }`}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">✏️ 今日一番心に残ったことを書いてみよう</label>
+                <textarea
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400 text-sm"
+                  rows="3"
+                  placeholder="例：思いつきで決めずに、資料で確かめると分かる、ということが分かった"
+                  value={memoryAnswer}
+                  onChange={(e) => setMemoryAnswer(e.target.value)}
+                ></textarea>
+              </div>
+              <div className="bg-indigo-50 rounded-lg p-4 text-sm text-indigo-700 text-center">
+                <p>次回、知能の窓・シーミー ep3（音楽・リズム編）では、シーミーの日にどんな音があるかを見ていくよ。お楽しみに。</p>
+              </div>
+            </div>
+          );
+
+          const renderParent = () => (
+            <div className="space-y-4">
+              <div className="text-center">
+                <div className="text-5xl mb-4">🎬</div>
+                <h2 className="text-2xl font-bold text-yellow-700">おわりに</h2>
+              </div>
+              <div className="bg-orange-50 rounded-lg p-4">
+                <p className="text-xs font-bold text-orange-700 mb-2">🧑‍🎓 児童生徒のみなさんへ</p>
+                <p className="text-sm text-gray-700">きょうは、シーミーということばの意味を、資料で確かめながら考えたね。知念おじぃさんが教えてくれた「いつ・どこで・誰が・何をするを確かめる」やり方、知らないことばに出会ったときにまた使ってみよう。</p>
+              </div>
+              <div className="bg-yellow-50 rounded-lg p-4">
+                <p className="text-xs font-bold text-yellow-800 mb-2">👪 保護者・支援者の方へ（学習指導要領との対応）</p>
+                <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
+                  <li><strong>国語（3〜6年）</strong>：語彙を広げる力、資料を読み取って要約する力、地域のことばを尊重して受け止める力</li>
+                  <li><strong>社会・総合的な学習の時間</strong>：地域文化・資料読解、年中行事の学習</li>
+                </ul>
+                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓」シリーズのシーミー版 ep2です。紅芋・獅子舞・台風・綱引き・ゴーヤーシリーズ等と同じ多重知能（MI）理論に基づき、1つのテーマ（シーミー）を8つの知能の窓（論理・数学／言語／音楽／身体運動／博物学／視覚空間／内省／対人）から順番に描く構成です。今回は「言語・語学」の窓から、知念おじぃさんがことばを資料で確かめる力を教える回でした。</p>
+                <p className="text-xs text-gray-500 mt-1">※ 4アルパカ（ハーリー・サラバンジ・ガンジュー・カーギー）は、「困りごとを持ち込む役」として登場します。3人の説明はランダムに選ばれ、いずれも資料を確かめる前の思いつきです。「自分だけの思いつきで話すと不確かになりやすい」「資料で、いつ・どこで・誰が・何をするを確かめると、ことばの意味がはっきりする」という体験そのものが、この教材のねらいです。</p>
+                <p className="text-xs text-gray-500 mt-1">※ シーミー（清明祭）の時期・地域・呼称・供え物等は、沖縄県公文書館の説明に基づく公的事実として扱っています。首里近辺での「ウシーミー」という呼称、沖縄本島の一部や宮古・八重山で十六日祭がより盛んな地域があることも、同資料に基づきます。ご家庭の呼び方・手順は地域や家庭によって異なることがあるため、「○○さんの経験」として、公的事実とは分けて受け止めてください。「沖縄では全部同じ」と一般化しないようご配慮ください。</p>
+                <p className="text-xs text-gray-500 mt-1">※ 祖先供養への向き合い方には個人差があります。シーミーへ参加した経験がない、参加しない、家族構成が複雑等のお子さんもいることを想定し、「参加して当然」「祖先を敬って当然」という前提を置かない設計にしています。</p>
+                <p className="text-xs text-gray-500 mt-1">※ 次の行動：家族や地域の人に「シーミーを何と呼ぶ？」と一つだけ聞いて、「○○さんの経験」として記録してみましょう。一般化はしません。</p>
+              </div>
+              {SOURCES.length > 0 && (
+                <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
+                  <p className="text-xs font-bold text-slate-700 mb-3">📚 出典・参考文献</p>
+                  <ul className="space-y-2 text-sm">
+                    {SOURCES.map((source, i) => (
+                      <li key={i} className="leading-relaxed">
+                        <span className="font-bold">[{source.kind}] {source.organization}</span>{" "}
+                        <a
+                          href={source.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-indigo-700 underline"
+                        >
+                          {source.title} ↗
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <div className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-4">
+                <p className="text-xs font-bold text-gray-700 mb-2">🖨️ 学習記録シートを作る（COCOLOプラン等の学習記録用）</p>
+                <input
+                  type="text"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 text-sm mb-2"
+                  placeholder="お子さんの名前（記入は任意）"
+                  value={childName}
+                  onChange={(e) => setChildName(e.target.value)}
+                />
+                <button
+                  onClick={() => window.print()}
+                  className="w-full px-4 py-2 bg-yellow-500 text-white rounded-lg font-medium hover:bg-yellow-600 transition-all text-sm"
+                >
+                  学習記録シートを印刷する
+                </button>
+                <p className="text-xs text-gray-400 mt-1">今日の日付・対応教科・取り組んだ内容・保護者確認欄が入った1枚のシートが印刷されます。</p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-gray-200 space-y-2">
+                <p className="text-xs font-bold text-gray-500 text-center">つぎに進む</p>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  {prevEpisode ? (
+                    <a href={"../" + prevEpisode.url} className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-300 text-sm font-bold text-gray-600 hover:bg-gray-50 transition">← {prevEpisode.short}</a>
+                  ) : (
+                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-300">← 最初のエピソード</span>
+                  )}
+                  {nextEpisode ? (
+                    <a href={"../" + nextEpisode.url} className="flex-1 text-center px-3 py-2 rounded-lg bg-violet-500 text-white text-sm font-bold hover:bg-violet-600 transition">{nextEpisode.short} →</a>
+                  ) : (
+                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-300">最終話</span>
+                  )}
+                </div>
+                <a href="../matrix-library.html" className="block text-center text-sm font-bold text-violet-500 hover:text-violet-700 underline">他のテーマも見る（教材一覧）</a>
+              </div>
+              <div className="mt-6 pt-4 border-t border-dashed border-gray-300">
+                <div className="bg-gray-50 rounded-lg p-4 text-left">
+                  <p className="text-xs font-bold text-gray-700 mb-2 text-center">💬 ご意見・ご要望</p>
+                  <p className="text-xs text-gray-600 mb-3">「こんな機能が欲しい」「ここが使いにくい」などのご意見をお聞かせください。今後の開発の参考にさせていただきます。</p>
+                  <a href={FEEDBACK_FORM_URL} target="_blank" rel="noopener noreferrer" className="block text-center px-4 py-2 bg-gray-700 text-white rounded-full text-sm font-bold hover:bg-gray-800 transition">📋 要望・フィードバックを送る</a>
+                </div>
+              </div>
+            </div>
+          );
+
+          const today = new Date();
+          const todayStr = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
+          const guessedForSheet = guess ? ALPACAS[guess] : null;
+
+          const renderPrintSheet = () => (
+            <div className="print-sheet w-[700px] p-10 bg-white text-black">
+              <h1 className="text-xl font-bold border-b-2 border-black pb-2 mb-4">学習記録シート</h1>
+              <table className="w-full text-sm mb-4">
+                <tbody>
+                  <tr><td className="py-1 pr-4 font-bold w-32">学習日</td><td className="py-1">{todayStr}</td></tr>
+                  <tr><td className="py-1 pr-4 font-bold">お子さんの名前</td><td className="py-1">{childName || "＿＿＿＿＿＿＿＿＿＿"}</td></tr>
+                  <tr><td className="py-1 pr-4 font-bold">教材名</td><td className="py-1">{MATERIAL.title}（{MATERIAL.series}）</td></tr>
+                  <tr><td className="py-1 pr-4 font-bold">対応教科・学年</td><td className="py-1">{MATERIAL.subjectGrade}</td></tr>
+                </tbody>
+              </table>
+              <div className="mb-4 text-xs text-gray-700 bg-gray-50 border border-gray-300 rounded p-3">
+                <p className="font-bold mb-1">学習指導要領との対応</p>
+                <ul className="space-y-0.5 list-disc list-inside">
+                  <li>国語（3〜6年）：語彙を広げる力、資料を読み取って要約する力、地域のことばを尊重して受け止める力</li>
+                  <li>社会・総合的な学習の時間：地域文化・資料読解、年中行事の学習</li>
+                </ul>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">1. アルパカの困りごとで、一番近いと思った説明</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">
+                  {guessedForSheet ? `${guessedForSheet.name}の「${guessedForSheet.claim}」を選びました。` : "（記入なし）"}
+                </p>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">2. 知念おじぃさんに教わった、シーミーの意味</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">シーミー（清明祭）は、旧暦3月上旬ごろ、門中（一族）が集まって行う祖先供養の行事。首里近辺では「ウシーミー」とも呼ばれる。ウサンミ（重箱料理）を供え、ウサンデー（皆でいただくこと）をする。</p>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">3. ことばマッチングクイズの結果</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">{allWordsAnswered ? `${correctCount} / ${WORD_ITEMS.length} 問正解` : "（未回答）"}</p>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">4. 想像する問題への自分の考え</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[3rem]">{imagineAnswer || "（記入なし）"}</p>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">5. 今日一番心に残ったこと</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[3rem]">{memoryAnswer || "（記入なし）"}</p>
+              </div>
+              <div className="mt-8 pt-4 border-t border-gray-400">
+                <p className="text-sm">保護者確認サイン：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+              </div>
+            </div>
+          );
+
+          const slideRenderers = {
+            intro: renderIntro,
+            trouble: renderTrouble,
+            mentor: renderMentor,
+            verify: renderVerify,
+            imagine: renderImagine,
+            checkin: renderCheckin,
+            parent: renderParent
+          };
+          const slideTitles = {
+            intro: "🌸 はじまりの問い",
+            trouble: "😱 困りごと",
+            mentor: "🧓 メンター登場",
+            verify: "✅ やってみる",
+            imagine: "💭 想像する",
+            checkin: "🙋 ふりかえり",
+            parent: "🎬 おわりに"
+          };
+
+          const canGoNext = !(slideIds[currentSlide] === "trouble" && !guess);
+
+          return (
+            <div className={`min-h-screen bg-gradient-to-br from-violet-50 to-yellow-50 ${furiganaOn ? "" : "furigana-off"}`}>
+              <div className="container mx-auto px-4 py-8 max-w-2xl">
+                <div className="flex items-center justify-between mb-4">
+                  <a href="../matrix-library.html" className="inline-flex items-center gap-1 text-sm font-bold text-violet-500 hover:text-violet-700">
+                    <ChevronLeft className="w-4 h-4" />教材一覧へ戻る
+                  </a>
+                  <button
+                    onClick={() => setFuriganaOn((f) => !f)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border-2 transition ${
+                      furiganaOn ? "bg-violet-500 text-white border-violet-500" : "bg-white text-violet-600 border-violet-300"
+                    }`}
+                  >
+                    🔤 ふりがな {furiganaOn ? "ON" : "OFF"}
+                  </button>
+                </div>
+                <div className="text-center mb-6">
+                  <p className="text-xs font-bold text-indigo-500 mb-1">知能の窓・シーミー ep2：言語編</p>
+                  <h1 className="text-2xl md:text-3xl font-bold text-violet-600">シーミーって、どんな行事？ 🌸</h1>
+                  <span className="inline-block mt-1 px-2 py-0.5 text-xs font-bold rounded-full bg-violet-100 text-violet-700">📚 {MATERIAL.subjectGrade}</span>
+                </div>
+
+                <div className="mb-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm text-gray-600">{slideTitles[slideIds[currentSlide]]}</span>
+                    <span className="text-sm text-gray-600">{currentSlide + 1} / {total}</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="bg-violet-500 h-2 rounded-full transition-all duration-300" style={{ width: `${((currentSlide + 1) / total) * 100}%` }}></div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8 mb-6 min-h-96">
+                  {slideRenderers[slideIds[currentSlide]]()}
+                </div>
+
+                {slideIds[currentSlide] === "parent" && (
+                  <div className="bg-violet-50 border border-violet-200 rounded-lg p-4 text-left mb-6">
+                    <p className="text-xs font-bold text-violet-700 mb-2 text-center">🌱 制作をアシストする</p>
+                    <p className="text-xs text-gray-600 mb-3">ここでの学びは、記録され、次の学びへと受け継がれていきます。その循環を支えるちからになっていただけたら嬉しいです。</p>
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      {SUPPORT_LINKS.map((s) => (
+                        <a key={s.label} href={s.url} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-full text-sm font-bold border-2 border-violet-300 text-violet-700 bg-white hover:bg-violet-100 transition">{s.label}</a>
+                      ))}
+                    </div>
+                    <div className="mt-2 text-center">
+                      <a href="../tokushoho.html" className="text-xs text-gray-400 underline">特定商取引法に基づく表記</a>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex justify-between items-center">
+                  <button
+                    onClick={prevSlide}
+                    disabled={currentSlide === 0}
+                    className={`flex items-center px-3 sm:px-5 py-3 rounded-lg font-medium transition-all ${
+                      currentSlide === 0 ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-violet-500 text-white hover:bg-violet-600"
+                    }`}
+                  >
+                    <ChevronLeft className="w-5 h-5 mr-1" />まえへ
+                  </button>
+                  <div className="progress-dots space-x-2">
+                    {slideIds.map((id, index) => (
+                      <div key={id} className={`w-2.5 h-2.5 rounded-full ${index === currentSlide ? "bg-violet-500" : "bg-gray-300"}`} />
+                    ))}
+                  </div>
+                  <button
+                    onClick={nextSlide}
+                    disabled={currentSlide === total - 1 || !canGoNext}
+                    className={`flex items-center px-3 sm:px-5 py-3 rounded-lg font-medium transition-all ${
+                      currentSlide === total - 1 || !canGoNext ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-violet-500 text-white hover:bg-violet-600"
+                    }`}
+                  >
+                    {slideIds[currentSlide] === "checkin" ? "おわりに" : "つぎへ"}<ChevronRight className="w-5 h-5 ml-1" />
+                  </button>
+                </div>
+              </div>
+              {renderPrintSheet()}
+            </div>
+          );
+        };
+
+        createRoot(document.getElementById("root")).render(<ShiimiApp />);
+    </script>
+</body>
+</html>
