@@ -122,3 +122,15 @@ const BENIIMO_EPISODES = [
   { id: "beniimo-ep8", short: "ep8：対人編", title: "紅芋のこと、うまく紹介できるかな？", url: "rekishi/beniimo_ep8_taijin.html" },
   { id: "beniimo-ep9", short: "ep9：集・表現編", title: "紅芋のことば、誰かに届けてみよう", url: "rekishi/beniimo_ep9_hyogen.html" },
 ];
+// 知能の窓・やちむんシリーズ（2026-08-17、全9話完成）
+const YACHIMUN_EPISODES = [
+  { id: "yachimun-ep01", short: "ep1：論理・数学編", title: "窯から、何個ぶじに出てきた？", url: "bunka/yachimun_ep01.html" },
+  { id: "yachimun-ep02", short: "ep2：言語編", title: "やちむんって、どんなことば？", url: "bunka/yachimun_ep02.html" },
+  { id: "yachimun-ep03", short: "ep3：音楽編", title: "土をつくる音、器をつくる音", url: "bunka/yachimun_ep03.html" },
+  { id: "yachimun-ep04", short: "ep4：身体・運動編", title: "土は、手でどう変わる？", url: "bunka/yachimun_ep04.html" },
+  { id: "yachimun-ep05", short: "ep5：博物学編", title: "土・水・火で、何が変わる？", url: "bunka/yachimun_ep05.html" },
+  { id: "yachimun-ep06", short: "ep6：視覚・空間編", title: "壺屋と読谷、どこにある？", url: "bunka/yachimun_ep06.html" },
+  { id: "yachimun-ep07", short: "ep7：内省編", title: "わたしなら、どんな器を毎日使いたい？", url: "bunka/yachimun_ep07.html" },
+  { id: "yachimun-ep08", short: "ep8：対人編", title: "やちむんは、一人でできる？", url: "bunka/yachimun_ep08.html" },
+  { id: "yachimun-ep09", short: "ep9：集・表現編（完）", title: "わたしのやちむん企画展", url: "bunka/yachimun_ep09.html" },
+];
