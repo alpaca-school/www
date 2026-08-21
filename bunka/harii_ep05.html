@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <script>
+        (() => {
+            const pageVersion = "20260821-2";
+            const url = new URL(window.location.href);
+            if (url.searchParams.get("v") !== pageVersion) {
+                url.searchParams.set("v", pageVersion);
+                window.location.replace(url.toString());
+            }
+        })();
+    </script>
+    <title>海の高さは、どうして変わる？【知能の窓・ハーリー ep5：博物学編】 🌊</title>
+    <script src="../series-nav-data.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        p, li {
+            word-break: normal;
+            overflow-wrap: break-word;
+            line-break: strict;
+        }
+        .speech-bubble {
+            position: relative;
+            min-width: 0;
+            max-width: 100%;
+        }
+        .speech-bubble p {
+            display: block;
+            min-width: 0;
+            max-width: 100%;
+            white-space: normal;
+            word-break: normal;
+            overflow-wrap: anywhere;
+            line-break: anywhere;
+        }
+        .choice-card {
+            min-width: 0;
+        }
+        .choice-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            min-width: 0;
+            max-width: 100%;
+        }
+        .choice-row .speech-bubble {
+            flex: 1 1 0;
+            width: 0;
+        }
+        .choice-check {
+            flex: 0 0 auto;
+        }
+        .progress-dots {
+            display: none;
+        }
+        @media (min-width: 640px) {
+            .progress-dots {
+                display: flex;
+            }
+        }
+        .speech-bubble::after {
+            content: "";
+            position: absolute;
+            left: -10px;
+            top: 18px;
+            border-width: 8px 10px 8px 0;
+            border-style: solid;
+            border-color: transparent currentColor transparent transparent;
+        }
+        .chara-avatar {
+            width: 56px; height: 56px; border-radius: 9999px; object-fit: cover;
+            border: 2px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.15); background: #fff;
+            flex-shrink: 0;
+        }
+        .print-sheet { position: fixed; left: -9999px; top: 0; }
+        @media print {
+            body * { visibility: hidden; }
+            .print-sheet, .print-sheet * { visibility: visible; }
+            .print-sheet { position: absolute; left: 0; top: 0; width: 100%; }
+        }
+        rt { font-size: 0.6em; color: #0e7490; font-weight: 700; }
+        .furigana-off rt { display: none; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+        const { createRoot } = ReactDOM;
+
+        const ChevronRight = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m9 18 6-6-6-6"/></svg>
+        );
+        const ChevronLeft = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m15 18-6-6 6-6"/></svg>
+        );
+
+        // 4アルパカ（困りごとを持ち込む役。3人をランダム表示し、全員が不正解）
+        const ALPACAS = {
+          hari: {
+            name: "ハーリー", color: "red", emoji: "🔥", img: "../img/characters/harly.png",
+            guess: "旧暦5月4日なら必ず大潮",
+            line: "ハーリーの日はぜったい大潮っしょ！旧暦の日付だけ見れば海の高さも全部わかる！",
+            gag: "（効果音：ズコーッ！ハーリー、潮の図を一枚だけ見て勢いよくすっ転ぶ）"
+          },
+          sara: {
+            name: "サラバンジ", color: "blue", emoji: "⚡", img: "../img/characters/sarabanji.png",
+            guess: "毎日同じ時刻に満潮",
+            line: "昨日の満潮が朝8時なら、今日も朝8時！覚えるのは一回で十分さ！",
+            gag: "（サラバンジ、その場でバタン！と大げさに倒れる→3秒後にムクッと起き上がる）"
+          },
+          gan: {
+            name: "ガンジュー", color: "green", emoji: "😴", img: "../img/characters/ganjuu.png",
+            guess: "月だけで港の安全が決まる",
+            line: "えっと…月の形を見れば、どの港も安全かどうか分かると思います…",
+            gag: "（ガンジュー、潮位表の前で本気のいびき→マタグワァのシズおばぁさんに肩を叩かれてハッと飛び起きる）"
+          },
+          kaa: {
+            name: "カーギー", color: "purple", emoji: "💁‍♀️", img: "../img/characters/carggy.png",
+            guess: "満月ならいつも同じ潮位差",
+            line: "満月の日は場所が違っても、満潮と干潮の差が同じ数字になるはずですよね。",
+            gag: "（カーギー、風で乱れた前髪を鏡もなしに一瞬でピシッと直しながら、同じ目盛りを書き込む）"
+          }
+        };
+
+        const ALPACA_KEYS = ["hari", "sara", "gan", "kaa"];
+
+        // 4メンター。MI8の担当と智徳体感の教育観を混同しない
+        const MENTORS = {
+          chinen: { name: "知念おじぃさん", role: "智（論理・言語）", color: "amber", emoji: "🧓" },
+          tokue: { name: "仲程のヨシおばぁさん", role: "徳（対人・内省）", color: "rose", emoji: "👵" },
+          rikiya: { name: "力也おじぃさん", role: "体（音楽・運動）", color: "teal", emoji: "🧓" },
+          shizu: { name: "マタグワァのシズおばぁさん", role: "感（視覚空間・博物学）", color: "indigo", emoji: "👵" }
+        };
+
+        const COLOR_MAP = {
+          red: { bg: "bg-red-50", border: "border-red-300", text: "text-red-700", solid: "bg-red-500" },
+          blue: { bg: "bg-blue-50", border: "border-blue-300", text: "text-blue-700", solid: "bg-blue-500" },
+          green: { bg: "bg-green-50", border: "border-green-300", text: "text-green-700", solid: "bg-green-500" },
+          purple: { bg: "bg-purple-50", border: "border-purple-300", text: "text-purple-700", solid: "bg-purple-500" },
+          amber: { bg: "bg-amber-50", border: "border-amber-300", text: "text-amber-700", solid: "bg-amber-500" },
+          rose: { bg: "bg-rose-50", border: "border-rose-300", text: "text-rose-700", solid: "bg-rose-500" },
+          teal: { bg: "bg-teal-50", border: "border-teal-300", text: "text-teal-700", solid: "bg-teal-500" },
+          indigo: { bg: "bg-indigo-50", border: "border-indigo-300", text: "text-indigo-700", solid: "bg-indigo-500" }
+        };
+
+        // キャラ画像。アルパカは画像→失敗時絵文字。メンターは画像未整備のため絵文字のみ
+        const Avatar = ({ person }) => {
+          const [failed, setFailed] = useState(false);
+          if (!person.img || failed) {
+            return (
+              <div className={`chara-avatar flex items-center justify-center text-2xl ${COLOR_MAP[person.color].bg}`}>
+                {person.emoji}
+              </div>
+            );
+          }
+          return (
+            <img
+              src={person.img}
+              alt={person.name}
+              className="chara-avatar"
+              onError={() => setFailed(true)}
+            />
+          );
+        };
+
+        function shuffledThreeAlpacas() {
+          const arr = [...ALPACA_KEYS];
+          for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+          }
+          return arr.slice(0, 3);
+        }
+
+        // 出典・参考資料（この回で実際に使った資料だけ）
+        const SOURCES = [
+          { label: "気象庁「潮汐の仕組み」", url: "https://www.data.jma.go.jp/kaiyou/db/tide/knowledge/tide/choseki.html" },
+          { label: "糸満市「糸満のハーリー・ハーレー」", url: "https://www.city.itoman.lg.jp/site/kankou-navi/15706.html" }
+        ];
+
+        // シリーズ内ナビ用の防御的参照
+        const HARII_LIST = typeof HARII_EPISODES !== "undefined" ? HARII_EPISODES : [];
+
+        // COCOLOプラン（ホームスクーラー等の学習記録）向けの教材メタ情報
+        const MATERIAL = {
+          title: "海の高さは、どうして変わる？",
+          series: "知能の窓・ハーリー ep5：博物学編",
+          subjectGrade: "理科4〜6年・中学"
+        };
+
+        const HariiApp = () => {
+          const [threeKeys] = useState(() => shuffledThreeAlpacas());
+          const [currentSlide, setCurrentSlide] = useState(0);
+          const [guess, setGuess] = useState(null);
+          const [imagineAnswer, setImagineAnswer] = useState("");
+          const [childName, setChildName] = useState("");
+          const [canDoIt, setCanDoIt] = useState(null);
+          const [memoryAnswer, setMemoryAnswer] = useState("");
+          const [furiganaOn, setFuriganaOn] = useState(true);
+
+          // 選んだアルパカの誤答を、やってみるスライドで振り返る
+
+          const slideIds = ["intro", "trouble", "mentor", "verify", "imagine", "checkin", "parent"];
+          const episodeIndex = HARII_LIST.findIndex((e) => e.id === "harii-ep05");
+          const prevEpisode = episodeIndex > 0 ? HARII_LIST[episodeIndex - 1] : null;
+          const nextEpisode = episodeIndex >= 0 && episodeIndex < HARII_LIST.length - 1 ? HARII_LIST[episodeIndex + 1] : null;
+          const total = slideIds.length;
+
+          const nextSlide = () => setCurrentSlide((p) => Math.min(p + 1, total - 1));
+          const prevSlide = () => setCurrentSlide((p) => Math.max(p - 1, 0));
+
+          const renderIntro = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-6xl mb-4">🌊</div>
+                <h2 className="text-2xl font-bold text-blue-600">満潮・干潮と、月・太陽にはどんな関係がある？</h2>
+                <span className="inline-block mt-2 px-3 py-1 text-xs font-bold rounded-full bg-blue-100 text-blue-700">📚 {MATERIAL.subjectGrade}</span>
+              </div>
+              <div className="bg-cyan-50 border-2 border-cyan-200 rounded-lg p-6 space-y-3">
+                <p>海面の高さは、ゆっくり上がったり下がったりします。上がりきった状態を<ruby>満潮<rt>まんちょう</rt></ruby>、下がりきった状態を<ruby>干潮<rt>かんちょう</rt></ruby>と呼びます。</p>
+                <p>気象庁は、潮汐の主な原因を月と太陽による<ruby>起潮力<rt>きちょうりょく</rt></ruby>と説明しています。新月・満月の頃は大潮、上弦・下弦の頃は小潮になりやすいとされます。</p>
+                <p>でも『旧暦5月4日の行事だから、必ずこの潮になる』とは言えません。場所・地形・時期で潮位は異なり、安全確認には公的な潮位表と主催者情報が必要です。</p>
+              </div>
+            </div>
+          );
+
+          const renderTrouble = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">😱</div>
+                <h2 className="text-xl font-bold text-red-600 mb-1">困りごと発生！</h2>
+                <p className="text-gray-600">3人のアルパカが、早合点して違う考えを言いはじめた。きみは、どの考えが一番近いと思う？</p>
+              </div>
+              <div className="grid gap-4">
+                {threeKeys.map((key) => {
+                  const c = ALPACAS[key];
+                  const cc = COLOR_MAP[c.color];
+                  const selected = guess === key;
+                  return (
+                    <div
+                      key={key}
+                      onClick={() => setGuess(key)}
+                      className={`choice-card p-4 rounded-lg border-2 cursor-pointer transition-all ${cc.bg} ${
+                        selected ? `${cc.border} ring-2 ring-offset-1 ring-${c.color}-400` : "border-gray-200 hover:border-gray-300"
+                      }`}
+                    >
+                      <div className="choice-row">
+                        <Avatar person={c} />
+                        <div className={`speech-bubble flex-1 min-w-0 rounded-lg p-3 ${cc.text} bg-white/70`}>
+                          <p className={`font-bold ${cc.text}`}>{c.name}：{c.guess}</p>
+                          <p className="text-sm text-gray-700 mt-1">「{c.line}」</p>
+                        </div>
+                        {selected && (
+                          <div className={`choice-check w-7 h-7 rounded-full ${cc.solid} flex items-center justify-center text-white text-sm shrink-0`}>✓</div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              {!guess && <p className="text-center text-sm text-blue-500">↑ どれか1つを選ぶと、次に進めるよ</p>}
+              {guess && (
+                <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
+                  <p>どのアルパカも、根拠や大切な条件を見落としているみたい。マタグワァのシズおばぁさんに聞いてみよう。</p>
+                </div>
+              )}
+            </div>
+          );
+
+          const renderMentor = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">👵</div>
+                <h2 className="text-xl font-bold text-indigo-600">マタグワァのシズおばぁさんが教えてくれた</h2>
+              </div>
+              <div className={`rounded-lg p-4 space-y-2 ${COLOR_MAP.indigo.bg}`}>
+                <div className="flex items-center gap-3 mb-1">
+                  <Avatar person={MENTORS.shizu} />
+                  <p className="font-bold text-indigo-700">{MENTORS.shizu.name}</p>
+                </div>
+                <p className="text-sm text-gray-700">「潮汐は、海面が約半日の周期で上下する現象だよ。月だけでなく太陽の起潮力も関わっているんだ」</p>
+                <p className="text-sm text-gray-700">「新月・満月の頃は大潮、上弦・下弦の頃は小潮になりやすい。でも旧暦の日付だけで、その場所の潮位や満潮時刻を決めつけないこと」</p>
+                <p className="text-sm text-gray-700">「月の形を学ぶ『月の窓』と、地点ごとの公的な潮位表は別の情報。安全判断では両者を混ぜず、主催者や大人の指示を優先しよう」</p>
+              </div>
+              <div className="grid gap-3">
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.amber.bg}`}>
+                  <Avatar person={MENTORS.chinen} />
+                  <p className="text-sm text-gray-700">「『なりやすい』と『必ず』は意味が違うね。資料のことばを正確に読もう」</p>
+                </div>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.rose.bg}`}>
+                  <Avatar person={MENTORS.tokue} />
+                  <p className="text-sm text-gray-700">「海をこわいと感じても大丈夫。近づかず、図や写真で学ぶ方法を選べるよ」</p>
+                </div>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.teal.bg}`}>
+                  <Avatar person={MENTORS.rikiya} />
+                  <p className="text-sm text-gray-700">「潮位の上がり下がりを、ゆっくりした手の動きで表すと周期を感じられるね」</p>
+                </div>
+              </div>
+            </div>
+          );
+
+          const renderVerify = () => {
+            const guessedAlpaca = guess ? ALPACAS[guess] : null;
+            return (
+              <div className="space-y-6">
+                <div className="text-center">
+                  <div className="text-5xl mb-4">✅</div>
+                  <h2 className="text-2xl font-bold text-green-600">やってみよう</h2>
+                </div>
+                <div className="bg-green-50 border-2 border-green-200 rounded-lg p-6 space-y-3 text-sm">
+                  <p><strong>満潮・干潮</strong>：潮位が上がりきった状態／下がりきった状態。多くの場所では一日に二回ずつあります。</p>
+                  <p><strong>大潮・小潮</strong>：月と太陽の起潮力の向きにより、満干潮の潮位差が大きくなる時期／小さくなる時期です。</p>
+                  <p>見抜くべき単純化：<strong>『旧暦5月4日だから必ず○○潮』は不正確</strong>。具体的な地点・日時は気象庁等の潮位表で確認します。</p>
+                </div>
+                {guessedAlpaca && (
+                  <div className="rounded-lg p-4 text-center bg-gray-100">
+                    <p className="font-bold text-gray-700">きみが選んだ{guessedAlpaca.name}の「{guessedAlpaca.guess}」は、大切な条件を見落としていたね。</p>
+                    <p className="text-xs text-gray-500 mt-2">{guessedAlpaca.gag}</p>
+                  </div>
+                )}
+                <div className="bg-cyan-50 rounded-lg p-4 text-sm text-cyan-800 text-center">
+                  <p>「月の窓」で月の形を学び、同じ日に公的な潮位表を見ると、月の一般的な関係と地点ごとの予測が別の情報だと分かります。教材だけで海の安全を判断しません。</p>
+                </div>
+              </div>
+            );
+          };
+
+          const renderImagine = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">💭</div>
+                <h2 className="text-2xl font-bold text-pink-600">想像してみよう</h2>
+              </div>
+              <div className="bg-pink-50 rounded-lg p-6">
+                <p className="text-lg">同じ月の形の日でも、二つの港で潮位の時刻や高さが違っていたら、どんな理由を調べたい？</p>
+                <p className="text-sm text-gray-500 mt-2">（海岸の形、場所、季節、観測記録など、調べたいことを一つ選ぼう。）</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">きみの考えを書いてみよう（学習記録シートに残せるよ）</label>
+                <textarea
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400 text-sm"
+                  rows="3"
+                  placeholder="例：港の形や場所の違いを、公的な資料で比べたい"
+                  value={imagineAnswer}
+                  onChange={(e) => setImagineAnswer(e.target.value)}
+                ></textarea>
+              </div>
+            </div>
+          );
+
+          const renderCheckin = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">🙋</div>
+                <h2 className="text-2xl font-bold text-teal-600">ふりかえり</h2>
+              </div>
+              <div className="bg-teal-50 rounded-lg p-6">
+                <p className="font-medium text-teal-800 mb-3">✏️ 『なりやすい』と『必ず』を分けて潮の資料を読めそう？</p>
+                <div className="flex flex-wrap gap-2">
+                  {["はい", "いいえ", "わからない"].map((opt) => (
+                    <button
+                      key={opt}
+                      onClick={() => setCanDoIt(opt)}
+                      className={`px-4 py-2 rounded-lg font-bold border-2 transition ${
+                        canDoIt === opt ? "bg-teal-500 text-white border-teal-500" : "bg-white text-teal-700 border-teal-200"
+                      }`}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">✏️ 今日一番心に残ったことを書いてみよう</label>
+                <textarea
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400 text-sm"
+                  rows="3"
+                  placeholder="例：旧暦5月4日だけでは、その港の潮は決められない"
+                  value={memoryAnswer}
+                  onChange={(e) => setMemoryAnswer(e.target.value)}
+                ></textarea>
+              </div>
+              <div className="bg-indigo-50 rounded-lg p-4 text-sm text-indigo-700 text-center">
+                <p>次回ep6では、教材用の架空コースを上から見た図にして、舟の位置関係を考えるよ。</p>
+              </div>
+            </div>
+          );
+
+          const renderParent = () => (
+            <div className="space-y-4">
+              <div className="text-center">
+                <div className="text-5xl mb-4">🎬</div>
+                <h2 className="text-2xl font-bold text-yellow-700">おわりに</h2>
+              </div>
+              <div className="bg-orange-50 rounded-lg p-4">
+                <p className="text-xs font-bold text-orange-700 mb-2">🧑‍🎓 児童生徒のみなさんへ</p>
+                <p className="text-sm text-gray-700">きょうは、満潮・干潮と大潮・小潮を学び、月と太陽が潮に関わることを知ったね。旧暦の日付だけで海の高さや安全を決めず、『月の窓』と公的な潮位表を分けて見ることが大切だよ。</p>
+              </div>
+              <div className="bg-yellow-50 rounded-lg p-4">
+                <p className="text-xs font-bold text-yellow-800 mb-2">👪 保護者・支援者の方へ（学習指導要領との対応）</p>
+                <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
+                  <li><strong>理科</strong>：月・太陽と潮汐、周期的な自然現象</li>
+                  <li><strong>情報・防災</strong>：一般的な仕組みと地点別の公的データを区別する</li>
+                </ul>
+                <p className="text-xs text-gray-500 mt-1">※ 新月・満月の頃に大潮になりやすいという一般則と、特定地点の潮位・安全判断は別です。</p>
+                <p className="text-xs text-gray-500 mt-1">※ ハーリー／ハーレーの呼び方、日程、舟、役割、音、競漕の方法には地域差があります。一つの地域の事例を沖縄全体の決まりとして一般化しません。</p>
+                <p className="text-xs text-gray-500 mt-1">※ 子どもだけで実際の海・港・舟へ行かせず、棒・櫂・ロープ等を振り回す活動は行いません。実際の乗船や競漕では主催者・学校・保護者・安全管理者の指示を最優先します。</p>
+                <p className="text-xs text-gray-500 mt-1">※ 海況・潮位・風等をこの教材だけで安全判断しません。泳げる／泳げない、参加した／していないことを能力や地域愛の評価に結びつけません。</p>
+              </div>
+              {SOURCES.length > 0 && (
+                <div className="bg-yellow-50 rounded-lg p-4">
+                  <p className="text-xs font-bold text-yellow-800 mb-2">📚 出典・参考資料</p>
+                  <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
+                    {SOURCES.map((s) => (
+                      <li key={s.label}>
+                        {s.url ? (
+                          <a href={s.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">{s.label}</a>
+                        ) : s.label}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <div className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-4">
+                <p className="text-xs font-bold text-gray-700 mb-2">🖨️ 学習記録シートを作る（COCOLOプラン等の学習記録用）</p>
+                <input
+                  type="text"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 text-sm mb-2"
+                  placeholder="お子さんの名前（記入は任意）"
+                  value={childName}
+                  onChange={(e) => setChildName(e.target.value)}
+                />
+                <button
+                  onClick={() => window.print()}
+                  className="w-full px-4 py-2 bg-yellow-500 text-white rounded-lg font-medium hover:bg-yellow-600 transition-all text-sm"
+                >
+                  学習記録シートを印刷する
+                </button>
+                <p className="text-xs text-gray-400 mt-1">今日の日付・対応教科・取り組んだ内容・保護者確認欄が入った1枚のシートが印刷されます。</p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-gray-200 space-y-2">
+                <p className="text-xs font-bold text-gray-500 text-center">つぎに進む</p>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  {prevEpisode ? (
+                    <a href={"../" + prevEpisode.url} className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-300 text-sm font-bold text-gray-600 hover:bg-gray-50 transition">← {prevEpisode.short}</a>
+                  ) : (
+                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-300">← 最初のエピソード</span>
+                  )}
+                  {nextEpisode ? (
+                    <a href={"../" + nextEpisode.url} className="flex-1 text-center px-3 py-2 rounded-lg bg-blue-500 text-white text-sm font-bold hover:bg-blue-600 transition">{nextEpisode.short} →</a>
+                  ) : (
+                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-300">最終話</span>
+                  )}
+                </div>
+                <a href="../matrix-library.html" className="block text-center text-sm font-bold text-blue-500 hover:text-blue-700 underline">他のテーマも見る（教材一覧）</a>
+              </div>
+              <div className="mt-6 pt-4 border-t border-dashed border-gray-300">
+                <div className="bg-gray-50 rounded-lg p-4 text-left">
+                  <p className="text-xs font-bold text-gray-700 mb-2 text-center">💬 ご意見・ご要望</p>
+                  <p className="text-xs text-gray-600 mb-3">「こんな機能が欲しい」「ここが使いにくい」などのご意見をお聞かせください。今後の開発の参考にさせていただきます。</p>
+                  <a href={FEEDBACK_FORM_URL} target="_blank" rel="noopener noreferrer" className="block text-center px-4 py-2 bg-gray-700 text-white rounded-full text-sm font-bold hover:bg-gray-800 transition">📋 要望・フィードバックを送る</a>
+                </div>
+              </div>
+            </div>
+          );
+
+          const today = new Date();
+          const todayStr = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
+          const guessedForSheet = guess ? ALPACAS[guess] : null;
+
+          const renderPrintSheet = () => (
+            <div className="print-sheet w-[700px] p-10 bg-white text-black">
+              <h1 className="text-xl font-bold border-b-2 border-black pb-2 mb-4">学習記録シート</h1>
+              <table className="w-full text-sm mb-4">
+                <tbody>
+                  <tr><td className="py-1 pr-4 font-bold w-32">学習日</td><td className="py-1">{todayStr}</td></tr>
+                  <tr><td className="py-1 pr-4 font-bold">お子さんの名前</td><td className="py-1">{childName || "＿＿＿＿＿＿＿＿＿＿"}</td></tr>
+                  <tr><td className="py-1 pr-4 font-bold">教材名</td><td className="py-1">{MATERIAL.title}（{MATERIAL.series}）</td></tr>
+                  <tr><td className="py-1 pr-4 font-bold">対応教科・学年</td><td className="py-1">{MATERIAL.subjectGrade}</td></tr>
+                </tbody>
+              </table>
+              <div className="mb-4 text-xs text-gray-700 bg-gray-50 border border-gray-300 rounded p-3">
+                <p className="font-bold mb-1">学習指導要領との対応</p>
+                <ul className="space-y-0.5 list-disc list-inside">
+                  <li><strong>理科</strong>：月・太陽と潮汐、周期的な自然現象</li>
+                  <li><strong>情報・防災</strong>：一般的な仕組みと地点別の公的データを区別する</li>
+                </ul>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">1. アルパカの困りごとで選んだ考え</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">
+                  {guessedForSheet ? `${guessedForSheet.name}の「${guessedForSheet.guess}」を選びました。` : "（記入なし）"}
+                </p>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">2. メンターに教わって確かめたこと</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[3rem]">満潮・干潮：潮位が上がりきった状態／下がりきった状態。多くの場所では一日に二回ずつあります。 / 大潮・小潮：月と太陽の起潮力の向きにより、満干潮の潮位差が大きくなる時期／小さくなる時期です。 / 見抜くべき単純化：『旧暦5月4日だから必ず○○潮』は不正確。具体的な地点・日時は気象庁等の潮位表で確認します。</p>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">3. 想像する問題への自分の考え</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[3rem]">{imagineAnswer || "（記入なし）"}</p>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">4. 今日一番心に残ったこと</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[3rem]">{memoryAnswer || "（記入なし）"}</p>
+              </div>
+              <div className="mt-8 pt-4 border-t border-gray-400">
+                <p className="text-sm">保護者確認サイン：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+              </div>
+            </div>
+          );
+
+          const slideRenderers = {
+            intro: renderIntro,
+            trouble: renderTrouble,
+            mentor: renderMentor,
+            verify: renderVerify,
+            imagine: renderImagine,
+            checkin: renderCheckin,
+            parent: renderParent
+          };
+          const slideTitles = {
+            intro: "🚣 はじまりの問い",
+            trouble: "😱 困りごと",
+            mentor: "🧓 メンター登場",
+            verify: "✅ やってみる",
+            imagine: "💭 想像する",
+            checkin: "🙋 ふりかえり",
+            parent: "🎬 おわりに"
+          };
+
+          const canGoNext = !(slideIds[currentSlide] === "trouble" && !guess);
+
+          return (
+            <div className={`min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 ${furiganaOn ? "" : "furigana-off"}`}>
+              <div className="container mx-auto px-4 py-8 max-w-2xl">
+                <div className="flex items-center justify-between mb-4">
+                  <a href="../matrix-library.html" className="inline-flex items-center gap-1 text-sm font-bold text-blue-500 hover:text-blue-700">
+                    <ChevronLeft className="w-4 h-4" />教材一覧へ戻る
+                  </a>
+                  <button
+                    onClick={() => setFuriganaOn((f) => !f)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border-2 transition ${
+                      furiganaOn ? "bg-blue-500 text-white border-blue-500" : "bg-white text-blue-600 border-blue-300"
+                    }`}
+                  >
+                    🔤 ふりがな {furiganaOn ? "ON" : "OFF"}
+                  </button>
+                </div>
+                <div className="text-center mb-6">
+                  <p className="text-xs font-bold text-indigo-500 mb-1">知能の窓・ハーリー ep5：博物学編</p>
+                  <h1 className="text-2xl md:text-3xl font-bold text-blue-600">海の高さは、どうして変わる？ 🌊</h1>
+                  <span className="inline-block mt-1 px-2 py-0.5 text-xs font-bold rounded-full bg-blue-100 text-blue-700">📚 {MATERIAL.subjectGrade}</span>
+                </div>
+
+                <div className="mb-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm text-gray-600">{slideTitles[slideIds[currentSlide]]}</span>
+                    <span className="text-sm text-gray-600">{currentSlide + 1} / {total}</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="bg-blue-500 h-2 rounded-full transition-all duration-300" style={{ width: `${((currentSlide + 1) / total) * 100}%` }}></div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8 mb-6 min-h-96">
+                  {slideRenderers[slideIds[currentSlide]]()}
+                </div>
+
+                {slideIds[currentSlide] === "parent" && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-left mb-6">
+                    <p className="text-xs font-bold text-blue-700 mb-2 text-center">🌱 制作をアシストする</p>
+                    <p className="text-xs text-gray-600 mb-3">ここでの学びは、記録され、次の学びへと受け継がれていきます。その循環を支えるちからになっていただけたら嬉しいです。</p>
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      {SUPPORT_LINKS.map((s) => (
+                        <a key={s.label} href={s.url} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-full text-sm font-bold border-2 border-blue-300 text-blue-700 bg-white hover:bg-blue-100 transition">{s.label}</a>
+                      ))}
+                    </div>
+                    <div className="mt-2 text-center">
+                      <a href="../tokushoho.html" className="text-xs text-gray-400 underline">特定商取引法に基づく表記</a>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex justify-between items-center">
+                  <button
+                    onClick={prevSlide}
+                    disabled={currentSlide === 0}
+                    className={`flex items-center px-3 sm:px-5 py-3 rounded-lg font-medium transition-all ${
+                      currentSlide === 0 ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-blue-500 text-white hover:bg-blue-600"
+                    }`}
+                  >
+                    <ChevronLeft className="w-5 h-5 mr-1" />まえへ
+                  </button>
+                  <div className="progress-dots space-x-2">
+                    {slideIds.map((id, index) => (
+                      <div key={id} className={`w-2.5 h-2.5 rounded-full ${index === currentSlide ? "bg-blue-500" : "bg-gray-300"}`} />
+                    ))}
+                  </div>
+                  <button
+                    onClick={nextSlide}
+                    disabled={currentSlide === total - 1 || !canGoNext}
+                    className={`flex items-center px-3 sm:px-5 py-3 rounded-lg font-medium transition-all ${
+                      currentSlide === total - 1 || !canGoNext ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-blue-500 text-white hover:bg-blue-600"
+                    }`}
+                  >
+                    {slideIds[currentSlide] === "checkin" ? "おわりに" : "つぎへ"}<ChevronRight className="w-5 h-5 ml-1" />
+                  </button>
+                </div>
+              </div>
+              {renderPrintSheet()}
+            </div>
+          );
+        };
+
+        createRoot(document.getElementById("root")).render(<HariiApp />);
+    </script>
+</body>
+</html>

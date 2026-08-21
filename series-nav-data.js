@@ -158,3 +158,29 @@ const SHIOKAWA_EPISODES = [
   { id: "shiokawa-ep08", short: "ep8：対人編", title: "珍しい自然を、どう守りながら伝える？", url: "bunka/shiokawa_ep08.html" },
   { id: "shiokawa-ep09", short: "ep9：集・表現編（完）", title: "塩川ミステリーガイドをつくろう", url: "bunka/shiokawa_ep09.html" },
 ];
+
+// 知能の窓・ハーリーシリーズ（2026-08-21、全9話完成）
+const HARII_EPISODES = [
+  { id: "harii-ep01", short: "ep1：論理・数学編", title: "漕ぎ手、あと何人？", url: "bunka/harii_ep01.html" },
+  { id: "harii-ep02", short: "ep2：言語・語学編", title: "ハーリー？ ハーレー？ どっちが正しい？", url: "bunka/harii_ep02.html" },
+  { id: "harii-ep03", short: "ep3：音楽・リズム編", title: "みんなの櫂は、なぜ同じタイミング？", url: "bunka/harii_ep03.html" },
+  { id: "harii-ep04", short: "ep4：身体・運動編", title: "速く動くより、そろえる？", url: "bunka/harii_ep04.html" },
+  { id: "harii-ep05", short: "ep5：博物学編", title: "海の高さは、どうして変わる？", url: "bunka/harii_ep05.html" },
+  { id: "harii-ep06", short: "ep6：視覚・空間編", title: "舟は、どこを通って戻る？", url: "bunka/harii_ep06.html" },
+  { id: "harii-ep07", short: "ep7：内省編", title: "海を見たとき、わたしはどう感じる？", url: "bunka/harii_ep07.html" },
+  { id: "harii-ep08", short: "ep8：対人編", title: "漕がない人も、ハーリーを作っている？", url: "bunka/harii_ep08.html" },
+  { id: "harii-ep09", short: "ep9：特別・統合／表現編（完）", title: "わたしの地域の海の祭りを未来へ渡す", url: "bunka/harii_ep09.html" },
+];
+
+// 知能の窓・旧盆・エイサーシリーズ（2026-08-21、全9話完成）
+const KYUUBON_EPISODES = [
+  { id: "kyuubon-ep01", short: "ep1：論理・数学編", title: "旧盆までの練習、あと何回？", url: "bunka/kyuubon_ep01.html" },
+  { id: "kyuubon-ep02", short: "ep2：言語・語学編", title: "ウンケー・ナカヌヒ・ウークイって何？", url: "bunka/kyuubon_ep02.html" },
+  { id: "kyuubon-ep03", short: "ep3：音楽・リズム編", title: "エイサーの音は、何が重なっている？", url: "bunka/kyuubon_ep03.html" },
+  { id: "kyuubon-ep04", short: "ep4：身体・運動編", title: "道ジュネーは、どう動く？", url: "bunka/kyuubon_ep04.html" },
+  { id: "kyuubon-ep05", short: "ep5：博物学編", title: "旧暦7月15日の月は、どんな月？", url: "bunka/kyuubon_ep05.html" },
+  { id: "kyuubon-ep06", short: "ep6：視覚・空間編", title: "エイサーは、どこを歩く？", url: "bunka/kyuubon_ep06.html" },
+  { id: "kyuubon-ep07", short: "ep7：内省編", title: "ご先祖に一言伝えるなら？", url: "bunka/kyuubon_ep07.html" },
+  { id: "kyuubon-ep08", short: "ep8：対人編", title: "エイサーは、誰と成り立つ？", url: "bunka/kyuubon_ep08.html" },
+  { id: "kyuubon-ep09", short: "ep9：特別・集／表現編（完）", title: "わたしの旧盆・エイサー文化記録", url: "bunka/kyuubon_ep09.html" },
+];
