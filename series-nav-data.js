@@ -146,3 +146,15 @@ const SHIIMI_EPISODES = [
   { id: "shiimi-ep08", short: "ep8：対人編", title: "親族が集まるとき、どう役割を分ける？", url: "bunka/shiimi_ep08.html" },
   { id: "shiimi-ep09", short: "ep9：集・表現編（完）", title: "シーミー文化カードを残そう", url: "bunka/shiimi_ep09.html" },
 ];
+// 知能の窓・塩川シリーズ（2026-08-21、全9話完成）
+const SHIOKAWA_EPISODES = [
+  { id: "shiokawa-ep01", short: "ep1：論理・数学編", title: "塩川の水は、海の水？川の水？", url: "bunka/shiokawa_ep01.html" },
+  { id: "shiokawa-ep02", short: "ep2：言語編", title: "「塩川」「汽水」「天然記念物」ってどういう意味？", url: "bunka/shiokawa_ep02.html" },
+  { id: "shiokawa-ep03", short: "ep3：音楽編", title: "川の音と海の音、何が違う？", url: "bunka/shiokawa_ep03.html" },
+  { id: "shiokawa-ep04", short: "ep4：身体・運動編", title: "100mの川って、どのくらい？", url: "bunka/shiokawa_ep04.html" },
+  { id: "shiokawa-ep05", short: "ep5：博物学編", title: "海の生きものと川の生きものが、なぜ一緒に？", url: "bunka/shiokawa_ep05.html" },
+  { id: "shiokawa-ep06", short: "ep6：視覚・空間編", title: "塩川の水は、どこから来る？", url: "bunka/shiokawa_ep06.html" },
+  { id: "shiokawa-ep07", short: "ep7：内省編", title: "分からないままでも、考え続けられる？", url: "bunka/shiokawa_ep07.html" },
+  { id: "shiokawa-ep08", short: "ep8：対人編", title: "珍しい自然を、どう守りながら伝える？", url: "bunka/shiokawa_ep08.html" },
+  { id: "shiokawa-ep09", short: "ep9：集・表現編（完）", title: "塩川ミステリーガイドをつくろう", url: "bunka/shiokawa_ep09.html" },
+];
