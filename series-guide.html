@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="アルパカすく〜るの教材を、沖縄の文化や自然をめぐるテーマごとに見渡せるシリーズガイドです。">
+    <title>テーマ一覧（シリーズガイド）｜アルパカすく〜る</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="./series-nav-data.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        p, li, a, button {
+            word-break: normal;
+            overflow-wrap: anywhere;
+            line-break: strict;
+        }
+        .series-card {
+            scroll-margin-top: 5.5rem;
+        }
+        .series-card button:focus-visible,
+        .episode-link:focus-visible,
+        .site-link:focus-visible {
+            outline: 3px solid #fb923c;
+            outline-offset: 3px;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-orange-50 text-gray-800">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useEffect, useMemo, useState } = React;
+        const { createRoot } = ReactDOM;
+
+        const GRADE_ORDER = ["小1", "小2", "小3", "小4", "小5", "小6", "中学生", "高校生・大人"];
+        const MI_STYLES = {
+          "論理数学": "bg-blue-100 text-blue-800",
+          "言語": "bg-amber-100 text-amber-800",
+          "音楽": "bg-fuchsia-100 text-fuchsia-800",
+          "身体運動": "bg-rose-100 text-rose-800",
+          "博物学": "bg-emerald-100 text-emerald-800",
+          "視覚空間": "bg-violet-100 text-violet-800",
+          "内省": "bg-cyan-100 text-cyan-800",
+          "対人": "bg-orange-100 text-orange-800",
+          "特別": "bg-gray-200 text-gray-800",
+        };
+
+        function parseMaterials(html) {
+          const match = html.match(/const MATERIALS = (\[[\s\S]*?\n\s*\]);/);
+          if (!match) throw new Error("教材メタデータを見つけられませんでした。");
+
+          // 同一サイト内の管理対象ファイルから、MATERIALS の配列リテラルだけを読み取る。
+          const materials = new Function('"use strict"; return (' + match[1] + ');')();
+          if (!Array.isArray(materials)) throw new Error("教材メタデータの形式が不正です。");
+          return materials;
+        }
+
+        function formatGrades(grades) {
+          if (grades.length === 0) return "対象学年は各話で確認";
+
+          const known = GRADE_ORDER.filter((grade) => grades.includes(grade));
+          const unknown = grades.filter((grade) => !GRADE_ORDER.includes(grade));
+          const elementary = known.filter((grade) => /^小[1-6]$/.test(grade));
+          const others = known.filter((grade) => !/^小[1-6]$/.test(grade));
+          const parts = [];
+
+          if (elementary.length === 1) {
+            parts.push(elementary[0]);
+          } else if (elementary.length > 1) {
+            parts.push(elementary[0] + "〜" + elementary[elementary.length - 1]);
+          }
+
+          return "対象：" + parts.concat(others, unknown).join("・");
+        }
+
+        function App() {
+          const [openSeries, setOpenSeries] = useState(null);
+          const [materialsByUrl, setMaterialsByUrl] = useState(new Map());
+          const [materialStatus, setMaterialStatus] = useState("loading");
+
+          useEffect(() => {
+            let active = true;
+
+            fetch("./matrix-library.html")
+              .then((response) => {
+                if (!response.ok) throw new Error("教材一覧を読み込めませんでした。");
+                return response.text();
+              })
+              .then((html) => {
+                if (!active) return;
+                const materials = parseMaterials(html);
+                setMaterialsByUrl(new Map(materials.map((item) => [item.url, item])));
+                setMaterialStatus("ready");
+              })
+              .catch(() => {
+                if (active) setMaterialStatus("error");
+              });
+
+            return () => { active = false; };
+          }, []);
+
+          const totalEpisodes = useMemo(
+            () => SERIES_META.reduce((sum, series) => sum + series.episodes.length, 0),
+            []
+          );
+
+          const gradeLabelFor = (series) => {
+            if (materialStatus === "loading") return "対象学年を確認中";
+            const grades = [];
+            series.episodes.forEach((episode) => {
+              const material = materialsByUrl.get(episode.url);
+              (material?.grades || []).forEach((grade) => {
+                if (!grades.includes(grade)) grades.push(grade);
+              });
+            });
+            return formatGrades(grades);
+          };
+
+          const toggleSeries = (key) => {
+            setOpenSeries((current) => current === key ? null : key);
+          };
+
+          return (
+            <div className="min-h-screen bg-gradient-to-b from-sky-100 via-orange-50 to-amber-50">
+              <div className="sticky top-0 z-20 border-b border-orange-100 bg-white/95 shadow-sm backdrop-blur">
+                <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-2 px-4 py-3">
+                  <a href="./matrix-library.html" className="site-link rounded font-extrabold text-gray-800 hover:text-orange-600">
+                    🦙 アルパカすく〜る
+                  </a>
+                  <nav aria-label="サイト内ナビゲーション" className="flex min-w-0 flex-wrap items-center gap-1 text-xs font-bold sm:text-sm">
+                    <a href="./matrix-library.html" className="site-link rounded px-2 py-1 text-gray-600 transition hover:bg-orange-50 hover:text-orange-600">教材一覧</a>
+                    <a href="./series-guide.html" aria-current="page" className="site-link rounded bg-orange-100 px-2 py-1 text-orange-700">テーマ一覧</a>
+                    <a href="./characters.html" className="site-link rounded px-2 py-1 text-gray-600 transition hover:bg-orange-50 hover:text-orange-600">キャラクター図鑑</a>
+                    <a href="./concept.html" className="site-link rounded px-2 py-1 text-gray-600 transition hover:bg-orange-50 hover:text-orange-600">このサイトについて</a>
+                  </nav>
+                </div>
+              </div>
+
+              <main data-material-state={materialStatus} className="mx-auto w-full max-w-6xl px-4 py-8 sm:py-12">
+                <header className="mx-auto mb-8 max-w-3xl text-center sm:mb-10">
+                  <p className="mb-3 text-sm font-extrabold tracking-wider text-orange-700">THEME &amp; SERIES GUIDE</p>
+                  <h1 className="text-3xl font-black leading-tight text-gray-900 sm:text-4xl">沖縄のテーマから、学びの旅を選ぼう</h1>
+                  <p className="mt-4 text-sm leading-7 text-gray-700 sm:text-base">
+                    一つのテーマを、数・ことば・音・身体・自然・心など、いろいろな「知能の窓」から見ていきます。気になるカードを開くと、シリーズの全エピソードを見渡せます。
+                  </p>
+                  <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-sm font-bold">
+                    <span className="rounded-full bg-white px-4 py-2 text-orange-700 shadow-sm">全{SERIES_META.length}テーマ</span>
+                    <span className="rounded-full bg-white px-4 py-2 text-sky-700 shadow-sm">全{totalEpisodes}エピソード</span>
+                  </div>
+                  {materialStatus === "error" && (
+                    <p role="status" className="mt-4 rounded-xl bg-amber-100 px-4 py-3 text-sm text-amber-900">
+                      対象学年とMI分類を読み込めませんでした。各エピソードのページで確認できます。
+                    </p>
+                  )}
+                </header>
+
+                <div className="space-y-4">
+                  {SERIES_META.map((series) => {
+                    const isOpen = openSeries === series.key;
+                    const panelId = "series-panel-" + series.key;
+
+                    return (
+                      <section id={series.key} key={series.key} className="series-card min-w-0 overflow-hidden rounded-3xl border border-orange-100 bg-white shadow-sm transition hover:shadow-md">
+                        <button
+                          type="button"
+                          aria-expanded={isOpen}
+                          aria-controls={panelId}
+                          onClick={() => toggleSeries(series.key)}
+                          className="w-full min-w-0 p-4 text-left sm:p-6"
+                        >
+                          <div className="flex min-w-0 items-start gap-3 sm:gap-5">
+                            <div className="flex h-14 w-14 flex-none items-center justify-center rounded-2xl bg-orange-50 text-3xl sm:h-16 sm:w-16 sm:text-4xl" aria-hidden="true">
+                              {series.emoji}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <div className="flex min-w-0 flex-wrap items-start justify-between gap-2">
+                                <h2 className="min-w-0 text-lg font-black leading-snug text-gray-900 sm:text-2xl">{series.name}</h2>
+                                <span aria-hidden="true" className={'flex-none text-xl font-bold text-orange-600 transition-transform ' + (isOpen ? "rotate-180" : "")}>⌄</span>
+                              </div>
+                              <p className="mt-2 text-sm leading-6 text-gray-600 sm:text-base sm:leading-7">{series.summary}</p>
+                              <div className="mt-3 flex flex-wrap gap-2 text-xs font-bold sm:text-sm">
+                                <span className="rounded-full bg-orange-100 px-3 py-1 text-orange-800">全{series.episodes.length}話</span>
+                                <span className="rounded-full bg-sky-100 px-3 py-1 text-sky-800">{gradeLabelFor(series)}</span>
+                                <span className="rounded-full bg-gray-100 px-3 py-1 text-gray-700">{isOpen ? "全話を閉じる" : "全話を見る"}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </button>
+
+                        {isOpen && (
+                          <div id={panelId} className="border-t border-orange-100 bg-orange-50/60 px-3 py-4 sm:px-6 sm:py-5">
+                            <ol className="space-y-2">
+                              {series.episodes.map((episode) => {
+                                const material = materialsByUrl.get(episode.url);
+                                return (
+                                  <li key={episode.id}>
+                                    <a href={'./' + episode.url} className="episode-link flex min-w-0 flex-col gap-2 rounded-2xl border border-transparent bg-white p-3 shadow-sm transition hover:border-orange-300 hover:shadow sm:flex-row sm:items-center sm:gap-4 sm:p-4">
+                                      <span className="min-w-0 flex-none text-sm font-extrabold text-orange-700 sm:w-52">{episode.short}</span>
+                                      <span className="min-w-0 flex-1 font-bold leading-6 text-gray-800">{episode.title}</span>
+                                      {material?.mi && (
+                                        <span className={'self-start rounded-full px-3 py-1 text-xs font-extrabold sm:self-center ' + (MI_STYLES[material.mi] || MI_STYLES["特別"])}>
+                                          MI：{material.mi}
+                                        </span>
+                                      )}
+                                      <span className="sr-only">を開く</span>
+                                    </a>
+                                  </li>
+                                );
+                              })}
+                            </ol>
+                          </div>
+                        )}
+                      </section>
+                    );
+                  })}
+                </div>
+
+                <div className="mt-10 rounded-3xl bg-sky-900 px-5 py-7 text-center text-white sm:px-8 sm:py-9">
+                  <h2 className="text-xl font-black sm:text-2xl">1話ずつ探したいときは</h2>
+                  <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-sky-100 sm:text-base">
+                    学年・教科・MI分類で絞り込める教材一覧もあります。今の気分や学びたいことに合わせて使い分けてください。
+                  </p>
+                  <a href="./matrix-library.html" className="site-link mt-5 inline-flex rounded-full bg-white px-5 py-3 text-sm font-extrabold text-sky-900 shadow transition hover:bg-orange-100">
+                    教材一覧（検索・フィルタ）へ
+                  </a>
+                </div>
+              </main>
+
+              <footer className="border-t border-orange-100 bg-white">
+                <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 sm:grid-cols-2 sm:py-10">
+                  <section className="min-w-0 rounded-2xl bg-gray-50 p-5">
+                    <h2 className="font-black text-gray-900">💬 ご意見・ご要望</h2>
+                    <p className="mt-2 text-sm leading-6 text-gray-600">教材をよりよくするための声をお待ちしています。</p>
+                    {FEEDBACK_FORM_URL.startsWith("http") ? (
+                      <a href={FEEDBACK_FORM_URL} target="_blank" rel="noopener noreferrer" className="site-link mt-3 inline-flex rounded-full bg-white px-4 py-2 text-sm font-bold text-gray-800 shadow-sm hover:text-orange-700">フォームを開く</a>
+                    ) : (
+                      <span className="mt-3 inline-flex rounded-full bg-gray-200 px-4 py-2 text-sm font-bold text-gray-600">フォーム準備中</span>
+                    )}
+                  </section>
+
+                  <section className="min-w-0 rounded-2xl bg-emerald-50 p-5">
+                    <h2 className="font-black text-emerald-950">🌱 制作をアシストする</h2>
+                    <p className="mt-2 text-sm leading-6 text-emerald-900">ここでの学びは、記録され、次の学びへと受け継がれていきます。その循環を支えるちからになっていただけたら嬉しいです。</p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {SUPPORT_LINKS.map((link) => (
+                        <a key={link.label} href={link.url} target="_blank" rel="noopener noreferrer" className="site-link rounded-full bg-white px-4 py-2 text-sm font-extrabold text-emerald-800 shadow-sm hover:bg-emerald-100">{link.label}</a>
+                      ))}
+                    </div>
+                    <a href="./tokushoho.html" className="site-link mt-3 inline-block text-xs font-bold text-emerald-900 underline">特定商取引法に基づく表記</a>
+                  </section>
+                </div>
+              </footer>
+            </div>
+          );
+        }
+
+        createRoot(document.getElementById("root")).render(<App />);
+    </script>
+</body>
+</html>

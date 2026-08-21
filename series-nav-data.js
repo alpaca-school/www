@@ -184,3 +184,107 @@ const KYUUBON_EPISODES = [
   { id: "kyuubon-ep08", short: "ep8：対人編", title: "エイサーは、誰と成り立つ？", url: "bunka/kyuubon_ep08.html" },
   { id: "kyuubon-ep09", short: "ep9：特別・集／表現編（完）", title: "わたしの旧盆・エイサー文化記録", url: "bunka/kyuubon_ep09.html" },
 ];
+
+// シリーズガイド用メタデータ。
+// 新しいシリーズは、上の _EPISODES 配列を定義したうえで、ここに1件追加すると
+// series-guide.html のカードと全話一覧へ自動的に反映される。
+const SERIES_META = [
+  {
+    key: "shishimai",
+    name: "知能の窓・獅子舞",
+    emoji: "🦁",
+    summary: "獅子舞を入口に、沖縄の年中行事・地域・道具・伝承を、数・ことば・音・身体などの窓から学びます。受け継がれてきた文化を、自分のことばと表現で次へ渡すシリーズです。",
+    episodes: SHISHIMAI_EPISODES,
+  },
+  {
+    key: "typhoon",
+    name: "知能の窓・台風",
+    emoji: "🌀",
+    summary: "沖縄で身近な台風を入口に、数・ことば・音・身体・自然・地図・心・人間関係の8つの窓から学びます。怖がらせるだけでも備蓄確認だけでもなく、自分たちの知恵として表現するシリーズです。",
+    episodes: TYPHOON_EPISODES,
+  },
+  {
+    key: "yago",
+    name: "知能の窓・沖縄の屋号",
+    emoji: "🏠",
+    summary: "屋号を暗記するのではなく、家の名前から昔の集落や人と場所の記憶を読み解きます。屋号を入口に、沖縄の地域社会を見るシリーズです。",
+    episodes: YAGO_EPISODES,
+  },
+  {
+    key: "tsunahiki",
+    name: "知能の窓・沖縄の綱引き",
+    emoji: "🪢",
+    summary: "沖縄の綱引きを勝敗だけで終わらせず、月、稲、綱づくり、音、身体、地域の役割へと学びを広げます。人々が力と記憶を合わせ、文化を次へ渡してきた営みを見つめるシリーズです。",
+    episodes: TSUNAHIKI_EPISODES,
+  },
+  {
+    key: "goya",
+    name: "知能の窓・ゴーヤー",
+    emoji: "🥒",
+    summary: "ゴーヤーを入口に、数やことばだけでなく、植物・農業・食文化・環境・家庭の経験へ進みます。身近な一本から、畑と食卓をつなぐ人や自然の働きを見つけるシリーズです。",
+    episodes: GOYA_EPISODES,
+  },
+  {
+    key: "pork",
+    name: "知能の窓・沖縄の豚",
+    emoji: "🐖",
+    summary: "沖縄の豚を単なる食材やブランドの知識にせず、数理・ことば・音・身体・生きもの・食文化・年中行事を横断して学びます。食べることと地域のつながりを、自分の表現で次へ渡すシリーズです。",
+    episodes: PORK_EPISODES,
+  },
+  {
+    key: "gurukun",
+    name: "知能の窓・グルクン",
+    emoji: "🐟",
+    summary: "グルクンを数えるところから、群れ、海、糸満海人の技、市場、食卓、仕事までをつなぎます。沖縄の海を知ることを、自分の文化資本へ変えていくシリーズです。",
+    episodes: GURUKUN_EPISODES,
+  },
+  {
+    key: "muchi",
+    name: "知能の窓・ムーチー",
+    emoji: "🍃",
+    summary: "ムーチーを作る数だけで終わらせず、ことば・音・手・植物・形・願い・人のつながりから学びます。自分の家や地域にある経験を記録し、次へ渡すシリーズです。",
+    episodes: MUCHI_EPISODES,
+  },
+  {
+    key: "beniimo",
+    name: "知能の窓・紅芋",
+    emoji: "🍠",
+    summary: "紅芋を入口に、計算、ことば、リズム、身体、植物、記憶、人へ伝える力を多彩な窓から育てます。最後は紅芋から生まれたことばや表現を、誰かへ届けるシリーズです。",
+    episodes: BENIIMO_EPISODES,
+  },
+  {
+    key: "yachimun",
+    name: "知能の窓・やちむん",
+    emoji: "🏺",
+    summary: "土を器に変える技だけでなく、沖縄の時間・場所・人・暮らしを8つの窓から学びます。見つけた価値を、自分が使う器や毎日の生活へ戻すシリーズです。",
+    episodes: YACHIMUN_EPISODES,
+  },
+  {
+    key: "shiimi",
+    name: "知能の窓・シーミー",
+    emoji: "🙏",
+    summary: "シーミーをお墓参りとして覚えるだけでなく、数・ことば・音・身体・太陽と季節・地域差・家族関係から見直します。自分たちの文化記録として次へ渡すシリーズです。",
+    episodes: SHIIMI_EPISODES,
+  },
+  {
+    key: "shiokawa",
+    name: "知能の窓・塩川",
+    emoji: "🧂",
+    summary: "本部町の塩川を入口に、塩分、ことば、音、生きもの、地図、地域保全を多彩な窓から学びます。まだ分かっていない自然の仕組みも大切にしながら、問い続ける力を育てるシリーズです。",
+    episodes: SHIOKAWA_EPISODES,
+  },
+  {
+    key: "harii",
+    name: "知能の窓・ハーリー",
+    emoji: "🚣",
+    summary: "沖縄の海文化・年中行事であるハーリー／ハーレーを入口に、数・ことば・音・身体・潮・航路・感情・協働を学びます。地域ごとの違いを尊重し、海の祭りを未来へ渡すシリーズです。",
+    episodes: HARII_EPISODES,
+  },
+  {
+    key: "kyuubon",
+    name: "知能の窓・旧盆・エイサー",
+    emoji: "🥁",
+    summary: "旧盆3日間とエイサーを入口に、数・しまくとぅば・音・身体・月・道ジュネー・心・地域の役割を学びます。家庭や地域の違いを尊重し、文化の記憶を次へ渡すシリーズです。",
+    episodes: KYUUBON_EPISODES,
+  },
+];
