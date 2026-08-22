@@ -185,6 +185,19 @@ const KYUUBON_EPISODES = [
   { id: "kyuubon-ep09", short: "ep9：特別・集／表現編（完）", title: "わたしの旧盆・エイサー文化記録", url: "bunka/kyuubon_ep09.html" },
 ];
 
+// 知能の窓・石敢當シリーズ（2026-08-22、全9話完成）
+const ISHIGANTO_EPISODES = [
+  { id: "ishiganto-ep01", short: "ep1：論理・数学編", title: "石敢當は、あと何基？", url: "bunka/ishiganto_ep01.html" },
+  { id: "ishiganto-ep02", short: "ep2：言語編", title: "石敢當って、なんて読む？", url: "bunka/ishiganto_ep02.html" },
+  { id: "ishiganto-ep03", short: "ep3：音楽編", title: "まちの音を聞いて石敢當を探す", url: "bunka/ishiganto_ep03.html" },
+  { id: "ishiganto-ep04", short: "ep4：身体・運動編", title: "T字路を身体でつくれる？", url: "bunka/ishiganto_ep04.html" },
+  { id: "ishiganto-ep05", short: "ep5：博物学編", title: "石敢當は、みんな同じ石？", url: "bunka/ishiganto_ep05.html" },
+  { id: "ishiganto-ep06", short: "ep6：視覚・空間編", title: "石敢當は、どこに置かれている？", url: "bunka/ishiganto_ep06.html" },
+  { id: "ishiganto-ep07", short: "ep7：内省編", title: "人は、なぜ『守るもの』を置くんだろう？", url: "bunka/ishiganto_ep07.html" },
+  { id: "ishiganto-ep08", short: "ep8：対人編", title: "石敢當のこと、地域の人はどう話す？", url: "bunka/ishiganto_ep08.html" },
+  { id: "ishiganto-ep09", short: "ep9：集・表現編（完）", title: "わたしの石敢當文化地図をつくろう", url: "bunka/ishiganto_ep09.html" },
+];
+
 // シリーズガイド用メタデータ。
 // 新しいシリーズは、上の _EPISODES 配列を定義したうえで、ここに1件追加すると
 // series-guide.html のカードと全話一覧へ自動的に反映される。
@@ -286,5 +299,12 @@ const SERIES_META = [
     emoji: "🥁",
     summary: "旧盆3日間とエイサーを入口に、数・しまくとぅば・音・身体・月・道ジュネー・心・地域の役割を学びます。家庭や地域の違いを尊重し、文化の記憶を次へ渡すシリーズです。",
     episodes: KYUUBON_EPISODES,
+  },
+  {
+    key: "ishiganto",
+    name: "知能の窓・石敢當",
+    emoji: "🪨",
+    summary: "石敢當を『魔除けの石』と覚えるだけでなく、沖縄の道・住まい・文字・地域の願いを8つの知能から観察します。見つけた文化を安全に記録し、地域文化地図として次へ渡すシリーズです。",
+    episodes: ISHIGANTO_EPISODES,
   },
 ];

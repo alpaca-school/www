@@ -1,0 +1,1052 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <script>
+      (() => {
+        const pageVersion = "20260822-1";
+        const url = new URL(window.location.href);
+        if (url.searchParams.get("v") !== pageVersion) {
+          url.searchParams.set("v", pageVersion);
+          window.location.replace(url.toString());
+        }
+      })();
+    </script>
+    <title>知能の窓・石敢當 🪨</title>
+    <script src="../series-nav-data.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.production.min.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      html,
+      body {
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      }
+      p, li {
+        word-break: normal;
+        overflow-wrap: break-word;
+        line-break: strict;
+      }
+      .speech-bubble {
+        position: relative;
+        min-width: 0;
+        max-width: 100%;
+      }
+      .speech-bubble p {
+        display: block;
+        min-width: 0;
+        max-width: 100%;
+        white-space: normal;
+        word-break: normal;
+        overflow-wrap: anywhere;
+        line-break: anywhere;
+      }
+      .speech-bubble::after {
+        content: "";
+        position: absolute;
+        left: -10px;
+        top: 18px;
+        border-width: 8px 10px 8px 0;
+        border-style: solid;
+        border-color: transparent currentColor transparent transparent;
+      }
+      .choice-card {
+        min-width: 0;
+      }
+      .choice-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        min-width: 0;
+        max-width: 100%;
+      }
+      .choice-row .speech-bubble {
+        flex: 1 1 0;
+        width: 0;
+      }
+      .choice-check {
+        flex: 0 0 auto;
+      }
+      .progress-dots {
+        display: none;
+      }
+      @media (min-width: 640px) {
+        .progress-dots {
+          display: flex;
+        }
+      }
+      .chara-avatar {
+        width: 56px;
+        height: 56px;
+        border-radius: 9999px;
+        object-fit: cover;
+        border: 2px solid white;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+        background: #fff;
+        flex-shrink: 0;
+      }
+      .print-sheet {
+        position: fixed;
+        left: -9999px;
+        top: 0;
+      }
+      @media print {
+        body * {
+          visibility: hidden;
+        }
+        .print-sheet,
+        .print-sheet * {
+          visibility: visible;
+        }
+        .print-sheet {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+        }
+      }
+      rt {
+        font-size: 0.6em;
+        color: #ea580c;
+        font-weight: 700;
+      }
+      .furigana-off rt {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      const { useState } = React;
+      const { createRoot } = ReactDOM;
+
+      const LESSONS = {
+        "03": {
+          title: "まちの音を聞いて石敢當を探す",
+          short: "ep3：音楽編",
+          mi: "音楽",
+          subjectGrade: "音楽3〜6年・総合",
+          icon: "🎵",
+          mentor: "rikiya",
+          intro: [
+            "まちには、足音・車の音・風・人の声など、いろいろな音が重なっている。",
+            "安全な屋内で『歩く・止まる・曲がる』を音のリズムにして、石敢當が置かれる道の形を想像しよう。石敢當だけの決まった音があるわけではないよ。",
+          ],
+          wrong: {
+            hari: [
+              "大きい車の音がした所にある！",
+              "一番うるさい音だけ追えば見つかるっしょ！",
+            ],
+            sara: [
+              "一回手をたたいた所が突き当たり！",
+              "パン！の一発で全部決める。短期決戦！",
+            ],
+            gan: [
+              "静かな所なら全部石敢當の場所…",
+              "音がしないと…眠くなって…場所も同じに思えます…",
+            ],
+            kaa: [
+              "きれいな高い音の場所ね",
+              "音の美しさだけで道の形も分かるはずです。",
+            ],
+          },
+          mentorLines: [
+            "音を『足音・車・風・人の声』に分けて聞こう。大きさだけで決めないよ。",
+            "『タン・タン・タン』で歩き、『シーン』で止まり、『クルッ』で左右を向く。歩く→止まる→曲がるをリズムにすると道の形を体で覚えられる。",
+            "本物を探すときは音だけで決めず、文字・石の形・安全な場所から確かめよう。",
+          ],
+          cameos: [
+            [
+              "chinen",
+              "音を種類ごとにことばで記録すると、あとで比べられるね。",
+            ],
+            [
+              "tokue",
+              "地域の人の声も大切な音。録音する前には必ず許可を聞こう。",
+            ],
+            ["shizu", "耳で聞いた道の曲がり方を、線で描くのも面白いよ。"],
+          ],
+          verify: {
+            question:
+              "道の突き当たりを表すリズムとして、いちばん近いのはどれ？",
+            options: [
+              "歩く→止まる→左右を確かめて曲がる",
+              "ずっと全速力で走り続ける",
+              "大声を出して車の音を消す",
+            ],
+            correct: 0,
+            note: "音を種類に分け、歩く・止まる・曲がるをリズムにすると、道の形を安全な場所で表現できる。",
+          },
+          imagine: [
+            "きみのまちを表す『音の地図』を作るなら、どんな音を3つ入れる？",
+            "録音するときは人の会話や顔が勝手に入らないようにしよう。正解は一つじゃないよ。",
+            "例：朝の鳥、風で葉が揺れる音、横断歩道の音",
+          ],
+          checkin: "身の回りの音を種類とリズムに分けて聞けそう？",
+          next: "次回は、T字路の形を体で表してみるよ。",
+          childSummary:
+            "きょうは、まちの音を種類に分け、『歩く・止まる・曲がる』をリズムで表したね。音だけで石敢當の場所を決めつけず、文字や形も確かめよう。",
+          curriculum: [
+            "音楽（3〜6年）：音色・強弱・反復・間を感じて表現する",
+            "総合：地域を複数の感覚で観察し、記録する",
+          ],
+          safety:
+            "道路では活動せず、屋内・校庭・公園など安全が確認できる場所で行います。録音は周囲の同意とプライバシーに配慮します。",
+          learned:
+            "まちの音を種類に分け、歩く・止まる・曲がるをリズムで表す。石敢當に固有の音があるわけではない。",
+        },
+      };
+
+      const episodeMatch = location.pathname.match(
+        /ishiganto_ep(0[2-9])\.html$/,
+      );
+      const episodeNumber = episodeMatch ? episodeMatch[1] : "02";
+      const LESSON = LESSONS[episodeNumber];
+      document.title = `${LESSON.title}【知能の窓・石敢當 ${LESSON.short}】 🪨`;
+
+      const ChevronRight = ({ className }) => (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className={className}
+        >
+          <path d="m9 18 6-6-6-6" />
+        </svg>
+      );
+      const ChevronLeft = ({ className }) => (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className={className}
+        >
+          <path d="m15 18-6-6 6-6" />
+        </svg>
+      );
+
+      const CHARACTER_BASE = {
+        hari: {
+          name: "ハーリー",
+          color: "red",
+          emoji: "🔥",
+          img: "../img/characters/harly.png",
+          gag: "（効果音：ズコーッ！ハーリー、勢いよくすっ転ぶ）",
+        },
+        sara: {
+          name: "サラバンジ",
+          color: "blue",
+          emoji: "⚡",
+          img: "../img/characters/sarabanji.png",
+          gag: "（サラバンジ、その場でバタン！と大げさに倒れる→3秒後にムクッと起き上がる）",
+        },
+        gan: {
+          name: "ガンジュー",
+          color: "green",
+          emoji: "😴",
+          img: "../img/characters/ganjuu.png",
+          gag: "（ガンジュー、立ったまま本気のいびき→メンターに肩を叩かれてハッと飛び起きる）",
+        },
+        kaa: {
+          name: "カーギー",
+          color: "purple",
+          emoji: "💁‍♀️",
+          img: "../img/characters/carggy.png",
+          gag: "（カーギー、風で乱れた前髪を鏡もなしに一瞬でピシッと直し、首をかしげる）",
+        },
+      };
+      const ALPACAS = Object.fromEntries(
+        Object.entries(CHARACTER_BASE).map(([key, base]) => [
+          key,
+          { ...base, guess: LESSON.wrong[key][0], line: LESSON.wrong[key][1] },
+        ]),
+      );
+      const ALPACA_KEYS = Object.keys(ALPACAS);
+      const MENTORS = {
+        chinen: {
+          name: "知念おじぃさん",
+          role: "智（論理・言語）",
+          color: "amber",
+          emoji: "🧓",
+        },
+        tokue: {
+          name: "仲程のヨシおばぁさん",
+          role: "徳（対人・内省）",
+          color: "rose",
+          emoji: "👵",
+        },
+        rikiya: {
+          name: "力也おじぃさん",
+          role: "体（音楽・運動）",
+          color: "teal",
+          emoji: "🧓",
+        },
+        shizu: {
+          name: "マタグワァのシズおばぁさん",
+          role: "感（視覚空間・博物学）",
+          color: "indigo",
+          emoji: "👵",
+        },
+      };
+      const COLOR_MAP = {
+        red: {
+          bg: "bg-red-50",
+          border: "border-red-300",
+          text: "text-red-700",
+          solid: "bg-red-500",
+        },
+        blue: {
+          bg: "bg-blue-50",
+          border: "border-blue-300",
+          text: "text-blue-700",
+          solid: "bg-blue-500",
+        },
+        green: {
+          bg: "bg-green-50",
+          border: "border-green-300",
+          text: "text-green-700",
+          solid: "bg-green-500",
+        },
+        purple: {
+          bg: "bg-purple-50",
+          border: "border-purple-300",
+          text: "text-purple-700",
+          solid: "bg-purple-500",
+        },
+        amber: {
+          bg: "bg-amber-50",
+          border: "border-amber-300",
+          text: "text-amber-700",
+          solid: "bg-amber-500",
+        },
+        rose: {
+          bg: "bg-rose-50",
+          border: "border-rose-300",
+          text: "text-rose-700",
+          solid: "bg-rose-500",
+        },
+        teal: {
+          bg: "bg-teal-50",
+          border: "border-teal-300",
+          text: "text-teal-700",
+          solid: "bg-teal-500",
+        },
+        indigo: {
+          bg: "bg-indigo-50",
+          border: "border-indigo-300",
+          text: "text-indigo-700",
+          solid: "bg-indigo-500",
+        },
+      };
+      const SOURCES = [
+        {
+          label: "沖縄県『伝統的な民家の風景』— 石敢當",
+          url: "https://www.pref.okinawa.jp/kyoiku/kodomo/1002657/1002666/1002667.html",
+        },
+      ];
+      const ISHIGANTO_LIST =
+        typeof ISHIGANTO_EPISODES !== "undefined" ? ISHIGANTO_EPISODES : [];
+      const MATERIAL = {
+        title: LESSON.title,
+        series: `知能の窓・石敢當 ${LESSON.short}`,
+        subjectGrade: LESSON.subjectGrade,
+      };
+
+      const Avatar = ({ person }) => {
+        const [failed, setFailed] = useState(false);
+        if (!person.img || failed)
+          return (
+            <div
+              className={`chara-avatar flex items-center justify-center text-2xl ${COLOR_MAP[person.color].bg}`}
+            >
+              {person.emoji}
+            </div>
+          );
+        return (
+          <img
+            src={person.img}
+            alt={person.name}
+            className="chara-avatar"
+            onError={() => setFailed(true)}
+          />
+        );
+      };
+      function shuffledThreeAlpacas() {
+        const arr = [...ALPACA_KEYS];
+        for (let i = arr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr.slice(0, 3);
+      }
+
+      const IshigantoApp = () => {
+        const [threeKeys] = useState(() => shuffledThreeAlpacas());
+        const [currentSlide, setCurrentSlide] = useState(0);
+        const [guess, setGuess] = useState(null);
+        const [verifyAnswer, setVerifyAnswer] = useState(null);
+        const [imagineAnswer, setImagineAnswer] = useState("");
+        const [childName, setChildName] = useState("");
+        const [canDoIt, setCanDoIt] = useState(null);
+        const [memoryAnswer, setMemoryAnswer] = useState("");
+        const [furiganaOn, setFuriganaOn] = useState(true);
+        const slideIds = [
+          "intro",
+          "trouble",
+          "mentor",
+          "verify",
+          "imagine",
+          "checkin",
+          "parent",
+        ];
+        const episodeIndex = ISHIGANTO_LIST.findIndex(
+          (e) => e.id === `ishiganto-ep${episodeNumber}`,
+        );
+        const prevEpisode =
+          episodeIndex > 0 ? ISHIGANTO_LIST[episodeIndex - 1] : null;
+        const nextEpisode =
+          episodeIndex >= 0 && episodeIndex < ISHIGANTO_LIST.length - 1
+            ? ISHIGANTO_LIST[episodeIndex + 1]
+            : null;
+        const mainMentor =
+          LESSON.mentor === "all" ? null : MENTORS[LESSON.mentor];
+        const nextSlide = () =>
+          setCurrentSlide((p) => Math.min(p + 1, slideIds.length - 1));
+        const prevSlide = () => setCurrentSlide((p) => Math.max(p - 1, 0));
+
+        const renderIntro = () => (
+          <div className="space-y-6">
+            <div className="text-center">
+              <div className="text-6xl mb-4">{LESSON.icon}</div>
+              <h2 className="text-2xl font-bold text-amber-700">
+                {LESSON.title}
+              </h2>
+              <span className="inline-block mt-2 px-3 py-1 text-xs font-bold rounded-full bg-amber-100 text-amber-700">
+                📚 {LESSON.subjectGrade}
+              </span>
+            </div>
+            <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 space-y-3">
+              {LESSON.intro.map((p) => (
+                <p key={p}>{p}</p>
+              ))}
+            </div>
+          </div>
+        );
+
+        const renderTrouble = () => (
+          <div className="space-y-6">
+            <div className="text-center">
+              <div className="text-5xl mb-4">😱</div>
+              <h2 className="text-xl font-bold text-red-600 mb-1">
+                困りごと発生！
+              </h2>
+              <p className="text-gray-600">
+                3人のアルパカが、確かめる前に言い切っている。誰の考えに一番近いと思う？
+              </p>
+            </div>
+            <div className="grid gap-4">
+              {threeKeys.map((key) => {
+                const c = ALPACAS[key];
+                const cc = COLOR_MAP[c.color];
+                const selected = guess === key;
+                return (
+                  <div
+                    key={key}
+                    onClick={() => setGuess(key)}
+                    className={`choice-card p-4 rounded-lg border-2 cursor-pointer transition-all ${cc.bg} ${selected ? `${cc.border} ring-2 ring-offset-1` : "border-gray-200 hover:border-gray-300"}`}
+                  >
+                    <div className="choice-row">
+                      <Avatar person={c} />
+                      <div
+                        className={`speech-bubble flex-1 min-w-0 rounded-lg p-3 ${cc.text} bg-white/70`}
+                      >
+                        <p className={`font-bold ${cc.text}`}>
+                          {c.name}：{c.guess}
+                        </p>
+                        <p className="text-sm text-gray-700 mt-1">
+                          「{c.line}」
+                        </p>
+                      </div>
+                      {selected && (
+                        <div
+                          className={`choice-check w-7 h-7 rounded-full ${cc.solid} flex items-center justify-center text-white text-sm shrink-0`}
+                        >
+                          ✓
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            {!guess && (
+              <p className="text-center text-sm text-amber-600">
+                ↑ どれか1つを選ぶと、次に進めるよ
+              </p>
+            )}
+            {guess && (
+              <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
+                みんなの考えには決めつけがあるみたい。メンターに確かめよう。
+              </div>
+            )}
+          </div>
+        );
+
+        const renderMentor = () => (
+          <div className="space-y-6">
+            <div className="text-center">
+              <div className="text-5xl mb-4">
+                {LESSON.mentor === "all" ? "🧓👵" : mainMentor.emoji}
+              </div>
+              <h2 className="text-xl font-bold text-amber-700">
+                {LESSON.mentor === "all"
+                  ? "4人のメンターが教えてくれた"
+                  : `${mainMentor.name}が教えてくれた`}
+              </h2>
+            </div>
+            <div className="rounded-lg p-4 space-y-2 bg-amber-50">
+              <div className="flex items-center gap-3 mb-1">
+                <Avatar person={mainMentor || MENTORS.chinen} />
+                <p className="font-bold text-amber-700">
+                  {LESSON.mentor === "all"
+                    ? "知能の窓・4人のメンター"
+                    : mainMentor.name}
+                </p>
+              </div>
+              {LESSON.mentorLines.map((p) => (
+                <p key={p} className="text-sm text-gray-700">
+                  「{p}」
+                </p>
+              ))}
+            </div>
+            <div className="grid gap-3">
+              {LESSON.cameos.map(([key, message], index) => {
+                const m = MENTORS[key];
+                return (
+                  <div
+                    key={`${key}-${index}`}
+                    className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP[m.color].bg}`}
+                  >
+                    <Avatar person={m} />
+                    <p className={`text-sm ${COLOR_MAP[m.color].text}`}>
+                      「{message}」
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+
+        const renderVerify = () => (
+          <div className="space-y-6">
+            <div className="text-center">
+              <div className="text-5xl mb-4">✅</div>
+              <h2 className="text-2xl font-bold text-green-600">
+                やってみよう
+              </h2>
+              <p className="text-sm text-gray-600 mt-1">
+                {LESSON.verify.question}
+              </p>
+            </div>
+            <div className="grid gap-3">
+              {LESSON.verify.options.map((opt, i) => {
+                const answered = verifyAnswer !== null;
+                const selected = verifyAnswer === i;
+                const correct = i === LESSON.verify.correct;
+                return (
+                  <button
+                    key={opt}
+                    onClick={() => !answered && setVerifyAnswer(i)}
+                    disabled={answered}
+                    className={`choice-card p-4 rounded-lg border-2 text-left text-sm transition ${answered && correct ? "border-green-400 bg-green-50" : selected ? "border-red-400 bg-red-50" : "border-gray-200 bg-white"}`}
+                  >
+                    {opt}
+                  </button>
+                );
+              })}
+            </div>
+            {verifyAnswer !== null && (
+              <div
+                className={`rounded-lg p-4 text-sm ${verifyAnswer === LESSON.verify.correct ? "bg-green-50 text-green-800" : "bg-orange-50 text-orange-800"}`}
+              >
+                <p className="font-bold mb-1">
+                  {verifyAnswer === LESSON.verify.correct
+                    ? "⭕ そのとおり！"
+                    : "もう一度、教わった方法を確認しよう。"}
+                </p>
+                <p>{LESSON.verify.note}</p>
+                <p className="text-xs text-gray-500 mt-2">
+                  {ALPACAS[guess].gag}
+                </p>
+              </div>
+            )}
+          </div>
+        );
+
+        const renderImagine = () => (
+          <div className="space-y-6">
+            <div className="text-center">
+              <div className="text-5xl mb-4">💭</div>
+              <h2 className="text-2xl font-bold text-pink-600">
+                想像してみよう
+              </h2>
+            </div>
+            <div className="bg-pink-50 rounded-lg p-6">
+              <p className="text-lg">{LESSON.imagine[0]}</p>
+              <p className="text-sm text-gray-500 mt-2">{LESSON.imagine[1]}</p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                きみの考えを書いてみよう（学習記録シートに残せるよ）
+              </label>
+              <textarea
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400 text-sm"
+                rows="3"
+                placeholder={LESSON.imagine[2]}
+                value={imagineAnswer}
+                onChange={(e) => setImagineAnswer(e.target.value)}
+              ></textarea>
+            </div>
+          </div>
+        );
+
+        const renderCheckin = () => (
+          <div className="space-y-6">
+            <div className="text-center">
+              <div className="text-5xl mb-4">🙋</div>
+              <h2 className="text-2xl font-bold text-teal-600">ふりかえり</h2>
+            </div>
+            <div className="bg-teal-50 rounded-lg p-6">
+              <p className="font-medium text-teal-800 mb-3">
+                ✏️ {LESSON.checkin}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {["はい", "いいえ", "わからない"].map((opt) => (
+                  <button
+                    key={opt}
+                    onClick={() => setCanDoIt(opt)}
+                    className={`px-4 py-2 rounded-lg font-bold border-2 transition ${canDoIt === opt ? "bg-teal-500 text-white border-teal-500" : "bg-white text-teal-700 border-teal-200"}`}
+                  >
+                    {opt}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                ✏️ 今日一番心に残ったことを書いてみよう
+              </label>
+              <textarea
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400 text-sm"
+                rows="3"
+                placeholder="例：分かったこと、次に確かめたいこと"
+                value={memoryAnswer}
+                onChange={(e) => setMemoryAnswer(e.target.value)}
+              ></textarea>
+            </div>
+            <div className="bg-indigo-50 rounded-lg p-4 text-sm text-indigo-700 text-center">
+              <p>{LESSON.next}</p>
+            </div>
+          </div>
+        );
+
+        const renderParent = () => (
+          <div className="space-y-4">
+            <div className="text-center">
+              <div className="text-5xl mb-4">🎬</div>
+              <h2 className="text-2xl font-bold text-yellow-700">おわりに</h2>
+            </div>
+            <div className="bg-orange-50 rounded-lg p-4">
+              <p className="text-xs font-bold text-orange-700 mb-2">
+                🧑‍🎓 児童生徒のみなさんへ
+              </p>
+              <p className="text-sm text-gray-700">{LESSON.childSummary}</p>
+            </div>
+            <div className="bg-yellow-50 rounded-lg p-4">
+              <p className="text-xs font-bold text-yellow-800 mb-2">
+                👪 保護者・支援者の方へ（学習指導要領との対応）
+              </p>
+              <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
+                {LESSON.curriculum.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+              <p className="text-xs text-gray-500 mt-2">
+                ※ 本教材は「知能の窓・石敢當」{LESSON.short}
+                です。石敢當を魔除けの石と覚えるだけでなく、沖縄の道・住まい・文字・地域の願いを8つの知能から観察します。今回は「
+                {LESSON.mi}」の窓で学びます。
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                ※
+                4アルパカは困りごとを持ち込む役で、3人がランダムに登場します。全員の発言に決めつけや確認不足があり、メンターから安全で確かな方法を学ぶ構成です。
+              </p>
+              <p className="text-xs text-red-600 mt-2">
+                <strong>安全・プライバシー：</strong>
+                {LESSON.safety}
+              </p>
+            </div>
+            <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
+              <p className="text-xs font-bold text-slate-700 mb-2">
+                📚 出典・参考資料
+              </p>
+              <ul className="text-xs text-gray-700 list-disc list-inside">
+                {SOURCES.map((s) => (
+                  <li key={s.label}>
+                    <a
+                      href={s.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 underline"
+                    >
+                      {s.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-4">
+              <p className="text-xs font-bold text-gray-700 mb-2">
+                🖨️ 学習記録シートを作る（COCOLOプラン等の学習記録用）
+              </p>
+              <input
+                type="text"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm mb-2"
+                placeholder="お子さんの名前（記入は任意）"
+                value={childName}
+                onChange={(e) => setChildName(e.target.value)}
+              />
+              <button
+                onClick={() => window.print()}
+                className="w-full px-4 py-2 bg-yellow-500 text-white rounded-lg font-medium hover:bg-yellow-600 text-sm"
+              >
+                学習記録シートを印刷する
+              </button>
+            </div>
+            <div className="mt-6 pt-4 border-t border-gray-200 space-y-2">
+              <p className="text-xs font-bold text-gray-500 text-center">
+                つぎに進む
+              </p>
+              <div className="flex flex-col sm:flex-row gap-2">
+                {prevEpisode ? (
+                  <a
+                    href={`../${prevEpisode.url}`}
+                    className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-300 text-sm font-bold text-gray-600"
+                  >
+                    ← {prevEpisode.short}
+                  </a>
+                ) : (
+                  <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm text-gray-300">
+                    最初の話
+                  </span>
+                )}
+                {nextEpisode ? (
+                  <a
+                    href={`../${nextEpisode.url}`}
+                    className="flex-1 text-center px-3 py-2 rounded-lg bg-amber-600 text-white text-sm font-bold"
+                  >
+                    {nextEpisode.short} →
+                  </a>
+                ) : (
+                  <a
+                    href="../series-guide.html"
+                    className="flex-1 text-center px-3 py-2 rounded-lg bg-amber-600 text-white text-sm font-bold"
+                  >
+                    テーマ一覧へ →
+                  </a>
+                )}
+              </div>
+              <a
+                href="../matrix-library.html"
+                className="block text-center text-sm font-bold text-amber-700 underline"
+              >
+                他のテーマも見る（教材一覧）
+              </a>
+              <a
+                href="../series-guide.html"
+                className="block text-center text-sm font-bold text-indigo-700 underline"
+              >
+                テーマ一覧で見る
+              </a>
+            </div>
+            <div className="mt-6 pt-4 border-t border-dashed border-gray-300">
+              <div className="bg-gray-50 rounded-lg p-4 text-left">
+                <p className="text-xs font-bold text-gray-700 mb-2 text-center">
+                  💬 ご意見・ご要望
+                </p>
+                <p className="text-xs text-gray-600 mb-3">
+                  「こんな機能が欲しい」「ここが使いにくい」などのご意見をお聞かせください。
+                </p>
+                <a
+                  href={FEEDBACK_FORM_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-center px-4 py-2 bg-gray-700 text-white rounded-full text-sm font-bold"
+                >
+                  📋 要望・フィードバックを送る
+                </a>
+              </div>
+            </div>
+          </div>
+        );
+
+        const today = new Date();
+        const todayStr = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
+        const renderPrintSheet = () => (
+          <div className="print-sheet w-[700px] p-10 bg-white text-black">
+            <h1 className="text-xl font-bold border-b-2 border-black pb-2 mb-4">
+              学習記録シート
+            </h1>
+            <table className="w-full text-sm mb-4">
+              <tbody>
+                <tr>
+                  <td className="py-1 pr-4 font-bold w-32">学習日</td>
+                  <td>{todayStr}</td>
+                </tr>
+                <tr>
+                  <td className="py-1 pr-4 font-bold">お子さんの名前</td>
+                  <td>{childName || "＿＿＿＿＿＿＿＿＿＿"}</td>
+                </tr>
+                <tr>
+                  <td className="py-1 pr-4 font-bold">教材名</td>
+                  <td>
+                    {MATERIAL.title}（{MATERIAL.series}）
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-1 pr-4 font-bold">対応教科・学年</td>
+                  <td>{MATERIAL.subjectGrade}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div className="mb-4 text-xs bg-gray-50 border border-gray-300 rounded p-3">
+              <p className="font-bold mb-1">学習指導要領との対応</p>
+              <ul className="list-disc list-inside">
+                {LESSON.curriculum.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="mb-4">
+              <p className="font-bold text-sm mb-1">
+                1. アルパカの困りごとで選んだ考え
+              </p>
+              <p className="text-sm border border-gray-400 rounded p-2">
+                {guess
+                  ? `${ALPACAS[guess].name}の「${ALPACAS[guess].guess}」`
+                  : "（未回答）"}
+              </p>
+            </div>
+            <div className="mb-4">
+              <p className="font-bold text-sm mb-1">
+                2. メンターに教わったこと
+              </p>
+              <p className="text-sm border border-gray-400 rounded p-2">
+                {LESSON.learned}
+              </p>
+            </div>
+            <div className="mb-4">
+              <p className="font-bold text-sm mb-1">3. やってみよう</p>
+              <p className="text-sm border border-gray-400 rounded p-2">
+                {verifyAnswer === null
+                  ? "（未回答）"
+                  : verifyAnswer === LESSON.verify.correct
+                    ? "正解できた"
+                    : `確かめ直した：${LESSON.verify.note}`}
+              </p>
+            </div>
+            <div className="mb-4">
+              <p className="font-bold text-sm mb-1">
+                4. 想像する問題への自分の考え
+              </p>
+              <p className="text-sm border border-gray-400 rounded p-2 min-h-[3rem]">
+                {imagineAnswer || "（記入なし）"}
+              </p>
+            </div>
+            <div className="mb-4">
+              <p className="font-bold text-sm mb-1">
+                5. 今日一番心に残ったこと
+              </p>
+              <p className="text-sm border border-gray-400 rounded p-2 min-h-[3rem]">
+                {memoryAnswer || "（記入なし）"}
+              </p>
+            </div>
+            <p className="text-xs text-red-600 mb-6">
+              安全・プライバシー：{LESSON.safety}
+            </p>
+            <p className="text-sm border-t border-gray-400 pt-4">
+              保護者確認サイン：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+            </p>
+          </div>
+        );
+
+        const slideRenderers = {
+          intro: renderIntro,
+          trouble: renderTrouble,
+          mentor: renderMentor,
+          verify: renderVerify,
+          imagine: renderImagine,
+          checkin: renderCheckin,
+          parent: renderParent,
+        };
+        const slideTitles = {
+          intro: `${LESSON.icon} はじまりの問い`,
+          trouble: "😱 困りごと",
+          mentor: "🧓 メンター登場",
+          verify: "✅ やってみる",
+          imagine: "💭 想像する",
+          checkin: "🙋 ふりかえり",
+          parent: "🎬 おわりに",
+        };
+        const canGoNext = !(slideIds[currentSlide] === "trouble" && !guess);
+        return (
+          <div
+            className={`min-h-screen bg-gradient-to-br from-amber-50 to-blue-50 ${furiganaOn ? "" : "furigana-off"}`}
+          >
+            <div className="container mx-auto px-4 py-8 max-w-2xl">
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+                <a
+                  href="../matrix-library.html"
+                  className="inline-flex items-center gap-1 text-sm font-bold text-amber-700"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  教材一覧へ戻る
+                </a>
+                <button
+                  onClick={() => setFuriganaOn((f) => !f)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold border-2 ${furiganaOn ? "bg-amber-600 text-white border-amber-600" : "bg-white text-amber-700 border-amber-300"}`}
+                >
+                  🔤 ふりがな {furiganaOn ? "ON" : "OFF"}
+                </button>
+              </div>
+              <div className="text-center mb-6">
+                <p className="text-xs font-bold text-indigo-500 mb-1">
+                  知能の窓・石敢當 {LESSON.short}
+                </p>
+                <h1 className="text-2xl md:text-3xl font-bold text-amber-700">
+                  {LESSON.title} 🪨
+                </h1>
+                <span className="inline-block mt-1 px-2 py-0.5 text-xs font-bold rounded-full bg-amber-100 text-amber-700">
+                  📚 {LESSON.subjectGrade}
+                </span>
+              </div>
+              <div className="mb-6">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm text-gray-600">
+                    {slideTitles[slideIds[currentSlide]]}
+                  </span>
+                  <span className="text-sm text-gray-600">
+                    {currentSlide + 1} / {slideIds.length}
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    className="bg-amber-600 h-2 rounded-full transition-all"
+                    style={{
+                      width: `${((currentSlide + 1) / slideIds.length) * 100}%`,
+                    }}
+                  ></div>
+                </div>
+              </div>
+              <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8 mb-6 min-h-96">
+                {slideRenderers[slideIds[currentSlide]]()}
+              </div>
+              {slideIds[currentSlide] === "parent" && (
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-left mb-6">
+                  <p className="text-xs font-bold text-amber-700 mb-2 text-center">
+                    🌱 制作をアシストする
+                  </p>
+                  <p className="text-xs text-gray-600 mb-3">
+                    ここでの学びを、次の学びへ受け継ぐ循環を支えていただけたら嬉しいです。
+                  </p>
+                  <div className="flex flex-wrap gap-2 justify-center">
+                    {SUPPORT_LINKS.map((s) => (
+                      <a
+                        key={s.label}
+                        href={s.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-4 py-2 rounded-full text-sm font-bold border-2 border-amber-300 text-amber-700 bg-white"
+                      >
+                        {s.label}
+                      </a>
+                    ))}
+                  </div>
+                  <div className="mt-2 text-center">
+                    <a
+                      href="../tokushoho.html"
+                      className="text-xs text-gray-400 underline"
+                    >
+                      特定商取引法に基づく表記
+                    </a>
+                  </div>
+                </div>
+              )}
+              <div className="flex justify-between items-center">
+                <button
+                  onClick={prevSlide}
+                  disabled={currentSlide === 0}
+                  className={`flex items-center px-3 sm:px-5 py-3 rounded-lg font-medium ${currentSlide === 0 ? "bg-gray-200 text-gray-400" : "bg-amber-600 text-white"}`}
+                >
+                  <ChevronLeft className="w-5 h-5 mr-1" />
+                  まえへ
+                </button>
+                <div className="progress-dots space-x-2">
+                  {slideIds.map((id, index) => (
+                    <div
+                      key={id}
+                      className={`w-2.5 h-2.5 rounded-full ${index === currentSlide ? "bg-amber-600" : "bg-gray-300"}`}
+                    />
+                  ))}
+                </div>
+                <button
+                  onClick={nextSlide}
+                  disabled={currentSlide === slideIds.length - 1 || !canGoNext}
+                  className={`flex items-center px-3 sm:px-5 py-3 rounded-lg font-medium ${currentSlide === slideIds.length - 1 || !canGoNext ? "bg-gray-200 text-gray-400" : "bg-amber-600 text-white"}`}
+                >
+                  {slideIds[currentSlide] === "checkin" ? "おわりに" : "つぎへ"}
+                  <ChevronRight className="w-5 h-5 ml-1" />
+                </button>
+              </div>
+            </div>
+            {renderPrintSheet()}
+          </div>
+        );
+      };
+
+      createRoot(document.getElementById("root")).render(<IshigantoApp />);
+    </script>
+  </body>
+</html>
