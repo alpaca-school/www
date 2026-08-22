@@ -1073,30 +1073,49 @@
         }
 
         // 新着バナー：更新日が新しい順に、数秒ごとに自動で切り替わる帯
+        // タイトルの「（〇〇 epN：...編）」からシリーズ名だけを取り出す。
+        // シリーズ名が取れない単発教材はタイトルそのものをグループキーにする。
+        function seriesGroupKey(item) {
+          const m = item.title.match(/[（(]([^（）()]+?)\s*ep\d+[：:][^（）()]*[）)]/);
+          if (m) return m[1].trim();
+          return item.title;
+        }
+
         function UpdateBanner({ items }) {
           const [index, setIndex] = useState(0);
-          const recent = useMemo(() => (
-            [...items].sort((a, b) => b.dateAdded.localeCompare(a.dateAdded)).slice(0, 5)
-          ), [items]);
+          const grouped = useMemo(() => {
+            const byDay = {};
+            [...items]
+              .sort((a, b) => b.dateAdded.localeCompare(a.dateAdded))
+              .forEach(item => {
+                const key = `${item.dateAdded}__${seriesGroupKey(item)}`;
+                if (!byDay[key]) byDay[key] = { ...item, count: 0 };
+                byDay[key].count += 1;
+              });
+            return Object.values(byDay).slice(0, 5);
+          }, [items]);
 
           useEffect(() => {
-            if (recent.length === 0) return;
-            const timer = setInterval(() => setIndex(i => (i + 1) % recent.length), 3500);
+            if (grouped.length === 0) return;
+            const timer = setInterval(() => setIndex(i => (i + 1) % grouped.length), 3500);
             return () => clearInterval(timer);
-          }, [recent]);
+          }, [grouped]);
 
-          if (recent.length === 0) return null;
-          const current = recent[index];
+          if (grouped.length === 0) return null;
+          const current = grouped[index];
+          const label = current.count > 1
+            ? `${seriesGroupKey(current)}が追加されました（全${current.count}話）`
+            : `${current.emoji} ${current.title}`;
 
           return (
             <div className="bg-orange-500 dark:bg-orange-700 text-white">
               <div className="max-w-6xl mx-auto px-4 py-2 flex items-center gap-3 overflow-hidden">
                 <span className="text-xs font-bold bg-white/20 rounded-full px-2 py-0.5 whitespace-nowrap">🆕 新着</span>
                 <a href={current.url === "#" ? undefined : current.url} className="text-sm font-bold truncate flex-1 hover:underline">
-                  {current.emoji} {current.title}（{current.dateAdded}）
+                  {label}（{current.dateAdded}）
                 </a>
                 <div className="flex gap-1 shrink-0">
-                  {recent.map((r, i) => (
+                  {grouped.map((r, i) => (
                     <span key={r.id} className={`w-1.5 h-1.5 rounded-full ${i === index ? "bg-white" : "bg-white/40"}`} />
                   ))}
                 </div>
@@ -1105,9 +1124,10 @@
           );
         }
 
-        function Sidebar({ selectedGrades, setSelectedGrades, selectedSubjects, setSelectedSubjects, selectedMi, setSelectedMi, toggle }) {
-          return (
-            <aside className="w-full lg:w-56 shrink-0 space-y-6">
+        function Sidebar({ selectedGrades, setSelectedGrades, selectedSubjects, setSelectedSubjects, selectedMi, setSelectedMi, toggle, open, setOpen }) {
+          const activeCount = selectedGrades.length + selectedSubjects.length + selectedMi.length;
+          const body = (
+            <div className="space-y-6">
               <div>
                 <p className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-2">学年・年齢</p>
                 <div className="flex flex-wrap gap-1.5">
@@ -1138,6 +1158,18 @@
                   ))}
                 </div>
               </div>
+            </div>
+          );
+          return (
+            <aside className="w-full lg:w-56 shrink-0">
+              <button
+                onClick={() => setOpen(o => !o)}
+                className="lg:hidden w-full flex items-center justify-between px-4 py-3 mb-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm font-bold text-gray-700 dark:text-gray-200"
+              >
+                <span>🔍 絞り込み{activeCount > 0 ? `（${activeCount}）` : ""}</span>
+                <span>{open ? "▲" : "▼"}</span>
+              </button>
+              <div className={`${open ? "block" : "hidden"} lg:block`}>{body}</div>
             </aside>
           );
         }
@@ -1148,6 +1180,7 @@
           const [selectedMi, setSelectedMi] = useState([]);
           const [searchQuery, setSearchQuery] = useState("");
           const [darkMode, setDarkMode] = useState(false);
+          const [filterOpen, setFilterOpen] = useState(false);
 
           const toggle = (list, setList, value) => {
             setList(list.includes(value) ? list.filter(v => v !== value) : [...list, value]);
@@ -1164,7 +1197,12 @@
             });
           }, [selectedGrades, selectedSubjects, selectedMi, searchQuery]);
 
-          const recommended = useMemo(() => MATERIALS.filter(m => m.recommended && m.status === "published"), []);
+          const recommended = useMemo(() => (
+            MATERIALS
+              .filter(m => m.recommended && m.status === "published")
+              .sort((a, b) => b.dateAdded.localeCompare(a.dateAdded))
+              .slice(0, 8)
+          ), []);
 
           const hasFilter = selectedGrades.length > 0 || selectedSubjects.length > 0 || selectedMi.length > 0 || searchQuery.trim() !== "";
           const resetAll = () => { setSelectedGrades([]); setSelectedSubjects([]); setSelectedMi([]); setSearchQuery(""); };
@@ -1228,6 +1266,7 @@
                     selectedSubjects={selectedSubjects} setSelectedSubjects={setSelectedSubjects}
                     selectedMi={selectedMi} setSelectedMi={setSelectedMi}
                     toggle={toggle}
+                    open={filterOpen} setOpen={setFilterOpen}
                   />
 
                   <div className="flex-1 min-w-0">
