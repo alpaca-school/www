@@ -8,7 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <script>
         (() => {
-            const pageVersion = "20260818-1";
+            const pageVersion = "20260823-3";
             const url = new URL(window.location.href);
             if (url.searchParams.get("v") !== pageVersion) {
                 url.searchParams.set("v", pageVersion);
@@ -247,6 +247,7 @@
           const [threeKeys] = useState(() => shuffledThreeAlpacas());
           const [currentSlide, setCurrentSlide] = useState(0);
           const [guess, setGuess] = useState(null);
+          const [freeThought, setFreeThought] = useState("");
           const [wordAnswers, setWordAnswers] = useState({});
           const [imagineAnswer, setImagineAnswer] = useState("");
           const [childName, setChildName] = useState("");
@@ -320,11 +321,42 @@
                     </div>
                   );
                 })}
+                <div
+                  onClick={() => setGuess("none")}
+                  className={`choice-card p-4 rounded-lg border-2 cursor-pointer transition-all bg-gray-50 ${
+                    guess === "none" ? "border-gray-400 ring-2 ring-offset-1 ring-gray-300" : "border-gray-200 hover:border-gray-300"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">🤔</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-gray-600">あてはまるものがない</p>
+                      <p className="text-sm text-gray-500">自分の考えを書いてみる</p>
+                    </div>
+                    {guess === "none" && (
+                      <div className="w-7 h-7 rounded-full bg-gray-500 flex items-center justify-center text-white text-sm shrink-0">✓</div>
+                    )}
+                  </div>
+                </div>
               </div>
+              {guess === "none" && (
+                <textarea
+                  value={freeThought}
+                  onChange={(e) => setFreeThought(e.target.value)}
+                  rows="3"
+                  className="w-full border rounded-lg p-3 text-sm"
+                  placeholder="きみの考えを書いてみよう（書かなくても次に進めるよ）"
+                />
+              )}
               {!guess && <p className="text-center text-sm text-violet-500">↑ どれか1つを選ぶと、次に進めるよ</p>}
-              {guess && (
+              {guess && guess !== "none" && (
                 <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
                   <p>みんな、思いつきで話していて、資料をまだ確かめていないみたい…。ここは、知能の窓シリーズのメンターに聞いてみよう。</p>
+                </div>
+              )}
+              {guess === "none" && (
+                <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
+                  <p>自分の考えを持てたね。それも大切な一歩だよ。メンターに聞いてみよう。</p>
                 </div>
               )}
             </div>
@@ -344,20 +376,6 @@
                 <p className="text-sm text-gray-700">「焦らんでいいさぁ。知らないことばに出会ったら、まず資料で『いつ・どこで・誰が・何をする』の4つを確かめるといいんだよ」</p>
                 <p className="text-sm text-gray-700">「沖縄県公文書館によると、シーミー（清明祭）は、旧暦3月上旬ごろ、沖縄本島中南部を中心に、門中（一族）が集まって行う祖先供養の行事だよ。お墓にウサンミ（重箱料理）やお酒、花を供えて、そのあとみんなでウサンデー（いただくこと）をするんだ」</p>
                 <p className="text-sm text-gray-700">「首里近辺では『ウシーミー』とも呼ばれるよ。呼び方が違うのは、間違いじゃなくて、地域のことばの違いなんだ」</p>
-              </div>
-              <div className="grid gap-3">
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.rose.bg}`}>
-                  <Avatar person={MENTORS.tokue} />
-                  <p className="text-sm text-rose-700">「分からないことばを、恥ずかしがらずに『これ、何のことば？』って聞けるの、すてきなことだよ」</p>
-                </div>
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.teal.bg}`}>
-                  <Avatar person={MENTORS.rikiya} />
-                  <p className="text-sm text-teal-700">「シーミー、ウシーミー、ウサンミ、ウサンデー…リズムに乗せて声に出してみるかー！」</p>
-                </div>
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.indigo.bg}`}>
-                  <Avatar person={MENTORS.shizu} />
-                  <p className="text-sm text-indigo-700">「清明が暦のどこで決まるのかは、また今度、たっぷり教えるね」</p>
-                </div>
               </div>
             </div>
           );
@@ -411,7 +429,7 @@
                 <p>首里近辺では「シーミー」ではなく「ウシーミー」と呼ばれる。また、沖縄本島の一部や宮古・八重山では、シーミーより「十六日祭（じゅうるくにちー、旧暦1月16日ごろ）」が盛んな地域もあるんだ。</p>
                 <p className="text-violet-600 text-xs">「沖縄はどこも同じ」と決めつけないようにしよう。</p>
               </div>
-              {guess && (
+              {guess && guess !== "none" && (
                 <div className="rounded-lg p-4 text-center bg-gray-100">
                   <p className="font-bold text-gray-700">きみが選んだ{ALPACAS[guess].name}の説明は、資料を確かめる前の思いつきだったね。</p>
                   <p className="text-xs text-gray-500 mt-2">{ALPACAS[guess].gag}</p>
@@ -591,7 +609,9 @@
               <div className="mb-4">
                 <p className="font-bold text-sm mb-1">1. アルパカの困りごとで、一番近いと思った説明</p>
                 <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">
-                  {guessedForSheet ? `${guessedForSheet.name}の「${guessedForSheet.claim}」を選びました。` : "（記入なし）"}
+                  {guess === "none"
+                    ? `あてはまるものがない。${freeThought.trim() ? `自分の考え：${freeThought.trim()}` : "自由記述なし"}`
+                    : guessedForSheet ? `${guessedForSheet.name}の「${guessedForSheet.claim}」を選びました。` : "（記入なし）"}
                 </p>
               </div>
               <div className="mb-4">
