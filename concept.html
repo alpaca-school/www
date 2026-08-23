@@ -1,227 +1,329 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>アルパカすく〜る｜孤立しない生活の学びの構造</title>
-
-  <meta name="description" content="学びと創作とご縁で、孤立する人を社会につなぎ直す。アルパカすく〜るは、現実世界を楽しむための学習エコシステムです。" />
-
-  <style>
-    body {
-      margin: 0;
-      font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
-      line-height: 1.8;
-      color: #333;
-      background: #fafafa;
-    }
-
-    header {
-      padding: 4rem 1.5rem;
-      background: #fff7e6;
-      text-align: center;
-    }
-
-    header h1 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-    }
-
-    header p {
-      max-width: 720px;
-      margin: 0 auto;
-      font-size: 1.1rem;
-    }
-
-    section {
-      padding: 3rem 1.5rem;
-      max-width: 960px;
-      margin: 0 auto;
-    }
-
-    h2 {
-      margin-top: 0;
-      border-left: 6px solid #f4a261;
-      padding-left: 0.75rem;
-    }
-
-    .cycle {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 1rem;
-      text-align: center;
-      margin-top: 2rem;
-    }
-
-    .cycle div {
-      background: #fff;
-      border-radius: 8px;
-      padding: 1.2rem 0.5rem;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    }
-
-    .pillars {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 2rem;
-      margin-top: 2rem;
-    }
-
-    .pillar {
-      background: #ffffff;
-      padding: 1.5rem;
-      border-radius: 10px;
-      border: 1px solid #eee;
-    }
-
-    footer {
-      padding: 2rem 1.5rem;
-      background: #333;
-      color: #fff;
-      font-size: 0.9rem;
-    }
-
-    footer a {
-      color: #ffd166;
-      text-decoration: none;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <script>
+        (() => {
+            const pageVersion = "20260823-1";
+            const url = new URL(window.location.href);
+            if (url.searchParams.get("v") !== pageVersion) {
+                url.searchParams.set("v", pageVersion);
+                window.location.replace(url.toString());
+            }
+        })();
+    </script>
+    <title>このサイトについて｜アルパカすく〜る</title>
+    <meta name="description" content="アルパカすく〜るは、文化資本・社会関係資本・経済資本という3つの持ち物を、沖縄のテーマ教材と8人の仲間を通して育てるオンライン学び舎です。">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { darkMode: 'class' };
+    </script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="./series-nav-data.js"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        p, li {
+            word-break: normal;
+            overflow-wrap: break-word;
+            line-break: strict;
+        }
+        .chara-avatar {
+            width: 64px; height: 64px; border-radius: 9999px; object-fit: cover;
+            border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.15); background: #fff;
+            flex-shrink: 0;
+        }
+    </style>
 </head>
+<body class="bg-orange-50 dark:bg-gray-900 transition-colors">
+    <div id="root"></div>
 
-<body>
+    <script type="text/babel">
+        const { useState } = React;
+        const { createRoot } = ReactDOM;
 
-  <header>
-    <h1>アルパカすく〜る</h1>
-    <p>
-      学びと創作とご縁で、<br>
-      社会とつながるオンラインすく〜る
-    </p>
-  </header>
+        // 4アルパカ：困りごとを持ち込む仲間たち（性格は正・変更禁止のキャラ設定。characters.htmlと一言一句一致）
+        const ALPACAS = [
+          {
+            key: "hari", name: "ハーリー", color: "red", emoji: "🔥",
+            personality: "オラオラ系。怖いもの知らずで、目立つことが好き。",
+            gag: "失敗の瞬間、「ズコーッ!」と勢いよくすっ転ぶ"
+          },
+          {
+            key: "sara", name: "サラバンジ", color: "blue", emoji: "⚡",
+            personality: "無謀に見えることも、運と勢いで乗り越える。体力がなく短期決戦を好む。",
+            gag: "失敗の瞬間、「バタン!」と大げさに倒れる→3秒後にムクッと起き上がる"
+          },
+          {
+            key: "gan", name: "ガンジュー", color: "green", emoji: "😴",
+            personality: "のんびり屋で何でも食べるが、人見知り。よく寝る。",
+            gag: "正解を答える直前に立ったまま本気のいびき→メンターに肩を叩かれてハッと飛び起きる"
+          },
+          {
+            key: "kaa", name: "カーギー", color: "purple", emoji: "💁‍♀️",
+            personality: "唯一の女性性。美意識が高く、常に安全策を選ぶ。",
+            gag: "登場直後、風で乱れた前髪を鏡もなしに一瞬でピシッと直す"
+          }
+        ];
 
-  <section id="why">
-    <h2>なぜ、このすく〜るをつくるのか</h2>
-    <p>
-      人は、教えられたから、支援されたから動くのではありません。<br>
-      <strong>関係ができてしまった場所</strong>に、自然と戻ってきます。
-    </p>
-    <p>
-      アルパカすく〜るは、<br>
-      子ども・若者・大人・高齢者まで、<br>
-      <strong>すべての人</strong>が、もう社会とつながるための「現実舞台」です。
-    </p>
-  </section>
+        // 4メンター：知識と生き方を教える役。多重知能8分類を2つずつ担当（characters.htmlと一言一句一致）
+        const MENTORS = [
+          {
+            key: "chinen", name: "知念おじぃさん", color: "amber", emoji: "🧓",
+            mi: ["論理・数学的知能", "言語・語学的知能"],
+          },
+          {
+            key: "tokue", name: "仲程のヨシおばぁさん", color: "rose", emoji: "👵",
+            mi: ["対人的知能", "内省的知能"],
+          },
+          {
+            key: "rikiya", name: "力也おじぃさん", color: "teal", emoji: "🧓",
+            mi: ["音楽・リズム的知能", "身体・運動感覚的知能"],
+          },
+          {
+            key: "misaki", name: "マタグワァのシズおばぁさん", color: "indigo", emoji: "👵",
+            mi: ["視覚・空間的知能", "博物学的知能"],
+          }
+        ];
 
-  <section id="dream">
-    <h2>夢つむぎとの関係</h2>
-    <p>
-      「わたしの夢つむぎ」は、心の中の葛藤を整理し、
-      未来の山を見つける<strong>内なる旅</strong>。
-    </p>
-    <p>
-      アルパカすく〜るは、
-      その山を登るために<strong>現実世界で試す装置</strong>です。
-    </p>
-  </section>
+        const COLOR_MAP = {
+          red: { bg: "bg-red-50 dark:bg-red-950", border: "border-red-200 dark:border-red-800", text: "text-red-700 dark:text-red-300", badge: "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200" },
+          blue: { bg: "bg-blue-50 dark:bg-blue-950", border: "border-blue-200 dark:border-blue-800", text: "text-blue-700 dark:text-blue-300", badge: "bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200" },
+          green: { bg: "bg-green-50 dark:bg-green-950", border: "border-green-200 dark:border-green-800", text: "text-green-700 dark:text-green-300", badge: "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-200" },
+          purple: { bg: "bg-purple-50 dark:bg-purple-950", border: "border-purple-200 dark:border-purple-800", text: "text-purple-700 dark:text-purple-300", badge: "bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200" },
+          amber: { bg: "bg-amber-50 dark:bg-amber-950", border: "border-amber-200 dark:border-amber-800", text: "text-amber-700 dark:text-amber-300", badge: "bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-200" },
+          rose: { bg: "bg-rose-50 dark:bg-rose-950", border: "border-rose-200 dark:border-rose-800", text: "text-rose-700 dark:text-rose-300", badge: "bg-rose-100 dark:bg-rose-900 text-rose-700 dark:text-rose-200" },
+          teal: { bg: "bg-teal-50 dark:bg-teal-950", border: "border-teal-200 dark:border-teal-800", text: "text-teal-700 dark:text-teal-300", badge: "bg-teal-100 dark:bg-teal-900 text-teal-700 dark:text-teal-200" },
+          indigo: { bg: "bg-indigo-50 dark:bg-indigo-950", border: "border-indigo-200 dark:border-indigo-800", text: "text-indigo-700 dark:text-indigo-300", badge: "bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-200" }
+        };
 
+        function AlpacaMiniCard({ c }) {
+          const cc = COLOR_MAP[c.color];
+          return (
+            <div className={`rounded-2xl border-2 ${cc.border} ${cc.bg} p-4 flex gap-3`}>
+              <div className={`chara-avatar flex items-center justify-center text-3xl ${cc.bg}`}>{c.emoji}</div>
+              <div className="flex-1 min-w-0">
+                <h3 className={`font-extrabold ${cc.text}`}>{c.name}</h3>
+                <p className="text-xs text-gray-700 dark:text-gray-300 mt-1">{c.personality}</p>
+                <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">🎬 {c.gag}</p>
+              </div>
+            </div>
+          );
+        }
 
-  <section id="cycle">
-    <h2>学びの循環</h2>
-    <div class="cycle">
-      <div>🍛<br>食べる</div>
-      <div>🌱<br>育てる</div>
-      <div>🧠<br>学ぶ</div>
-      <div>🎥<br>共有する</div>
-      <div>🌌<br>物語にする</div>
-      <div>📘<br>表現する</div>
-    </div>
-    <p>
-      この循環を通して、人は<br>
-      自分の体・生活・地域を、<br>
-      <strong>「自分ごと」として取り戻していきます。</strong>
-    </p>
-  </section>
+        function MentorMiniCard({ m }) {
+          const cc = COLOR_MAP[m.color];
+          return (
+            <div className={`rounded-2xl border-2 ${cc.border} ${cc.bg} p-4 flex gap-3`}>
+              <div className={`chara-avatar flex items-center justify-center text-3xl ${cc.bg}`}>{m.emoji}</div>
+              <div className="flex-1 min-w-0">
+                <h3 className={`font-extrabold ${cc.text}`}>{m.name}</h3>
+                <div className="flex flex-wrap gap-1.5 mt-1">
+                  {m.mi.map((tag) => (
+                    <span key={tag} className={`px-2 py-0.5 text-xs font-bold rounded-full ${cc.badge}`}>{tag}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          );
+        }
 
-  <section>
-    <h2>体験してみる</h2>
-    <p>
-      この構造は、読むだけでは完成しません。
-    </p>
-    <a href="./index.html">
-      ▶ 体験フロアへ進む
-    </a>
-  </section>
+        function App() {
+          const [darkMode, setDarkMode] = useState(false);
+          const seriesCount = typeof SERIES_META !== "undefined" ? SERIES_META.length : 15;
+          const episodeCount = typeof SERIES_META !== "undefined"
+            ? SERIES_META.reduce((sum, s) => sum + s.episodes.length, 0)
+            : 128;
+          const links = typeof SUPPORT_LINKS !== "undefined" ? SUPPORT_LINKS : [];
 
+          return (
+            <div className={darkMode ? "dark" : ""}>
+            <div className="bg-gradient-to-b from-sky-100 to-orange-50 dark:from-gray-900 dark:to-gray-900 min-h-screen transition-colors">
 
-  <section id="trinity">
-    <h2>三位一体の構造</h2>
-    <div class="pillars">
-      <div class="pillar">
-        <h3>① アルパカすく〜る</h3>
-        <p>現実を生きるための学びの場。</p>
-        <p>
-          食材・健康・文化・技術を起点に、<br>
-          判断力と創作力を育てます。
-        </p>
-      </div>
+              <div className="sticky top-0 z-10 bg-white/90 dark:bg-gray-800/90 backdrop-blur border-b border-gray-200 dark:border-gray-700">
+                <div className="max-w-4xl mx-auto px-4 py-3 flex flex-wrap items-center gap-3">
+                  <span className="font-extrabold text-gray-800 dark:text-gray-100 whitespace-nowrap">🦙 アルパカすく〜る</span>
+                  <nav className="flex flex-wrap items-center gap-1 text-xs sm:text-sm font-bold">
+                    <a href="./matrix-library.html" className="px-2 py-1 rounded text-gray-600 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 transition">教材一覧</a>
+                    <a href="./series-guide.html" className="px-2 py-1 rounded text-gray-600 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 transition">テーマ一覧</a>
+                    <a href="./characters.html" className="px-2 py-1 rounded text-gray-600 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 transition">キャラクター図鑑</a>
+                    <a href="./concept.html" className="px-2 py-1 rounded text-orange-600 dark:text-orange-400">このサイトについて</a>
+                    <a href="./account.html" className="px-2 py-1 rounded text-gray-600 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 transition">マイページ</a>
+                  </nav>
+                  <button
+                    onClick={() => setDarkMode(d => !d)}
+                    aria-label="ライト/ダークモード切り替え"
+                    className="ml-auto px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-bold hover:bg-gray-50 dark:hover:bg-gray-600 transition"
+                  >
+                    {darkMode ? "☀️" : "🌙"}
+                  </button>
+                </div>
+              </div>
 
-      <div class="pillar">
-        <h3>② よばれるちいき</h3>
-        <p>関係が生まれてしまう場所。</p>
-        <p>
-          食べた記憶、手を動かした経験、<br>
-          小さな役割が、人をまた呼び戻します。
-        </p>
-      </div>
+              <div className="max-w-4xl mx-auto px-4 py-10">
+                <header className="mb-10 text-center">
+                  <h1 className="text-3xl md:text-4xl font-extrabold text-gray-800 dark:text-gray-100 mb-4">アルパカすく〜る 🦙</h1>
+                  <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+                    沖縄を教材に、<br />勉強と暮らしの力を育てる。
+                  </p>
+                  <p className="mt-4 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                    子どもから大人まで通える、<br />
+                    オンライン学び舎。
+                  </p>
+                </header>
 
-      <div class="pillar">
-        <h3>③ てぃあんだぁクラブ universe</h3>
-        <p>物語と役割の世界。</p>
-        <p>
-          安全に役割を試し、<br>
-          現実へ持ち帰るための回路です。
-        </p>
-      </div>
-    </div>
-  </section>
+                <section className="mb-12">
+                  <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">なぜ、このすく〜るをつくるのか</h2>
+                  <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 space-y-4 text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                    <p>
+                      人が生きていくうえで頼りになる持ち物には、大きく3つの種類があると言われます。
+                      1つ目は<strong className="text-gray-900 dark:text-gray-100">文化資本</strong>——知識やことば、物事を見るセンス。
+                      2つ目は<strong className="text-gray-900 dark:text-gray-100">社会関係資本</strong>——困ったときに頼れる人や、ご縁のつながり。
+                      3つ目は<strong className="text-gray-900 dark:text-gray-100">経済資本</strong>——お金や、安定した仕事。
+                    </p>
+                    <p>
+                      不登校や中退、非正規の仕事、なかなか貯まらないお金——それは、その人が何かに負けた結果ではありません。
+                      たまたま、この3つの持ち物のどれかを、十分に手渡されなかっただけのことがほとんどです。
+                      アルパカすく〜るは、そのどこからでも学び直せる場所でありたいと考えています。
+                    </p>
+                    <p>
+                      昔から、人が一人前になるには6つの技（六芸）が要ると言われてきました。
+                      勉強・インプット（書・数）、仕事・実務（御・射）、人間関係・調和（礼・楽）の3領域です。
+                      アルパカすく〜るは、その中でも特に「御・射（実行力・段取り力）」と「礼・楽（規範・調和の感性）」を育てることを担っています。
+                    </p>
+                  </div>
+                </section>
 
-  <section id="creation">
-    <h2>学ぶ・作る・出展する</h2>
-    <p>
-      学びは、創作へ。<br>
-      創作は、社会参加へ。
-    </p>
-    <ul>
-      <li>詩・エッセイ・ZINE</li>
-      <li>イラスト・写真・ハンドメイド</li>
-      <li>HTML・インフォグラフィック・動画</li>
-      <li>沖縄文芸フリマへの出展</li>
-    </ul>
-  </section>
+                <section className="mb-12">
+                  <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">学びの中には、いつも8人の仲間がいる</h2>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">4人のアルパカは「困りごと」を持ち込む役、4人のメンター（オバー・オジー）は「知識と生き方」を教える役です。</p>
 
-  <section id="business">
-    <h2>教育 × 事業モデル</h2>
-    <p><strong>無料：</strong> HTML教材 / YouTube / note</p>
-    <p><strong>有料：</strong> 教材パック / 講座 / ツアー（Stripe・PayPay）</p>
-    <p>
-      売るためではなく、<br>
-      <strong>続けるための仕組み</strong>として設計しています。
-    </p>
-  </section>
+                  <h3 className="text-sm font-bold text-gray-600 dark:text-gray-400 mb-2">4アルパカ｜困りごとを持ち込む仲間たち</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+                    {ALPACAS.map((c) => <AlpacaMiniCard key={c.key} c={c} />)}
+                  </div>
 
-  <footer>
-    <p>
-      アルパカすく〜るは、<br>
-      プロジェクトでもイベントでもありません。
-    </p>
-    <p>
-      <strong>人が、生き直すための回路です。</strong>
-    </p>
-    <p>
-      © Ryukyu no Tane / Alpaca School
-    </p>
-  </footer>
+                  <h3 className="text-sm font-bold text-gray-600 dark:text-gray-400 mb-2">4メンター｜オバー・オジー</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {MENTORS.map((m) => <MentorMiniCard key={m.key} m={m} />)}
+                  </div>
 
+                  <div className="text-center mt-6">
+                    <a href="./characters.html" className="inline-block text-orange-600 dark:text-orange-400 font-bold hover:underline">
+                      ▶ キャラクター図鑑をもっと見る
+                    </a>
+                  </div>
+                </section>
+
+                <section className="mb-12">
+                  <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">沖縄のテーマから、いろんな「知能の窓」で学ぶ</h2>
+                  <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 text-center">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
+                      獅子舞・台風・ゴーヤー・やちむん・エイサーなど、沖縄の暮らしや文化を入口に、数・ことば・音・身体・自然・心・人間関係といった、いろいろな「知能の窓」から同じテーマを見つめ直します。
+                    </p>
+                    <div className="flex flex-wrap justify-center gap-3 mb-5">
+                      <span className="px-4 py-2 rounded-full bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-200 font-bold text-sm">現在 全{seriesCount}テーマ</span>
+                      <span className="px-4 py-2 rounded-full bg-sky-100 dark:bg-sky-900 text-sky-700 dark:text-sky-200 font-bold text-sm">全{episodeCount}話</span>
+                    </div>
+                    <a href="./series-guide.html" className="inline-block text-orange-600 dark:text-orange-400 font-bold hover:underline">
+                      ▶ テーマ一覧を見る
+                    </a>
+                  </div>
+                </section>
+
+                <section className="mb-12">
+                  <div className="bg-white dark:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-2xl p-6">
+                    <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">1話の流れ</h2>
+                    <ol className="text-sm text-gray-600 dark:text-gray-400 space-y-1.5 list-decimal list-inside">
+                      <li>はじまりの問い：ちょっとした事件・困りごとが起きる</li>
+                      <li>困りごと：3人のアルパカが焦って、それぞれ違うことを言う（みんな不正解）</li>
+                      <li>メンター登場：その回のテーマに合った1人が、知識と生き方を教えてくれる</li>
+                      <li>やってみる：教わったやり方で、実際にやってみる</li>
+                      <li>想像する：正解のない問いを、自分の頭で考えてみる</li>
+                      <li>ふりかえり：今日学んだことを、自分の言葉で書き残す</li>
+                    </ol>
+                  </div>
+                </section>
+
+                <section className="mb-12">
+                  <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">学びの先につながる場所</h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <a href="./matrix-library.html" className="block rounded-2xl border-2 border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-950 p-5 hover:bg-orange-100 dark:hover:bg-orange-900 transition">
+                      <h3 className="font-extrabold text-orange-700 dark:text-orange-300 mb-1">📚 教材一覧</h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">学年・教科・知能の窓で、教材を探せます。</p>
+                    </a>
+                    <a href="./series-guide.html" className="block rounded-2xl border-2 border-sky-200 dark:border-sky-800 bg-sky-50 dark:bg-sky-950 p-5 hover:bg-sky-100 dark:hover:bg-sky-900 transition">
+                      <h3 className="font-extrabold text-sky-700 dark:text-sky-300 mb-1">🗺️ テーマ一覧</h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">沖縄のテーマごとに、シリーズをまとめて見渡せます。</p>
+                    </a>
+                    <a href="https://furima.ryukyu-tane.com" target="_blank" rel="noopener noreferrer" className="block rounded-2xl border-2 border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950 p-5 hover:bg-emerald-100 dark:hover:bg-emerald-900 transition">
+                      <h3 className="font-extrabold text-emerald-700 dark:text-emerald-300 mb-1">📖 沖縄文芸フリマ</h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">学びの先に、自分のことばで表現し、社会とつながる場所です。</p>
+                    </a>
+                    <a href="https://universe.tea-under.club/" target="_blank" rel="noopener noreferrer" className="block rounded-2xl border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950 p-5 hover:bg-blue-100 dark:hover:bg-blue-900 transition">
+                      <h3 className="font-extrabold text-blue-700 dark:text-blue-300 mb-1">🌏 てぃあんだぁクラブ universe</h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">学びの記録が積み重なっていく、地域とつながるコミュニティです。</p>
+                    </a>
+                  </div>
+                </section>
+
+                <section>
+                  <div className="bg-white dark:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-2xl p-6">
+                    <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-3">無料と有料の考え方</h2>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
+                      教材（HTML）・YouTube・noteの記事は、すべて無料でご覧いただけます。
+                      もし気に入っていただけたら、制作を続けるための寄付として、Stripeで少額から応援していただけます。
+                    </p>
+                    <div className="flex flex-wrap gap-3 justify-center mb-4">
+                      {links.map((link) => (
+                        <a
+                          key={link.label}
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-5 py-2 rounded-full bg-emerald-500 text-white font-bold hover:bg-emerald-600 transition"
+                        >
+                          {link.label} 制作アシスト
+                        </a>
+                      ))}
+                    </div>
+                    <p className="text-xs text-gray-400 dark:text-gray-500 leading-relaxed">
+                      学習の記録や保護者向けレポートの仕組みは、現在準備中です。
+                    </p>
+                  </div>
+                </section>
+              </div>
+
+              <footer className="bg-gray-800 text-white p-6 text-sm mt-12">
+                <div className="max-w-4xl mx-auto">
+                  <p>
+                    仕事は、誰かとのご縁。<br />
+                    アルパカすく〜るは、その入口をつくります。
+                    <br />
+                    このコンテンツは、ご自宅から快適に学習できるよう設計されています。車椅子をご利用の方、高齢の方、外出が難しい方など、すべての方が楽しめるよう善処します。
+                  </p>
+                  <p className="mt-3 text-gray-300">
+                    アルパカすく〜るは、プロジェクトでもイベントでもありません。人が、生き直すための回路です。
+                  </p>
+                  <a
+                    href="./tokushoho.html"
+                    className="inline-block mt-2 underline hover:text-emerald-300"
+                  >
+                    特定商取引法に基づく表記
+                  </a>
+                </div>
+              </footer>
+            </div>
+            </div>
+          );
+        }
+
+        createRoot(document.getElementById("root")).render(<App />);
+    </script>
 </body>
-
 </html>
