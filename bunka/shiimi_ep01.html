@@ -8,7 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <script>
         (() => {
-            const pageVersion = "20260823-1";
+            const pageVersion = "20260823-2";
             const url = new URL(window.location.href);
             if (url.searchParams.get("v") !== pageVersion) {
                 url.searchParams.set("v", pageVersion);
@@ -216,6 +216,7 @@
           const [canDoIt, setCanDoIt] = useState(null);
           const [memoryAnswer, setMemoryAnswer] = useState("");
           const [furiganaOn, setFuriganaOn] = useState(true);
+          const [recordSaveState, setRecordSaveState] = useState("idle");
           const recordSavedRef = useRef(false);
           const recordSavingRef = useRef(false);
 
@@ -228,13 +229,35 @@
           const total = slideIds.length;
 
           const saveLearningRecord = async () => {
-            if (!learningRecordsClient || recordSavedRef.current || recordSavingRef.current) return;
+            if (recordSavedRef.current) return "saved";
+            if (recordSavingRef.current) return "saving";
+            if (!learningRecordsClient) {
+              setRecordSaveState("unavailable");
+              return "skipped";
+            }
 
             recordSavingRef.current = true;
+            setRecordSaveState("saving");
             try {
               const { data } = await learningRecordsClient.auth.getSession();
               const user = data.session?.user;
-              if (!user) return;
+              if (!user) {
+                setRecordSaveState("no-session");
+                return "skipped";
+              }
+
+              // 認証直後にマイページを経由しなくても、履歴の外部キーとなるプロフィールを用意する。
+              const { error: profileError } = await learningRecordsClient
+                .from("profiles")
+                .upsert(
+                  {
+                    id: user.id,
+                    display_name: user.user_metadata?.display_name || "学習者",
+                  },
+                  { onConflict: "id", ignoreDuplicates: true }
+                );
+
+              if (profileError) throw profileError;
 
               const reflection = [
                 canDoIt ? `自分でも使えそう：${canDoIt}` : null,
@@ -250,16 +273,25 @@
                   reflection: reflection || null,
                 });
 
-              if (!error) recordSavedRef.current = true;
-            } catch (_error) {
-              // 未接続・通信失敗時も、教材の進行は止めない。
+              if (error) throw error;
+
+              recordSavedRef.current = true;
+              setRecordSaveState("saved");
+              return "saved";
+            } catch (error) {
+              console.error("学習履歴を保存できませんでした。", error);
+              setRecordSaveState("error");
+              return "error";
             } finally {
               recordSavingRef.current = false;
             }
           };
 
-          const nextSlide = () => {
-            if (slideIds[currentSlide] === "checkin") void saveLearningRecord();
+          const nextSlide = async () => {
+            if (slideIds[currentSlide] === "checkin") {
+              const outcome = await saveLearningRecord();
+              if (outcome === "error" || outcome === "saving") return;
+            }
             setCurrentSlide((p) => Math.min(p + 1, total - 1));
           };
           const prevSlide = () => setCurrentSlide((p) => Math.max(p - 1, 0));
@@ -441,6 +473,11 @@
                   onChange={(e) => setMemoryAnswer(e.target.value)}
                 ></textarea>
               </div>
+              {recordSaveState === "error" && (
+                <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700" role="alert">
+                  学習履歴を保存できませんでした。通信状態を確認して、「もう一度保存」を押してください。
+                </div>
+              )}
               <div className="bg-indigo-50 rounded-lg p-4 text-sm text-indigo-700 text-center">
                 <p>次回、知能の窓・シーミー ep2（言語・語学編）では、「シーミー」ということば自体を、資料をもとに調べていくよ。お楽しみに。</p>
               </div>
@@ -449,6 +486,16 @@
 
           const renderParent = () => (
             <div className="space-y-4">
+              {recordSaveState === "saved" && (
+                <div className="rounded-lg border border-teal-200 bg-teal-50 p-4 text-center text-sm font-bold text-teal-700" role="status">
+                  ✓ 学習履歴を保存しました。マイページで確認できます。
+                </div>
+              )}
+              {(recordSaveState === "no-session" || recordSaveState === "unavailable") && (
+                <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-center text-sm text-amber-800" role="status">
+                  今回の学習履歴は保存されていません。保存するにはマイページからログインしてください。
+                </div>
+              )}
               <div className="text-center">
                 <div className="text-5xl mb-4">🎬</div>
                 <h2 className="text-2xl font-bold text-yellow-700">おわりに</h2>
@@ -665,12 +712,16 @@
                   </div>
                   <button
                     onClick={nextSlide}
-                    disabled={currentSlide === total - 1 || !canGoNext}
+                    disabled={currentSlide === total - 1 || !canGoNext || recordSaveState === "saving"}
                     className={`flex items-center px-3 sm:px-5 py-3 rounded-lg font-medium transition-all ${
-                      currentSlide === total - 1 || !canGoNext ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-orange-500 text-white hover:bg-orange-600"
+                      currentSlide === total - 1 || !canGoNext || recordSaveState === "saving" ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-orange-500 text-white hover:bg-orange-600"
                     }`}
                   >
-                    {slideIds[currentSlide] === "checkin" ? "おわりに" : "つぎへ"}<ChevronRight className="w-5 h-5 ml-1" />
+                    {recordSaveState === "saving"
+                      ? "保存中…"
+                      : slideIds[currentSlide] === "checkin"
+                        ? recordSaveState === "error" ? "もう一度保存" : "保存しておわる"
+                        : "つぎへ"}<ChevronRight className="w-5 h-5 ml-1" />
                   </button>
                 </div>
               </div>
