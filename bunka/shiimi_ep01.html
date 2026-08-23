@@ -8,7 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <script>
         (() => {
-            const pageVersion = "20260818-1";
+            const pageVersion = "20260823-1";
             const url = new URL(window.location.href);
             if (url.searchParams.get("v") !== pageVersion) {
                 url.searchParams.set("v", pageVersion);
@@ -18,6 +18,8 @@
     </script>
     <title>ウサンミ、何個分けられる？【知能の窓・シーミー ep1：論理・数学編】 🍱</title>
     <script src="../series-nav-data.js"></script>
+    <script src="../supabase-config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -96,8 +98,9 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState } = React;
+        const { useRef, useState } = React;
         const { createRoot } = ReactDOM;
+        const learningRecordsClient = window.AlpacaSupabase?.createClient() || null;
 
         const ChevronRight = ({ className }) => (
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m9 18 6-6-6-6"/></svg>
@@ -213,6 +216,8 @@
           const [canDoIt, setCanDoIt] = useState(null);
           const [memoryAnswer, setMemoryAnswer] = useState("");
           const [furiganaOn, setFuriganaOn] = useState(true);
+          const recordSavedRef = useRef(false);
+          const recordSavingRef = useRef(false);
 
           const correctCount = 5; // (24+30+24+22)=100個 ÷ 参加者20人 ＝ 1人5個
 
@@ -222,7 +227,41 @@
           const nextEpisode = episodeIndex >= 0 && episodeIndex < SHIIMI_LIST.length - 1 ? SHIIMI_LIST[episodeIndex + 1] : null;
           const total = slideIds.length;
 
-          const nextSlide = () => setCurrentSlide((p) => Math.min(p + 1, total - 1));
+          const saveLearningRecord = async () => {
+            if (!learningRecordsClient || recordSavedRef.current || recordSavingRef.current) return;
+
+            recordSavingRef.current = true;
+            try {
+              const { data } = await learningRecordsClient.auth.getSession();
+              const user = data.session?.user;
+              if (!user) return;
+
+              const reflection = [
+                canDoIt ? `自分でも使えそう：${canDoIt}` : null,
+                imagineAnswer.trim() ? `想像したこと：${imagineAnswer.trim()}` : null,
+                memoryAnswer.trim() ? `心に残ったこと：${memoryAnswer.trim()}` : null,
+              ].filter(Boolean).join("\n");
+
+              const { error } = await learningRecordsClient
+                .from("learning_records")
+                .insert({
+                  user_id: user.id,
+                  material_id: "shiimi-ep01",
+                  reflection: reflection || null,
+                });
+
+              if (!error) recordSavedRef.current = true;
+            } catch (_error) {
+              // 未接続・通信失敗時も、教材の進行は止めない。
+            } finally {
+              recordSavingRef.current = false;
+            }
+          };
+
+          const nextSlide = () => {
+            if (slideIds[currentSlide] === "checkin") void saveLearningRecord();
+            setCurrentSlide((p) => Math.min(p + 1, total - 1));
+          };
           const prevSlide = () => setCurrentSlide((p) => Math.max(p - 1, 0));
 
           const renderIntro = () => (
