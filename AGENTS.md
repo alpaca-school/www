@@ -20,7 +20,7 @@
 
 - **サイト名**：アルパカすく〜る（`alpaca-school.okinawa`）
 - **本番運用**：GitHub Pages。remote `origin` = `https://github.com/alpaca-school/www.git`、`main`ブランチ直結。`git push`すると通常1〜2分で本番に反映される（ステージング環境なし）
-- **ローカル作業場所**：`/Users/kanmemacbookair/Desktop/github-clones/alpaca-school-www`
+- **ローカル作業場所**：`/Users/kanmemacbookair/Desktop/github/01_Workspace/03_projects/alpaca-school-www`（2026-08-23現在）。`/Users/kanmemacbookair/Desktop/github-clones/alpaca-school-www`は同じremoteの別クローンだが更新が止まっており（`5b6f43a`で停止）作業対象外。作業前に必ずこのパスにいることを確認する
 - **目的**：9歳からのキャリア教育・郷土文化学習教材ポータル。ブルデューの3資本理論（文化資本→社会関係資本→経済資本）による段階的キャリアラダーが設計思想の土台（詳細は`PROJECT_SPEC.md`参照）
 
 ## 2. 技術スタック（重要：ビルド工程なし）
@@ -234,7 +234,11 @@ diff matrix-library.html index2.html  # 差分なしを確認
 - `bunka/shiokawa_ep01.html`〜`ep09.html`：知能の窓・塩川シリーズ 全9話完成（2026-08-21）。Layer 1正本（`2026-08-16-知能の窓・塩川-MI8全9回設計.md`）準拠。塩水湧出機構の未解明を断定回避、実在種名は公的資料確認済みのみ採用。§25参照
 - `bunka/harii_ep01.html`〜`ep09.html`：知能の窓・ハーリーシリーズ 全9話完成（2026-08-21）。Layer 1正本（`2026-08-16-知能の窓・ハーリー-MI8全9回設計.md`）準拠。呼称・日程・舟・潮・役割の地域差と海の安全に配慮。§26参照
 - `bunka/kyuubon_ep01.html`〜`ep09.html`：知能の窓・旧盆・エイサーシリーズ 全9話完成（2026-08-21）。Layer 1正本（`2026-08-16-旧盆・エイサー-MI8全9回設計.md`）準拠。家庭差・地域差・宗教的実践・死別・同意と個人情報に配慮。§27参照
+- `series-guide.html`：テーマ一覧（シリーズガイド）ページ。全15テーマをあらすじ・話数と共に一覧表示（2026-08-22）。§28参照
+- `bunka/ishiganto_ep01.html`〜`ep09.html`：知能の窓・石敢當シリーズ 全9話完成（2026-08-22）。Layer 1正本（`2026-08-16-知能の窓・石敢當-MI8全9回設計.md`）準拠。フィールドワークの安全・個人情報・地域一般化の回避に配慮。§29参照
 - `bunka/tsuki-no-mado.html`：月の形・名前・沖縄の旧暦行事・学年別理科をつなぐ横断ツール「月の窓」（2026-08-23）。標準7スライドのエピソードではなく、複数シリーズから参照する独立ページ。§31参照
+- `account.html`：学習履歴・認証（Supabaseフェーズ1、2026-08-23）。マジックリンクログイン、学習記録の閲覧。フェーズ2（課金・団体ダッシュボード）は未着手
+- `concept.html`：このサイトについて（2026-08-23全面刷新）。3資本理論・六芸フレーム・キャラクター体系・知能の窓シリーズ全体像を説明
 - `characters.html`：キャラクター図鑑
 
 ## 12. 失敗事例と教訓：獅子舞シリーズ ep2〜10（2026-08-14、解決済み）
