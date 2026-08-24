@@ -8,7 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <script>
         (() => {
-            const pageVersion = "20260816-1";
+            const pageVersion = "20260823-3";
             const url = new URL(window.location.href);
             if (url.searchParams.get("v") !== pageVersion) {
                 url.searchParams.set("v", pageVersion);
@@ -203,6 +203,7 @@
           const [threeKeys] = useState(() => shuffledThreeAlpacas());
           const [currentSlide, setCurrentSlide] = useState(0);
           const [guess, setGuess] = useState(null);
+          const [freeThought, setFreeThought] = useState("");
           const [quizChoice, setQuizChoice] = useState(null);
           const [imagineAnswer, setImagineAnswer] = useState("");
           const [childName, setChildName] = useState("");
@@ -267,11 +268,42 @@
                     </div>
                   );
                 })}
+                <div
+                  onClick={() => setGuess("none")}
+                  className={`choice-card p-4 rounded-lg border-2 cursor-pointer transition-all bg-gray-50 ${
+                    guess === "none" ? "border-gray-400 ring-2 ring-offset-1 ring-gray-300" : "border-gray-200 hover:border-gray-300"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">🤔</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-gray-600">あてはまるものがない</p>
+                      <p className="text-sm text-gray-500">自分の考えを書いてみる</p>
+                    </div>
+                    {guess === "none" && (
+                      <div className="w-7 h-7 rounded-full bg-gray-500 flex items-center justify-center text-white text-sm shrink-0">✓</div>
+                    )}
+                  </div>
+                </div>
               </div>
+              {guess === "none" && (
+                <textarea
+                  value={freeThought}
+                  onChange={(e) => setFreeThought(e.target.value)}
+                  rows="3"
+                  className="w-full border rounded-lg p-3 text-sm"
+                  placeholder="きみの考えを書いてみよう（書かなくても次に進めるよ）"
+                />
+              )}
               {!guess && <p className="text-center text-sm text-orange-500">↑ どれか1つを選ぶと、次に進めるよ</p>}
-              {guess && (
+              {guess && guess !== "none" && (
                 <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
                   <p>みんな、それぞれの考えで進めようとしている…。ここは、知能の窓シリーズのメンターに聞いてみよう。</p>
+                </div>
+              )}
+              {guess === "none" && (
+                <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
+                  <p>自分の考えを持てたね。それも大切な一歩だよ。メンターに聞いてみよう。</p>
                 </div>
               )}
             </div>
@@ -292,25 +324,11 @@
                 <p className="text-sm text-gray-700">「まずは、やることを紙に書き出してみる。それから『今日は誰が何をできるか』を、家族で話して決めるんだよ」</p>
                 <p className="text-sm text-gray-700">「得意・不得意も、その日の体調も、話してみないと分からんさ。決めつけずに、一人ひとりに聞いてみるのが一番だね」</p>
               </div>
-              <div className="grid gap-3">
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.amber.bg}`}>
-                  <Avatar person={MENTORS.chinen} />
-                  <p className="text-sm text-amber-700">「やることを箇条書きにして、名前を横に書いていくと分かりやすいさぁ」</p>
-                </div>
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.teal.bg}`}>
-                  <Avatar person={MENTORS.rikiya} />
-                  <p className="text-sm text-teal-700">「せーの、で家族で集まって、その場で声に出して決めるのもいいリズムさー！」</p>
-                </div>
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.indigo.bg}`}>
-                  <Avatar person={MENTORS.misaki} />
-                  <p className="text-sm text-indigo-700">「決めたことは、紙に書いて壁に貼っておくと、あとで誰でも見られて安心だね」</p>
-                </div>
-              </div>
             </div>
           );
 
           const renderVerify = () => {
-            const guessedAlpaca = guess ? ALPACAS[guess] : null;
+            const guessedAlpaca = guess && guess !== "none" ? ALPACAS[guess] : null;
             return (
               <div className="space-y-6">
                 <div className="text-center">
@@ -486,7 +504,7 @@
 
           const today = new Date();
           const todayStr = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
-          const guessedForSheet = guess ? ALPACAS[guess] : null;
+          const guessedForSheet = guess && guess !== "none" ? ALPACAS[guess] : null;
 
           const renderPrintSheet = () => (
             <div className="print-sheet w-[700px] p-10 bg-white text-black">

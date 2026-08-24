@@ -407,7 +407,7 @@
           );
 
           const renderVerify = () => {
-            const guessedAlpaca = guess ? ALPACAS[guess] : null;
+            const guessedAlpaca = guess && guess !== "none" ? ALPACAS[guess] : null;
             return (
               <div className="space-y-6">
                 <div className="text-center">
@@ -597,7 +597,7 @@
 
           const today = new Date();
           const todayStr = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
-          const guessedForSheet = guess ? ALPACAS[guess] : null;
+          const guessedForSheet = guess && guess !== "none" ? ALPACAS[guess] : null;
 
           const renderPrintSheet = () => (
             <div className="print-sheet w-[700px] p-10 bg-white text-black">

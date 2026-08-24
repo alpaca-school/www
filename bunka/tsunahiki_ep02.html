@@ -8,7 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <script>
         (() => {
-            const pageVersion = "20260816-2";
+            const pageVersion = "20260823-3";
             const url = new URL(window.location.href);
             if (url.searchParams.get("v") !== pageVersion) {
                 url.searchParams.set("v", pageVersion);
@@ -210,6 +210,7 @@
           const [threeKeys] = useState(() => shuffledThreeAlpacas());
           const [currentSlide, setCurrentSlide] = useState(0);
           const [guess, setGuess] = useState(null);
+          const [freeThought, setFreeThought] = useState("");
           const [quizAnswer, setQuizAnswer] = useState(null);
           const [imagineAnswer, setImagineAnswer] = useState("");
           const [childName, setChildName] = useState("");
@@ -274,11 +275,42 @@
                     </div>
                   );
                 })}
+                <div
+                  onClick={() => setGuess("none")}
+                  className={`choice-card p-4 rounded-lg border-2 cursor-pointer transition-all bg-gray-50 ${
+                    guess === "none" ? "border-gray-400 ring-2 ring-offset-1 ring-gray-300" : "border-gray-200 hover:border-gray-300"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">🤔</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-gray-600">あてはまるものがない</p>
+                      <p className="text-sm text-gray-500">自分の考えを書いてみる</p>
+                    </div>
+                    {guess === "none" && (
+                      <div className="w-7 h-7 rounded-full bg-gray-500 flex items-center justify-center text-white text-sm shrink-0">✓</div>
+                    )}
+                  </div>
+                </div>
               </div>
+              {guess === "none" && (
+                <textarea
+                  value={freeThought}
+                  onChange={(e) => setFreeThought(e.target.value)}
+                  rows="3"
+                  className="w-full border rounded-lg p-3 text-sm"
+                  placeholder="きみの考えを書いてみよう（書かなくても次に進めるよ）"
+                />
+              )}
               {!guess && <p className="text-center text-sm text-orange-500">↑ どれか1つを選ぶと、次に進めるよ</p>}
-              {guess && (
+              {guess && guess !== "none" && (
                 <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
                   <p>みんな、それぞれの思い込みで「これが正しい」と決めつけている…。ここは、知能の窓シリーズのメンターに聞いてみよう。</p>
+                </div>
+              )}
+              {guess === "none" && (
+                <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
+                  <p>自分の考えを持てたね。それも大切な一歩だよ。メンターに聞いてみよう。</p>
                 </div>
               )}
             </div>
@@ -300,25 +332,11 @@
                 <p className="text-sm text-gray-700">「だから聞くべきは『誰が・どこで・どう呼んでいるか』。文化庁は広く『綱引き』、与那原は『大綱曳』、糸満は『大綱引』、那覇は『大綱挽』。字が違うのは、間違いじゃなくて、それぞれの土地の歴史なんだよ」</p>
                 <p className="text-sm text-gray-700">「ウマチー綱・盆綱・十五夜綱っていう呼び方も、みんな同じ『綱引き』の仲間。集落ごとに、いつ・何を願って綱を引くかが少しずつ違うのさ」</p>
               </div>
-              <div className="grid gap-3">
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.rose.bg}`}>
-                  <Avatar person={MENTORS.tokue} />
-                  <p className="text-sm text-rose-700">「『どっちが正解か』で急いで決めつけたくなる気持ち、よくわかるよ。まずは深呼吸ね」</p>
-                </div>
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.teal.bg}`}>
-                  <Avatar person={MENTORS.rikiya} />
-                  <p className="text-sm text-teal-700">「引く・曳く・挽く！同じ音でも字が違う、これ声に出すとおもしろいリズムだぞー！」</p>
-                </div>
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.indigo.bg}`}>
-                  <Avatar person={MENTORS.shizu} />
-                  <p className="text-sm text-indigo-700">「綱そのものの太さや作り方の違いは、また今度、たっぷり教えるね」</p>
-                </div>
-              </div>
             </div>
           );
 
           const renderVerify = () => {
-            const guessedAlpaca = guess ? ALPACAS[guess] : null;
+            const guessedAlpaca = guess && guess !== "none" ? ALPACAS[guess] : null;
             const correctOpt = QUIZ_OPTIONS.find((o) => o.key === QUIZ_CORRECT);
             return (
               <div className="space-y-6">
@@ -509,7 +527,7 @@
 
           const today = new Date();
           const todayStr = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
-          const guessedForSheet = guess ? ALPACAS[guess] : null;
+          const guessedForSheet = guess && guess !== "none" ? ALPACAS[guess] : null;
 
           const renderPrintSheet = () => (
             <div className="print-sheet w-[700px] p-10 bg-white text-black">

@@ -8,7 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <script>
         (() => {
-            const pageVersion = "20260821-1";
+            const pageVersion = "20260823-3";
             const url = new URL(window.location.href);
             if (url.searchParams.get("v") !== pageVersion) {
                 url.searchParams.set("v", pageVersion);
@@ -267,6 +267,7 @@
           const [threeKeys] = useState(() => shuffledThreeAlpacas());
           const [currentSlide, setCurrentSlide] = useState(0);
           const [guess, setGuess] = useState(null);
+          const [freeThought, setFreeThought] = useState("");
           const [wordAnswers, setWordAnswers] = useState({});
           const [imagineAnswer, setImagineAnswer] = useState("");
           const [childName, setChildName] = useState("");
@@ -340,11 +341,42 @@
                     </div>
                   );
                 })}
+                <div
+                  onClick={() => setGuess("none")}
+                  className={`choice-card p-4 rounded-lg border-2 cursor-pointer transition-all bg-gray-50 ${
+                    guess === "none" ? "border-gray-400 ring-2 ring-offset-1 ring-gray-300" : "border-gray-200 hover:border-gray-300"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">🤔</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-gray-600">あてはまるものがない</p>
+                      <p className="text-sm text-gray-500">自分の考えを書いてみる</p>
+                    </div>
+                    {guess === "none" && (
+                      <div className="w-7 h-7 rounded-full bg-gray-500 flex items-center justify-center text-white text-sm shrink-0">✓</div>
+                    )}
+                  </div>
+                </div>
               </div>
+              {guess === "none" && (
+                <textarea
+                  value={freeThought}
+                  onChange={(e) => setFreeThought(e.target.value)}
+                  rows="3"
+                  className="w-full border rounded-lg p-3 text-sm"
+                  placeholder="きみの考えを書いてみよう（書かなくても次に進めるよ）"
+                />
+              )}
               {!guess && <p className="text-center text-sm text-cyan-600">↑ どれか1つを選ぶと、次に進めるよ</p>}
-              {guess && (
+              {guess && guess !== "none" && (
                 <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
                   <p>みんな、分かったふりで話していて、意味をまだ確かめていないみたい…。ここは、知能の窓シリーズのメンターに聞いてみよう。</p>
+                </div>
+              )}
+              {guess === "none" && (
+                <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
+                  <p>自分の考えを持てたね。それも大切な一歩だよ。メンターに聞いてみよう。</p>
                 </div>
               )}
             </div>
@@ -365,20 +397,6 @@
                 <p className="text-sm text-gray-700">「文化庁の資料では、塩川は沖縄県本部町の国指定天然記念物（1972年5月15日指定）で、幅約2m・長さ約100mほどの、塩分を含んだ水が流れる小川、と説明されているよ」</p>
                 <p className="text-sm text-gray-700">「『汽水』は、海水（塩分の多い水）と淡水（塩分の少ない水）が混ざりあった水のことをいうんだ。塩川の水も、この汽水に近い水だと考えられているよ」</p>
                 <p className="text-sm text-gray-700">「『天然記念物』は、貴重な自然だから国や自治体が指定して守っている、ということばだよ。ほかのことばは、これから一緒にカードで確かめていこう」</p>
-              </div>
-              <div className="grid gap-3">
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.rose.bg}`}>
-                  <Avatar person={MENTORS.tokue} />
-                  <p className="text-sm text-rose-700">「分からないことばを、恥ずかしがらずに『これ、何のことば？』って聞けるの、すてきなことだよ」</p>
-                </div>
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.teal.bg}`}>
-                  <Avatar person={MENTORS.rikiya} />
-                  <p className="text-sm text-teal-700">「塩分、淡水、海水、汽水、天然記念物、石灰岩…リズムに乗せて声に出してみるかー！」</p>
-                </div>
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.indigo.bg}`}>
-                  <Avatar person={MENTORS.shizu} />
-                  <p className="text-sm text-indigo-700">「石灰岩の地形から、どうやって塩分を含んだ水が来るのかは、また今度、たっぷり教えるね」</p>
-                </div>
               </div>
             </div>
           );
@@ -432,10 +450,10 @@
                 <p>塩川の水がどこから塩分をもらっているのかは、流域が石灰岩地帯であることとの関係が考えられていますが、その仕組みはまだ分かっていません。</p>
                 <p className="text-cyan-600 text-xs">「分からない」を「分かったふり」にせず、そのまま覚えておくのも大切な学び方だよ。</p>
               </div>
-              {guess && (
+              {guess && guess !== "none" && (
                 <div className="rounded-lg p-4 text-center bg-gray-100">
-                  <p className="font-bold text-gray-700">きみが選んだ{ALPACAS[guess].name}の説明は、資料を確かめる前の思いつきだったね。</p>
-                  <p className="text-xs text-gray-500 mt-2">{ALPACAS[guess].gag}</p>
+                  <p className="font-bold text-gray-700">きみが選んだ{ALPACAS[guess]?.name}の説明は、資料を確かめる前の思いつきだったね。</p>
+                  <p className="text-xs text-gray-500 mt-2">{ALPACAS[guess]?.gag}</p>
                 </div>
               )}
             </div>
@@ -589,7 +607,7 @@
 
           const today = new Date();
           const todayStr = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
-          const guessedForSheet = guess ? ALPACAS[guess] : null;
+          const guessedForSheet = guess && guess !== "none" ? ALPACAS[guess] : null;
 
           const renderPrintSheet = () => (
             <div className="print-sheet w-[700px] p-10 bg-white text-black">

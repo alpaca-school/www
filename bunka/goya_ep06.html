@@ -8,7 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <script>
         (() => {
-            const pageVersion = "20260816-3";
+            const pageVersion = "20260823-3";
             const url = new URL(window.location.href);
             if (url.searchParams.get("v") !== pageVersion) {
                 url.searchParams.set("v", pageVersion);
@@ -205,6 +205,7 @@
           const [threeKeys] = useState(() => shuffledThreeAlpacas());
           const [currentSlide, setCurrentSlide] = useState(0);
           const [guess, setGuess] = useState(null);
+          const [freeThought, setFreeThought] = useState("");
           const [quizChoice, setQuizChoice] = useState(null);
           const [imagineAnswer, setImagineAnswer] = useState("");
           const [childName, setChildName] = useState("");
@@ -271,11 +272,42 @@
                     </div>
                   );
                 })}
+                <div
+                  onClick={() => setGuess("none")}
+                  className={`choice-card p-4 rounded-lg border-2 cursor-pointer transition-all bg-gray-50 ${
+                    guess === "none" ? "border-gray-400 ring-2 ring-offset-1 ring-gray-300" : "border-gray-200 hover:border-gray-300"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">🤔</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-gray-600">あてはまるものがない</p>
+                      <p className="text-sm text-gray-500">自分の考えを書いてみる</p>
+                    </div>
+                    {guess === "none" && (
+                      <div className="w-7 h-7 rounded-full bg-gray-500 flex items-center justify-center text-white text-sm shrink-0">✓</div>
+                    )}
+                  </div>
+                </div>
               </div>
+              {guess === "none" && (
+                <textarea
+                  value={freeThought}
+                  onChange={(e) => setFreeThought(e.target.value)}
+                  rows="3"
+                  className="w-full border rounded-lg p-3 text-sm"
+                  placeholder="きみの考えを書いてみよう（書かなくても次に進めるよ）"
+                />
+              )}
               {!guess && <p className="text-center text-sm text-green-500">↑ どれか1つを選ぶと、次に進めるよ</p>}
-              {guess && (
+              {guess && guess !== "none" && (
                 <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
                   <p>みんな、配置についてバラバラなことを言っている…。ここは、知能の窓シリーズのメンターに聞いてみよう。</p>
+                </div>
+              )}
+              {guess === "none" && (
+                <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
+                  <p>自分の考えを持てたね。それも大切な一歩だよ。メンターに聞いてみよう。</p>
                 </div>
               )}
             </div>
@@ -297,20 +329,6 @@
                 <p className="text-sm text-gray-700">「2つ目：ネットに沿って、ゴーヤーのつるを横に大きく広げる。葉っぱが重なるくらい茂ってはじめて、日差しをさえぎる『カーテン』になるんだよ」</p>
                 <p className="text-sm text-gray-700">「3つ目：北向きの窓は、もともと強い直射日光が入らないから、無理にネットを張らなくていいさぁ。日差しが強い窓から順番に考えるといいよ」</p>
               </div>
-              <div className="grid gap-3">
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.amber.bg}`}>
-                  <Avatar person={MENTORS.chinen} />
-                  <p className="text-sm text-amber-700">「窓とネットの大きさを、メジャーできちんと測っておくと、あとで迷わないさぁ」</p>
-                </div>
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.rose.bg}`}>
-                  <Avatar person={MENTORS.tokue} />
-                  <p className="text-sm text-rose-700">「強い日差しが入る窓、実際にさわって熱くなっていないか、確かめてみるといいよ」</p>
-                </div>
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${COLOR_MAP.teal.bg}`}>
-                  <Avatar person={MENTORS.rikiya} />
-                  <p className="text-sm text-teal-700">「風が通る場所に置けば、葉っぱの揺れる音も届くかもなー」</p>
-                </div>
-              </div>
               <div className="bg-red-50 border-2 border-red-200 rounded-lg p-4">
                 <p className="text-sm font-bold text-red-700">⚠️ ネットや鉢を実際に固定するときは、重さや倒れないようにする工夫が必要だから、必ず大人と一緒に、大人が最終的に判断して取り付けよう。</p>
               </div>
@@ -318,7 +336,7 @@
           );
 
           const renderVerify = () => {
-            const guessedAlpaca = guess ? ALPACAS[guess] : null;
+            const guessedAlpaca = guess && guess !== "none" ? ALPACAS[guess] : null;
             return (
               <div className="space-y-6">
                 <div className="text-center">
@@ -518,7 +536,7 @@
 
           const today = new Date();
           const todayStr = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
-          const guessedForSheet = guess ? ALPACAS[guess] : null;
+          const guessedForSheet = guess && guess !== "none" ? ALPACAS[guess] : null;
 
           const renderPrintSheet = () => (
             <div className="print-sheet w-[700px] p-10 bg-white text-black">

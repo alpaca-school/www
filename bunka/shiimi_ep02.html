@@ -431,8 +431,8 @@
               </div>
               {guess && guess !== "none" && (
                 <div className="rounded-lg p-4 text-center bg-gray-100">
-                  <p className="font-bold text-gray-700">きみが選んだ{ALPACAS[guess].name}の説明は、資料を確かめる前の思いつきだったね。</p>
-                  <p className="text-xs text-gray-500 mt-2">{ALPACAS[guess].gag}</p>
+                  <p className="font-bold text-gray-700">きみが選んだ{ALPACAS[guess]?.name}の説明は、資料を確かめる前の思いつきだったね。</p>
+                  <p className="text-xs text-gray-500 mt-2">{ALPACAS[guess]?.gag}</p>
                 </div>
               )}
             </div>
@@ -586,7 +586,7 @@
 
           const today = new Date();
           const todayStr = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
-          const guessedForSheet = guess ? ALPACAS[guess] : null;
+          const guessedForSheet = guess && guess !== "none" ? ALPACAS[guess] : null;
 
           const renderPrintSheet = () => (
             <div className="print-sheet w-[700px] p-10 bg-white text-black">
