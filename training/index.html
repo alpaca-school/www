@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="パソコン初心者のための、30秒から10分まで時間を選べるやさしいタイピング練習です。"
+    />
+    <meta property="og:title" content="はじめてのタイピング" />
+    <meta
+      property="og:description"
+      content="ゆっくり、ただしく。選べる練習時間で小さな自信を育てよう。"
+    />
+    <meta property="og:site_name" content="はじめてのタイピング" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://alpaca-school.okinawa/training/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="はじめてのタイピング — ゆっくり、ただしく。30秒からはじめよう。" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="はじめてのタイピング" />
+    <meta
+      name="twitter:description"
+      content="ゆっくり、ただしく。選べる練習時間で小さな自信を育てよう。"
+    />
+    <meta name="twitter:image" content="https://alpaca-school.okinawa/training/og.png" />
+    <title>はじめてのタイピング</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">本文へ移動</a>
+
+    <div class="page-accent" aria-hidden="true"></div>
+    <div class="app-shell">
+      <header class="site-header" aria-label="サイトヘッダー">
+        <a class="brand" href="./" aria-label="はじめてのタイピング トップへ">
+          <span class="brand-mark" aria-hidden="true">A</span>
+          <span>
+            <strong>はじめてのタイピング</strong>
+            <small>ALPACA SCHOOL</small>
+          </span>
+        </a>
+        <div class="header-note">
+          <span class="status-dot" aria-hidden="true"></span>
+          30秒〜10分で選べる練習
+        </div>
+      </header>
+
+      <main id="main-content">
+        <section id="start-screen" class="screen start-screen" aria-labelledby="welcome-title">
+          <div class="intro-copy">
+            <p class="eyebrow"><span>LESSON 01</span> パソコン入門</p>
+            <h1 id="welcome-title">
+              ゆっくり、<br />
+              <em>ただしく。</em>
+            </h1>
+            <p class="lead">
+              速さよりも、落ち着いて正しく入力することから。<br />
+              自分に合った時間を選んで、小さな練習をはじめましょう。
+            </p>
+
+            <ol class="lesson-steps" aria-label="練習の流れ">
+              <li>
+                <span>01</span>
+                <div><strong>名前と時間を選ぶ</strong><small>30秒から10分まで</small></div>
+              </li>
+              <li>
+                <span>02</span>
+                <div><strong>タイピング練習</strong><small>見本どおりに入力します</small></div>
+              </li>
+              <li>
+                <span>03</span>
+                <div><strong>結果と修了証</strong><small>正確率80%以上で合格です</small></div>
+              </li>
+            </ol>
+          </div>
+
+          <div class="start-card-wrap">
+            <div class="start-card">
+              <div class="card-number" aria-hidden="true">01</div>
+              <p class="card-kicker">READY?</p>
+              <h2>お名前と時間を<br />教えてください</h2>
+              <p class="card-description">
+                合格すると、このお名前で修了証をつくります。
+              </p>
+
+              <form id="name-form" novalidate>
+                <label for="learner-name">お名前</label>
+                <input
+                  id="learner-name"
+                  name="learnerName"
+                  type="text"
+                  maxlength="30"
+                  autocomplete="name"
+                  placeholder="例：山田 花子"
+                  required
+                  aria-describedby="name-help name-error"
+                />
+                <p id="name-help" class="field-help">ニックネームでも大丈夫です。</p>
+                <p id="name-error" class="field-error" role="alert"></p>
+
+                <fieldset class="duration-picker">
+                  <legend>練習時間</legend>
+                  <div class="duration-options">
+                    <label class="duration-option">
+                      <input type="radio" name="practiceDuration" value="30" checked />
+                      <span><strong>30</strong>秒</span>
+                    </label>
+                    <label class="duration-option">
+                      <input type="radio" name="practiceDuration" value="60" />
+                      <span><strong>1</strong>分</span>
+                    </label>
+                    <label class="duration-option">
+                      <input type="radio" name="practiceDuration" value="180" />
+                      <span><strong>3</strong>分</span>
+                    </label>
+                    <label class="duration-option">
+                      <input type="radio" name="practiceDuration" value="300" />
+                      <span><strong>5</strong>分</span>
+                    </label>
+                    <label class="duration-option">
+                      <input type="radio" name="practiceDuration" value="600" />
+                      <span><strong>10</strong>分</span>
+                    </label>
+                  </div>
+                </fieldset>
+
+                <button class="button button-primary button-large" type="submit">
+                  練習をはじめる
+                  <span aria-hidden="true">→</span>
+                </button>
+              </form>
+
+              <p class="privacy-note">
+                <span aria-hidden="true">●</span>
+                入力したお名前や結果は送信・保存されません
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="practice-screen" class="screen practice-screen" aria-labelledby="practice-title" hidden>
+          <div class="practice-heading">
+            <div>
+              <p class="eyebrow"><span>LESSON 01</span> <span id="practice-duration" class="eyebrow-text">30秒チャレンジ</span></p>
+              <h1 id="practice-title"><span id="practice-name"></span>さん、<br />落ち着いていきましょう。</h1>
+            </div>
+            <div class="timer-card" aria-label="残り時間">
+              <span>のこり</span>
+              <strong id="timer-value">00:30</strong>
+              <small>分：秒</small>
+            </div>
+          </div>
+
+          <div class="timer-track" role="progressbar" aria-label="残り時間" aria-valuemin="0" aria-valuemax="30" aria-valuenow="30">
+            <div id="timer-bar" class="timer-bar"></div>
+          </div>
+
+          <div class="practice-card">
+            <div class="practice-card-header">
+              <div>
+                <span class="step-chip">STEP 1</span>
+                <h2>見本どおりに入力してください</h2>
+              </div>
+              <p>まちがえても、消して直せます。</p>
+            </div>
+
+            <div class="target-wrap">
+              <span class="target-label">入力する文章（続きは自動で切り替わります）</span>
+              <p id="target-text" class="target-text" aria-label="入力する見本文"></p>
+            </div>
+
+            <div class="input-wrap">
+              <label for="typing-input">ここに入力</label>
+              <textarea
+                id="typing-input"
+                rows="4"
+                placeholder="ここをクリックして、入力をはじめます"
+                aria-describedby="typing-hint live-status"
+                spellcheck="false"
+                autocapitalize="off"
+                autocomplete="off"
+              ></textarea>
+              <div class="input-footer">
+                <p id="typing-hint"><kbd>Backspace</kbd> で文字を消して直せます</p>
+                <p><strong id="live-typed">0</strong> 文字入力</p>
+              </div>
+            </div>
+          </div>
+
+          <p id="live-status" class="sr-only" aria-live="polite"></p>
+        </section>
+
+        <section id="result-screen" class="screen result-screen" aria-labelledby="result-title" hidden>
+          <div id="result-banner" class="result-banner">
+            <p id="result-kicker" class="eyebrow"><span>RESULT</span> <span id="result-duration" class="eyebrow-text">30秒チャレンジ</span></p>
+            <h1 id="result-title"></h1>
+            <p id="result-message" class="result-message"></p>
+          </div>
+
+          <div class="score-grid" aria-label="採点結果">
+            <div class="score-card score-card-main">
+              <span>正確率</span>
+              <strong><span id="score-accuracy">0</span><small>%</small></strong>
+              <p>合格ラインは80%以上</p>
+            </div>
+            <div class="score-card">
+              <span>入力文字数</span>
+              <strong><span id="score-typed">0</span><small>文字</small></strong>
+              <p>選んだ時間内に入力した文字</p>
+            </div>
+            <div class="score-card">
+              <span>正しく入力</span>
+              <strong><span id="score-correct">0</span><small>文字</small></strong>
+              <p>見本と同じ位置の文字</p>
+            </div>
+            <div class="score-card">
+              <span>タイピング速度</span>
+              <strong><span id="score-speed">0</span><small>文字/分</small></strong>
+              <p>正しく入力した文字から計算</p>
+            </div>
+          </div>
+
+          <div id="pass-content" hidden>
+            <div class="certificate-intro">
+              <div>
+                <p class="eyebrow"><span>CERTIFICATE</span> 修了のしるし</p>
+                <h2>あなたの修了証が<br />できました。</h2>
+              </div>
+              <p>
+                「印刷・PDF保存」を押すと、修了証だけをA4横向きで印刷できます。<br />
+                印刷画面で「PDFとして保存」を選ぶと、ファイルにできます。
+              </p>
+            </div>
+
+            <article id="certificate" class="certificate" aria-label="はじめてのタイピング講座 修了証">
+              <div class="certificate-inner">
+                <div class="certificate-topline">
+                  <span>ALPACA SCHOOL</span>
+                  <span id="certificate-number">CERTIFICATE NO.</span>
+                </div>
+                <div class="certificate-body">
+                  <p class="certificate-en">CERTIFICATE OF COMPLETION</p>
+                  <h2>修 了 証</h2>
+                  <p id="certificate-name" class="certificate-name"></p>
+                  <p class="certificate-copy">
+                    あなたは「はじめてのタイピング講座」において<br />
+                    <span id="certificate-duration">30秒チャレンジ</span>を優秀な成績で修了したことを証します
+                  </p>
+                  <div class="certificate-score">
+                    <div><span>正確率</span><strong id="certificate-accuracy">0%</strong></div>
+                    <div><span>入力速度</span><strong id="certificate-speed">0文字/分</strong></div>
+                  </div>
+                </div>
+                <div class="certificate-bottom">
+                  <p id="certificate-date"></p>
+                  <div class="certificate-signature">
+                    <span class="seal" aria-hidden="true">修了</span>
+                    <p><small>パソコン初心者のための学び場</small><strong>アルパカすく〜る</strong></p>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <div class="result-actions">
+              <button id="print-button" class="button button-primary" type="button">
+                印刷・PDF保存
+                <span aria-hidden="true">↗</span>
+              </button>
+              <button id="retry-button" class="button button-secondary" type="button">もう一度挑戦</button>
+              <button id="change-name-button" class="text-button" type="button">名前を変える</button>
+            </div>
+          </div>
+
+          <div id="retry-content" class="retry-panel" hidden>
+            <div class="retry-icon" aria-hidden="true">↻</div>
+            <div>
+              <h2>正確さを意識すると、すぐに上達します。</h2>
+              <p id="retry-message"></p>
+            </div>
+            <button id="retry-fail-button" class="button button-primary" type="button">もう一度挑戦</button>
+            <button id="change-name-fail-button" class="text-button" type="button">名前を変える</button>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <p>ALPACA SCHOOL <span>×</span> はじめてのデジタルスキル</p>
+        <p>できた！を、ひとつずつ。</p>
+      </footer>
+    </div>
+  </body>
+</html>
