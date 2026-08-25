@@ -5,8 +5,8 @@ const ALLOWED_DURATIONS = new Set([30, 60, 180, 300, 600]);
 const PREPARATION_SECONDS = 3;
 const START_DISPLAY_MILLISECONDS = 550;
 const PASSING_ACCURACY = 80;
-const TARGET_WINDOW_STEP = 100;
-const TARGET_WINDOW_SIZE = 150;
+const TARGET_WINDOW_STEP = 60;
+const TARGET_WINDOW_SIZE = 90;
 const PRACTICE_SENTENCES = [
   "きょうはいいてんきです。",
   "パソコンをつかって、できることをひとつずつふやしていきましょう。",
@@ -136,6 +136,7 @@ function showScreen(screen) {
   [elements.startScreen, elements.practiceScreen, elements.resultScreen].forEach((item) => {
     item.hidden = item !== screen;
   });
+  document.body.classList.toggle("is-practice-active", screen === elements.practiceScreen);
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -176,9 +177,10 @@ function beginTimedRound() {
   elements.typingInput.disabled = false;
   elements.liveStatus.textContent = `${durationLabel}の練習を開始しました。`;
 
+  elements.typingInput.scrollIntoView({ block: "center", inline: "nearest", behavior: "auto" });
+  elements.typingInput.focus({ preventScroll: true });
   deadline = performance.now() + practiceSeconds * 1000;
   timerId = window.setInterval(updateTimer, 100);
-  elements.typingInput.focus({ preventScroll: true });
 }
 
 function startPreparation() {

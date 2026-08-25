@@ -91,6 +91,10 @@ button {
   border-bottom: 2px solid var(--ink);
 }
 
+.is-practice-active .site-header {
+  min-height: 72px;
+}
+
 .brand {
   display: inline-flex;
   align-items: center;
@@ -632,7 +636,10 @@ form .duration-option {
   font-weight: 700;
 }
 
-.practice-screen,
+.practice-screen {
+  padding: 28px 0 72px;
+}
+
 .result-screen {
   padding: 62px 0 100px;
 }
@@ -645,8 +652,8 @@ form .duration-option {
 }
 
 .practice-heading h1 {
-  font-size: clamp(34px, 5vw, 62px);
-  line-height: 1.2;
+  font-size: clamp(27px, 3.4vw, 42px);
+  line-height: 1.15;
 }
 
 .practice-heading h1 span {
@@ -655,10 +662,10 @@ form .duration-option {
 
 .timer-card {
   display: flex;
-  min-width: 180px;
+  min-width: 150px;
   flex-direction: column;
   align-items: flex-start;
-  padding: 16px 22px;
+  padding: 10px 16px;
   border: 2px solid var(--ink);
   border-radius: 14px;
   background: var(--white);
@@ -673,7 +680,7 @@ form .duration-option {
 
 .timer-card strong {
   font-family: Georgia, serif;
-  font-size: 42px;
+  font-size: 32px;
   font-variant-numeric: tabular-nums;
   line-height: 1;
 }
@@ -686,8 +693,8 @@ form .duration-option {
 }
 
 .timer-track {
-  height: 12px;
-  margin: 32px 0 28px;
+  height: 10px;
+  margin: 16px 0;
   overflow: hidden;
   border: 2px solid var(--ink);
   border-radius: 999px;
@@ -719,7 +726,7 @@ form .duration-option {
   align-items: center;
   justify-content: space-between;
   gap: 28px;
-  padding: 26px 32px;
+  padding: 15px 24px;
   border-bottom: 2px solid var(--ink);
   background: var(--paper-deep);
 }
@@ -744,7 +751,7 @@ form .duration-option {
 
 .practice-card-header h2 {
   margin: 0;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .practice-card-header p {
@@ -756,7 +763,7 @@ form .duration-option {
 
 .target-wrap,
 .input-wrap {
-  padding: 30px 34px;
+  padding: 18px 24px;
 }
 
 .target-wrap {
@@ -765,7 +772,7 @@ form .duration-option {
 
 .target-label {
   display: inline-block;
-  margin-bottom: 14px;
+  margin-bottom: 9px;
   padding-bottom: 3px;
   border-bottom: 3px solid var(--sun);
   font-size: 10px;
@@ -773,13 +780,13 @@ form .duration-option {
 }
 
 .target-text {
-  min-height: 118px;
+  min-height: 0;
   margin: 0;
   color: #576176;
-  font-size: clamp(20px, 2.35vw, 28px);
+  font-size: clamp(18px, 1.8vw, 22px);
   font-weight: 700;
-  line-height: 2;
-  letter-spacing: 0.06em;
+  line-height: 1.7;
+  letter-spacing: 0.04em;
   word-break: break-all;
 }
 
@@ -806,7 +813,8 @@ form .duration-option {
 }
 
 textarea {
-  min-height: 132px;
+  min-height: 100px;
+  scroll-margin-block: 24px;
   resize: vertical;
   padding: 18px 20px;
   font-size: 19px;
@@ -1250,14 +1258,21 @@ kbd {
     min-height: 86px;
   }
 
+  .is-practice-active .site-header {
+    min-height: 68px;
+  }
+
   .header-note {
     display: none;
   }
 
   .start-screen,
-  .practice-screen,
   .result-screen {
     padding: 42px 0 68px;
+  }
+
+  .practice-screen {
+    padding: 22px 0 56px;
   }
 
   .intro-copy h1 {
@@ -1308,7 +1323,7 @@ kbd {
   }
 
   .practice-heading h1 {
-    font-size: 34px;
+    font-size: 28px;
   }
 
   .timer-card {
@@ -1323,7 +1338,7 @@ kbd {
   .practice-card-header {
     align-items: flex-start;
     flex-direction: column;
-    padding: 22px 20px;
+    padding: 14px 18px;
   }
 
   .practice-card-header > div {
@@ -1333,12 +1348,12 @@ kbd {
 
   .target-wrap,
   .input-wrap {
-    padding: 24px 20px;
+    padding: 16px 18px;
   }
 
   .target-text {
-    font-size: 19px;
-    line-height: 1.9;
+    font-size: 18px;
+    line-height: 1.7;
   }
 
   .input-footer {
