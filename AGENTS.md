@@ -240,6 +240,7 @@ diff matrix-library.html index2.html  # 差分なしを確認
 - `account.html`：学習履歴・認証（Supabaseフェーズ1、2026-08-23）。マジックリンクログイン、学習記録の閲覧。フェーズ2（課金・団体ダッシュボード）は未着手
 - `concept.html`：このサイトについて（2026-08-23全面刷新）。3資本理論・六芸フレーム・キャラクター体系・知能の窓シリーズ全体像を説明
 - `bunka/hinukan_ep01.html`〜`ep09.html`：知能の窓・ヒヌカンシリーズ 全9話完成（2026-08-26）。Layer 1正本（`2026-08-26-知能の窓・ヒヌカン-MI8全9回設計.md`）準拠。宗教配慮の絶対原則（特定の祀り方を正解としない、祭祀を持たない家庭も想定）に配慮。§32参照
+- `bunka/shioya_ungami_ep1_ronri.html`〜`ep9_bunkachizu.html`：知能の窓・塩屋湾ウンガミシリーズ 全9話完成（2026-08-26）。話数間の前後ナビゲーション未実装という既知の課題あり。§33参照
 - `characters.html`：キャラクター図鑑
 
 ## 12. 失敗事例と教訓：獅子舞シリーズ ep2〜10（2026-08-14、解決済み）
@@ -638,3 +639,15 @@ Layer 1正本：`【Layer 1】projects ← 人間を守る（人間と時間の�
 - `SOURCES`配列は空のまま（確実な一次資料URLが確認できていないため、出典リンクを捏造していない）
 - `series-nav-data.js` の `HINUKAN_EPISODES` と `SERIES_META`、`matrix-library.html` / `index2.html` の9件を必ず同期する。
 - 月・旧暦と直接つながる既存教材からは「🌙 月の窓を見る」リンクで接続する。2026-08-23時点の接続元は、獅子舞ep2・ep7・ep8、シーミーep5、ハーリーep5、旧盆・エイサーep5。
+
+## 33. 知能の窓・塩屋湾ウンガミシリーズ（2026-08-26、全9話完成）
+
+- ファイル：`bunka/shioya_ungami_ep1_ronri.html`〜`bunka/shioya_ungami_ep9_bunkachizu.html`（他シリーズと異なりファイル名が`epN_MI名`形式）
+- 全9話：論理・数学／言語／音楽・リズム／身体・運動／博物学／視覚・空間／内省／対人／特別（集・表現）
+- 題材：大宜味村塩屋湾のウンガミ（海神祭、国指定重要無形民俗文化財）。御願バーリー・太鼓・舟漕ぎ・豊漁祈願・ノロの生き方（ep8）等を扱う
+- 全話に§12ゲームデザイン原則（verifyでの教え返し、checkinでの称賛の一言）を実装済み
+- **既知の未完了事項（2026-08-26 Claude Code監査で発見）**：
+  - 他シリーズが使う`LESSONS`辞書共有型テンプレート（`episodeMatch`正規表現、`series-nav-data.js`参照）ではなく、話ごとに独立したコンポーネント構造（`MATERIAL`オブジェクト直書き、`quizAnswers`/`teachMessage`等の新state）で実装されている
+  - **各話内に「前へ／次へ」の話数間ナビゲーションが未実装**（`series-nav-data.js`の`prevEpisode`/`nextEpisode`パターンを参照していない）。教材一覧（`matrix-library.html`・`series-guide.html`）からは各話へ到達できるが、話を読み終えた後に次話へ進む導線がない
+  - `series-nav-data.js`の`SHIOYA_UNGAMI_EPISODES`・`SERIES_META`、`matrix-library.html`/`index2.html`の9件登録は2026-08-26に実施済み
+- 次の一手：各話へ前後ナビゲーションのUI・ロジックを追加する（既存の`LESSONS`辞書パターンへの統合、または独自構造のまま`series-nav-data.js`を参照するナビ部品を追加するかは要検討）。実在の人物（ノロ・山城トヨさん、ep8）を扱う教材のため、事実確認の状況は実装セッションの記録を別途確認すること。

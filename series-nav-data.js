@@ -198,6 +198,19 @@ const ISHIGANTO_EPISODES = [
   { id: "ishiganto-ep09", short: "ep9：集・表現編（完）", title: "わたしの石敢當文化地図をつくろう", url: "bunka/ishiganto_ep09.html" },
 ];
 
+// 知能の窓・塩屋湾ウンガミシリーズ（2026-08-26、全9話完成。話数間の前後ナビゲーションは各HTML内で未実装のため別途対応）
+const SHIOYA_UNGAMI_EPISODES = [
+  { id: "shioya-ungami-ep01", short: "ep1：論理・数学編", title: "御願バーリー、勝つのはどっち？", url: "bunka/shioya_ungami_ep1_ronri.html" },
+  { id: "shioya-ungami-ep02", short: "ep2：言語編", title: "ウンガミって、なんて呼ぶ？", url: "bunka/shioya_ungami_ep2_gengo.html" },
+  { id: "shioya-ungami-ep03", short: "ep3：音楽・リズム編", title: "太鼓の音で、神様をお迎えする", url: "bunka/shioya_ungami_ep3_ongaku.html" },
+  { id: "shioya-ungami-ep04", short: "ep4：身体・運動編", title: "バーリーの舟を漕いでみよう", url: "bunka/shioya_ungami_ep4_shintai.html" },
+  { id: "shioya-ungami-ep05", short: "ep5：博物学編", title: "海の恵みと、豊漁の願い", url: "bunka/shioya_ungami_ep5_hakubutsu.html" },
+  { id: "shioya-ungami-ep06", short: "ep6：視覚・空間編", title: "アサギから海まで、どう進む？", url: "bunka/shioya_ungami_ep6_shikaku.html" },
+  { id: "shioya-ungami-ep07", short: "ep7：内省編", title: "見えないものに、感謝するってどういうこと？", url: "bunka/shioya_ungami_ep7_naisei.html" },
+  { id: "shioya-ungami-ep08", short: "ep8：対人編", title: "89年間、役目を守った人がいた", url: "bunka/shioya_ungami_ep8_taijin.html" },
+  { id: "shioya-ungami-ep09", short: "ep9：特別編（完）", title: "わたしの海のまつり地図をつくろう", url: "bunka/shioya_ungami_ep9_bunkachizu.html" },
+];
+
 // 知能の窓・ヒヌカンシリーズ（2026-08-26、全9話完成）
 const HINUKAN_EPISODES = [
   { id: "hinukan-ep01", short: "ep1：論理・数学編", title: "火神さまは、いつ戻ってくる？", url: "bunka/hinukan_ep01.html" },
@@ -326,5 +339,12 @@ const SERIES_META = [
     emoji: "🔥",
     summary: "沖縄の台所を守るといわれるヒヌカン（火の神信仰）を、特定の祀り方の正解として教えるのではなく、暮らし・ことば・観察・空間・内省・聞き取りという8つの知能から多面的に学びます。家によって、地域によって違うことを尊重するシリーズです。",
     episodes: HINUKAN_EPISODES,
+  },
+  {
+    key: "shioya-ungami",
+    name: "知能の窓・塩屋湾ウンガミ",
+    emoji: "🌊",
+    summary: "大宜味村塩屋湾のウンガミ（海神祭、国指定重要無形民俗文化財）を入口に、御願バーリー・太鼓・舟漕ぎ・豊漁祈願・ノロの生き方などを8つの知能から学びます。",
+    episodes: SHIOYA_UNGAMI_EPISODES,
   },
 ];
