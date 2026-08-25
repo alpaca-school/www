@@ -9,6 +9,7 @@
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="./series-nav-data.js"></script>
+  <script src="./material-curriculum-map.js"></script>
   <script src="./supabase-config.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
@@ -20,6 +21,47 @@
       word-break: normal;
       overflow-wrap: anywhere;
       line-break: strict;
+    }
+    .print-sheet {
+      position: fixed;
+      left: -9999px;
+      top: 0;
+    }
+    @page {
+      size: A4 portrait;
+      margin: 12mm;
+    }
+    @media print {
+      body {
+        background: white !important;
+      }
+      #root > div {
+        min-height: 0 !important;
+        background: white !important;
+      }
+      #root > div > header,
+      #root > div > main {
+        display: none !important;
+      }
+      body * {
+        visibility: hidden;
+      }
+      .print-sheet,
+      .print-sheet * {
+        visibility: visible;
+      }
+      .print-sheet {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+      }
+      .print-sheet thead {
+        display: table-header-group;
+      }
+      .print-sheet tr {
+        break-inside: avoid;
+      }
     }
   </style>
 </head>
@@ -43,6 +85,61 @@
       );
     })();
 
+    const curriculumMap = typeof MATERIAL_CURRICULUM_MAP !== "undefined"
+      ? MATERIAL_CURRICULUM_MAP
+      : {};
+
+    const currentMonthValue = () => {
+      const now = new Date();
+      return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+    };
+
+    const getMonthRange = (monthValue) => {
+      const match = /^(\d{4})-(\d{2})$/.exec(monthValue);
+      if (!match) return null;
+
+      const year = Number(match[1]);
+      const monthIndex = Number(match[2]) - 1;
+      if (monthIndex < 0 || monthIndex > 11) return null;
+
+      return {
+        start: new Date(year, monthIndex, 1),
+        end: new Date(year, monthIndex + 1, 1),
+      };
+    };
+
+    const formatMonth = (monthValue) => {
+      const range = getMonthRange(monthValue);
+      if (!range) return "対象月未設定";
+      return new Intl.DateTimeFormat("ja-JP", {
+        year: "numeric",
+        month: "long",
+      }).format(range.start);
+    };
+
+    const formatLearningDate = (value) => {
+      if (!value) return "日付なし";
+      return new Intl.DateTimeFormat("ja-JP", {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+      }).format(new Date(value));
+    };
+
+    const getMaterialDetails = (materialId) => {
+      const curriculum = curriculumMap[materialId];
+      const navigation = materialMap.get(materialId);
+      return {
+        series: curriculum?.series || "シリーズ情報なし",
+        title: curriculum?.title || navigation?.title || materialId,
+        subjects: curriculum?.subjects || [],
+        url: navigation?.url || "",
+      };
+    };
+
+    const formatSubjectLabel = ({ subject, grade }) =>
+      grade ? `${subject}（${grade}）` : `${subject}（学年指定なし）`;
+
     const formatDate = (value) => {
       if (!value) return "日時なし";
       return new Intl.DateTimeFormat("ja-JP", {
@@ -64,6 +161,10 @@
       const [sending, setSending] = useState(false);
       const [notice, setNotice] = useState("");
       const [errorMessage, setErrorMessage] = useState("");
+      const [selectedMonth, setSelectedMonth] = useState(currentMonthValue);
+      const [reportRecords, setReportRecords] = useState([]);
+      const [reportLoading, setReportLoading] = useState(false);
+      const [reportError, setReportError] = useState("");
 
       useEffect(() => {
         let active = true;
@@ -145,6 +246,58 @@
           authListener.subscription.unsubscribe();
         };
       }, [client]);
+
+      useEffect(() => {
+        let active = true;
+
+        if (!client || !session?.user) {
+          setReportRecords([]);
+          setReportLoading(false);
+          setReportError("");
+          return undefined;
+        }
+
+        const monthRange = getMonthRange(selectedMonth);
+        if (!monthRange) {
+          setReportRecords([]);
+          setReportLoading(false);
+          setReportError("対象月を確認できませんでした。月を選び直してください。");
+          return undefined;
+        }
+
+        setReportLoading(true);
+        setReportError("");
+
+        const loadMonthlyReport = async () => {
+          try {
+            const { data, error } = await client
+              .from("learning_records")
+              .select("id, material_id, completed_at, reflection")
+              .gte("completed_at", monthRange.start.toISOString())
+              .lt("completed_at", monthRange.end.toISOString())
+              .order("completed_at", { ascending: true });
+
+            if (!active) return;
+            if (error) {
+              throw error;
+            }
+
+            setReportRecords(data || []);
+          } catch (_error) {
+            if (!active) return;
+            setReportRecords([]);
+            setReportError("月間学習レポートを読み込めませんでした。少し時間をおいて、もう一度お試しください。");
+          } finally {
+            if (active) setReportLoading(false);
+          }
+        };
+
+        loadMonthlyReport();
+
+        return () => {
+          active = false;
+        };
+      }, [client, session?.user?.id, selectedMonth]);
 
       const sendMagicLink = async (event) => {
         event.preventDefault();
@@ -273,6 +426,97 @@
                   </div>
                 </section>
 
+                <section className="rounded-2xl bg-white p-5 sm:p-7 shadow-sm border border-teal-100 min-w-0" aria-labelledby="monthly-report-heading">
+                  <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 min-w-0">
+                    <div className="min-w-0">
+                      <p className="text-xs font-bold text-teal-600">MONTHLY LEARNING REPORT</p>
+                      <h2 id="monthly-report-heading" className="text-xl font-extrabold">月間学習レポート</h2>
+                      <p className="mt-1 text-sm text-gray-500">学習日・教材・対応教科と学年・ふりかえりを、学校へ提出しやすい形でまとめます。</p>
+                    </div>
+                    <div className="shrink-0">
+                      <label htmlFor="report-month" className="block text-xs font-bold text-gray-600 mb-1">対象月</label>
+                      <input
+                        id="report-month"
+                        type="month"
+                        value={selectedMonth}
+                        onChange={(event) => setSelectedMonth(event.target.value)}
+                        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-teal-400"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-xl bg-teal-50 p-4">
+                    <div>
+                      <p className="font-extrabold text-teal-900">{formatMonth(selectedMonth)}</p>
+                      <p className="text-sm text-teal-700">{reportLoading ? "読み込み中…" : `${reportRecords.length}件の学習記録`}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => window.print()}
+                      disabled={reportLoading}
+                      className="rounded-lg bg-teal-600 px-4 py-2 text-sm font-bold text-white hover:bg-teal-700 disabled:bg-gray-300"
+                    >
+                      🖨️ 印刷・PDF保存
+                    </button>
+                  </div>
+
+                  {reportError && (
+                    <p className="mt-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700" role="alert">{reportError}</p>
+                  )}
+
+                  {!reportError && reportLoading && (
+                    <p className="mt-5 text-center text-sm text-gray-500" aria-live="polite">月間レポートを読み込んでいます…</p>
+                  )}
+
+                  {!reportError && !reportLoading && reportRecords.length === 0 && (
+                    <div className="mt-5 rounded-xl border-2 border-dashed border-gray-200 p-6 text-center">
+                      <p className="font-bold text-gray-700">この月の学習記録はありません</p>
+                      <p className="mt-1 text-sm text-gray-500">別の月を選ぶか、教材のふりかえりを終えてからご確認ください。</p>
+                    </div>
+                  )}
+
+                  {!reportError && !reportLoading && reportRecords.length > 0 && (
+                    <ol className="mt-5 space-y-4 min-w-0">
+                      {reportRecords.map((record) => {
+                        const material = getMaterialDetails(record.material_id);
+                        return (
+                          <li key={record.id} className="rounded-xl border border-gray-200 p-4 min-w-0">
+                            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                              <div className="min-w-0">
+                                <p className="text-xs font-bold text-teal-600">{material.series}</p>
+                                {material.url ? (
+                                  <a href={`./${material.url}`} className="mt-1 inline-block font-extrabold text-orange-700 hover:underline">{material.title}</a>
+                                ) : (
+                                  <p className="mt-1 font-extrabold text-gray-800">{material.title}</p>
+                                )}
+                              </div>
+                              <time className="shrink-0 text-sm font-bold text-gray-600">{formatLearningDate(record.completed_at)}</time>
+                            </div>
+
+                            {material.subjects.length > 0 ? (
+                              <ul className="mt-3 space-y-2">
+                                {material.subjects.map((subject, index) => (
+                                  <li key={`${record.id}-subject-${index}`} className="rounded-lg bg-sky-50 px-3 py-2 text-sm text-gray-700">
+                                    <span className="font-bold text-sky-800">{formatSubjectLabel(subject)}</span>
+                                    {subject.unit && <span>：{subject.unit}</span>}
+                                  </li>
+                                ))}
+                              </ul>
+                            ) : (
+                              <p className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800">教科・学年情報を確認できませんでした。</p>
+                            )}
+
+                            <div className="mt-3 rounded-lg bg-teal-50 p-3">
+                              <p className="text-xs font-bold text-teal-700">ふりかえり</p>
+                              <p className="mt-1 text-sm text-teal-950 whitespace-pre-wrap">{record.reflection?.trim() || "記録なし"}</p>
+                            </div>
+                          </li>
+                        );
+                      })}
+                    </ol>
+                  )}
+                </section>
+
                 <section className="min-w-0">
                   <div className="flex flex-wrap items-end justify-between gap-2 mb-3">
                     <div>
@@ -318,6 +562,62 @@
               </div>
             )}
           </main>
+
+          <section className="print-sheet bg-white text-black" aria-hidden="true">
+            <div className="border-b-2 border-black pb-3 mb-5">
+              <p className="text-sm font-bold">アルパカすく〜る</p>
+              <h1 className="text-2xl font-extrabold">月間学習レポート</h1>
+              <div className="mt-2 flex justify-between gap-4 text-sm">
+                <p><strong>対象月：</strong>{formatMonth(selectedMonth)}</p>
+                <p><strong>学習記録：</strong>{reportRecords.length}件</p>
+              </div>
+            </div>
+
+            {reportRecords.length === 0 ? (
+              <p className="border border-gray-400 p-5 text-center text-sm">この月の学習記録はありません。</p>
+            ) : (
+              <table className="w-full border-collapse text-xs">
+                <thead>
+                  <tr>
+                    <th className="border border-black p-2 text-left w-20">学習日</th>
+                    <th className="border border-black p-2 text-left w-48">教材</th>
+                    <th className="border border-black p-2 text-left">対応教科・学年／学習指導要領対応</th>
+                    <th className="border border-black p-2 text-left w-40">ふりかえり</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {reportRecords.map((record) => {
+                    const material = getMaterialDetails(record.material_id);
+                    return (
+                      <tr key={`print-${record.id}`}>
+                        <td className="border border-black p-2 align-top">{formatLearningDate(record.completed_at)}</td>
+                        <td className="border border-black p-2 align-top">
+                          <p className="font-bold">{material.title}</p>
+                          <p className="mt-1 text-gray-700">{material.series}</p>
+                        </td>
+                        <td className="border border-black p-2 align-top">
+                          {material.subjects.length > 0 ? (
+                            <ul className="space-y-1 list-disc list-inside">
+                              {material.subjects.map((subject, index) => (
+                                <li key={`print-${record.id}-subject-${index}`}>
+                                  <strong>{formatSubjectLabel(subject)}</strong>{subject.unit ? `：${subject.unit}` : ""}
+                                </li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p>教科・学年情報なし</p>
+                          )}
+                        </td>
+                        <td className="border border-black p-2 align-top whitespace-pre-wrap">{record.reflection?.trim() || "記録なし"}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            )}
+
+            <p className="mt-4 text-[10px] text-gray-600">このレポートは、ログイン中の利用者本人の学習記録を対象月ごとにまとめたものです。</p>
+          </section>
         </div>
       );
     }
