@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <script>
+        (() => {
+            const pageVersion = "20260826-1";
+            const url = new URL(window.location.href);
+            if (url.searchParams.get("v") !== pageVersion) {
+                url.searchParams.set("v", pageVersion);
+                window.location.replace(url.toString());
+            }
+        })();
+    </script>
+    <title>ウンガミって、なんて呼ぶ？【知能の窓 塩屋湾ウンガミ ep2：言語編】 🌊</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        p, li {
+            word-break: normal;
+            overflow-wrap: break-word;
+            line-break: strict;
+        }
+        .speech-bubble {
+            position: relative;
+            min-width: 0;
+            max-width: 100%;
+        }
+        .speech-bubble p {
+            display: block;
+            min-width: 0;
+            max-width: 100%;
+            white-space: normal;
+            word-break: normal;
+            overflow-wrap: anywhere;
+            line-break: anywhere;
+        }
+        .choice-card {
+            min-width: 0;
+        }
+        .choice-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            min-width: 0;
+            max-width: 100%;
+        }
+        .choice-row .speech-bubble {
+            flex: 1 1 0;
+            width: 0;
+        }
+        .choice-check {
+            flex: 0 0 auto;
+        }
+        .progress-dots {
+            display: none;
+        }
+        @media (min-width: 640px) {
+            .progress-dots {
+                display: flex;
+            }
+        }
+        .speech-bubble::after {
+            content: "";
+            position: absolute;
+            left: -10px;
+            top: 18px;
+            border-width: 8px 10px 8px 0;
+            border-style: solid;
+            border-color: transparent currentColor transparent transparent;
+        }
+        .chara-avatar {
+            width: 56px; height: 56px; border-radius: 9999px; object-fit: cover;
+            border: 2px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.15); background: #fff;
+            flex-shrink: 0;
+        }
+        .print-sheet { position: fixed; left: -9999px; top: 0; }
+        @media print {
+            body * { visibility: hidden; }
+            .print-sheet, .print-sheet * { visibility: visible; }
+            .print-sheet { position: absolute; left: 0; top: 0; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+        const { createRoot } = ReactDOM;
+
+        const ChevronRight = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m9 18 6-6-6-6"/></svg>
+        );
+        const ChevronLeft = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m15 18-6-6 6-6"/></svg>
+        );
+
+        // 4アルパカ（性格は既存シリーズと同じ。困りごとを持ち込む役）
+        const ALPACAS = {
+          hari: {
+            name: "ハーリー", color: "red", emoji: "🔥", img: "../img/characters/harly.png",
+            claim: "ウンガミってさ、あれでしょ、めちゃくちゃすごい伝説の生き物でしょ！知ってる知ってる！",
+            gag: "（効果音：ズコーッ！ハーリー、早口すぎて自分の舌がもつれてすっ転ぶ）"
+          },
+          sara: {
+            name: "サラバンジ", color: "blue", emoji: "⚡", img: "../img/characters/sarabanji.png",
+            claim: "ウンガミとは、すなわち海神祭の異称でありまして、その語源は…",
+            gag: "（サラバンジ、難しい言葉を言い切った瞬間にバタン！と大げさに倒れる→3秒後にムクッと起き上がる）"
+          },
+          gan: {
+            name: "ガンジュー", color: "green", emoji: "😴", img: "../img/characters/ganjuu.png",
+            claim: "ウンガミ…あーあれあれ、おばあがやってたやつ…昔ぼくが小さいころねぇ…",
+            gag: "（ガンジュー、話しながら立ったまま本気のいびき→知念おじぃさんに肩を叩かれてハッと飛び起きる）"
+          },
+          kaa: {
+            name: "カーギー", color: "purple", emoji: "💁‍♀️", img: "../img/characters/carggy.png",
+            claim: "（メモを見ながら棒読みで）「うん・が・み、と、読みます」",
+            gag: "（カーギー、メモから顔を上げた瞬間、乱れた前髪を鏡もなしに一瞬でピシッと直す）"
+          }
+        };
+        const ALPACA_KEYS = ["hari", "sara", "gan", "kaa"];
+
+        // 4メンター（おじぃさん・おばぁさん）。多重知能8分類を2つずつ担当する「知能の窓」シリーズの案内役
+        const MENTORS = {
+          chinen: { name: "知念おじぃさん", color: "amber", emoji: "🧓" },
+          tokue: { name: "仲程のヨシおばぁさん", color: "rose", emoji: "👵" },
+          rikiya: { name: "力也おじぃさん", color: "teal", emoji: "🧓" },
+          misaki: { name: "美咲おばぁさん", color: "indigo", emoji: "👵" }
+        };
+
+        const COLOR_MAP = {
+          red: { bg: "bg-red-50", border: "border-red-300", text: "text-red-700", solid: "bg-red-500" },
+          blue: { bg: "bg-blue-50", border: "border-blue-300", text: "text-blue-700", solid: "bg-blue-500" },
+          green: { bg: "bg-green-50", border: "border-green-300", text: "text-green-700", solid: "bg-green-500" },
+          purple: { bg: "bg-purple-50", border: "border-purple-300", text: "text-purple-700", solid: "bg-purple-500" },
+          amber: { bg: "bg-amber-50", border: "border-amber-300", text: "text-amber-700", solid: "bg-amber-500" },
+          rose: { bg: "bg-rose-50", border: "border-rose-300", text: "text-rose-700", solid: "bg-rose-500" },
+          teal: { bg: "bg-teal-50", border: "border-teal-300", text: "text-teal-700", solid: "bg-teal-500" },
+          indigo: { bg: "bg-indigo-50", border: "border-indigo-300", text: "text-indigo-700", solid: "bg-indigo-500" }
+        };
+
+        // キャラ画像。アルパカは画像→失敗時絵文字。メンターは画像未整備のため絵文字のみ
+        const Avatar = ({ person }) => {
+          const [failed, setFailed] = useState(false);
+          if (!person.img || failed) {
+            return (
+              <div className={`chara-avatar flex items-center justify-center text-2xl ${COLOR_MAP[person.color].bg}`}>
+                {person.emoji}
+              </div>
+            );
+          }
+          return (
+            <img
+              src={person.img}
+              alt={person.name}
+              className="chara-avatar"
+              onError={() => setFailed(true)}
+            />
+          );
+        };
+
+        function shuffledThreeAlpacas() {
+          const arr = [...ALPACA_KEYS];
+          for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+          }
+          return arr.slice(0, 3);
+        }
+
+        // やってみる：教え返しクイズ（§12.2 verifyでの教え返しミニゲーム）
+        const TEACH_BACK_QUIZ = [
+          {
+            question: "「ウンガミ」って、なんて読む？",
+            options: [
+              { id: "q1a", text: "うんがみ", correct: true },
+              { id: "q1b", text: "おんがみ", correct: false },
+              { id: "q1c", text: "うみがみ", correct: false }
+            ]
+          },
+          {
+            question: "ウンガミは、どこから神さまをお迎えするお祭り？",
+            options: [
+              { id: "q2a", text: "ニライカナイ（海の彼方の神の国）", correct: true },
+              { id: "q2b", text: "お空の上", correct: false },
+              { id: "q2c", text: "山の奥", correct: false }
+            ]
+          }
+        ];
+
+        // COCOLOプラン（ホームスクーラー等の学習記録）向けの教材メタ情報
+        const MATERIAL = {
+          title: "ウンガミって、なんて呼ぶ？",
+          series: "知能の窓 塩屋湾ウンガミ ep2：言語編",
+          subjectGrade: "国語3〜6年・社会3〜4年"
+        };
+
+        const UngamiEp2App = () => {
+          const [threeKeys] = useState(() => shuffledThreeAlpacas());
+          const [currentSlide, setCurrentSlide] = useState(0);
+          const [guess, setGuess] = useState(null);
+          const [freeThought, setFreeThought] = useState("");
+          const [quizAnswers, setQuizAnswers] = useState({});
+          const [teachMessage, setTeachMessage] = useState("");
+          const [imagineAnswer, setImagineAnswer] = useState("");
+          const [childName, setChildName] = useState("");
+          const [canDoIt, setCanDoIt] = useState(null);
+          const [memoryAnswer, setMemoryAnswer] = useState("");
+
+          const slideIds = ["intro", "trouble", "mentor", "verify", "imagine", "checkin", "parent"];
+          const total = slideIds.length;
+
+          const nextSlide = () => setCurrentSlide((p) => Math.min(p + 1, total - 1));
+          const prevSlide = () => setCurrentSlide((p) => Math.max(p - 1, 0));
+
+          const pickQuizAnswer = (qIndex, optId) => setQuizAnswers((prev) => ({ ...prev, [qIndex]: optId }));
+          const quizAllAnswered = TEACH_BACK_QUIZ.every((_, i) => quizAnswers[i]);
+          const quizAllCorrect = TEACH_BACK_QUIZ.every((q, i) => {
+            const picked = q.options.find((o) => o.id === quizAnswers[i]);
+            return picked && picked.correct;
+          });
+
+          const renderIntro = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-6xl mb-4">🌊</div>
+                <h2 className="text-2xl font-bold text-sky-600">塩屋湾で、大きなお祭りがあるらしい</h2>
+                <span className="inline-block mt-2 px-3 py-1 text-xs font-bold rounded-full bg-sky-100 text-sky-700">📚 {MATERIAL.subjectGrade}</span>
+              </div>
+              <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 space-y-3">
+                <p>塩屋湾のまわりでは、大昔から「ウンガミ」というお祭りが続いています。海の向こうから神さまをお迎えして、みんなの元気と、お米や魚がたくさんとれることをお願いするお祭りです。</p>
+                <p>でも、アルパカたちは「ウンガミ」という言葉、実はよくわかっていないみたい。知念おじぃさんに、言葉の意味を教わりに行こう。</p>
+              </div>
+            </div>
+          );
+
+          const renderTrouble = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">😱</div>
+                <h2 className="text-xl font-bold text-red-600 mb-1">困りごと発生！</h2>
+                <p className="text-gray-600">3人のアルパカが、それぞれの説明でお客さんを困らせてしまった。きみは、誰の説明が一番惜しいと思う？</p>
+              </div>
+              <div className="grid gap-4">
+                {threeKeys.map((key) => {
+                  const c = ALPACAS[key];
+                  const cc = COLOR_MAP[c.color];
+                  const selected = guess === key;
+                  return (
+                    <div
+                      key={key}
+                      onClick={() => setGuess(key)}
+                      className={`choice-card p-4 rounded-lg border-2 cursor-pointer transition-all ${cc.bg} ${
+                        selected ? `${cc.border} ring-2 ring-offset-1 ring-${c.color}-400` : "border-gray-200 hover:border-gray-300"
+                      }`}
+                    >
+                      <div className="choice-row">
+                        <Avatar person={c} />
+                        <div className={`speech-bubble flex-1 min-w-0 rounded-lg p-3 ${cc.text} bg-white/70`}>
+                          <p className="text-sm text-gray-700">「{c.claim}」</p>
+                        </div>
+                        {selected && (
+                          <div className={`choice-check w-7 h-7 rounded-full ${cc.solid} flex items-center justify-center text-white text-sm shrink-0`}>✓</div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+                <div
+                  onClick={() => setGuess("none")}
+                  className={`choice-card p-4 rounded-lg border-2 cursor-pointer transition-all bg-gray-50 ${
+                    guess === "none" ? "border-gray-400 ring-2 ring-offset-1 ring-gray-300" : "border-gray-200 hover:border-gray-300"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">🤔</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-gray-600">あてはまるものがない</p>
+                      <p className="text-sm text-gray-500">自分の考えを書いてみる</p>
+                    </div>
+                    {guess === "none" && (
+                      <div className="w-7 h-7 rounded-full bg-gray-500 flex items-center justify-center text-white text-sm shrink-0">✓</div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              {guess === "none" && (
+                <textarea
+                  value={freeThought}
+                  onChange={(e) => setFreeThought(e.target.value)}
+                  rows="3"
+                  className="w-full border rounded-lg p-3 text-sm"
+                  placeholder="きみの考えを書いてみよう（書かなくても次に進めるよ）"
+                />
+              )}
+              {!guess && <p className="text-center text-sm text-sky-500">↑ どれか1つを選ぶと、次に進めるよ</p>}
+              {guess && guess !== "none" && (
+                <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
+                  <p>みんな、それらしいことを言っているけど…本当のところ、知念おじぃさんに聞いてみよう。</p>
+                </div>
+              )}
+              {guess === "none" && (
+                <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600 text-center">
+                  <p>自分の考えを持てたね。それも大切な一歩だよ。メンターに聞いてみよう。</p>
+                </div>
+              )}
+            </div>
+          );
+
+          const renderMentor = () => {
+            const guessedAlpaca = guess && guess !== "none" ? ALPACAS[guess] : null;
+            return (
+              <div className="space-y-6">
+                <div className="text-center">
+                  <div className="text-5xl mb-4">🧓</div>
+                  <h2 className="text-xl font-bold text-amber-600">知念おじぃさんが教えてくれた</h2>
+                </div>
+                {guessedAlpaca && (
+                  <div className="rounded-lg p-3 text-center bg-gray-100 text-sm text-gray-600">
+                    <p>きみが選んだ「{guessedAlpaca.claim}」は、本当の話とは違っていたみたい。</p>
+                    <p className="text-xs text-gray-500 mt-1">{guessedAlpaca.gag}</p>
+                  </div>
+                )}
+                <div className={`rounded-lg p-4 space-y-2 ${COLOR_MAP.amber.bg}`}>
+                  <div className="flex items-center gap-3 mb-1">
+                    <Avatar person={MENTORS.chinen} />
+                    <p className="font-bold text-amber-700">{MENTORS.chinen.name}</p>
+                  </div>
+                  <p className="text-sm text-gray-700">「早口でも、難しい言葉でも、読み方だけでも、伝わらないさ。まず3つ覚えよう」</p>
+                  <p className="text-sm text-gray-700"><strong>読み方</strong>：「ウンガミ」（漢字では「海神祭」と書かれることが多いよ）</p>
+                  <p className="text-sm text-gray-700"><strong>意味</strong>：海の彼方にある神さまの国「ニライカナイ」から、神さまをお迎えするお祭りのこと</p>
+                  <p className="text-sm text-gray-700"><strong>どんな流れ</strong>：夜に神さまをお迎え → 次の日の朝にお祈りの儀式 → 海でバーリー（舟のこぎくらべ）→ 最後にお米や魚がたくさんとれるようお祈りする</p>
+                  <p className="text-sm text-gray-700">「ことばの意味がわかると、お祭りの見え方が変わるさ」</p>
+                </div>
+              </div>
+            );
+          };
+
+          const renderVerify = () => {
+            const targetKey = guess && guess !== "none" ? guess : threeKeys[0];
+            const target = ALPACAS[targetKey];
+            return (
+              <div className="space-y-6">
+                <div className="text-center">
+                  <div className="text-5xl mb-4">🗣️</div>
+                  <h2 className="text-2xl font-bold text-green-600">教え返してみよう</h2>
+                  <p className="text-gray-600 text-sm mt-1">知念おじぃさんに教わったことを、{target.name}に教えてあげよう。</p>
+                </div>
+                <div className="space-y-4">
+                  {TEACH_BACK_QUIZ.map((q, qi) => (
+                    <div key={qi}>
+                      <p className="text-sm font-bold text-gray-700 mb-2">{qi + 1}. {q.question}</p>
+                      <div className="grid gap-2">
+                        {q.options.map((o) => (
+                          <button
+                            key={o.id}
+                            onClick={() => pickQuizAnswer(qi, o.id)}
+                            className={`text-left px-4 py-3 rounded-lg font-medium border-2 transition ${
+                              quizAnswers[qi] === o.id ? "bg-green-500 text-white border-green-500" : "bg-white text-gray-700 border-green-200 hover:bg-green-50"
+                            }`}
+                          >
+                            {o.text}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {quizAllAnswered && (
+                  <div className={`rounded-lg p-4 text-center ${quizAllCorrect ? "bg-yellow-100" : "bg-gray-100"}`}>
+                    {quizAllCorrect ? (
+                      <p className="font-bold text-yellow-700">🎉 {target.name}「そうか、そういう意味だったんだね！教えてくれてありがとう」</p>
+                    ) : (
+                      <p className="font-bold text-gray-700">おしい！知念おじぃさんの話をもう一度読み返してから、教え直してみよう。</p>
+                    )}
+                  </div>
+                )}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{target.name}への一言（自由記述）</label>
+                  <textarea
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400 text-sm"
+                    rows="2"
+                    placeholder="例：早口じゃなくて、まず読み方から教えてあげるね"
+                    value={teachMessage}
+                    onChange={(e) => setTeachMessage(e.target.value)}
+                  ></textarea>
+                </div>
+              </div>
+            );
+          };
+
+          const renderImagine = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">💭</div>
+                <h2 className="text-2xl font-bold text-pink-600">想像してみよう</h2>
+              </div>
+              <div className="bg-pink-50 rounded-lg p-6">
+                <p className="text-lg">ウンガミを知らない人に、20字くらいで説明するとしたら、きみならどう言う？</p>
+                <p className="text-sm text-gray-500 mt-2">（正解は一つじゃないよ。知念おじぃさんに教わった「読み方・意味・流れ」のどれを使ってもいい）</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">きみの考えを書いてみよう（学習記録シートに残せるよ）</label>
+                <textarea
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400 text-sm"
+                  rows="3"
+                  placeholder="例：海の神さまをお迎えする、塩屋湾のお祭りだよ"
+                  value={imagineAnswer}
+                  onChange={(e) => setImagineAnswer(e.target.value)}
+                ></textarea>
+              </div>
+            </div>
+          );
+
+          const renderCheckin = () => (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl mb-4">🙋</div>
+                <h2 className="text-2xl font-bold text-teal-600">ふりかえり</h2>
+              </div>
+              <div className="bg-teal-50 rounded-lg p-6">
+                <p className="font-medium text-teal-800 mb-3">✏️ 知念おじぃさんに教わったこと、自分でも説明できそうだと思った？</p>
+                <div className="flex flex-wrap gap-2">
+                  {["はい", "いいえ", "わからない"].map((opt) => (
+                    <button
+                      key={opt}
+                      onClick={() => setCanDoIt(opt)}
+                      className={`px-4 py-2 rounded-lg font-bold border-2 transition ${
+                        canDoIt === opt ? "bg-teal-500 text-white border-teal-500" : "bg-white text-teal-700 border-teal-200"
+                      }`}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">✏️ 今日一番心に残ったことを書いてみよう</label>
+                <textarea
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400 text-sm"
+                  rows="3"
+                  placeholder="例：お祭りにも、こぎくらべがあるのを初めて知った"
+                  value={memoryAnswer}
+                  onChange={(e) => setMemoryAnswer(e.target.value)}
+                ></textarea>
+              </div>
+              <div className="bg-indigo-50 rounded-lg p-4 text-sm text-indigo-700 text-center">
+                <p>うまく言えたかどうかより、知らない言葉を「知りたい」と思って調べたこと自体が、すごく大事な一歩だよ。</p>
+              </div>
+            </div>
+          );
+
+          const renderParent = () => (
+            <div className="space-y-4">
+              <div className="text-center">
+                <div className="text-5xl mb-4">👪</div>
+                <h2 className="text-2xl font-bold text-yellow-700">保護者・支援者の方へ</h2>
+              </div>
+              <div className="bg-yellow-50 rounded-lg p-4">
+                <p className="text-xs font-bold text-yellow-800 mb-2">学習指導要領との対応</p>
+                <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
+                  <li><strong>国語（3〜6年）</strong>：語彙、説明文、要約</li>
+                  <li><strong>社会（3〜4年）</strong>：地域文化</li>
+                </ul>
+                <p className="text-xs text-gray-500 mt-2">※ この教材は「知能の窓 塩屋湾ウンガミ」シリーズ ep2（言語編）です。大宜味村塩屋湾で行われる国指定重要無形民俗文化財「塩屋湾のウンガミ（海神祭）」を題材に、知念おじぃさんがことばの意味を教える回でした。</p>
+                <p className="text-xs text-gray-500 mt-1">※ 4アルパカ（ハーリー・サラバンジ・ガンジュー・カーギー）は「困りごとを持ち込む役」として登場します。3人の発言はランダムに選ばれ、いずれも伝え方に課題が残る例として描いています。会話文・ギャグ演出は教材オリジナルの創作です。</p>
+                <p className="text-xs text-gray-500 mt-1">※ 出典：<a href="http://kanko.vill.ogimi.okinawa.jp/village/ungami/index.html" target="_blank" rel="noopener noreferrer" className="underline">大宜味村観光ナビ「塩屋湾のウンガミ」</a>、<a href="https://online.bunka.go.jp/heritages/detail/215129" target="_blank" rel="noopener noreferrer" className="underline">文化遺産オンライン「塩屋湾のウンガミ」</a>。地域・年によって儀礼の細部や関わる集落の数え方が異なる場合があり、本教材は代表的な流れを紹介するものです。</p>
+              </div>
+              <div className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-4">
+                <p className="text-xs font-bold text-gray-700 mb-2">🖨️ 学習記録シートを作る（COCOLOプラン等の学習記録用）</p>
+                <input
+                  type="text"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 text-sm mb-2"
+                  placeholder="お子さんの名前（記入は任意）"
+                  value={childName}
+                  onChange={(e) => setChildName(e.target.value)}
+                />
+                <button
+                  onClick={() => window.print()}
+                  className="w-full px-4 py-2 bg-yellow-500 text-white rounded-lg font-medium hover:bg-yellow-600 transition-all text-sm"
+                >
+                  学習記録シートを印刷する
+                </button>
+                <p className="text-xs text-gray-400 mt-1">今日の日付・対応教科・取り組んだ内容・保護者確認欄が入った1枚のシートが印刷されます。</p>
+              </div>
+            </div>
+          );
+
+          const today = new Date();
+          const todayStr = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
+          const guessedForSheet = guess && guess !== "none" ? ALPACAS[guess] : null;
+
+          const renderPrintSheet = () => (
+            <div className="print-sheet w-[700px] p-10 bg-white text-black">
+              <h1 className="text-xl font-bold border-b-2 border-black pb-2 mb-4">学習記録シート</h1>
+              <table className="w-full text-sm mb-4">
+                <tbody>
+                  <tr><td className="py-1 pr-4 font-bold w-32">学習日</td><td className="py-1">{todayStr}</td></tr>
+                  <tr><td className="py-1 pr-4 font-bold">お子さんの名前</td><td className="py-1">{childName || "＿＿＿＿＿＿＿＿＿＿"}</td></tr>
+                  <tr><td className="py-1 pr-4 font-bold">教材名</td><td className="py-1">{MATERIAL.title}（{MATERIAL.series}）</td></tr>
+                  <tr><td className="py-1 pr-4 font-bold">対応教科・学年</td><td className="py-1">{MATERIAL.subjectGrade}</td></tr>
+                </tbody>
+              </table>
+              <div className="mb-4 text-xs text-gray-700 bg-gray-50 border border-gray-300 rounded p-3">
+                <p className="font-bold mb-1">学習指導要領との対応</p>
+                <ul className="space-y-0.5 list-disc list-inside">
+                  <li>国語（3〜6年）：語彙、説明文、要約</li>
+                  <li>社会（3〜4年）：地域文化</li>
+                </ul>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">1. アルパカの困りごとで、一番惜しいと思った説明</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">
+                  {guessedForSheet ? `${guessedForSheet.name}の「${guessedForSheet.claim}」を選びました。` : "（記入なし）"}
+                </p>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">2. 知念おじぃさんに教わった、ウンガミの読み方・意味・流れ</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[2.5rem]">読み方：ウンガミ／意味：ニライカナイから神さまを迎える祭り／流れ：神迎え→儀式→バーリー→祈願</p>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">3. 想像する問題への自分の考え</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[3rem]">{imagineAnswer || "（記入なし）"}</p>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold text-sm mb-1">4. 今日一番心に残ったこと</p>
+                <p className="text-sm border border-gray-400 rounded p-2 min-h-[3rem]">{memoryAnswer || "（記入なし）"}</p>
+              </div>
+              <div className="mt-8 pt-4 border-t border-gray-400">
+                <p className="text-sm">保護者確認サイン：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+              </div>
+            </div>
+          );
+
+          const slideRenderers = {
+            intro: renderIntro,
+            trouble: renderTrouble,
+            mentor: renderMentor,
+            verify: renderVerify,
+            imagine: renderImagine,
+            checkin: renderCheckin,
+            parent: renderParent
+          };
+          const slideTitles = {
+            intro: "🌊 はじまりの問い",
+            trouble: "😱 困りごと",
+            mentor: "🧓 メンター登場",
+            verify: "🗣️ 教え返してみる",
+            imagine: "💭 想像する",
+            checkin: "🙋 ふりかえり",
+            parent: "👪 保護者の方へ"
+          };
+
+          const canGoNext = !(slideIds[currentSlide] === "trouble" && !guess);
+
+          return (
+            <div className="min-h-screen bg-gradient-to-br from-sky-50 to-blue-50">
+              <div className="container mx-auto px-4 py-8 max-w-2xl">
+                <a href="../matrix-library.html" className="inline-flex items-center gap-1 text-sm font-bold text-sky-500 hover:text-sky-700 mb-4">
+                  <ChevronLeft className="w-4 h-4" />教材一覧へ戻る
+                </a>
+                <div className="text-center mb-6">
+                  <p className="text-xs font-bold text-indigo-500 mb-1">知能の窓 塩屋湾ウンガミ ep2：言語編</p>
+                  <h1 className="text-2xl md:text-3xl font-bold text-sky-600">ウンガミって、なんて呼ぶ？ 🌊</h1>
+                  <span className="inline-block mt-1 px-2 py-0.5 text-xs font-bold rounded-full bg-sky-100 text-sky-700">📚 {MATERIAL.subjectGrade}</span>
+                </div>
+
+                <div className="mb-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm text-gray-600">{slideTitles[slideIds[currentSlide]]}</span>
+                    <span className="text-sm text-gray-600">{currentSlide + 1} / {total}</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="bg-sky-500 h-2 rounded-full transition-all duration-300" style={{ width: `${((currentSlide + 1) / total) * 100}%` }}></div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8 mb-6 min-h-96">
+                  {slideRenderers[slideIds[currentSlide]]()}
+                </div>
+
+                <div className="flex justify-between items-center">
+                  <button
+                    onClick={prevSlide}
+                    disabled={currentSlide === 0}
+                    className={`flex items-center px-3 sm:px-5 py-3 rounded-lg font-medium transition-all ${
+                      currentSlide === 0 ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-sky-500 text-white hover:bg-sky-600"
+                    }`}
+                  >
+                    <ChevronLeft className="w-5 h-5 mr-1" />まえへ
+                  </button>
+                  <div className="progress-dots space-x-2">
+                    {slideIds.map((id, index) => (
+                      <div key={id} className={`w-2.5 h-2.5 rounded-full ${index === currentSlide ? "bg-sky-500" : "bg-gray-300"}`} />
+                    ))}
+                  </div>
+                  <button
+                    onClick={nextSlide}
+                    disabled={currentSlide === total - 1 || !canGoNext}
+                    className={`flex items-center px-3 sm:px-5 py-3 rounded-lg font-medium transition-all ${
+                      currentSlide === total - 1 || !canGoNext ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-sky-500 text-white hover:bg-sky-600"
+                    }`}
+                  >
+                    つぎへ<ChevronRight className="w-5 h-5 ml-1" />
+                  </button>
+                </div>
+              </div>
+              {renderPrintSheet()}
+            </div>
+          );
+        };
+
+        createRoot(document.getElementById("root")).render(<UngamiEp2App />);
+    </script>
+</body>
+</html>
