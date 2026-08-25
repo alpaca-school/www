@@ -562,6 +562,76 @@ form .duration-option {
   font-size: 8px;
 }
 
+.preparation-overlay {
+  position: fixed;
+  z-index: 80;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(246, 242, 233, 0.95);
+}
+
+.preparation-card {
+  width: min(420px, 100%);
+  padding: 42px 32px;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--white);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.preparation-card > span {
+  display: inline-block;
+  margin-bottom: 18px;
+  padding: 6px 10px;
+  border: 1.5px solid var(--ink);
+  color: var(--white);
+  background: var(--ink);
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+}
+
+.preparation-card p {
+  margin: 0;
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", serif;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.7;
+}
+
+.preparation-card strong {
+  display: grid;
+  width: 150px;
+  height: 150px;
+  place-items: center;
+  margin: 24px auto 20px;
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  color: var(--white);
+  background: var(--coral);
+  box-shadow: 7px 7px 0 var(--sun);
+  font-family: Georgia, serif;
+  font-size: 76px;
+  line-height: 1;
+}
+
+.preparation-card strong.is-start {
+  width: 210px;
+  border-radius: 999px;
+  font-family: "Hiragino Sans", sans-serif;
+  font-size: 32px;
+}
+
+.preparation-card small {
+  color: var(--ink-soft);
+  font-size: 10px;
+  font-weight: 700;
+}
+
 .practice-screen,
 .result-screen {
   padding: 62px 0 100px;
@@ -1215,6 +1285,22 @@ kbd {
   .start-card {
     padding: 34px 24px;
     box-shadow: 5px 5px 0 var(--ink);
+  }
+
+  .preparation-card {
+    padding: 34px 22px;
+    box-shadow: 5px 5px 0 var(--ink);
+  }
+
+  .preparation-card strong {
+    width: 128px;
+    height: 128px;
+    font-size: 64px;
+  }
+
+  .preparation-card strong.is-start {
+    width: 190px;
+    font-size: 28px;
   }
 
   .practice-heading {

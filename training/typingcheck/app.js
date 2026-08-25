@@ -2,6 +2,8 @@
 
 const DEFAULT_PRACTICE_SECONDS = 30;
 const ALLOWED_DURATIONS = new Set([30, 60, 180, 300, 600]);
+const PREPARATION_SECONDS = 3;
+const START_DISPLAY_MILLISECONDS = 550;
 const PASSING_ACCURACY = 80;
 const TARGET_WINDOW_STEP = 100;
 const TARGET_WINDOW_SIZE = 150;
@@ -33,6 +35,8 @@ const elements = {
   typingInput: document.querySelector("#typing-input"),
   liveTyped: document.querySelector("#live-typed"),
   liveStatus: document.querySelector("#live-status"),
+  preparationOverlay: document.querySelector("#preparation-overlay"),
+  preparationCount: document.querySelector("#preparation-count"),
   timerValue: document.querySelector("#timer-value"),
   timerTrack: document.querySelector(".timer-track"),
   timerBar: document.querySelector("#timer-bar"),
@@ -63,6 +67,8 @@ const elements = {
 let learnerName = "";
 let practiceSeconds = DEFAULT_PRACTICE_SECONDS;
 let timerId = null;
+let preparationTimerId = null;
+let preparationTimeoutId = null;
 let deadline = 0;
 let roundFinished = false;
 
@@ -154,14 +160,59 @@ function updateTimer() {
   }
 }
 
-function startRound() {
+function cancelRoundTimers() {
   window.clearInterval(timerId);
+  window.clearInterval(preparationTimerId);
+  window.clearTimeout(preparationTimeoutId);
+  timerId = null;
+  preparationTimerId = null;
+  preparationTimeoutId = null;
+}
+
+function beginTimedRound() {
+  const durationLabel = formatDurationLabel(practiceSeconds);
+  preparationTimeoutId = null;
+  elements.preparationOverlay.hidden = true;
+  elements.typingInput.disabled = false;
+  elements.liveStatus.textContent = `${durationLabel}の練習を開始しました。`;
+
+  deadline = performance.now() + practiceSeconds * 1000;
+  timerId = window.setInterval(updateTimer, 100);
+  elements.typingInput.focus({ preventScroll: true });
+}
+
+function startPreparation() {
+  let secondsLeft = PREPARATION_SECONDS;
+  elements.preparationOverlay.hidden = false;
+  elements.preparationCount.classList.remove("is-start");
+  elements.preparationCount.textContent = secondsLeft;
+  elements.liveStatus.textContent = `準備時間です。開始まで${secondsLeft}秒です。`;
+
+  preparationTimerId = window.setInterval(() => {
+    secondsLeft -= 1;
+
+    if (secondsLeft > 0) {
+      elements.preparationCount.textContent = secondsLeft;
+      elements.liveStatus.textContent = `開始まで${secondsLeft}秒です。`;
+      return;
+    }
+
+    window.clearInterval(preparationTimerId);
+    preparationTimerId = null;
+    elements.preparationCount.textContent = "スタート！";
+    elements.preparationCount.classList.add("is-start");
+    elements.liveStatus.textContent = "スタート！";
+    preparationTimeoutId = window.setTimeout(beginTimedRound, START_DISPLAY_MILLISECONDS);
+  }, 1000);
+}
+
+function startRound() {
+  cancelRoundTimers();
   roundFinished = false;
   const durationLabel = formatDurationLabel(practiceSeconds);
-  elements.typingInput.disabled = false;
+  elements.typingInput.disabled = true;
   elements.typingInput.value = "";
   elements.liveTyped.textContent = "0";
-  elements.liveStatus.textContent = `${durationLabel}の練習を開始しました。`;
   elements.timerValue.textContent = formatTimer(practiceSeconds);
   elements.timerTrack.setAttribute("aria-valuemax", String(practiceSeconds));
   elements.timerTrack.setAttribute("aria-valuenow", String(practiceSeconds));
@@ -172,10 +223,7 @@ function startRound() {
   elements.resultDuration.textContent = `${durationLabel}チャレンジ`;
   renderTarget();
   showScreen(elements.practiceScreen);
-
-  deadline = performance.now() + practiceSeconds * 1000;
-  timerId = window.setInterval(updateTimer, 100);
-  elements.typingInput.focus({ preventScroll: true });
+  startPreparation();
 }
 
 function formatTimer(totalSeconds) {
@@ -264,7 +312,8 @@ function finishRound() {
 }
 
 function returnToStart() {
-  window.clearInterval(timerId);
+  cancelRoundTimers();
+  elements.preparationOverlay.hidden = true;
   roundFinished = true;
   showScreen(elements.startScreen);
   elements.learnerName.value = learnerName;
