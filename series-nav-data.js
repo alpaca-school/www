@@ -198,6 +198,19 @@ const ISHIGANTO_EPISODES = [
   { id: "ishiganto-ep09", short: "ep9：集・表現編（完）", title: "わたしの石敢當文化地図をつくろう", url: "bunka/ishiganto_ep09.html" },
 ];
 
+// 知能の窓・ヒヌカンシリーズ（2026-08-26、全9話完成）
+const HINUKAN_EPISODES = [
+  { id: "hinukan-ep01", short: "ep1：論理・数学編", title: "火神さまは、いつ戻ってくる？", url: "bunka/hinukan_ep01.html" },
+  { id: "hinukan-ep02", short: "ep2：言語編", title: "呼び方は、ひとつじゃない", url: "bunka/hinukan_ep02.html" },
+  { id: "hinukan-ep03", short: "ep3：音楽・リズム編", title: "台所の音を聞いてみよう", url: "bunka/hinukan_ep03.html" },
+  { id: "hinukan-ep04", short: "ep4：身体・運動編", title: "大切な場所を整える", url: "bunka/hinukan_ep04.html" },
+  { id: "hinukan-ep05", short: "ep5：博物学編", title: "三つの石を観察しよう", url: "bunka/hinukan_ep05.html" },
+  { id: "hinukan-ep06", short: "ep6：視覚・空間編", title: "小さな神さまは、いろんな場所にいる", url: "bunka/hinukan_ep06.html" },
+  { id: "hinukan-ep07", short: "ep7：内省編", title: "言葉づかいを、ちょっと振り返る", url: "bunka/hinukan_ep07.html" },
+  { id: "hinukan-ep08", short: "ep8：対人編", title: "家族に聞いてみよう（無理はしない）", url: "bunka/hinukan_ep08.html" },
+  { id: "hinukan-ep09", short: "ep9：集・表現編（完）", title: "わたしの『火と暮らし』ノートをつくろう", url: "bunka/hinukan_ep09.html" },
+];
+
 // シリーズガイド用メタデータ。
 // 新しいシリーズは、上の _EPISODES 配列を定義したうえで、ここに1件追加すると
 // series-guide.html のカードと全話一覧へ自動的に反映される。
@@ -306,5 +319,12 @@ const SERIES_META = [
     emoji: "🪨",
     summary: "石敢當を『魔除けの石』と覚えるだけでなく、沖縄の道・住まい・文字・地域の願いを8つの知能から観察します。見つけた文化を安全に記録し、地域文化地図として次へ渡すシリーズです。",
     episodes: ISHIGANTO_EPISODES,
+  },
+  {
+    key: "hinukan",
+    name: "知能の窓・ヒヌカン",
+    emoji: "🔥",
+    summary: "沖縄の台所を守るといわれるヒヌカン（火の神信仰）を、特定の祀り方の正解として教えるのではなく、暮らし・ことば・観察・空間・内省・聞き取りという8つの知能から多面的に学びます。家によって、地域によって違うことを尊重するシリーズです。",
+    episodes: HINUKAN_EPISODES,
   },
 ];
