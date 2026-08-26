@@ -17,6 +17,7 @@
         })();
     </script>
     <title>ウンガミって、なんて呼ぶ？【知能の窓 塩屋湾ウンガミ ep2：言語編】 🌊</title>
+    <script src="../series-nav-data.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -202,6 +203,8 @@
           series: "知能の窓 塩屋湾ウンガミ ep2：言語編",
           subjectGrade: "国語3〜6年・社会3〜4年"
         };
+        const CURRENT_EPISODE_ID = "shioya-ungami-ep02";
+        const UNGAMI_LIST = typeof SHIOYA_UNGAMI_EPISODES !== "undefined" ? SHIOYA_UNGAMI_EPISODES : [];
 
         const UngamiEp2App = () => {
           const [threeKeys] = useState(() => shuffledThreeAlpacas());
@@ -216,6 +219,9 @@
           const [memoryAnswer, setMemoryAnswer] = useState("");
 
           const slideIds = ["intro", "trouble", "mentor", "verify", "imagine", "checkin", "parent"];
+          const episodeIndex = UNGAMI_LIST.findIndex((e) => e.id === CURRENT_EPISODE_ID);
+          const prevEpisode = episodeIndex > 0 ? UNGAMI_LIST[episodeIndex - 1] : null;
+          const nextEpisode = episodeIndex >= 0 && episodeIndex < UNGAMI_LIST.length - 1 ? UNGAMI_LIST[episodeIndex + 1] : null;
           const total = slideIds.length;
 
           const nextSlide = () => setCurrentSlide((p) => Math.min(p + 1, total - 1));
@@ -490,6 +496,26 @@
                   学習記録シートを印刷する
                 </button>
                 <p className="text-xs text-gray-400 mt-1">今日の日付・対応教科・取り組んだ内容・保護者確認欄が入った1枚のシートが印刷されます。</p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-gray-200 space-y-2">
+                <p className="text-xs font-bold text-gray-500 text-center">つぎに進む</p>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  {prevEpisode ? (
+                    <a href={`../${prevEpisode.url}`} className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-300 text-sm font-bold text-gray-600">
+                      ← {prevEpisode.short}
+                    </a>
+                  ) : (
+                    <span className="flex-1 text-center px-3 py-2 rounded-lg border border-gray-200 text-sm text-gray-300">最初の話</span>
+                  )}
+                  {nextEpisode ? (
+                    <a href={`../${nextEpisode.url}`} className="flex-1 text-center px-3 py-2 rounded-lg bg-sky-600 text-white text-sm font-bold">
+                      {nextEpisode.short} →
+                    </a>
+                  ) : (
+                    <a href="../series-guide.html" className="flex-1 text-center px-3 py-2 rounded-lg bg-sky-600 text-white text-sm font-bold">テーマ一覧へ →</a>
+                  )}
+                </div>
+                <a href="../matrix-library.html" className="block text-center text-sm font-bold text-sky-700 underline">他のテーマも見る（教材一覧）</a>
               </div>
             </div>
           );

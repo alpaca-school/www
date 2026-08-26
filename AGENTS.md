@@ -646,8 +646,7 @@ Layer 1正本：`【Layer 1】projects ← 人間を守る（人間と時間の�
 - 全9話：論理・数学／言語／音楽・リズム／身体・運動／博物学／視覚・空間／内省／対人／特別（集・表現）
 - 題材：大宜味村塩屋湾のウンガミ（海神祭、国指定重要無形民俗文化財）。御願バーリー・太鼓・舟漕ぎ・豊漁祈願・ノロの生き方（ep8）等を扱う
 - 全話に§12ゲームデザイン原則（verifyでの教え返し、checkinでの称賛の一言）を実装済み
-- **既知の未完了事項（2026-08-26 Claude Code監査で発見）**：
-  - 他シリーズが使う`LESSONS`辞書共有型テンプレート（`episodeMatch`正規表現、`series-nav-data.js`参照）ではなく、話ごとに独立したコンポーネント構造（`MATERIAL`オブジェクト直書き、`quizAnswers`/`teachMessage`等の新state）で実装されている
-  - **各話内に「前へ／次へ」の話数間ナビゲーションが未実装**（`series-nav-data.js`の`prevEpisode`/`nextEpisode`パターンを参照していない）。教材一覧（`matrix-library.html`・`series-guide.html`）からは各話へ到達できるが、話を読み終えた後に次話へ進む導線がない
-  - `series-nav-data.js`の`SHIOYA_UNGAMI_EPISODES`・`SERIES_META`、`matrix-library.html`/`index2.html`の9件登録は2026-08-26に実施済み
-- 次の一手：各話へ前後ナビゲーションのUI・ロジックを追加する（既存の`LESSONS`辞書パターンへの統合、または独自構造のまま`series-nav-data.js`を参照するナビ部品を追加するかは要検討）。実在の人物（ノロ・山城トヨさん、ep8）を扱う教材のため、事実確認の状況は実装セッションの記録を別途確認すること。
+- 他シリーズが使う`LESSONS`辞書共有型テンプレート（`episodeMatch`正規表現、`series-nav-data.js`参照）ではなく、話ごとに独立したコンポーネント構造（`MATERIAL`オブジェクト直書き、`quizAnswers`/`teachMessage`等の新state）で実装されている
+- `series-nav-data.js`の`SHIOYA_UNGAMI_EPISODES`・`SERIES_META`、`matrix-library.html`/`index2.html`の9件登録は2026-08-26に実施済み
+- **話数間「前へ／次へ」ナビゲーション実装済み（2026-08-26）**：独自コンポーネント構造は変更せず、各話に`CURRENT_EPISODE_ID`定数＋`UNGAMI_LIST = SHIOYA_UNGAMI_EPISODES`参照の`episodeIndex`/`prevEpisode`/`nextEpisode`ロジックを追加し、`renderParent`の印刷シートブロック直後（他シリーズの配置ルール§13.1と同じ位置）に「つぎに進む」ブロックを設置。ep1（sky系）→ep2への遷移をPlaywrightで実地確認済み、JSエラーなし。ep1〜6はsky系、ep7〜9はrose系のボタン色（「教材一覧へ戻る」リンクの既存色に合わせた）。ep9（最終話）は`nextEpisode`がnullのため`series-guide.html`（テーマ一覧）への導線になる。
+- 実在の人物（ノロ・山城トヨさん、ep8）を扱う教材のため、事実確認の状況は実装セッションの記録を別途確認すること（未確認）。
