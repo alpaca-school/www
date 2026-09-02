@@ -197,6 +197,25 @@ diff matrix-library.html index2.html  # 差分なしを確認
 }
 ```
 
+## 8.5 表示設定（Googleスプレッドシート）への追記ルール（2026-09-03導入）
+
+テーマ・教材の表示/非表示は、以下の専用Googleスプレッドシートで管理している（`assets/catalog-visibility.js`が読み込む）。
+
+シートURL: https://docs.google.com/spreadsheets/d/1TrDP6OnmNjOVBeLcHdBdCAHL2WjtKe68FBOk33Uq5LU/edit?gid=2078889757#gid=2078889757
+
+**新しいテーマ（シリーズ）や新しい教材（エピソード）を追加したときは、必ずこのシートにも行を追記すること。** シートに行がないIDは「表示」扱いになる後方互換設計のため、追記を忘れてもサイト自体は壊れないが、運用担当者がその教材を非表示にしたくてもシート上に対象行が存在せず操作できなくなる。
+
+### 追記ルール
+- 列構成: `entity_type`（`theme`または`material`） / `entity_id` / `visible` / `updated_at` / `名前（参考）`
+- `entity_id`は`series-nav-data.js`の`SERIES_META[].key`（テーマ）または`matrix-library.html`の`MATERIALS[].id`（教材）と**1文字も違わず完全一致**させる。この値はサイト側コードの照合キーであり、日本語に翻訳しない
+- 新しいテーマを追加する場合：テーマ本体で1行（`entity_type=theme`）＋配下の全エピソードでそれぞれ1行（`entity_type=material`）を追加する
+- `visible`は新規追加時は`TRUE`にする。一般公開前のプレビュー段階のみ`FALSE`にし、その旨をユーザーへ伝える
+- `名前（参考）`列には、テーマなら`SERIES_META[].name`、教材なら`MATERIALS[].title`の値をそのまま入れる（表示ロジックには使われない、運用担当者向けの参考情報のみ）
+- `updated_at`は追記日（yyyy-mm-dd）
+- シートへの書き込みをAPI経由で行えないツール・セッションの場合は、追記すべき行の内容（上記5列分）を一覧としてユーザーへ提示し、ユーザー自身に貼り付けてもらう
+
+詳細な設計背景は`docs/2026-08-31-google-sheets-visibility-design-plan.md`を参照。
+
 ## 9. git運用ルール（最重要）
 
 - **`git push`は必ずユーザーの明示的な許可を得てから実行する。** ファイルの作成・編集は自由に行ってよいが、pushは毎回確認を取ること
