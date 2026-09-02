@@ -11,6 +11,8 @@
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="./series-nav-data.js"></script>
+    <script src="./assets/catalog-visibility.js"></script>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
         .banner-track { animation: banner-scroll 18s linear infinite; }
@@ -1193,7 +1195,39 @@
           );
         }
 
+        // 教材id -> テーマkey の対応表。series-nav-data.js の SERIES_META を正とし、
+        // MATERIALS側にthemeIdを個別追加しない（対応表の重複管理を避けるため、AGENTS.md §13.1と同じ「単一の一元管理場所」方針に合わせる）。
+        const THEME_ID_BY_MATERIAL_ID = (() => {
+          const map = Object.create(null);
+          if (typeof SERIES_META === "undefined") return map;
+          SERIES_META.forEach((series) => {
+            series.episodes.forEach((ep) => {
+              map[ep.id] = series.key;
+            });
+          });
+          return map;
+        })();
+
+        function filterVisible(materials, catalog) {
+          if (!catalog || !catalog.rules) return materials; // static: 全表示
+          return materials.filter((item) =>
+            CatalogVisibility.isMaterialVisible(catalog.rules, item.id, THEME_ID_BY_MATERIAL_ID[item.id] || null)
+          );
+        }
+
         function App() {
+          const [catalog, setCatalog] = useState(null); // null = 読み込み中（全表示のまま描画）
+          useEffect(() => {
+            let active = true;
+            CatalogVisibility.load().then((result) => {
+              if (active) setCatalog(result);
+              if (result.source !== "static") {
+                console.info("[catalog-visibility] source:", result.source);
+              }
+            });
+            return () => { active = false; };
+          }, []);
+
           const [selectedGrades, setSelectedGrades] = useState([]);
           const [selectedSubjects, setSelectedSubjects] = useState([]);
           const [selectedMi, setSelectedMi] = useState([]);
@@ -1205,23 +1239,25 @@
             setList(list.includes(value) ? list.filter(v => v !== value) : [...list, value]);
           };
 
+          const visibleMaterials = useMemo(() => filterVisible(MATERIALS, catalog), [catalog]);
+
           const filtered = useMemo(() => {
             const q = searchQuery.trim().toLowerCase();
-            return MATERIALS.filter(item => {
+            return visibleMaterials.filter(item => {
               const gradeOk = selectedGrades.length === 0 || item.grades.some(g => selectedGrades.includes(g));
               const subjectOk = selectedSubjects.length === 0 || item.subjects.some(s => selectedSubjects.includes(s));
               const miOk = selectedMi.length === 0 || selectedMi.includes(item.mi);
               const searchOk = q === "" || item.title.toLowerCase().includes(q) || item.subjectLabel.toLowerCase().includes(q);
               return gradeOk && subjectOk && miOk && searchOk;
             });
-          }, [selectedGrades, selectedSubjects, selectedMi, searchQuery]);
+          }, [visibleMaterials, selectedGrades, selectedSubjects, selectedMi, searchQuery]);
 
           const recommended = useMemo(() => (
-            MATERIALS
+            visibleMaterials
               .filter(m => m.recommended && m.status === "published")
               .sort((a, b) => b.dateAdded.localeCompare(a.dateAdded))
               .slice(0, 8)
-          ), []);
+          ), [visibleMaterials]);
 
           const hasFilter = selectedGrades.length > 0 || selectedSubjects.length > 0 || selectedMi.length > 0 || searchQuery.trim() !== "";
           const resetAll = () => { setSelectedGrades([]); setSelectedSubjects([]); setSelectedMi([]); setSearchQuery(""); };
@@ -1230,7 +1266,7 @@
             <div className={darkMode ? "dark" : ""}>
             <div className="bg-gradient-to-b from-sky-100 to-orange-50 dark:from-gray-900 dark:to-gray-900 min-h-screen transition-colors">
 
-              <UpdateBanner items={MATERIALS} />
+              <UpdateBanner items={visibleMaterials} />
 
               <div className="sticky top-0 z-10 bg-white/90 dark:bg-gray-800/90 backdrop-blur border-b border-gray-200 dark:border-gray-700">
                 <div className="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center gap-3">

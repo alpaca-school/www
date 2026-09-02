@@ -10,6 +10,7 @@
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="./series-nav-data.js"></script>
+    <script src="./assets/catalog-visibility.js"></script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -88,6 +89,15 @@
           const [openSeries, setOpenSeries] = useState(null);
           const [materialsByUrl, setMaterialsByUrl] = useState(new Map());
           const [materialStatus, setMaterialStatus] = useState("loading");
+          const [catalog, setCatalog] = useState(null); // null = 読み込み中（全表示のまま描画）
+
+          useEffect(() => {
+            let active = true;
+            CatalogVisibility.load().then((result) => {
+              if (active) setCatalog(result);
+            });
+            return () => { active = false; };
+          }, []);
 
           useEffect(() => {
             let active = true;
@@ -110,9 +120,26 @@
             return () => { active = false; };
           }, []);
 
+          // テーマ非表示 -> 配下エピソードも非表示。表示エピソードが0件になったテーマはカード自体を出さない。
+          const visibleSeries = useMemo(() => {
+            if (!catalog || !catalog.rules) {
+              return SERIES_META; // 読み込み中・staticフォールバック時は全表示
+            }
+            const rules = catalog.rules;
+            return SERIES_META
+              .filter((series) => CatalogVisibility.isThemeVisible(rules, series.key))
+              .map((series) => ({
+                ...series,
+                episodes: series.episodes.filter((ep) =>
+                  CatalogVisibility.isMaterialVisible(rules, ep.id, series.key)
+                ),
+              }))
+              .filter((series) => series.episodes.length > 0);
+          }, [catalog]);
+
           const totalEpisodes = useMemo(
-            () => SERIES_META.reduce((sum, series) => sum + series.episodes.length, 0),
-            []
+            () => visibleSeries.reduce((sum, series) => sum + series.episodes.length, 0),
+            [visibleSeries]
           );
 
           const gradeLabelFor = (series) => {
@@ -155,7 +182,7 @@
                     一つのテーマを、数・ことば・音・身体・自然・心など、いろいろな「知能の窓」から見ていきます。気になるカードを開くと、シリーズの全エピソードを見渡せます。
                   </p>
                   <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-sm font-bold">
-                    <span className="rounded-full bg-white px-4 py-2 text-orange-700 shadow-sm">全{SERIES_META.length}テーマ</span>
+                    <span className="rounded-full bg-white px-4 py-2 text-orange-700 shadow-sm">全{visibleSeries.length}テーマ</span>
                     <span className="rounded-full bg-white px-4 py-2 text-sky-700 shadow-sm">全{totalEpisodes}エピソード</span>
                   </div>
                   {materialStatus === "error" && (
@@ -166,7 +193,7 @@
                 </header>
 
                 <div className="space-y-4">
-                  {SERIES_META.map((series) => {
+                  {visibleSeries.map((series) => {
                     const isOpen = openSeries === series.key;
                     const panelId = "series-panel-" + series.key;
 
