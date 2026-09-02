@@ -10,7 +10,7 @@
 
   // 公開シート（表示設定専用ブック）のID・タブ。実運用シートを作成後、ここだけ書き換える。
   const SHEET_ID = "1TrDP6OnmNjOVBeLcHdBdCAHL2WjtKe68FBOk33Uq5LU"; // 「アルパカすく〜る 表示設定（テーマ・教材）」
-  const SHEET_GID = "0"; // 唯一のシート（1枚目）のgid
+  const SHEET_GID = "2078889757"; // 唯一のシート「visibility」のgid（2026-09-03、実際のタブgidに修正。旧"0"はgviz側のフォールバックでたまたま動いていただけで、タブ追加時に壊れる状態だった）
   const REMOTE_TIMEOUT_MS = 2500;
   const SNAPSHOT_URL = "./data/catalog-visibility.snapshot.json";
   const MAX_ROWS = 1000;
