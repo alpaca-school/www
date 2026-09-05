@@ -1,7 +1,87 @@
 // このファイルは scripts/generate_material_curriculum_map.js で生成します。
-// series-nav-data.js の128話と、各教材HTMLの renderParent にある学習指導要領対応を正本とします。
+// series-nav-data.js の151話と、各教材HTMLの renderParent にある学習指導要領対応を正本とします。
 const MATERIAL_CURRICULUM_MAP = Object.freeze(
 {
+  "social-bungei-lesson1": {
+    "series": "社会参加シリーズ・文芸フリマ運営編",
+    "title": "困っている人に気づく",
+    "subjects": [
+      {
+        "subject": "特別活動",
+        "grade": "小学校高学年〜",
+        "unit": "集団活動への参加、他者への気づき、役割と協力"
+      },
+      {
+        "subject": "総合",
+        "grade": "小学校高学年〜",
+        "unit": "地域活動への参加と振り返り"
+      }
+    ]
+  },
+  "social-bungei-lesson2": {
+    "series": "社会参加シリーズ・文芸フリマ運営編",
+    "title": "会場を案内してみよう",
+    "subjects": [
+      {
+        "subject": "国語",
+        "grade": "小学校高学年〜",
+        "unit": "相手に応じて短く分かりやすく伝える"
+      },
+      {
+        "subject": "特別活動・総合",
+        "grade": "小学校高学年〜",
+        "unit": "地域活動での案内と協力"
+      }
+    ]
+  },
+  "social-bungei-lesson3": {
+    "series": "社会参加シリーズ・文芸フリマ運営編",
+    "title": "みんなが過ごしやすい場所をつくる",
+    "subjects": [
+      {
+        "subject": "家庭科",
+        "grade": "小学校高学年〜",
+        "unit": "安全で快適な住環境への気づき"
+      },
+      {
+        "subject": "特別活動・総合",
+        "grade": "小学校高学年〜",
+        "unit": "公共空間の整備と協働"
+      }
+    ]
+  },
+  "social-bungei-lesson4": {
+    "series": "社会参加シリーズ・文芸フリマ運営編",
+    "title": "困ったら『人につなぐ』",
+    "subjects": [
+      {
+        "subject": "特別活動",
+        "grade": "小学校高学年〜",
+        "unit": "自己理解、援助要請、役割分担"
+      },
+      {
+        "subject": "保健・総合",
+        "grade": "小学校高学年〜",
+        "unit": "休息と安全な活動参加"
+      }
+    ]
+  },
+  "social-bungei-lesson5": {
+    "series": "社会参加シリーズ・文芸フリマ運営編",
+    "title": "地域イベントの経験は防災にもつながる",
+    "subjects": [
+      {
+        "subject": "社会",
+        "grade": "小学校高学年〜",
+        "unit": "地域の施設、人々の協力と防災への関心"
+      },
+      {
+        "subject": "特別活動・総合",
+        "grade": "小学校高学年〜",
+        "unit": "地域参加の経験を次の活動へつなげる"
+      }
+    ]
+  },
   "shishimai-ep01": {
     "series": "知能の窓・獅子舞",
     "title": "獅子舞の練習、あと何回？",
@@ -2277,6 +2357,294 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
         "subject": "情報",
         "grade": "",
         "unit": "個人情報、同意、著作物の扱い"
+      }
+    ]
+  },
+  "hinukan-ep01": {
+    "series": "知能の窓・ヒヌカン",
+    "title": "火神さまは、いつ戻ってくる？",
+    "subjects": [
+      {
+        "subject": "算数",
+        "grade": "3〜4年",
+        "unit": "日数の計算、暦の理解"
+      },
+      {
+        "subject": "社会",
+        "grade": "4年",
+        "unit": "地域の年中行事を知る"
+      }
+    ]
+  },
+  "hinukan-ep02": {
+    "series": "知能の窓・ヒヌカン",
+    "title": "呼び方は、ひとつじゃない",
+    "subjects": [
+      {
+        "subject": "国語",
+        "grade": "3〜6年",
+        "unit": "語句の意味、方言・地域のことばへの関心"
+      },
+      {
+        "subject": "社会",
+        "grade": "3〜4年",
+        "unit": "地域によって異なる暮らしの文化を知る"
+      }
+    ]
+  },
+  "hinukan-ep03": {
+    "series": "知能の窓・ヒヌカン",
+    "title": "台所の音を聞いてみよう",
+    "subjects": [
+      {
+        "subject": "音楽",
+        "grade": "3〜6年",
+        "unit": "音色・リズムを聞き分ける"
+      },
+      {
+        "subject": "家庭科",
+        "grade": "",
+        "unit": "台所の仕事を知る"
+      }
+    ]
+  },
+  "hinukan-ep04": {
+    "series": "知能の窓・ヒヌカン",
+    "title": "大切な場所を整える",
+    "subjects": [
+      {
+        "subject": "生活科",
+        "grade": "",
+        "unit": "整理整頓の習慣"
+      },
+      {
+        "subject": "図画工作",
+        "grade": "",
+        "unit": "紙工作、丁寧な手の動き"
+      }
+    ]
+  },
+  "hinukan-ep05": {
+    "series": "知能の窓・ヒヌカン",
+    "title": "三つの石を観察しよう",
+    "subjects": [
+      {
+        "subject": "理科・生活科",
+        "grade": "3〜6年",
+        "unit": "身近な道具の観察・比較"
+      },
+      {
+        "subject": "社会",
+        "grade": "3〜6年",
+        "unit": "暮らしの道具の移り変わり"
+      }
+    ]
+  },
+  "hinukan-ep06": {
+    "series": "知能の窓・ヒヌカン",
+    "title": "小さな神さまは、いろんな場所にいる",
+    "subjects": [
+      {
+        "subject": "社会",
+        "grade": "3〜6年",
+        "unit": "地域社会の仕組み"
+      }
+    ]
+  },
+  "hinukan-ep07": {
+    "series": "知能の窓・ヒヌカン",
+    "title": "言葉づかいを、ちょっと振り返る",
+    "subjects": [
+      {
+        "subject": "道徳",
+        "grade": "",
+        "unit": "自分の言動を振り返り、より良い生き方を考える"
+      },
+      {
+        "subject": "国語",
+        "grade": "3〜6年",
+        "unit": "意見文、自分の考えを言葉で表現する"
+      }
+    ]
+  },
+  "hinukan-ep08": {
+    "series": "知能の窓・ヒヌカン",
+    "title": "家族に聞いてみよう（無理はしない）",
+    "subjects": [
+      {
+        "subject": "国語",
+        "grade": "3〜6年",
+        "unit": "聞くこと・話すこと、開かれた質問のしかた"
+      },
+      {
+        "subject": "社会",
+        "grade": "3〜4年",
+        "unit": "家庭と地域の暮らしの多様性"
+      }
+    ]
+  },
+  "hinukan-ep09": {
+    "series": "知能の窓・ヒヌカン",
+    "title": "わたしの『火と暮らし』ノートをつくろう",
+    "subjects": [
+      {
+        "subject": "国語",
+        "grade": "",
+        "unit": "これまでの学びを整理し、自分のことばで表現する"
+      },
+      {
+        "subject": "社会",
+        "grade": "",
+        "unit": "地域や家庭による暮らしの違いを尊重する"
+      },
+      {
+        "subject": "図画工作・総合",
+        "grade": "",
+        "unit": "ノート作り、探究成果の発信"
+      }
+    ]
+  },
+  "shioya-ungami-ep01": {
+    "series": "知能の窓・塩屋湾ウンガミ",
+    "title": "御願バーリー、勝つのはどっち？",
+    "subjects": [
+      {
+        "subject": "算数",
+        "grade": "3〜4年",
+        "unit": "かけ算の複数段階、表と整理、不要な情報を見分ける力"
+      },
+      {
+        "subject": "社会",
+        "grade": "3〜4年",
+        "unit": "地域行事"
+      }
+    ]
+  },
+  "shioya-ungami-ep02": {
+    "series": "知能の窓・塩屋湾ウンガミ",
+    "title": "ウンガミって、なんて呼ぶ？",
+    "subjects": [
+      {
+        "subject": "国語",
+        "grade": "3〜6年",
+        "unit": "語彙、説明文、要約"
+      },
+      {
+        "subject": "社会",
+        "grade": "3〜4年",
+        "unit": "地域文化"
+      }
+    ]
+  },
+  "shioya-ungami-ep03": {
+    "series": "知能の窓・塩屋湾ウンガミ",
+    "title": "太鼓の音で、神様をお迎えする",
+    "subjects": [
+      {
+        "subject": "音楽",
+        "grade": "3〜6年",
+        "unit": "リズム・音色"
+      },
+      {
+        "subject": "総合",
+        "grade": "",
+        "unit": "文化体験"
+      }
+    ]
+  },
+  "shioya-ungami-ep04": {
+    "series": "知能の窓・塩屋湾ウンガミ",
+    "title": "バーリーの舟を漕いでみよう",
+    "subjects": [
+      {
+        "subject": "体育",
+        "grade": "3〜6年",
+        "unit": "身体表現・協力運動"
+      },
+      {
+        "subject": "総合",
+        "grade": "",
+        "unit": "地域行事体験"
+      }
+    ]
+  },
+  "shioya-ungami-ep05": {
+    "series": "知能の窓・塩屋湾ウンガミ",
+    "title": "海の恵みと、豊漁の願い",
+    "subjects": [
+      {
+        "subject": "理科・生活科的観察",
+        "grade": "",
+        "unit": ""
+      },
+      {
+        "subject": "社会",
+        "grade": "3〜4年",
+        "unit": "地域産業"
+      }
+    ]
+  },
+  "shioya-ungami-ep06": {
+    "series": "知能の窓・塩屋湾ウンガミ",
+    "title": "アサギから海まで、どう進む？",
+    "subjects": [
+      {
+        "subject": "社会",
+        "grade": "3〜4年",
+        "unit": "地図・地域行事"
+      },
+      {
+        "subject": "国語",
+        "grade": "",
+        "unit": "順序を表す言葉"
+      }
+    ]
+  },
+  "shioya-ungami-ep07": {
+    "series": "知能の窓・塩屋湾ウンガミ",
+    "title": "見えないものに、感謝するってどういうこと？",
+    "subjects": [
+      {
+        "subject": "道徳",
+        "grade": "",
+        "unit": "感謝の気持ちについて考える"
+      },
+      {
+        "subject": "国語",
+        "grade": "",
+        "unit": "意見表現"
+      }
+    ]
+  },
+  "shioya-ungami-ep08": {
+    "series": "知能の窓・塩屋湾ウンガミ",
+    "title": "89年間、役目を守った人がいた",
+    "subjects": [
+      {
+        "subject": "道徳",
+        "grade": "",
+        "unit": "人物の生き方について考える"
+      },
+      {
+        "subject": "国語",
+        "grade": "",
+        "unit": "聞く・話す"
+      },
+      {
+        "subject": "社会",
+        "grade": "",
+        "unit": "地域の歴史・人物"
+      }
+    ]
+  },
+  "shioya-ungami-ep09": {
+    "series": "知能の窓・塩屋湾ウンガミ",
+    "title": "わたしの海のまつり地図をつくろう",
+    "subjects": [
+      {
+        "subject": "国語・社会・図工・情報・総合の横断的なまとめ活動",
+        "grade": "",
+        "unit": ""
       }
     ]
   }

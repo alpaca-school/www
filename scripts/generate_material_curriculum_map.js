@@ -7,8 +7,8 @@ const vm = require("vm");
 const REPOSITORY_ROOT = path.resolve(__dirname, "..");
 const SERIES_DATA_PATH = path.join(REPOSITORY_ROOT, "series-nav-data.js");
 const OUTPUT_PATH = path.join(REPOSITORY_ROOT, "material-curriculum-map.js");
-const EXPECTED_SERIES_COUNT = 15;
-const EXPECTED_MATERIAL_COUNT = 128;
+const EXPECTED_SERIES_COUNT = 18;
+const EXPECTED_MATERIAL_COUNT = 151;
 
 function readSeriesMeta() {
   const source = fs.readFileSync(SERIES_DATA_PATH, "utf8");
@@ -156,13 +156,15 @@ function buildCurriculumMap() {
 
   for (const series of seriesMeta) {
     for (const episode of series.episodes) {
-      const materialPath = path.join(REPOSITORY_ROOT, episode.url);
+      const materialPath = path.join(REPOSITORY_ROOT, episode.url.split(/[?#]/, 1)[0]);
       if (!fs.existsSync(materialPath)) {
         throw new Error(`教材HTMLが見つかりません: ${episode.id} (${episode.url})`);
       }
 
       const source = fs.readFileSync(materialPath, "utf8");
-      const extracted = extractStandards(source);
+      const extracted = Array.isArray(episode.curriculum)
+        ? { method: "curriculum", values: episode.curriculum }
+        : extractStandards(source);
       methods[extracted.method] += 1;
 
       if (extracted.values.length === 0) {
@@ -199,7 +201,7 @@ function buildCurriculumMap() {
 function writeCurriculumMap(curriculumMap) {
   const generated = [
     "// このファイルは scripts/generate_material_curriculum_map.js で生成します。",
-    "// series-nav-data.js の128話と、各教材HTMLの renderParent にある学習指導要領対応を正本とします。",
+    `// series-nav-data.js の${Object.keys(curriculumMap).length}話と、各教材HTMLの renderParent にある学習指導要領対応を正本とします。`,
     "const MATERIAL_CURRICULUM_MAP = Object.freeze(",
     JSON.stringify(curriculumMap, null, 2),
     ");",
