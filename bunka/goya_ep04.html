@@ -16,7 +16,7 @@
             }
         })();
     </script>
-    <title>つるは、どうやって上へ行く？【知能の窓・ゴーヤー ep4：身体・運動編】 🥒</title>
+    <title>つるは、どうやって上へ行く？【ゴーヤー ep4：身体・運動編】 🥒</title>
     <script src="../series-nav-data.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -99,7 +99,7 @@
         const { useState } = React;
         const { createRoot } = ReactDOM;
 
-        // series-nav-data.jsに「知能の窓・ゴーヤー」シリーズはまだ登録されていないため、
+        // series-nav-data.jsに「ゴーヤー」シリーズはまだ登録されていないため、
         // 存在すればそれを使い、無ければこのファイル内のフォールバックを使う防御的な参照にする。
         const GOYA_LIST = (typeof GOYA_EPISODES !== "undefined") ? GOYA_EPISODES : [
           { id: "goya-ep04", short: "ep4：身体・運動編", title: "つるは、どうやって上へ行く？", url: "bunka/goya_ep04.html" }
@@ -194,7 +194,7 @@
         // COCOLOプラン（ホームスクーラー等の学習記録）向けの教材メタ情報
         const MATERIAL = {
           title: "つるは、どうやって上へ行く？",
-          series: "知能の窓・ゴーヤー ep4：身体・運動編",
+          series: "ゴーヤー ep4：身体・運動編",
           subjectGrade: "理科・生活（小学生〜）"
         };
 
@@ -446,7 +446,7 @@
                 ></textarea>
               </div>
               <div className="bg-indigo-50 rounded-lg p-4 text-sm text-indigo-700 text-center">
-                <p>次回、知能の窓・ゴーヤー ep5（博物学編）では、ゴーヤーの体そのものをじっくり観察していくよ。お楽しみに。</p>
+                <p>次回、ゴーヤー ep5（博物学編）では、ゴーヤーの体そのものをじっくり観察していくよ。お楽しみに。</p>
               </div>
             </div>
           );
@@ -600,7 +600,7 @@
                   </button>
                 </div>
                 <div className="text-center mb-6">
-                  <p className="text-xs font-bold text-indigo-500 mb-1">知能の窓・ゴーヤー ep4：身体・運動編</p>
+                  <p className="text-xs font-bold text-indigo-500 mb-1">ゴーヤー ep4：身体・運動編</p>
                   <h1 className="text-2xl md:text-3xl font-bold text-green-600">つるは、どうやって上へ行く？ 🥒</h1>
                   <span className="inline-block mt-1 px-2 py-0.5 text-xs font-bold rounded-full bg-green-100 text-green-700">📚 {MATERIAL.subjectGrade}</span>
                 </div>

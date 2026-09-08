@@ -3,7 +3,7 @@
 const MATERIAL_CURRICULUM_MAP = Object.freeze(
 {
   "shishimai-ep01": {
-    "series": "知能の窓・獅子舞",
+    "series": "獅子舞",
     "title": "獅子舞の練習、あと何回？",
     "subjects": [
       {
@@ -19,7 +19,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shishimai-ep02": {
-    "series": "知能の窓・獅子舞",
+    "series": "獅子舞",
     "title": "獅子舞は、いつやるの？",
     "subjects": [
       {
@@ -35,7 +35,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shishimai-ep03": {
-    "series": "知能の窓・獅子舞",
+    "series": "獅子舞",
     "title": "獅子のお面は、何年生きる？",
     "subjects": [
       {
@@ -51,7 +51,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shishimai-ep04": {
-    "series": "知能の窓・獅子舞",
+    "series": "獅子舞",
     "title": "沖縄のどこで獅子が舞う？",
     "subjects": [
       {
@@ -67,7 +67,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shishimai-ep05": {
-    "series": "知能の窓・獅子舞",
+    "series": "獅子舞",
     "title": "獅子は、どんな音で動く？",
     "subjects": [
       {
@@ -83,7 +83,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shishimai-ep06": {
-    "series": "知能の窓・獅子舞",
+    "series": "獅子舞",
     "title": "ふたりで、一頭の獅子になる",
     "subjects": [
       {
@@ -99,7 +99,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shishimai-ep07": {
-    "series": "知能の窓・獅子舞",
+    "series": "獅子舞",
     "title": "獅子をつくる植物を見てみよう",
     "subjects": [
       {
@@ -115,7 +115,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shishimai-ep08": {
-    "series": "知能の窓・獅子舞",
+    "series": "獅子舞",
     "title": "十五夜の月を見て、何を感じる？",
     "subjects": [
       {
@@ -136,7 +136,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shishimai-ep09": {
-    "series": "知能の窓・獅子舞",
+    "series": "獅子舞",
     "title": "獅子舞を知らない人に、どう紹介する？",
     "subjects": [
       {
@@ -152,7 +152,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shishimai-ep10": {
-    "series": "知能の窓・獅子舞",
+    "series": "獅子舞",
     "title": "わたしの獅子舞・月文化地図",
     "subjects": [
       {
@@ -178,7 +178,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "typhoon-ep01": {
-    "series": "知能の窓・台風",
+    "series": "台風",
     "title": "水は、あと何本？",
     "subjects": [
       {
@@ -194,7 +194,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "typhoon-ep02": {
-    "series": "知能の窓・台風",
+    "series": "台風",
     "title": "その台風情報、どこから来た？",
     "subjects": [
       {
@@ -210,7 +210,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "typhoon-ep03": {
-    "series": "知能の窓・台風",
+    "series": "台風",
     "title": "台風の日、家の中にはどんな音がある？",
     "subjects": [
       {
@@ -226,7 +226,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "typhoon-ep04": {
-    "series": "知能の窓・台風",
+    "series": "台風",
     "title": "暗くなる前に、家の中を歩いてみよう",
     "subjects": [
       {
@@ -242,7 +242,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "typhoon-ep05": {
-    "series": "知能の窓・台風",
+    "series": "台風",
     "title": "台風は、どこで力をもらう？",
     "subjects": [
       {
@@ -258,7 +258,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "typhoon-ep06": {
-    "series": "知能の窓・台風",
+    "series": "台風",
     "title": "台風の進路図、どこを見ればいい？",
     "subjects": [
       {
@@ -279,7 +279,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "typhoon-ep07": {
-    "series": "知能の窓・台風",
+    "series": "台風",
     "title": "台風がこわいとき、心はどうなる？",
     "subjects": [
       {
@@ -300,7 +300,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "typhoon-ep08": {
-    "series": "知能の窓・台風",
+    "series": "台風",
     "title": "家族で、誰が何をする？",
     "subjects": [
       {
@@ -316,7 +316,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "typhoon-ep09": {
-    "series": "知能の窓・台風",
+    "series": "台風",
     "title": "わが家の台風知恵カードをつくろう",
     "subjects": [
       {
@@ -342,7 +342,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "yago-ep01": {
-    "series": "知能の窓・沖縄の屋号",
+    "series": "沖縄の屋号",
     "title": "同じ名字が3軒！どうやって呼び分ける？",
     "subjects": [
       {
@@ -368,7 +368,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "tsunahiki-ep01": {
-    "series": "知能の窓・沖縄の綱引き",
+    "series": "沖縄の綱引き",
     "title": "大綱づくり、わら束はあといくつ？",
     "subjects": [
       {
@@ -384,7 +384,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "tsunahiki-ep02": {
-    "series": "知能の窓・沖縄の綱引き",
+    "series": "沖縄の綱引き",
     "title": "引く？曳く？挽く？—綱引きの名前を読む",
     "subjects": [
       {
@@ -400,7 +400,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "tsunahiki-ep03": {
-    "series": "知能の窓・沖縄の綱引き",
+    "series": "沖縄の綱引き",
     "title": "綱引きは、どんな音で動く？",
     "subjects": [
       {
@@ -421,7 +421,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "tsunahiki-ep04": {
-    "series": "知能の窓・沖縄の綱引き",
+    "series": "沖縄の綱引き",
     "title": "みんなの力を、どうやってそろえる？",
     "subjects": [
       {
@@ -437,7 +437,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "tsunahiki-ep05": {
-    "series": "知能の窓・沖縄の綱引き",
+    "series": "沖縄の綱引き",
     "title": "稲わらが、どうして大綱になる？",
     "subjects": [
       {
@@ -453,7 +453,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "tsunahiki-ep06": {
-    "series": "知能の窓・沖縄の綱引き",
+    "series": "沖縄の綱引き",
     "title": "雄綱・雌綱は、どうつながる？",
     "subjects": [
       {
@@ -469,7 +469,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "tsunahiki-ep07": {
-    "series": "知能の窓・沖縄の綱引き",
+    "series": "沖縄の綱引き",
     "title": "勝つ・負けると、わたしの心はどう動く？",
     "subjects": [
       {
@@ -485,7 +485,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "tsunahiki-ep08": {
-    "series": "知能の窓・沖縄の綱引き",
+    "series": "沖縄の綱引き",
     "title": "どうして地域みんなで大綱を作れる？",
     "subjects": [
       {
@@ -501,7 +501,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "tsunahiki-ep09": {
-    "series": "知能の窓・沖縄の綱引き",
+    "series": "沖縄の綱引き",
     "title": "わたしの地域の綱引き文化地図をつくろう",
     "subjects": [
       {
@@ -527,7 +527,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "goya-ep01": {
-    "series": "知能の窓・ゴーヤー",
+    "series": "ゴーヤー",
     "title": "出荷できるゴーヤーは何本？",
     "subjects": [
       {
@@ -543,7 +543,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "goya-ep02": {
-    "series": "知能の窓・ゴーヤー",
+    "series": "ゴーヤー",
     "title": "ゴーヤーって、どんな野菜？",
     "subjects": [
       {
@@ -559,7 +559,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "goya-ep03": {
-    "series": "知能の窓・ゴーヤー",
+    "series": "ゴーヤー",
     "title": "ゴーヤーチャンプルーの台所は、どんな音？",
     "subjects": [
       {
@@ -575,7 +575,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "goya-ep04": {
-    "series": "知能の窓・ゴーヤー",
+    "series": "ゴーヤー",
     "title": "つるは、どうやって上へ行く？",
     "subjects": [
       {
@@ -601,7 +601,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "goya-ep05": {
-    "series": "知能の窓・ゴーヤー",
+    "series": "ゴーヤー",
     "title": "ゴーヤーは、どうやって実になる？",
     "subjects": [
       {
@@ -617,7 +617,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "goya-ep06": {
-    "series": "知能の窓・ゴーヤー",
+    "series": "ゴーヤー",
     "title": "緑のカーテンを設計しよう",
     "subjects": [
       {
@@ -638,7 +638,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "goya-ep07": {
-    "series": "知能の窓・ゴーヤー",
+    "series": "ゴーヤー",
     "title": "苦いって、きらいでいい？",
     "subjects": [
       {
@@ -659,7 +659,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "goya-ep08": {
-    "series": "知能の窓・ゴーヤー",
+    "series": "ゴーヤー",
     "title": "畑から食卓まで、誰がつないでいる？",
     "subjects": [
       {
@@ -680,7 +680,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "goya-ep09": {
-    "series": "知能の窓・ゴーヤー",
+    "series": "ゴーヤー",
     "title": "わたしのゴーヤー文化カードをつくろう",
     "subjects": [
       {
@@ -706,7 +706,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "pork-ep01": {
-    "series": "知能の窓・沖縄の豚",
+    "series": "沖縄の豚",
     "title": "550頭から、2万頭をこえる？",
     "subjects": [
       {
@@ -722,7 +722,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "pork-ep02": {
-    "series": "知能の窓・沖縄の豚",
+    "series": "沖縄の豚",
     "title": "ミミガーって、どこのこと？",
     "subjects": [
       {
@@ -738,7 +738,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "pork-ep03": {
-    "series": "知能の窓・沖縄の豚",
+    "series": "沖縄の豚",
     "title": "ミミガー、チラガー、どんなリズム？",
     "subjects": [
       {
@@ -754,7 +754,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "pork-ep04": {
-    "series": "知能の窓・沖縄の豚",
+    "series": "沖縄の豚",
     "title": "豚は、どう動く？",
     "subjects": [
       {
@@ -770,7 +770,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "pork-ep05": {
-    "series": "知能の窓・沖縄の豚",
+    "series": "沖縄の豚",
     "title": "『鳴き声以外』って、本当？",
     "subjects": [
       {
@@ -791,7 +791,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "pork-ep06": {
-    "series": "知能の窓・沖縄の豚",
+    "series": "沖縄の豚",
     "title": "一頭の豚を、地図にしよう",
     "subjects": [
       {
@@ -812,7 +812,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "pork-ep07": {
-    "series": "知能の窓・沖縄の豚",
+    "series": "沖縄の豚",
     "title": "『いただきます』を考える",
     "subjects": [
       {
@@ -828,7 +828,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "pork-ep08": {
-    "series": "知能の窓・沖縄の豚",
+    "series": "沖縄の豚",
     "title": "豚料理は、なぜみんなで食べる？",
     "subjects": [
       {
@@ -849,7 +849,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "pork-ep09": {
-    "series": "知能の窓・沖縄の豚",
+    "series": "沖縄の豚",
     "title": "沖縄の豚文化を伝えよう",
     "subjects": [
       {
@@ -860,7 +860,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "gurukun-ep01": {
-    "series": "知能の窓・グルクン",
+    "series": "グルクン",
     "title": "グルクン、何箱できる？",
     "subjects": [
       {
@@ -881,7 +881,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "gurukun-ep02": {
-    "series": "知能の窓・グルクン",
+    "series": "グルクン",
     "title": "グルクンって、魚の名前？",
     "subjects": [
       {
@@ -897,7 +897,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "gurukun-ep03": {
-    "series": "知能の窓・グルクン",
+    "series": "グルクン",
     "title": "群れの動きを、リズムにできる？",
     "subjects": [
       {
@@ -913,7 +913,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "gurukun-ep04": {
-    "series": "知能の窓・グルクン",
+    "series": "グルクン",
     "title": "追い込み漁って、どう動く？",
     "subjects": [
       {
@@ -934,7 +934,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "gurukun-ep05": {
-    "series": "知能の窓・グルクン",
+    "series": "グルクン",
     "title": "グルクンは、どんな海で暮らす？",
     "subjects": [
       {
@@ -950,7 +950,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "gurukun-ep06": {
-    "series": "知能の窓・グルクン",
+    "series": "グルクン",
     "title": "魚・人・網を、上から見たら？",
     "subjects": [
       {
@@ -976,7 +976,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "gurukun-ep07": {
-    "series": "知能の窓・グルクン",
+    "series": "グルクン",
     "title": "わたしにとって「県魚」って何？",
     "subjects": [
       {
@@ -992,7 +992,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "gurukun-ep08": {
-    "series": "知能の窓・グルクン",
+    "series": "グルクン",
     "title": "一尾のグルクンに、何人が関わる？",
     "subjects": [
       {
@@ -1013,7 +1013,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "gurukun-ep09": {
-    "series": "知能の窓・グルクン",
+    "series": "グルクン",
     "title": "「一尾の旅」を伝えよう",
     "subjects": [
       {
@@ -1024,7 +1024,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "muchi-ep01": {
-    "series": "知能の窓・ムーチー",
+    "series": "ムーチー",
     "title": "ムーチー、いくつ作る？",
     "subjects": [
       {
@@ -1035,7 +1035,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "muchi-ep02": {
-    "series": "知能の窓・ムーチー",
+    "series": "ムーチー",
     "title": "ムーチーって、どんな行事？",
     "subjects": [
       {
@@ -1051,7 +1051,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "muchi-ep03": {
-    "series": "知能の窓・ムーチー",
+    "series": "ムーチー",
     "title": "ムーチーを作る音、いくつ聞こえる？",
     "subjects": [
       {
@@ -1067,7 +1067,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "muchi-ep04": {
-    "series": "知能の窓・ムーチー",
+    "series": "ムーチー",
     "title": "月桃の葉で、どう包む？",
     "subjects": [
       {
@@ -1088,7 +1088,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "muchi-ep05": {
-    "series": "知能の窓・ムーチー",
+    "series": "ムーチー",
     "title": "月桃って、どんな植物？",
     "subjects": [
       {
@@ -1104,7 +1104,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "muchi-ep06": {
-    "series": "知能の窓・ムーチー",
+    "series": "ムーチー",
     "title": "ムーチーの包み方を図にしてみよう",
     "subjects": [
       {
@@ -1125,7 +1125,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "muchi-ep07": {
-    "series": "知能の窓・ムーチー",
+    "series": "ムーチー",
     "title": "願うって、どんな気持ち？",
     "subjects": [
       {
@@ -1141,7 +1141,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "muchi-ep08": {
-    "series": "知能の窓・ムーチー",
+    "series": "ムーチー",
     "title": "ムーチーは、誰と誰をつなぐ？",
     "subjects": [
       {
@@ -1162,7 +1162,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "muchi-ep09": {
-    "series": "知能の窓・ムーチー",
+    "series": "ムーチー",
     "title": "わたしの家のムーチー記録を残そう",
     "subjects": [
       {
@@ -1178,7 +1178,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "beniimo-ep1": {
-    "series": "知能の窓・紅芋",
+    "series": "紅芋",
     "title": "紅芋チップス、あと何袋たりない？",
     "subjects": [
       {
@@ -1194,7 +1194,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "beniimo-ep2": {
-    "series": "知能の窓・紅芋",
+    "series": "紅芋",
     "title": "紅芋を持ってきたのは誰？",
     "subjects": [
       {
@@ -1210,7 +1210,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "beniimo-ep3": {
-    "series": "知能の窓・紅芋",
+    "series": "紅芋",
     "title": "紅芋づくりのリズム、覚えてる？",
     "subjects": [
       {
@@ -1226,7 +1226,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "beniimo-ep4": {
-    "series": "知能の窓・紅芋",
+    "series": "紅芋",
     "title": "紅芋掘り、正しいやり方は？",
     "subjects": [
       {
@@ -1242,7 +1242,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "beniimo-ep5": {
-    "series": "知能の窓・紅芋",
+    "series": "紅芋",
     "title": "紅芋の色、なんで紫なの？",
     "subjects": [
       {
@@ -1258,7 +1258,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "beniimo-ep6": {
-    "series": "知能の窓・紅芋",
+    "series": "紅芋",
     "title": "紅芋の花、見たことある？",
     "subjects": [
       {
@@ -1274,7 +1274,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "beniimo-ep7": {
-    "series": "知能の窓・紅芋",
+    "series": "紅芋",
     "title": "紅芋、はじめて食べたのはいつだった？",
     "subjects": [
       {
@@ -1290,7 +1290,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "beniimo-ep8": {
-    "series": "知能の窓・紅芋",
+    "series": "紅芋",
     "title": "紅芋のこと、うまく紹介できるかな？",
     "subjects": [
       {
@@ -1306,7 +1306,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "beniimo-ep9": {
-    "series": "知能の窓・紅芋",
+    "series": "紅芋",
     "title": "紅芋のことば、誰かに届けてみよう",
     "subjects": [
       {
@@ -1322,7 +1322,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "yachimun-ep01": {
-    "series": "知能の窓・やちむん",
+    "series": "やちむん",
     "title": "窯から、何個ぶじに出てきた？",
     "subjects": [
       {
@@ -1343,7 +1343,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "yachimun-ep02": {
-    "series": "知能の窓・やちむん",
+    "series": "やちむん",
     "title": "やちむんって、どんなことば？",
     "subjects": [
       {
@@ -1359,7 +1359,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "yachimun-ep03": {
-    "series": "知能の窓・やちむん",
+    "series": "やちむん",
     "title": "土をつくる音、器をつくる音",
     "subjects": [
       {
@@ -1375,7 +1375,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "yachimun-ep04": {
-    "series": "知能の窓・やちむん",
+    "series": "やちむん",
     "title": "土は、手でどう変わる？",
     "subjects": [
       {
@@ -1396,7 +1396,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "yachimun-ep05": {
-    "series": "知能の窓・やちむん",
+    "series": "やちむん",
     "title": "土・水・火で、何が変わる？",
     "subjects": [
       {
@@ -1412,7 +1412,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "yachimun-ep06": {
-    "series": "知能の窓・やちむん",
+    "series": "やちむん",
     "title": "壺屋と読谷、どこにある？",
     "subjects": [
       {
@@ -1433,7 +1433,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "yachimun-ep07": {
-    "series": "知能の窓・やちむん",
+    "series": "やちむん",
     "title": "わたしなら、どんな器を毎日使いたい？",
     "subjects": [
       {
@@ -1454,7 +1454,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "yachimun-ep08": {
-    "series": "知能の窓・やちむん",
+    "series": "やちむん",
     "title": "やちむんは、一人でできる？",
     "subjects": [
       {
@@ -1475,7 +1475,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "yachimun-ep09": {
-    "series": "知能の窓・やちむん",
+    "series": "やちむん",
     "title": "わたしのやちむん企画展",
     "subjects": [
       {
@@ -1501,7 +1501,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shiimi-ep01": {
-    "series": "知能の窓・シーミー",
+    "series": "シーミー",
     "title": "ウサンミ、何個分けられる？",
     "subjects": [
       {
@@ -1517,7 +1517,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shiimi-ep02": {
-    "series": "知能の窓・シーミー",
+    "series": "シーミー",
     "title": "シーミーって、どんな行事？",
     "subjects": [
       {
@@ -1533,7 +1533,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shiimi-ep03": {
-    "series": "知能の窓・シーミー",
+    "series": "シーミー",
     "title": "シーミーの日には、どんな音がある？",
     "subjects": [
       {
@@ -1549,7 +1549,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shiimi-ep04": {
-    "series": "知能の窓・シーミー",
+    "series": "シーミー",
     "title": "みんなで準備するには、どう動く？",
     "subjects": [
       {
@@ -1570,7 +1570,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shiimi-ep05": {
-    "series": "知能の窓・シーミー",
+    "series": "シーミー",
     "title": "清明って、月の満ち欠けで決まるの？",
     "subjects": [
       {
@@ -1586,7 +1586,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shiimi-ep06": {
-    "series": "知能の窓・シーミー",
+    "series": "シーミー",
     "title": "沖縄のどこで、どう違う？",
     "subjects": [
       {
@@ -1602,7 +1602,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shiimi-ep07": {
-    "series": "知能の窓・シーミー",
+    "series": "シーミー",
     "title": "会ったことのないご先祖に、何を聞く？",
     "subjects": [
       {
@@ -1623,7 +1623,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shiimi-ep08": {
-    "series": "知能の窓・シーミー",
+    "series": "シーミー",
     "title": "親族が集まるとき、どう役割を分ける？",
     "subjects": [
       {
@@ -1639,7 +1639,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shiimi-ep09": {
-    "series": "知能の窓・シーミー",
+    "series": "シーミー",
     "title": "シーミー文化カードを残そう",
     "subjects": [
       {
@@ -1665,7 +1665,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shiokawa-ep01": {
-    "series": "知能の窓・塩川",
+    "series": "塩川",
     "title": "塩川の水は、海の水？川の水？",
     "subjects": [
       {
@@ -1681,7 +1681,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shiokawa-ep02": {
-    "series": "知能の窓・塩川",
+    "series": "塩川",
     "title": "「塩川」「汽水」「天然記念物」ってどういう意味？",
     "subjects": [
       {
@@ -1702,7 +1702,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shiokawa-ep03": {
-    "series": "知能の窓・塩川",
+    "series": "塩川",
     "title": "川の音と海の音、何が違う？",
     "subjects": [
       {
@@ -1718,7 +1718,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shiokawa-ep04": {
-    "series": "知能の窓・塩川",
+    "series": "塩川",
     "title": "100mの川って、どのくらい？",
     "subjects": [
       {
@@ -1739,7 +1739,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shiokawa-ep05": {
-    "series": "知能の窓・塩川",
+    "series": "塩川",
     "title": "海の生きものと川の生きものが、なぜ一緒に？",
     "subjects": [
       {
@@ -1755,7 +1755,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shiokawa-ep06": {
-    "series": "知能の窓・塩川",
+    "series": "塩川",
     "title": "塩川の水は、どこから来る？",
     "subjects": [
       {
@@ -1776,7 +1776,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shiokawa-ep07": {
-    "series": "知能の窓・塩川",
+    "series": "塩川",
     "title": "分からないままでも、考え続けられる？",
     "subjects": [
       {
@@ -1797,7 +1797,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shiokawa-ep08": {
-    "series": "知能の窓・塩川",
+    "series": "塩川",
     "title": "珍しい自然を、どう守りながら伝える？",
     "subjects": [
       {
@@ -1818,7 +1818,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shiokawa-ep09": {
-    "series": "知能の窓・塩川",
+    "series": "塩川",
     "title": "塩川ミステリーガイドをつくろう",
     "subjects": [
       {
@@ -1844,7 +1844,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "harii-ep01": {
-    "series": "知能の窓・ハーリー",
+    "series": "ハーリー",
     "title": "漕ぎ手、あと何人？",
     "subjects": [
       {
@@ -1860,7 +1860,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "harii-ep02": {
-    "series": "知能の窓・ハーリー",
+    "series": "ハーリー",
     "title": "ハーリー？ ハーレー？ どっちが正しい？",
     "subjects": [
       {
@@ -1876,7 +1876,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "harii-ep03": {
-    "series": "知能の窓・ハーリー",
+    "series": "ハーリー",
     "title": "みんなの櫂は、なぜ同じタイミング？",
     "subjects": [
       {
@@ -1892,7 +1892,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "harii-ep04": {
-    "series": "知能の窓・ハーリー",
+    "series": "ハーリー",
     "title": "速く動くより、そろえる？",
     "subjects": [
       {
@@ -1908,7 +1908,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "harii-ep05": {
-    "series": "知能の窓・ハーリー",
+    "series": "ハーリー",
     "title": "海の高さは、どうして変わる？",
     "subjects": [
       {
@@ -1924,7 +1924,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "harii-ep06": {
-    "series": "知能の窓・ハーリー",
+    "series": "ハーリー",
     "title": "舟は、どこを通って戻る？",
     "subjects": [
       {
@@ -1940,7 +1940,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "harii-ep07": {
-    "series": "知能の窓・ハーリー",
+    "series": "ハーリー",
     "title": "海を見たとき、わたしはどう感じる？",
     "subjects": [
       {
@@ -1956,7 +1956,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "harii-ep08": {
-    "series": "知能の窓・ハーリー",
+    "series": "ハーリー",
     "title": "漕がない人も、ハーリーを作っている？",
     "subjects": [
       {
@@ -1972,7 +1972,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "harii-ep09": {
-    "series": "知能の窓・ハーリー",
+    "series": "ハーリー",
     "title": "わたしの地域の海の祭りを未来へ渡す",
     "subjects": [
       {
@@ -1988,7 +1988,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "kyuubon-ep01": {
-    "series": "知能の窓・旧盆・エイサー",
+    "series": "旧盆・エイサー",
     "title": "旧盆までの練習、あと何回？",
     "subjects": [
       {
@@ -2004,7 +2004,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "kyuubon-ep02": {
-    "series": "知能の窓・旧盆・エイサー",
+    "series": "旧盆・エイサー",
     "title": "ウンケー・ナカヌヒ・ウークイって何？",
     "subjects": [
       {
@@ -2020,7 +2020,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "kyuubon-ep03": {
-    "series": "知能の窓・旧盆・エイサー",
+    "series": "旧盆・エイサー",
     "title": "エイサーの音は、何が重なっている？",
     "subjects": [
       {
@@ -2036,7 +2036,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "kyuubon-ep04": {
-    "series": "知能の窓・旧盆・エイサー",
+    "series": "旧盆・エイサー",
     "title": "道ジュネーは、どう動く？",
     "subjects": [
       {
@@ -2052,7 +2052,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "kyuubon-ep05": {
-    "series": "知能の窓・旧盆・エイサー",
+    "series": "旧盆・エイサー",
     "title": "旧暦7月15日の月は、どんな月？",
     "subjects": [
       {
@@ -2068,7 +2068,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "kyuubon-ep06": {
-    "series": "知能の窓・旧盆・エイサー",
+    "series": "旧盆・エイサー",
     "title": "エイサーは、どこを歩く？",
     "subjects": [
       {
@@ -2084,7 +2084,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "kyuubon-ep07": {
-    "series": "知能の窓・旧盆・エイサー",
+    "series": "旧盆・エイサー",
     "title": "ご先祖に一言伝えるなら？",
     "subjects": [
       {
@@ -2100,7 +2100,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "kyuubon-ep08": {
-    "series": "知能の窓・旧盆・エイサー",
+    "series": "旧盆・エイサー",
     "title": "エイサーは、誰と成り立つ？",
     "subjects": [
       {
@@ -2116,7 +2116,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "kyuubon-ep09": {
-    "series": "知能の窓・旧盆・エイサー",
+    "series": "旧盆・エイサー",
     "title": "わたしの旧盆・エイサー文化記録",
     "subjects": [
       {
@@ -2132,7 +2132,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "ishiganto-ep01": {
-    "series": "知能の窓・石敢當",
+    "series": "石敢當",
     "title": "石敢當は、あと何基？",
     "subjects": [
       {
@@ -2148,7 +2148,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "ishiganto-ep02": {
-    "series": "知能の窓・石敢當",
+    "series": "石敢當",
     "title": "石敢當って、なんて読む？",
     "subjects": [
       {
@@ -2164,7 +2164,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "ishiganto-ep03": {
-    "series": "知能の窓・石敢當",
+    "series": "石敢當",
     "title": "まちの音を聞いて石敢當を探す",
     "subjects": [
       {
@@ -2180,7 +2180,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "ishiganto-ep04": {
-    "series": "知能の窓・石敢當",
+    "series": "石敢當",
     "title": "T字路を身体でつくれる？",
     "subjects": [
       {
@@ -2196,7 +2196,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "ishiganto-ep05": {
-    "series": "知能の窓・石敢當",
+    "series": "石敢當",
     "title": "石敢當は、みんな同じ石？",
     "subjects": [
       {
@@ -2212,7 +2212,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "ishiganto-ep06": {
-    "series": "知能の窓・石敢當",
+    "series": "石敢當",
     "title": "石敢當は、どこに置かれている？",
     "subjects": [
       {
@@ -2228,7 +2228,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "ishiganto-ep07": {
-    "series": "知能の窓・石敢當",
+    "series": "石敢當",
     "title": "人は、なぜ『守るもの』を置くんだろう？",
     "subjects": [
       {
@@ -2244,7 +2244,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "ishiganto-ep08": {
-    "series": "知能の窓・石敢當",
+    "series": "石敢當",
     "title": "石敢當のこと、地域の人はどう話す？",
     "subjects": [
       {
@@ -2260,7 +2260,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "ishiganto-ep09": {
-    "series": "知能の窓・石敢當",
+    "series": "石敢當",
     "title": "わたしの石敢當文化地図をつくろう",
     "subjects": [
       {
