@@ -224,10 +224,26 @@ const HINUKAN_EPISODES = [
   { id: "hinukan-ep09", short: "ep9：集・表現編（完）", title: "わたしの『火と暮らし』ノートをつくろう", url: "bunka/hinukan_ep09.html" },
 ];
 
+// 社会参加シリーズ・文芸フリマ運営編（2026-09-05、全5Lesson）
+const SOCIAL_PARTICIPATION_EPISODES = [
+  { id: "social-bungei-lesson1", short: "Lesson 1：気づく", title: "困っている人に気づく", url: "syakaisanka/bungei-furima/lesson.html?lesson=1", curriculum: ["特別活動（小学校高学年〜）：集団活動への参加、他者への気づき、役割と協力", "総合（小学校高学年〜）：地域活動への参加と振り返り"] },
+  { id: "social-bungei-lesson2", short: "Lesson 2：案内する", title: "会場を案内してみよう", url: "syakaisanka/bungei-furima/lesson.html?lesson=2", curriculum: ["国語（小学校高学年〜）：相手に応じて短く分かりやすく伝える", "特別活動・総合（小学校高学年〜）：地域活動での案内と協力"] },
+  { id: "social-bungei-lesson3", short: "Lesson 3：場をつくる", title: "みんなが過ごしやすい場所をつくる", url: "syakaisanka/bungei-furima/lesson.html?lesson=3", curriculum: ["家庭科（小学校高学年〜）：安全で快適な住環境への気づき", "特別活動・総合（小学校高学年〜）：公共空間の整備と協働"] },
+  { id: "social-bungei-lesson4", short: "Lesson 4：人につなぐ", title: "困ったら『人につなぐ』", url: "syakaisanka/bungei-furima/lesson.html?lesson=4", curriculum: ["特別活動（小学校高学年〜）：自己理解、援助要請、役割分担", "保健・総合（小学校高学年〜）：休息と安全な活動参加"] },
+  { id: "social-bungei-lesson5", short: "Lesson 5：地域と防災", title: "地域イベントの経験は防災にもつながる", url: "syakaisanka/bungei-furima/lesson.html?lesson=5", curriculum: ["社会（小学校高学年〜）：地域の施設、人々の協力と防災への関心", "特別活動・総合（小学校高学年〜）：地域参加の経験を次の活動へつなげる"] },
+];
+
 // シリーズガイド用メタデータ。
 // 新しいシリーズは、上の _EPISODES 配列を定義したうえで、ここに1件追加すると
 // series-guide.html のカードと全話一覧へ自動的に反映される。
 const SERIES_META = [
+  {
+    key: "social-participation",
+    name: "社会参加シリーズ・文芸フリマ運営編",
+    emoji: "🤝",
+    summary: "地域イベントの運営を通して、困っている人への気づき、案内、環境調整、援助要請、協働を学びます。点数で比べず、自分が使った力を次の地域活動へつなげるシリーズです。",
+    episodes: SOCIAL_PARTICIPATION_EPISODES,
+  },
   {
     key: "shishimai",
     name: "獅子舞",

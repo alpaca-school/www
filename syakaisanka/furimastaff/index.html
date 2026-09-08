@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="2026年度沖縄文芸フリマの企画骨子を、実行委員が共通理解するための教材です。">
+  <title>文芸フリマ実行委員 共通理解教材 | アルパカすく〜る</title>
+  <script>
+    const pageVersion = "20260905-1";
+    const versionedUrl = new URL(window.location.href);
+    if (versionedUrl.searchParams.get("v") !== pageVersion) {
+      versionedUrl.searchParams.set("v", pageVersion);
+      window.location.replace(versionedUrl.toString());
+    }
+  </script>
+  <script src="../event-program-data.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; overflow-x: hidden; }
+    p, li { word-break: normal; overflow-wrap: anywhere; line-break: strict; }
+    a, button, label, textarea { word-break: normal; overflow-wrap: anywhere; line-break: strict; }
+    .progress-dots { display: none; }
+    @media (min-width: 640px) { .progress-dots { display: flex; } }
+    :focus-visible { outline: 3px solid #0f766e; outline-offset: 3px; }
+    .print-sheet { position: fixed; left: -9999px; top: 0; }
+    @page { size: A4 portrait; margin: 12mm; }
+    @media print { body * { visibility: hidden; } .print-sheet, .print-sheet * { visibility: visible; } .print-sheet { position: absolute; left: 0; top: 0; width: 100%; } }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState } = React;
+    const { createRoot } = ReactDOM;
+    const program = window.SOCIAL_PARTICIPATION_PROGRAMS["bungei-furima"];
+    const SOURCE_URL = "https://docs.google.com/document/d/1UyGBSv5bgqIweJdrBHP6NNIph9N41xhjrQsXQfA7i2A/edit";
+    const SNAPSHOT_DATE = "2026年9月5日";
+    const topics = [
+      {
+        id: "purpose", label: "1. 目的", emoji: "🌱", title: "好き・得意が地域につながる一日へ",
+        body: <><p>メインテーマは「つくる・伝える・つながる。地域にひらく表現と社会参加の場」です。</p><p className="mt-4">本、絵、猫、人への気づき。目立つ力だけでなく、一人ひとりの「好き」「得意」が地域で役割になることを目指します。</p><div className="mt-5 rounded-xl bg-amber-50 p-4"><strong>サブテーマ：</strong><br/>{program.subtheme}</div></>
+      },
+      {
+        id: "outline", label: "2. 開催概要", emoji: "📅", title: "日程は候補。決定事項と分けて共有する",
+        body: <><dl className="grid gap-3 rounded-xl bg-slate-50 p-5 text-sm sm:grid-cols-[9rem_1fr]"><dt className="font-bold">開催候補日</dt><dd>2027年2月6日（土）または2月13日（土）</dd><dt className="font-bold">開催時間</dt><dd>{program.event.time}</dd><dt className="font-bold">会場</dt><dd>{program.event.venue}</dd><dt className="font-bold">確定条件</dt><dd>{program.event.dateStatus}</dd></dl><p className="mt-5 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800"><strong>共有時の注意：</strong>候補日を確定日として案内しません。正式決定後は、正本とこの教材の両方を更新します。</p></>
+      },
+      {
+        id: "children", label: "3. 子ども実行委員", emoji: "🧑‍🤝‍🧑", title: "子どもの挑戦と、大人の責任を分ける",
+        body: <><p>子どもは、企画・広報・会場づくり・受付・案内・記録・片付けから、自分のペースで役割を選びます。</p><div className="mt-5 grid gap-3 sm:grid-cols-2"><div className="rounded-xl bg-teal-50 p-4"><p className="font-black text-teal-900">子どもが挑戦できること</p><p className="mt-2 text-sm leading-7">アイデアを出す、役割を選ぶ、やってみる、休む、助けを求める、振り返る。</p></div><div className="rounded-xl bg-orange-50 p-4"><p className="font-black text-orange-900">大人が責任を持つこと</p><p className="mt-2 text-sm leading-7">安全、金銭、契約、個人情報、介助、保護者同意、緊急時の判断。</p></div></div><p className="mt-4 text-sm leading-7 text-slate-600">大人は先回りしてすべてを奪わず、放任もしません。必要な責任を持ちながら、挑戦の少し後ろを歩きます。</p></>
+      },
+      {
+        id: "invisible", label: "4. 見えない仕事", emoji: "🪑", title: "うまくいった時ほど見えにくい仕事に光をあてる",
+        body: <><p>会場がきれい、迷わず受付へ行ける、疲れたときに座れる、車椅子でも通れる。これは誰かの気づきと準備で生まれます。</p><ul className="mt-5 grid gap-2 text-sm sm:grid-cols-2">{["掃除・片付け","机と椅子を整える","駐車場で案内する","迷っている人へ声をかける","休憩室を準備する","困りごとを担当者へつなぐ"].map((item) => <li key={item} className="rounded-xl border border-slate-200 bg-white p-3">✓ {item}</li>)}</ul><p className="mt-5 rounded-xl bg-teal-50 p-4 font-bold text-teal-950">実行委員は、目立つ役割だけを「貢献」と評価しない。</p></>
+      },
+      {
+        id: "footprints", label: "5. やさしさの足あと", emoji: "🐾", title: "してもらって嬉しかったことを残す",
+        body: <><p>来場者が「してもらって嬉しかったこと」を短く残し、イベント後に読み返す仕掛けです。</p><div className="mt-5 space-y-2">{["入口で声をかけてもらって安心しました","椅子を出してくれて助かりました","休憩室を案内してもらえました"].map((item) => <blockquote key={item} className="rounded-xl bg-amber-50 p-4 text-amber-950">「{item}」</blockquote>)}</div><div className="mt-5 rounded-xl border border-indigo-200 bg-indigo-50 p-4 text-sm leading-7"><strong>相談して決めること：</strong>記入方法、掲示場所、匿名性、本人の同意、写真撮影の可否、イベント後の返し方。</div></>
+      },
+      {
+        id: "safety", label: "6. 防災と安全", emoji: "🏘️", title: "楽しい地域活動を、日常の中の備えへ",
+        body: <><p>受付、誘導、休憩場所づくり、通路の確保、役割分担には、避難所などの場づくりと共通する部分があります。</p><p className="mt-4">ただし、今回は防災訓練や資格認定ではありません。まず公民館を使い、地域の人と顔を合わせ、助けを求められる関係を育てます。</p><div className="mt-5 rounded-xl bg-red-50 p-4 text-sm leading-7 text-red-900"><strong>実行委員が事前確認する安全項目：</strong>休憩室、車椅子動線、駐車場、緊急連絡、体調不良時の対応、子どもの引き渡し、個人情報と撮影。</div></>
+      },
+      {
+        id: "decisions", label: "7. 次の確認", emoji: "✅", title: "実行委員会で決めること",
+        body: <><p>次の項目は、企画骨子では未確定です。担当者・期限・決定内容を会議で確認します。</p><ul className="mt-5 grid gap-2 text-sm">{["猫サブテーマの扱い","子ども実行委員の募集方法と保護者同意","大人のサポート体制","休憩室・車椅子動線・駐車場","やさしさの足あとの方法","安全管理と緊急時対応","アルパカ教材との連携","活動証明書の発行主体"].map((item) => <li key={item} className="rounded-xl border border-slate-200 bg-white p-3">□ {item}</li>)}</ul><div className="mt-6 grid gap-2 sm:grid-cols-2"><button type="button" onClick={() => window.print()} className="min-h-12 rounded-xl bg-yellow-500 px-4 py-3 font-black text-white">確認シートを印刷</button><a href="../bungei-furima/" className="flex min-h-12 items-center justify-center rounded-xl bg-teal-700 px-4 py-3 text-center font-black text-white">参加者向け教材を見る</a></div><div className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm"><p className="font-bold">📚 正本・出典</p><a href={SOURCE_URL} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block text-indigo-700 underline">2026年度 沖縄文芸フリマ 全体骨子（Googleドキュメント）</a><p className="mt-2 text-slate-500">この教材は{SNAPSHOT_DATE}時点のスナップショットです。最新の判断は正本で確認してください。</p></div></>
+      }
+    ];
+
+    function StaffApp() {
+      const [current, setCurrent] = useState(0);
+      const topic = topics[current];
+      const next = () => {
+        const target = Math.min(current + 1, topics.length - 1);
+        setCurrent(target);
+        if (target === topics.length - 1) localStorage.setItem("alpaca-furimastaff-completed-v1", new Date().toISOString());
+      };
+      return <div className="min-h-screen bg-gradient-to-br from-sky-50 via-orange-50 to-white text-slate-800">
+        <main className="mx-auto max-w-3xl px-4 py-7 sm:py-10">
+          <div className="mb-5 flex flex-wrap items-center justify-between gap-2"><a href="../" className="rounded-lg px-2 py-2 text-sm font-bold text-orange-600 hover:bg-orange-50">← 社会参加シリーズ</a><span className="rounded-full bg-sky-100 px-3 py-1 text-xs font-bold text-sky-800">メインスタッフ共有用</span></div>
+          <header className="mb-6 text-center"><p className="text-xs font-black text-teal-700">2026年度 沖縄文芸フリマ</p><h1 className="mt-1 text-2xl font-black text-slate-900 sm:text-3xl">実行委員 共通理解教材</h1><p className="mt-2 text-sm text-slate-600">企画の目的と、大人が確認する責任を7画面で共有します。</p></header>
+          <div className="mb-6"><div className="mb-2 flex justify-between text-sm text-slate-600"><span>{topic.label}</span><span>{current + 1} / {topics.length}</span></div><div className="h-2 rounded-full bg-slate-200"><div className="h-2 rounded-full bg-teal-600 transition-all" style={{width:`${((current+1)/topics.length)*100}%`}}></div></div></div>
+          <section className="min-h-[30rem] rounded-3xl bg-white p-4 sm:p-6 md:p-8 shadow-xl" aria-live="polite"><div className="text-center"><div className="text-6xl" aria-hidden="true">{topic.emoji}</div><h2 className="mt-4 text-2xl font-black leading-tight text-slate-900">{topic.title}</h2></div><div className="mt-7 text-base leading-8">{topic.body}</div></section>
+          <nav className="mt-6 flex items-center justify-between" aria-label="教材内の移動"><button type="button" disabled={current===0} onClick={() => setCurrent((value)=>Math.max(value-1,0))} className={`min-h-12 rounded-xl px-3 sm:px-5 py-3 font-bold ${current===0?"bg-slate-200 text-slate-400":"bg-orange-500 text-white"}`}>← まえへ</button><div className="progress-dots space-x-2">{topics.map((item,index)=><span key={item.id} className={`inline-block h-2.5 w-2.5 rounded-full ${index===current?"bg-teal-600":"bg-slate-300"}`}></span>)}</div><button type="button" disabled={current===topics.length-1} onClick={next} className={`min-h-12 rounded-xl px-3 sm:px-5 py-3 font-bold ${current===topics.length-1?"bg-slate-200 text-slate-400":"bg-orange-500 text-white"}`}>つぎへ →</button></nav>
+        </main>
+        <div className="print-sheet w-[700px] bg-white p-8 text-black"><h1 className="border-b-2 border-black pb-2 text-2xl font-black">沖縄文芸フリマ 実行委員確認シート</h1><p className="mt-2 text-sm">企画骨子スナップショット：{SNAPSHOT_DATE}</p><div className="mt-5 rounded border border-black p-4 text-sm"><p><strong>目的：</strong>つくる・伝える・つながる。地域にひらく表現と社会参加の場</p><p className="mt-2"><strong>候補日：</strong>2027年2月6日（土）または2月13日（土）※未確定</p><p className="mt-2"><strong>会場：</strong>{program.event.venue}</p></div><h2 className="mt-6 text-lg font-black">会議で決めること</h2>{["猫サブテーマの扱い","子ども実行委員の募集方法・保護者同意","大人のサポート体制","休憩室・車椅子動線・駐車場","やさしさの足あとの方法と同意","安全管理・緊急時対応","アルパカ教材との連携","活動証明書の発行主体"].map((item)=><div key={item} className="mt-3 grid grid-cols-[1.5rem_1fr_8rem_7rem] gap-2 border-b border-slate-400 pb-2 text-sm"><span>□</span><span>{item}</span><span>担当：＿＿＿＿</span><span>期限：＿＿＿＿</span></div>)}<div className="mt-8 border-t border-black pt-4 text-sm">確認日：＿＿年＿＿月＿＿日　参加者：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</div><p className="mt-5 text-xs">最新の判断は、正本「2026年度 沖縄文芸フリマ 全体骨子」で確認してください。</p></div>
+      </div>;
+    }
+    createRoot(document.getElementById("root")).render(<StaffApp />);
+  </script>
+</body>
+</html>

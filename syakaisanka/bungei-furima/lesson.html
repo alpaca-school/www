@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>文芸フリマ運営編 Lesson | アルパカすく〜る</title>
+  <script>
+    const pageVersion = "20260905-1";
+    const versionedUrl = new URL(window.location.href);
+    if (versionedUrl.searchParams.get("v") !== pageVersion) {
+      versionedUrl.searchParams.set("v", pageVersion);
+      window.location.replace(versionedUrl.toString());
+    }
+  </script>
+  <script src="../event-program-data.js"></script>
+  <script src="../../series-nav-data.js"></script>
+  <script src="../../supabase-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    p, li { word-break: normal; overflow-wrap: anywhere; line-break: strict; }
+    label, button, textarea { word-break: normal; overflow-wrap: anywhere; line-break: strict; }
+    .choice-card { min-width: 0; }
+    .choice-row { display: flex; align-items: flex-start; gap: .75rem; min-width: 0; max-width: 100%; }
+    .speech-bubble { flex: 1 1 0; width: 0; min-width: 0; max-width: 100%; }
+    .speech-bubble p { white-space: normal; overflow-wrap: anywhere; }
+    .choice-check { flex: 0 0 auto; }
+    .progress-dots { display: none; }
+    @media (min-width: 640px) { .progress-dots { display: flex; } }
+    :focus-visible { outline: 3px solid #0f766e; outline-offset: 3px; }
+    .print-sheet { position: fixed; left: -9999px; top: 0; }
+    @page { size: A4 portrait; margin: 12mm; }
+    @media print {
+      body * { visibility: hidden; }
+      .print-sheet, .print-sheet * { visibility: visible; }
+      .print-sheet { position: absolute; left: 0; top: 0; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useMemo, useRef, useState } = React;
+    const { createRoot } = ReactDOM;
+    const program = window.SOCIAL_PARTICIPATION_PROGRAMS["bungei-furima"];
+    const params = new URLSearchParams(window.location.search);
+    const requestedLesson = Number(params.get("lesson") || "1");
+    const lessonIndex = Math.min(Math.max(requestedLesson - 1, 0), program.lessons.length - 1);
+    const lesson = program.lessons[lessonIndex];
+    const learningRecordsClient = window.AlpacaSupabase?.createClient() || null;
+    const STORAGE_KEY = "alpaca-social-participation-bungei-v1";
+
+    const ChevronLeft = ({ className = "" }) => <span aria-hidden="true" className={className}>←</span>;
+    const ChevronRight = ({ className = "" }) => <span aria-hidden="true" className={className}>→</span>;
+
+    const safeRead = () => {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); }
+      catch (_error) { return {}; }
+    };
+    const saveLocalCompletion = (reflection) => {
+      const current = safeRead();
+      const completedLessons = Array.from(new Set([...(current.completedLessons || []), lesson.id]));
+      const lessonReflections = { ...(current.lessonReflections || {}), [lesson.id]: reflection.slice(0, 500) };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...current, completedLessons, lessonReflections, updatedAt: new Date().toISOString() }));
+    };
+
+    function LessonApp() {
+      const [currentSlide, setCurrentSlide] = useState(0);
+      const [firstChoice, setFirstChoice] = useState(null);
+      const [verifyChoice, setVerifyChoice] = useState(null);
+      const [imagineAnswer, setImagineAnswer] = useState("");
+      const [checkin, setCheckin] = useState("");
+      const [memoryAnswer, setMemoryAnswer] = useState("");
+      const [childName, setChildName] = useState("");
+      const [recordState, setRecordState] = useState("idle");
+      const savedRef = useRef(false);
+      const savingRef = useRef(false);
+
+      const slideIds = ["intro", "trouble", "mentor", "verify", "imagine", "checkin", "parent"];
+      const slideTitles = {
+        intro: `${lesson.emoji} はじまりの問い`, trouble: "😮 場面を考える", mentor: "👵 メンター登場",
+        verify: "✅ やってみる", imagine: "💭 自分だったら？", checkin: "🙋 ふりかえり", parent: "🎬 おわりに"
+      };
+      const currentId = slideIds[currentSlide];
+
+      const reflectionText = useMemo(() => [
+        checkin ? `今日の理解：${checkin}` : null,
+        imagineAnswer.trim() ? `自分だったら：${imagineAnswer.trim().slice(0, 240)}` : null,
+        memoryAnswer.trim() ? `心に残ったこと：${memoryAnswer.trim().slice(0, 240)}` : null
+      ].filter(Boolean).join("\n"), [checkin, imagineAnswer, memoryAnswer]);
+
+      const saveLearningRecord = async () => {
+        saveLocalCompletion(reflectionText);
+        if (savedRef.current || !learningRecordsClient) {
+          setRecordState(learningRecordsClient ? "saved" : "local");
+          return "saved";
+        }
+        if (savingRef.current) return "saving";
+        savingRef.current = true;
+        setRecordState("saving");
+        try {
+          const { data } = await learningRecordsClient.auth.getSession();
+          const user = data.session?.user;
+          if (!user) {
+            setRecordState("local");
+            return "saved";
+          }
+          const { error: profileError } = await learningRecordsClient.from("profiles").upsert({
+            id: user.id,
+            display_name: user.user_metadata?.display_name || "学習者"
+          }, { onConflict: "id", ignoreDuplicates: true });
+          if (profileError) throw profileError;
+          const { error } = await learningRecordsClient.from("learning_records").insert({
+            user_id: user.id,
+            material_id: lesson.id,
+            reflection: reflectionText || null
+          });
+          if (error) throw error;
+          savedRef.current = true;
+          setRecordState("saved");
+          return "saved";
+        } catch (_error) {
+          setRecordState("error");
+          return "error";
+        } finally {
+          savingRef.current = false;
+        }
+      };
+
+      const nextSlide = async () => {
+        if (currentId === "checkin") {
+          const result = await saveLearningRecord();
+          if (result === "error" || result === "saving") return;
+        }
+        setCurrentSlide((value) => Math.min(value + 1, slideIds.length - 1));
+      };
+      const previousSlide = () => setCurrentSlide((value) => Math.max(value - 1, 0));
+      const canGoNext = currentId !== "trouble" || firstChoice !== null;
+
+      const renderIntro = () => (
+        <div className="space-y-6">
+          <div className="text-center">
+            <div className="text-6xl mb-4" aria-hidden="true">{lesson.emoji}</div>
+            <h2 className="text-2xl font-black text-teal-800">{lesson.title}</h2>
+            <span className="inline-block mt-3 rounded-full bg-teal-100 px-3 py-1 text-xs font-bold text-teal-800">📚 {lesson.subjectGrade}</span>
+          </div>
+          <div className="rounded-2xl border-2 border-amber-200 bg-amber-50 p-5 leading-8 sm:p-6">
+            <p>{lesson.intro}</p>
+          </div>
+        </div>
+      );
+
+      const renderTrouble = () => (
+        <div className="space-y-5">
+          <div className="text-center">
+            <div className="text-5xl mb-3" aria-hidden="true">😮</div>
+            <h2 className="text-xl font-black text-orange-700">{lesson.trouble.question}</h2>
+            <p className="mt-2 text-sm text-slate-600">今の自分の考えに近いものを選んでみよう。</p>
+          </div>
+          <div className="grid gap-3" role="radiogroup" aria-label={lesson.trouble.question}>
+            {lesson.trouble.choices.map((choice, index) => (
+              <button key={choice} type="button" role="radio" aria-checked={firstChoice === index}
+                onClick={() => setFirstChoice(index)}
+                className={`choice-card choice-row w-full rounded-xl border-2 p-4 text-left transition ${firstChoice === index ? "border-orange-500 bg-orange-50" : "border-slate-200 bg-white hover:border-orange-300"}`}>
+                <span className={`choice-check flex h-8 w-8 items-center justify-center rounded-full font-black ${firstChoice === index ? "bg-orange-500 text-white" : "bg-slate-100 text-slate-600"}`}>{index + 1}</span>
+                <span className="speech-bubble flex-1 min-w-0"><p className="font-bold leading-7">{choice}</p></span>
+              </button>
+            ))}
+          </div>
+          {firstChoice !== null && <div className="rounded-xl bg-teal-50 p-4 text-sm leading-7 text-teal-950">{lesson.trouble.feedback}</div>}
+        </div>
+      );
+
+      const renderMentor = () => (
+        <div className="space-y-6">
+          <div className="text-center"><div className="text-5xl mb-3" aria-hidden="true">👵</div><h2 className="text-xl font-black text-rose-700">仲程のヨシおばぁさんと考えよう</h2></div>
+          <div className="rounded-2xl border border-rose-200 bg-rose-50 p-5 leading-8 sm:p-6"><p>{lesson.mentor}</p></div>
+          <div className="rounded-xl bg-slate-50 p-4 text-sm leading-7 text-slate-700"><strong>大事なこと：</strong>相手の気持ちや必要な助けを決めつけず、本人に確かめます。危険や体調不良があるときは、すぐ大人スタッフへ知らせます。</div>
+        </div>
+      );
+
+      const renderVerify = () => (
+        <div className="space-y-5">
+          <div className="text-center"><div className="text-5xl mb-3" aria-hidden="true">✅</div><h2 className="text-xl font-black text-teal-800">{lesson.verify.question}</h2></div>
+          <div className="grid gap-3" role="radiogroup" aria-label={lesson.verify.question}>
+            {lesson.verify.choices.map((choice, index) => {
+              const selected = verifyChoice === index;
+              const correct = index === lesson.verify.correct;
+              return <button key={choice} type="button" role="radio" aria-checked={selected} onClick={() => setVerifyChoice(index)}
+                className={`w-full rounded-xl border-2 p-4 text-left font-bold leading-7 ${selected ? (correct ? "border-teal-500 bg-teal-50" : "border-amber-500 bg-amber-50") : "border-slate-200 bg-white hover:border-teal-300"}`}>
+                {choice}{selected && <span className="ml-2">{correct ? "✓" : "もう一度考えてみよう"}</span>}
+              </button>;
+            })}
+          </div>
+          {verifyChoice === lesson.verify.correct && <p className="rounded-xl bg-teal-100 p-4 font-bold text-teal-900">その考え方なら、相手も自分も大切にできます。</p>}
+        </div>
+      );
+
+      const renderImagine = () => (
+        <div className="space-y-5">
+          <div className="text-center"><div className="text-5xl mb-3" aria-hidden="true">💭</div><h2 className="text-xl font-black text-indigo-800">自分だったらどうする？</h2></div>
+          <p className="rounded-xl bg-indigo-50 p-5 leading-8">{lesson.imagine}</p>
+          <label className="block font-bold text-slate-700" htmlFor="imagine-answer">自分の考え（書かなくても進めます）</label>
+          <textarea id="imagine-answer" rows="5" maxLength="240" value={imagineAnswer} onChange={(event) => setImagineAnswer(event.target.value)} className="w-full rounded-xl border border-slate-300 p-3 text-base focus:border-teal-600" placeholder="短い言葉でも大丈夫です"></textarea>
+          <p className="text-right text-xs text-slate-400">{imagineAnswer.length}/240</p>
+        </div>
+      );
+
+      const renderCheckin = () => (
+        <div className="space-y-5">
+          <div className="text-center"><div className="text-5xl mb-3" aria-hidden="true">🙋</div><h2 className="text-xl font-black text-teal-800">今日の自分をふりかえる</h2></div>
+          <fieldset>
+            <legend className="font-bold text-slate-700">この考え方を、当日使えそう？</legend>
+            <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-3">
+              {["使えそう", "少し手伝いがあれば使えそう", "まだ分からない"].map((value) => <button key={value} type="button" onClick={() => setCheckin(value)} className={`rounded-xl border-2 px-3 py-3 text-sm font-bold ${checkin === value ? "border-teal-500 bg-teal-50 text-teal-900" : "border-slate-200"}`}>{value}</button>)}
+            </div>
+          </fieldset>
+          <label className="block font-bold text-slate-700" htmlFor="memory-answer">一番心に残ったこと（任意）</label>
+          <textarea id="memory-answer" rows="4" maxLength="240" value={memoryAnswer} onChange={(event) => setMemoryAnswer(event.target.value)} className="w-full rounded-xl border border-slate-300 p-3 text-base" placeholder="言葉、場面、やってみたいこと"></textarea>
+          <div className="rounded-xl bg-amber-50 p-4 text-sm leading-7 text-amber-950">ログインしている場合は既存の学習履歴へ、ログインしていない場合はこの端末内だけに完了記録を保存します。</div>
+          {recordState === "error" && <p className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700" role="alert">学習履歴へ保存できませんでした。端末内には保存済みです。通信状態を確認して、もう一度お試しください。</p>}
+        </div>
+      );
+
+      const renderParent = () => {
+        const nextLesson = program.lessons[lessonIndex + 1];
+        return <div className="space-y-5">
+          <div className="text-center"><div className="text-5xl mb-3" aria-hidden="true">🎬</div><h2 className="text-2xl font-black text-orange-700">おわりに</h2></div>
+          <div className="rounded-2xl bg-orange-50 p-5"><p className="text-xs font-bold text-orange-700">🧑‍🎓 学習したみなさんへ</p><p className="mt-2 text-lg font-black leading-8 text-orange-950">{lesson.point}</p></div>
+          <div className="rounded-xl bg-yellow-50 p-4 text-sm leading-7 text-slate-700"><p className="font-bold">👪 保護者・支援者の方へ</p><p className="mt-2">本人の自己申告を尊重し、できた・できないの点数化は行いません。休憩や援助要請も、活動を続けるための社会参加スキルとして扱います。</p></div>
+          <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm leading-7"><p className="font-bold text-slate-700">📚 出典・参考文献</p><p className="mt-1 text-slate-600">沖縄文芸フリマ運営資料（2025年）および本教材の企画要件をもとに構成しています。</p></div>
+          <div className="rounded-xl border-2 border-dashed border-slate-300 bg-white p-4"><label className="text-sm font-bold" htmlFor="child-name">名前またはニックネーム（任意）</label><input id="child-name" maxLength="80" value={childName} onChange={(event) => setChildName(event.target.value)} className="mt-2 w-full rounded-lg border border-slate-300 px-3 py-2"/><button type="button" onClick={() => window.print()} className="mt-3 w-full rounded-xl bg-yellow-500 px-4 py-3 font-bold text-white hover:bg-yellow-600">学習記録シートを印刷する</button></div>
+          <div className="grid gap-2 sm:grid-cols-2">
+            <a href={lessonIndex > 0 ? `./lesson.html?lesson=${lesson.number - 1}` : "./"} className="rounded-xl border border-slate-300 px-4 py-3 text-center font-bold text-slate-600">← {lessonIndex > 0 ? "前のLesson" : "参加プランへ"}</a>
+            <a href={nextLesson ? `./lesson.html?lesson=${nextLesson.number}` : "./#plan"} className="rounded-xl bg-orange-500 px-4 py-3 text-center font-bold text-white">{nextLesson ? `Lesson ${nextLesson.number}へ` : "参加プランを作る"} →</a>
+          </div>
+        </div>;
+      };
+
+      const renderers = { intro: renderIntro, trouble: renderTrouble, mentor: renderMentor, verify: renderVerify, imagine: renderImagine, checkin: renderCheckin, parent: renderParent };
+      const today = new Intl.DateTimeFormat("ja-JP", { dateStyle: "long" }).format(new Date());
+
+      return <div className="min-h-screen bg-gradient-to-br from-teal-50 via-orange-50 to-white text-slate-800">
+        <main className="container mx-auto max-w-2xl px-4 py-7">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+            <a href="./" className="inline-flex min-h-11 items-center gap-1 rounded-lg px-2 text-sm font-bold text-orange-600 hover:bg-orange-50"><ChevronLeft /> 文芸フリマ運営編へ</a>
+            <span className="rounded-full bg-teal-100 px-3 py-1 text-xs font-bold text-teal-800">Lesson {lesson.number} / {program.lessons.length}</span>
+          </div>
+          <header className="mb-6 text-center"><p className="text-xs font-bold text-teal-700">{program.seriesName}・{program.title}</p><h1 className="mt-1 text-2xl font-black text-slate-900 sm:text-3xl">{lesson.title} {lesson.emoji}</h1></header>
+          <div className="mb-6"><div className="mb-2 flex justify-between text-sm text-slate-600"><span>{slideTitles[currentId]}</span><span>{currentSlide + 1} / {slideIds.length}</span></div><div className="h-2 w-full rounded-full bg-slate-200"><div className="h-2 rounded-full bg-teal-600 transition-all" style={{ width: `${((currentSlide + 1) / slideIds.length) * 100}%` }}></div></div></div>
+          <section className="mb-6 min-h-96 rounded-2xl bg-white p-4 sm:p-6 md:p-8 shadow-lg" aria-live="polite">{renderers[currentId]()}</section>
+          <nav className="flex items-center justify-between" aria-label="教材内の移動">
+            <button type="button" onClick={previousSlide} disabled={currentSlide === 0} className={`flex min-h-12 items-center rounded-xl px-3 sm:px-5 py-3 font-bold ${currentSlide === 0 ? "bg-slate-200 text-slate-400" : "bg-orange-500 text-white"}`}><ChevronLeft className="mr-1"/>まえへ</button>
+            <div className="progress-dots space-x-2">{slideIds.map((id, index) => <span key={id} className={`inline-block h-2.5 w-2.5 rounded-full ${index === currentSlide ? "bg-teal-600" : "bg-slate-300"}`}></span>)}</div>
+            <button type="button" onClick={nextSlide} disabled={currentSlide === slideIds.length - 1 || !canGoNext || recordState === "saving"} className={`flex min-h-12 items-center rounded-xl px-3 sm:px-5 py-3 font-bold ${currentSlide === slideIds.length - 1 || !canGoNext || recordState === "saving" ? "bg-slate-200 text-slate-400" : "bg-orange-500 text-white"}`}>{recordState === "saving" ? "保存中…" : currentId === "checkin" ? "保存しておわる" : "つぎへ"}<ChevronRight className="ml-1"/></button>
+          </nav>
+        </main>
+        <div className="print-sheet w-[700px] bg-white p-10 text-black">
+          <h1 className="border-b-2 border-black pb-2 text-xl font-bold">学習記録シート</h1>
+          <table className="mt-4 w-full text-sm"><tbody><tr><th className="w-40 py-2 text-left">学習日</th><td>{today}</td></tr><tr><th className="py-2 text-left">名前・ニックネーム</th><td>{childName || "＿＿＿＿＿＿＿＿＿＿"}</td></tr><tr><th className="py-2 text-left">教材名</th><td>{program.title} Lesson {lesson.number}「{lesson.title}」</td></tr><tr><th className="py-2 text-left">対応</th><td>{lesson.subjectGrade}</td></tr></tbody></table>
+          <div className="mt-5 rounded border border-black p-4"><p className="font-bold">学習ポイント</p><p className="mt-2">{lesson.point}</p></div>
+          <div className="mt-4 rounded border border-black p-4"><p className="font-bold">自分だったらどうする？</p><p className="mt-2 min-h-16 whitespace-pre-wrap">{imagineAnswer || "（記入なし）"}</p></div>
+          <div className="mt-4 rounded border border-black p-4"><p className="font-bold">一番心に残ったこと</p><p className="mt-2 min-h-16 whitespace-pre-wrap">{memoryAnswer || "（記入なし）"}</p></div>
+          <p className="mt-8 border-t border-black pt-4 text-sm">保護者・支援者確認：＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+        </div>
+      </div>;
+    }
+
+    createRoot(document.getElementById("root")).render(<LessonApp />);
+  </script>
+</body>
+</html>

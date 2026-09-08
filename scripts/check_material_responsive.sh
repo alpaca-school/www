@@ -47,7 +47,10 @@ if errors:
     print(f"ERROR: {path}: JSX括弧不一致: {', '.join(errors)}", file=sys.stderr)
     raise SystemExit(1)
 PY
-done < <(rg -l 'print-sheet|className="progress-dots space-x-2"' -g '*.html' bousai bunka rekishi | sort)
+done < <(rg -l 'print-sheet|className="progress-dots space-x-2"' -g '*.html' \
+  bousai bunka rekishi \
+  syakaisanka/bungei-furima/lesson.html \
+  syakaisanka/furimastaff/index.html | sort)
 
 if (( failed != 0 )); then
   exit 1
