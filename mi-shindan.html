@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <script>
+        (() => {
+            const pageVersion = "20260911-1";
+            const url = new URL(window.location.href);
+            if (url.searchParams.get("v") !== pageVersion) {
+                url.searchParams.set("v", pageVersion);
+                window.location.replace(url.toString());
+            }
+        })();
+    </script>
+    <title>8つの学びルート 強み診断＆キャラクター診断｜アルパカすく〜る</title>
+    <script src="./series-nav-data.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { darkMode: 'class' };
+    </script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        p, li {
+            word-break: normal;
+            overflow-wrap: break-word;
+            line-break: strict;
+        }
+        .chara-avatar {
+            width: 64px; height: 64px; border-radius: 9999px; object-fit: cover;
+            border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.15); background: #fff;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body class="bg-orange-50 dark:bg-gray-900 transition-colors">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useMemo } = React;
+        const { createRoot } = ReactDOM;
+
+        // 「8つの学びルート」を2つずつ担当する4メンター（characters.html / concept.htmlと同じ設定）。
+        // ここでは診断結果とのマッチング表示専用に、名前・emoji・色・担当ルートのみを保持する。
+        const MENTORS = [
+          { key: "chinen", name: "知念おじぃさん", color: "amber", emoji: "🧓", mi: ["論理数学", "言語"] },
+          { key: "tokue", name: "仲程のヨシおばぁさん", color: "rose", emoji: "👵", mi: ["対人", "内省"] },
+          { key: "rikiya", name: "力也おじぃさん", color: "teal", emoji: "🧓", mi: ["音楽", "身体運動"] },
+          { key: "misaki", name: "マタグワァのシズおばぁさん", color: "indigo", emoji: "👵", mi: ["視覚空間", "博物学"] },
+        ];
+
+        const COLOR_MAP = {
+          amber: { bg: "bg-amber-50 dark:bg-amber-950", border: "border-amber-200 dark:border-amber-800", text: "text-amber-700 dark:text-amber-300", badge: "bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-200" },
+          rose: { bg: "bg-rose-50 dark:bg-rose-950", border: "border-rose-200 dark:border-rose-800", text: "text-rose-700 dark:text-rose-300", badge: "bg-rose-100 dark:bg-rose-900 text-rose-700 dark:text-rose-200" },
+          teal: { bg: "bg-teal-50 dark:bg-teal-950", border: "border-teal-200 dark:border-teal-800", text: "text-teal-700 dark:text-teal-300", badge: "bg-teal-100 dark:bg-teal-900 text-teal-700 dark:text-teal-200" },
+          indigo: { bg: "bg-indigo-50 dark:bg-indigo-950", border: "border-indigo-200 dark:border-indigo-800", text: "text-indigo-700 dark:text-indigo-300", badge: "bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-200" },
+        };
+
+        // 8つの学びルートから、隣接・1つ飛ばしの組み合わせ（各ルートが必ず4回登場する16問）を機械的に生成。
+        // MI_DISPLAY（series-nav-data.js）のキー順を土台にした円環（circulant graph, offset 1・2）。
+        const MI_KEYS = Object.keys(MI_DISPLAY);
+        const QUESTION_PAIRS = [1, 2].flatMap((offset) =>
+          MI_KEYS.map((_, i) => [MI_KEYS[i], MI_KEYS[(i + offset) % MI_KEYS.length]])
+        );
+
+        function shuffle(arr) {
+          const a = [...arr];
+          for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+          }
+          return a;
+        }
+
+        function findMentorsFor(keys) {
+          const set = new Set(keys);
+          return MENTORS.filter((m) => m.mi.some((k) => set.has(k)));
+        }
+
+        function RouteChip({ mikey, size }) {
+          const d = MI_DISPLAY[mikey];
+          const cls = size === "lg"
+            ? "text-lg sm:text-xl font-extrabold"
+            : "text-sm font-bold";
+          return <span className={cls}>{d.emoji} {d.label}</span>;
+        }
+
+        function QuizCard({ pair, index, total, onChoose }) {
+          const [a, b] = pair;
+          return (
+            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-sm p-6 sm:p-8">
+              <p className="text-xs font-bold text-gray-400 dark:text-gray-500 mb-4">もんだい {index + 1} / {total}</p>
+              <h2 className="text-center text-base sm:text-lg font-bold text-gray-700 dark:text-gray-200 mb-6">
+                いまの気分で選ぶなら、どっちが気になる？
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {[a, b].map((k) => (
+                  <button
+                    key={k}
+                    onClick={() => onChoose(k)}
+                    className="rounded-2xl border-2 border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-950 hover:bg-orange-100 dark:hover:bg-orange-900 transition p-6 text-center"
+                  >
+                    <RouteChip mikey={k} size="lg" />
+                  </button>
+                ))}
+              </div>
+            </div>
+          );
+        }
+
+        function ResultScreen({ counts, onRestart }) {
+          const ranked = MI_KEYS
+            .map((k) => ({ key: k, score: counts[k] || 0 }))
+            .sort((x, y) => y.score - x.score);
+          const topScore = ranked[0].score;
+          const topKeys = ranked.filter((r) => r.score === topScore).map((r) => r.key);
+          const mentors = findMentorsFor(topKeys);
+          const maxScore = Math.max(...ranked.map((r) => r.score), 1);
+
+          return (
+            <div className="space-y-8">
+              <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-sm p-6 sm:p-8 text-center">
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">いちばん気になる学びルートは…</p>
+                <div className="flex flex-wrap justify-center gap-3 mb-2">
+                  {topKeys.map((k) => (
+                    <span key={k} className="inline-block px-4 py-2 rounded-full bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-200">
+                      <RouteChip mikey={k} size="lg" />
+                    </span>
+                  ))}
+                </div>
+                <p className="text-xs text-gray-400 dark:text-gray-500">
+                  ※ これは「得意・不得意」を判定するテストではありません。今の気分で選んだ結果なので、日によって変わってもだいじょうぶです。
+                </p>
+              </div>
+
+              {mentors.length > 0 && (
+                <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-sm p-6 sm:p-8">
+                  <h3 className="text-sm font-bold text-gray-500 dark:text-gray-400 mb-4">今回、相性がよさそうなメンター</h3>
+                  <div className={`grid grid-cols-1 ${mentors.length > 1 ? "sm:grid-cols-2" : ""} gap-4`}>
+                    {mentors.map((m) => {
+                      const cc = COLOR_MAP[m.color];
+                      return (
+                        <div key={m.key} className={`rounded-2xl border-2 ${cc.border} ${cc.bg} p-4 flex items-center gap-3`}>
+                          <div className="chara-avatar flex items-center justify-center text-3xl">{m.emoji}</div>
+                          <div className="min-w-0">
+                            <p className={`font-extrabold ${cc.text}`}>{m.name}</p>
+                            <div className="flex flex-wrap gap-1 mt-1">
+                              {m.mi.map((k) => (
+                                <span key={k} className={`px-2 py-0.5 text-xs font-bold rounded-full ${cc.badge}`}>
+                                  {MI_DISPLAY[k].emoji} {MI_DISPLAY[k].label}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <a href="./characters.html" className="inline-block mt-4 text-sm font-bold text-orange-600 dark:text-orange-400 hover:underline">
+                    ▶ キャラクター図鑑でくわしく見る
+                  </a>
+                </div>
+              )}
+
+              <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-sm p-6 sm:p-8">
+                <h3 className="text-sm font-bold text-gray-500 dark:text-gray-400 mb-4">8つの学びルート、全部の結果</h3>
+                <div className="space-y-2">
+                  {ranked.map((r) => (
+                    <div key={r.key} className="flex items-center gap-3">
+                      <div className="w-40 sm:w-48 flex-shrink-0 text-sm font-bold text-gray-700 dark:text-gray-200">
+                        <RouteChip mikey={r.key} />
+                      </div>
+                      <div className="flex-1 h-3 rounded-full bg-gray-100 dark:bg-gray-700 overflow-hidden">
+                        <div
+                          className="h-full rounded-full bg-orange-400 dark:bg-orange-500"
+                          style={{ width: `${(r.score / maxScore) * 100}%` }}
+                        />
+                      </div>
+                      <div className="w-6 text-right text-xs text-gray-400 dark:text-gray-500">{r.score}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex flex-wrap justify-center gap-3">
+                <button
+                  onClick={onRestart}
+                  className="px-6 py-3 rounded-full bg-orange-500 text-white font-bold hover:bg-orange-600 transition"
+                >
+                  もう一度やってみる
+                </button>
+                <a
+                  href="./matrix-library.html"
+                  className="px-6 py-3 rounded-full border-2 border-orange-300 dark:border-orange-700 text-orange-700 dark:text-orange-300 font-bold hover:bg-orange-50 dark:hover:bg-orange-950 transition"
+                >
+                  教材一覧へ
+                </a>
+              </div>
+            </div>
+          );
+        }
+
+        function StartScreen({ onStart }) {
+          return (
+            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-sm p-6 sm:p-8 text-center">
+              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
+                2つの「学びルート」が並ぶので、いまの気分で気になる方をタップしていくよ。全部で{16}問、3分くらいで終わるよ。
+              </p>
+              <p className="text-xs text-gray-400 dark:text-gray-500 leading-relaxed mb-6">
+                「8つの学びルート」は、ハワード・ガードナーの多重知能理論の8分類を参考にした、アルパカすく〜る独自の呼び方です。正解・不正解のあるテストではなく、今のあなたが心を動かされやすい入口を知るためのものです。
+              </p>
+              <button
+                onClick={onStart}
+                className="px-8 py-4 rounded-full bg-orange-500 text-white font-extrabold text-lg hover:bg-orange-600 transition"
+              >
+                はじめる
+              </button>
+            </div>
+          );
+        }
+
+        function App() {
+          const [darkMode, setDarkMode] = useState(false);
+          const [phase, setPhase] = useState("start"); // start | quiz | result
+          const [questions, setQuestions] = useState([]);
+          const [qIndex, setQIndex] = useState(0);
+          const [counts, setCounts] = useState({});
+
+          const start = () => {
+            setQuestions(shuffle(QUESTION_PAIRS).map((pair) => shuffle(pair)));
+            setQIndex(0);
+            setCounts({});
+            setPhase("quiz");
+          };
+
+          const choose = (key) => {
+            setCounts((prev) => ({ ...prev, [key]: (prev[key] || 0) + 1 }));
+            if (qIndex + 1 >= questions.length) {
+              setPhase("result");
+            } else {
+              setQIndex((i) => i + 1);
+            }
+          };
+
+          return (
+            <div className={darkMode ? "dark" : ""}>
+            <div className="bg-gradient-to-b from-sky-100 to-orange-50 dark:from-gray-900 dark:to-gray-900 min-h-screen transition-colors">
+              <div className="sticky top-0 z-10 bg-white/90 dark:bg-gray-800/90 backdrop-blur border-b border-gray-200 dark:border-gray-700">
+                <div className="max-w-4xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-2 sm:flex-nowrap">
+                  <span className="font-extrabold text-gray-800 dark:text-gray-100 whitespace-nowrap">🦙 アルパカすく〜る</span>
+                  <nav className="order-3 flex w-full flex-wrap items-center justify-center gap-1 text-sm font-bold sm:order-none sm:w-auto sm:flex-nowrap">
+                    <a href="./matrix-library.html" className="px-2 py-1 rounded text-gray-600 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 transition">教材一覧</a>
+                    <a href="./characters.html" className="px-2 py-1 rounded text-gray-600 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 transition">キャラクター図鑑</a>
+                    <a href="./mi-shindan.html" className="px-2 py-1 rounded text-orange-600 dark:text-orange-400">学びルート診断</a>
+                    <a href="./concept.html" className="px-2 py-1 rounded text-gray-600 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 transition">このサイトについて</a>
+                  </nav>
+                  <button
+                    onClick={() => setDarkMode(d => !d)}
+                    aria-label="ライト/ダークモード切り替え"
+                    className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-bold hover:bg-gray-50 dark:hover:bg-gray-600 transition"
+                  >
+                    {darkMode ? "☀️" : "🌙"}
+                  </button>
+                </div>
+              </div>
+
+              <div className="max-w-2xl mx-auto px-4 py-10">
+                <header className="mb-8 text-center">
+                  <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-800 dark:text-gray-100 mb-2">8つの学びルート診断 🧭</h1>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">強み診断＆キャラクター診断</p>
+                </header>
+
+                {phase === "start" && <StartScreen onStart={start} />}
+                {phase === "quiz" && questions.length > 0 && (
+                  <QuizCard
+                    pair={questions[qIndex]}
+                    index={qIndex}
+                    total={questions.length}
+                    onChoose={choose}
+                  />
+                )}
+                {phase === "result" && <ResultScreen counts={counts} onRestart={start} />}
+              </div>
+
+              <footer className="bg-gray-800 text-white p-6 text-sm mt-12">
+                <div className="max-w-4xl mx-auto">
+                  <p>
+                    診断結果はこの端末の画面上に表示されるだけで、どこにも送信・保存されません。何度でもやり直せます。
+                  </p>
+                  <a href="./concept.html" className="inline-block mt-2 underline hover:text-emerald-300">
+                    ▶ この学びの設計思想を読む
+                  </a>
+                </div>
+              </footer>
+            </div>
+            </div>
+          );
+        }
+
+        createRoot(document.getElementById("root")).render(<App />);
+    </script>
+</body>
+</html>
