@@ -17,6 +17,7 @@
         })();
     </script>
     <title>キャラクター図鑑｜アルパカすく〜る</title>
+    <script src="./series-nav-data.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = { darkMode: 'class' };
@@ -77,26 +78,27 @@
           }
         ];
 
-        // 4メンター：知識と生き方を教える役。多重知能8分類を2つずつ担当
+        // 4メンター：知識と生き方を教える役。8つの学びルートを2つずつ担当
+        // mi配列はMI_DISPLAY（series-nav-data.js）参照用の内部キー。表示はMentorMiniCardでMI_DISPLAYから組み立てる。
         const MENTORS = [
           {
             key: "chinen", name: "知念おじぃさん", color: "amber", emoji: "🧓",
-            mi: ["論理・数学的知能", "言語・語学的知能"],
+            mi: ["論理数学", "言語"],
             personality: "理屈屋だけど優しい先生役。数字と言葉の筋道を、はっきりわかりやすく解きほぐす。"
           },
           {
             key: "tokue", name: "仲程のヨシおばぁさん", color: "rose", emoji: "👵",
-            mi: ["対人的知能", "内省的知能"],
+            mi: ["対人", "内省"],
             personality: "聞き上手、包み込むような優しさ。人の気持ちや、なぜそれが大切なのかを、一緒に考える。花が好きで、庭先にはいつも季節の花が咲いている。"
           },
           {
             key: "rikiya", name: "力也おじぃさん", color: "teal", emoji: "🧓",
-            mi: ["音楽・リズム的知能", "身体・運動感覚的知能"],
+            mi: ["音楽", "身体運動"],
             personality: "陽気で元気、実演好き。歌や体の動きで、手順を体に覚えさせる。"
           },
           {
             key: "misaki", name: "マタグワァのシズおばぁさん", color: "indigo", emoji: "👵",
-            mi: ["視覚・空間的知能", "博物学的知能"],
+            mi: ["視覚空間", "博物学"],
             personality: "観察好き、物知り博士肌。絵や地図、生き物や自然の知識で説明する。"
           }
         ];
@@ -148,7 +150,9 @@
                 <h3 className={`font-extrabold text-lg ${cc.text}`}>{m.name}</h3>
                 <div className="flex flex-wrap gap-1.5 mt-1">
                   {m.mi.map((tag) => (
-                    <span key={tag} className={`px-2 py-0.5 text-xs font-bold rounded-full ${cc.badge}`}>{tag}</span>
+                    <span key={tag} className={`px-2 py-0.5 text-xs font-bold rounded-full ${cc.badge}`}>
+                      {MI_DISPLAY[tag] ? `${MI_DISPLAY[tag].emoji} ${MI_DISPLAY[tag].label}` : tag}
+                    </span>
                   ))}
                 </div>
                 <p className="text-sm text-gray-700 dark:text-gray-300 mt-2">{m.personality}</p>
@@ -200,7 +204,7 @@
 
                 <section className="mb-12">
                   <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">4メンター｜オバー・オジー</h2>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">多重知能理論（ガードナーの8分類）を2つずつ担当する、教材ごとの案内役。1本の教材につき1人が「主役」として教える（特別編は4人全員）。</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">「8つの学びルート」を2つずつ担当する、教材ごとの案内役。1本の教材につき1人が「主役」として教える（特別編は4人全員）。「8つの学びルート」は、ガードナーの多重知能理論の8分類を参考にしています。</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {MENTORS.map((m) => <MentorCard key={m.key} m={m} />)}
                   </div>
@@ -210,7 +214,7 @@
                   <div className="bg-white dark:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-2xl p-6">
                     <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">メンターたちの人間観について</h2>
                     <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                      4人のメンターは、単に多重知能の担当を割り振られているだけの存在ではありません。東洋の伝統的な人間形成観「知育・徳育・体育（三育）」に、感性を育てる「美育」を加えた4本柱の教育者として、それぞれの窓から知識だけでなく生き方の指針を示す役でもあります。
+                      4人のメンターは、単に8つの学びルートの担当を割り振られているだけの存在ではありません。東洋の伝統的な人間形成観「知育・徳育・体育（三育）」に、感性を育てる「美育」を加えた4本柱の教育者として、それぞれの窓から知識だけでなく生き方の指針を示す役でもあります。
                     </p>
                   </div>
                 </section>

@@ -371,7 +371,7 @@
           },
           {
             id: "mi-shindan",
-            title: "MI（多重知能）強み診断＆キャラクター診断",
+            title: "8つの学びルート 強み診断＆キャラクター診断",
             url: "#",
             subjectLabel: "特別活動・自己理解",
             grades: ["小3", "小4", "小5", "小6"],
@@ -1033,16 +1033,12 @@
 
         const GRADES = ["小3", "小4", "小5", "小6", "中学生", "高校生・大人"];
         const SUBJECTS = ["国語", "算数", "理科", "社会", "生活", "家庭科", "図画工作", "総合", "特別活動", "技術・情報"];
-        const MI_LIST = [
-          { key: "論理数学", label: "論理・数学的知能" },
-          { key: "言語", label: "言語・語学的知能" },
-          { key: "音楽", label: "音楽・リズム的知能" },
-          { key: "身体運動", label: "身体・運動感覚的知能" },
-          { key: "博物学", label: "博物学的知能" },
-          { key: "視覚空間", label: "視覚・空間的知能" },
-          { key: "内省", label: "内省的知能" },
-          { key: "対人", label: "対人的知能" },
-        ];
+        // 表示ラベルは series-nav-data.js の MI_DISPLAY（8つの学びルート）を正とする。
+        // 内部照合キー（論理数学・言語 等）は MATERIALS[].mi と完全一致させたまま変更しない。
+        const MI_LIST = Object.keys(MI_DISPLAY).map((key) => ({
+          key,
+          label: `${MI_DISPLAY[key].emoji} ${MI_DISPLAY[key].label}`,
+        }));
         const CAPITALS = [
           { key: "文化資本", color: "orange" },
           { key: "社会関係資本", color: "cyan" },
@@ -1165,7 +1161,7 @@
                 </div>
               </div>
               <div>
-                <p className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-2">多重知能（知能の窓）</p>
+                <p className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-2">8つの学びルート</p>
                 <div className="flex flex-wrap gap-1.5">
                   {MI_LIST.map(m => (
                     <Chip key={m.key} label={m.label} active={selectedMi.includes(m.key)}
