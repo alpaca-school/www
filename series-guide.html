@@ -187,7 +187,7 @@
                   </div>
                   {materialStatus === "error" && (
                     <p role="status" className="mt-4 rounded-xl bg-amber-100 px-4 py-3 text-sm text-amber-900">
-                      対象学年とMI分類を読み込めませんでした。各エピソードのページで確認できます。
+                      対象学年と学びルートを読み込めませんでした。各エピソードのページで確認できます。
                     </p>
                   )}
                 </header>
@@ -237,7 +237,7 @@
                                       <span className="min-w-0 flex-1 font-bold leading-6 text-gray-800">{episode.title}</span>
                                       {material?.mi && (
                                         <span className={'self-start rounded-full px-3 py-1 text-xs font-extrabold sm:self-center ' + (MI_STYLES[material.mi] || MI_STYLES["特別"])}>
-                                          MI：{material.mi}
+                                          学びルート：{MI_DISPLAY[material.mi] ? `${MI_DISPLAY[material.mi].emoji} ${MI_DISPLAY[material.mi].label}` : material.mi}
                                         </span>
                                       )}
                                       <span className="sr-only">を開く</span>
@@ -267,7 +267,7 @@
                 <div className="mt-10 rounded-3xl bg-sky-900 px-5 py-7 text-center text-white sm:px-8 sm:py-9">
                   <h2 className="text-xl font-black sm:text-2xl">1話ずつ探したいときは</h2>
                   <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-sky-100 sm:text-base">
-                    学年・教科・MI分類で絞り込める教材一覧もあります。今の気分や学びたいことに合わせて使い分けてください。
+                    学年・教科・8つの学びルートで絞り込める教材一覧もあります。今の気分や学びたいことに合わせて使い分けてください。
                   </p>
                   <a href="./matrix-library.html" className="site-link mt-5 inline-flex rounded-full bg-white px-5 py-3 text-sm font-extrabold text-sky-900 shadow transition hover:bg-orange-100">
                     教材一覧（検索・フィルタ）へ

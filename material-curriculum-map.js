@@ -391,7 +391,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
       {
         "subject": "道徳",
         "grade": "",
-        "unit": "家族愛、家庭生活の充実（対人的知能・徳育の窓）"
+        "unit": "家族愛、家庭生活の充実（学びルート「人とつながる」・徳育の窓）"
       }
     ]
   },
@@ -576,7 +576,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
       {
         "subject": "道徳",
         "grade": "",
-        "unit": "勤労、公共の精神、集団生活の充実（対人的知能・徳育の窓）"
+        "unit": "勤労、公共の精神、集団生活の充実（学びルート「人とつながる」・徳育の窓）"
       }
     ]
   },
@@ -753,7 +753,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
         "unit": "我が国の食料生産、輸送・流通のしくみへの理解"
       },
       {
-        "subject": "対人的知能（MI）",
+        "subject": "学びルート「人とつながる」",
         "grade": "",
         "unit": "見えない他者の役割・立場を想像し、関係性を理解する力"
       }
@@ -1888,7 +1888,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
       {
         "subject": "道徳",
         "grade": "",
-        "unit": "自然愛護、公共の精神、集団や社会との関わり（対人的知能・徳育の窓）"
+        "unit": "自然愛護、公共の精神、集団や社会との関わり（学びルート「人とつながる」・徳育の窓）"
       },
       {
         "subject": "総合的な学習の時間",
@@ -2047,7 +2047,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
       {
         "subject": "道徳",
         "grade": "",
-        "unit": "勤労、公共の精神、集団生活の充実（対人的知能・徳育の窓）"
+        "unit": "勤労、公共の精神、集団生活の充実（学びルート「人とつながる」・徳育の窓）"
       }
     ]
   },
@@ -2361,7 +2361,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "hinukan-ep01": {
-    "series": "知能の窓・ヒヌカン",
+    "series": "ヒヌカン",
     "title": "火神さまは、いつ戻ってくる？",
     "subjects": [
       {
@@ -2377,7 +2377,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "hinukan-ep02": {
-    "series": "知能の窓・ヒヌカン",
+    "series": "ヒヌカン",
     "title": "呼び方は、ひとつじゃない",
     "subjects": [
       {
@@ -2393,7 +2393,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "hinukan-ep03": {
-    "series": "知能の窓・ヒヌカン",
+    "series": "ヒヌカン",
     "title": "台所の音を聞いてみよう",
     "subjects": [
       {
@@ -2409,7 +2409,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "hinukan-ep04": {
-    "series": "知能の窓・ヒヌカン",
+    "series": "ヒヌカン",
     "title": "大切な場所を整える",
     "subjects": [
       {
@@ -2425,7 +2425,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "hinukan-ep05": {
-    "series": "知能の窓・ヒヌカン",
+    "series": "ヒヌカン",
     "title": "三つの石を観察しよう",
     "subjects": [
       {
@@ -2441,7 +2441,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "hinukan-ep06": {
-    "series": "知能の窓・ヒヌカン",
+    "series": "ヒヌカン",
     "title": "小さな神さまは、いろんな場所にいる",
     "subjects": [
       {
@@ -2452,7 +2452,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "hinukan-ep07": {
-    "series": "知能の窓・ヒヌカン",
+    "series": "ヒヌカン",
     "title": "言葉づかいを、ちょっと振り返る",
     "subjects": [
       {
@@ -2468,7 +2468,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "hinukan-ep08": {
-    "series": "知能の窓・ヒヌカン",
+    "series": "ヒヌカン",
     "title": "家族に聞いてみよう（無理はしない）",
     "subjects": [
       {
@@ -2484,7 +2484,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "hinukan-ep09": {
-    "series": "知能の窓・ヒヌカン",
+    "series": "ヒヌカン",
     "title": "わたしの『火と暮らし』ノートをつくろう",
     "subjects": [
       {
@@ -2505,7 +2505,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shioya-ungami-ep01": {
-    "series": "知能の窓・塩屋湾ウンガミ",
+    "series": "塩屋湾ウンガミ",
     "title": "御願バーリー、勝つのはどっち？",
     "subjects": [
       {
@@ -2521,7 +2521,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shioya-ungami-ep02": {
-    "series": "知能の窓・塩屋湾ウンガミ",
+    "series": "塩屋湾ウンガミ",
     "title": "ウンガミって、なんて呼ぶ？",
     "subjects": [
       {
@@ -2537,7 +2537,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shioya-ungami-ep03": {
-    "series": "知能の窓・塩屋湾ウンガミ",
+    "series": "塩屋湾ウンガミ",
     "title": "太鼓の音で、神様をお迎えする",
     "subjects": [
       {
@@ -2553,7 +2553,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shioya-ungami-ep04": {
-    "series": "知能の窓・塩屋湾ウンガミ",
+    "series": "塩屋湾ウンガミ",
     "title": "バーリーの舟を漕いでみよう",
     "subjects": [
       {
@@ -2569,7 +2569,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shioya-ungami-ep05": {
-    "series": "知能の窓・塩屋湾ウンガミ",
+    "series": "塩屋湾ウンガミ",
     "title": "海の恵みと、豊漁の願い",
     "subjects": [
       {
@@ -2585,7 +2585,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shioya-ungami-ep06": {
-    "series": "知能の窓・塩屋湾ウンガミ",
+    "series": "塩屋湾ウンガミ",
     "title": "アサギから海まで、どう進む？",
     "subjects": [
       {
@@ -2601,7 +2601,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shioya-ungami-ep07": {
-    "series": "知能の窓・塩屋湾ウンガミ",
+    "series": "塩屋湾ウンガミ",
     "title": "見えないものに、感謝するってどういうこと？",
     "subjects": [
       {
@@ -2617,7 +2617,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shioya-ungami-ep08": {
-    "series": "知能の窓・塩屋湾ウンガミ",
+    "series": "塩屋湾ウンガミ",
     "title": "89年間、役目を守った人がいた",
     "subjects": [
       {
@@ -2638,7 +2638,7 @@ const MATERIAL_CURRICULUM_MAP = Object.freeze(
     ]
   },
   "shioya-ungami-ep09": {
-    "series": "知能の窓・塩屋湾ウンガミ",
+    "series": "塩屋湾ウンガミ",
     "title": "わたしの海のまつり地図をつくろう",
     "subjects": [
       {

@@ -364,3 +364,18 @@ const SERIES_META = [
     episodes: SHIOYA_UNGAMI_EPISODES,
   },
 ];
+
+// ユーザー向け表示名「8つの学びルート」の共有マッピング（2026-09-09導入）。
+// キーは MATERIALS[].mi / SERIES_META系エピソードの内部照合値と完全一致させること（変更禁止）。
+// 表示側（emoji + label）だけを、UI文言の見直しに合わせて更新する。
+// 「特別」等、8分類に含まれない値はこのテーブルに含めず、呼び出し側でフォールバック表示すること。
+const MI_DISPLAY = {
+  "論理数学": { emoji: "🔢", label: "数で考える" },
+  "言語": { emoji: "💬", label: "ことばで考える" },
+  "音楽": { emoji: "🎵", label: "音・リズムで感じる" },
+  "身体運動": { emoji: "🏃", label: "動いてわかる" },
+  "博物学": { emoji: "🌿", label: "観察して気づく" },
+  "視覚空間": { emoji: "🗺️", label: "見てつかむ" },
+  "内省": { emoji: "🪞", label: "自分を知る" },
+  "対人": { emoji: "🤝", label: "人とつながる" },
+};
