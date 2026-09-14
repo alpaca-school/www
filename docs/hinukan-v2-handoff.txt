@@ -1,0 +1,31 @@
+ヒヌカン V2 引き継ぎ（2026-09-14）
+
+承認済み原案 hinukan-v2.zip の9話を、現行ヒヌカンのReact/Babel/Tailwind・7画面テンプレートへ移植。
+V1 bunka/hinukan_ep01.html〜09.html はバイト単位で不変。
+V2 bunka/hinukan_v2_ep01.html〜09.html を追加。
+series-nav-data.jsのV2配列とSERIES_META、matrix-library.htmlとindex2.htmlを同期。
+問い：1日・15日→新暦/旧暦→月→観察→星→聞き取り→火・月・星ノート。
+家庭場面は教材用架空場面。祈りや線香の実演は行わない。
+旧暦15日は必ず満月ではなく、約15°/時は天の極まわりの回転角。
+入力はページ内React stateのみ。外部送信・永続保存は追加していない。
+
+検証済み
+- check_material_responsive.sh（新規9話すべて対象）、JSX構文解析、括弧対応
+- 内部リンク・画像参照、V1保全、一覧同期、機密情報/入力外部送信チェック
+- 独立レビュー：Critical/Highなし。キーボード選択と印刷の回答欠落を修正。
+- 国立天文台の旧暦・月FAQ、日本天文学会の日周運動の出典を確認。
+
+本番前の残作業
+- 全7画面遷移、選択/キーボード/印刷の実ブラウザ検証。
+- 320・375・390・430・768pxで横スクロールや入力等の収まりを確認。
+  Cloud BrowserはlocalhostをERR_BLOCKED_BY_CLIENTで開けず、ローカルブラウザ取得もネットワークエラー。
+- 現行mainには星空シリーズの公開HTMLがない。未確認リンクは追加せず「月の窓」に接続。
+  星空シリーズ確認・公開後、V2 ep7/ep9に確定URLを追加する。
+
+表示設定シート
+https://docs.google.com/spreadsheets/d/1TrDP6OnmNjOVBeLcHdBdCAHL2WjtKe68FBOk33Uq5LU/edit#gid=2078889757
+Untitled!A84:E93：hinukan-v2 と hinukan-v2-ep01〜09 の10行を追加済み。
+プレビュー段階のためvisible=FALSE。本番反映時にこれら10行をTRUEにする。
+既存値・チェックボックス・日付書式を保持。
+
+専用ブランチへのcommit/push。本番mainへのマージ・公開は未実行。

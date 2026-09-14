@@ -236,7 +236,65 @@ const SOCIAL_PARTICIPATION_EPISODES = [
 // シリーズガイド用メタデータ。
 // 新しいシリーズは、上の _EPISODES 配列を定義したうえで、ここに1件追加すると
 // series-guide.html のカードと全話一覧へ自動的に反映される。
+const HINUKAN_V2_EPISODES = [
+  {
+    "id": "hinukan-v2-ep01",
+    "short": "ep1：論理・数学編",
+    "title": "おばあちゃんの「1日・15日」って、いつ？",
+    "url": "bunka/hinukan_v2_ep01.html"
+  },
+  {
+    "id": "hinukan-v2-ep02",
+    "short": "ep2：言語編",
+    "title": "旧暦って、どんなカレンダー？",
+    "url": "bunka/hinukan_v2_ep02.html"
+  },
+  {
+    "id": "hinukan-v2-ep03",
+    "short": "ep3：音楽・リズム編",
+    "title": "月にもリズムがある？",
+    "url": "bunka/hinukan_v2_ep03.html"
+  },
+  {
+    "id": "hinukan-v2-ep04",
+    "short": "ep4：身体・運動編",
+    "title": "月を探しに外へ出よう",
+    "url": "bunka/hinukan_v2_ep04.html"
+  },
+  {
+    "id": "hinukan-v2-ep05",
+    "short": "ep5：博物学編",
+    "title": "月は、どうして形が変わる？",
+    "url": "bunka/hinukan_v2_ep05.html"
+  },
+  {
+    "id": "hinukan-v2-ep06",
+    "short": "ep6：視覚・空間編",
+    "title": "月のとなりの光を、地図にしよう",
+    "url": "bunka/hinukan_v2_ep06.html"
+  },
+  {
+    "id": "hinukan-v2-ep07",
+    "short": "ep7：論理・数学編",
+    "title": "星は、1時間でどれくらい動く？",
+    "url": "bunka/hinukan_v2_ep07.html"
+  },
+  {
+    "id": "hinukan-v2-ep08",
+    "short": "ep8：対人編",
+    "title": "家族に「月と空の記憶」を聞いてみよう",
+    "url": "bunka/hinukan_v2_ep08.html"
+  },
+  {
+    "id": "hinukan-v2-ep09",
+    "short": "ep9：集・表現編",
+    "title": "わたしの「火・月・星」ノートをつくろう",
+    "url": "bunka/hinukan_v2_ep09.html"
+  }
+];
+
 const SERIES_META = [
+  {key: "hinukan-v2", name: "ヒヌカンV2：火・月・星", emoji: "🔥", summary: "おばあちゃんの『1日・15日』から、新暦と旧暦、月の満ち欠け、星の動きへ。聞いた経験と自分の観察を分けて、次の人へ渡す全9話の物語です。", episodes: HINUKAN_V2_EPISODES},
   {
     key: "social-participation",
     name: "社会参加シリーズ・文芸フリマ運営編",
