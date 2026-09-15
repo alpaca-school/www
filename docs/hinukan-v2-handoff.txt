@@ -1,4 +1,4 @@
-ヒヌカン V2 引き継ぎ（2026-09-14）
+ヒヌカン V2 引き継ぎ（2026-09-15更新）
 
 承認済み原案 hinukan-v2.zip の9話を、現行ヒヌカンのReact/Babel/Tailwind・7画面テンプレートへ移植。
 V1 bunka/hinukan_ep01.html〜09.html はバイト単位で不変。
@@ -28,4 +28,5 @@ Untitled!A84:E93：hinukan-v2 と hinukan-v2-ep01〜09 の10行を追加済み�
 プレビュー段階のためvisible=FALSE。本番反映時にこれら10行をTRUEにする。
 既存値・チェックボックス・日付書式を保持。
 
-専用ブランチへのcommit/push。本番mainへのマージ・公開は未実行。
+専用ブランチ `hinukan-v2` へcommit済み。remoteに同名ブランチがあるかは `git ls-remote --heads origin hinukan-v2` で確認する。なければ、GitHubへの書込み権限がある端末からpushする。mainへのマージ・本番公開は別作業。
+MBA2017・MBA2025のClaude Code / Claude CLIは、リポジトリ直下のCLAUDE.mdから本ファイルとAGENTS.mdを読み込んで引き継ぐ。
