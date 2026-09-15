@@ -3,7 +3,7 @@
 このリポジトリを Claude Code / Claude CLI で開いたら、作業を始める前に必ず次の2ファイルを読むこと。
 
 - @AGENTS.md
-- @docs/hinukan-v2-handoff.txt
+- @docs/hinukan-v2-work-log.md
 
 `AGENTS.md` が制作・検証・Git運用の正本であり、このファイルと矛盾する場合は `AGENTS.md` を優先する。
 
@@ -29,4 +29,4 @@ git fetch origin
 - 作業ブランチ：`hinukan-v2`
 - V1 `bunka/hinukan_ep01.html`〜`09.html` は変更しない。
 - V2 `bunka/hinukan_v2_ep01.html`〜`09.html` は、正式7画面テンプレートへ移植済み。
-- 詳細・検証結果・未完了事項は @docs/hinukan-v2-handoff.txt を正とする。
+- 詳細・検証結果・未完了事項は @docs/hinukan-v2-work-log.md を正とする。

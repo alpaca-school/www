@@ -686,5 +686,5 @@ Layer 1正本：`【Layer 1】projects ← 人間を守る（人間と時間の�
 - 旧暦は月の満ち欠けを基礎に季節とのずれを調整する太陰太陽暦として扱い、「旧暦15日＝必ず完全な満月」と断定しない。
 - 星の約15度／時は、天の極を中心に見た日周運動の回転角として扱う。
 - `HINUKAN_V2_EPISODES`・`SERIES_META`・`matrix-library.html`・`index2.html`を常に同期する。
-- 実装・検証・表示設定シートの状態は `docs/hinukan-v2-handoff.txt` を参照する。
+- 実装・検証・表示設定シートの状態は `docs/hinukan-v2-work-log.md` を参照する。
 - Claude Code / Claude CLI向けの入口はリポジトリ直下の `CLAUDE.md`。MBA2017・MBA2025のいずれでも、端末固有パスではなくGitリポジトリルートから相対パスで参照する。
