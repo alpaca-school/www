@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>旅のクエスト＋お助けクエスト｜琉球のタネ 試作版</title>
 <style>
 :root{--ink:#1f2933;--sub:#5b6773;--blue:#3266a8;--blue2:#e8f0fc;--green:#28764d;--green2:#e2f3e9;--red:#b94a40;--red2:#fce8e6;--amber:#9a6b00;--amber2:#fff4d6;--purple:#8054aa;--line:#d7dde4}
@@ -70,7 +70,21 @@ a.btn{display:inline-block;text-decoration:none;text-align:center;line-height:1.
 .q-item:first-child{border-top:0}
 .done-q{opacity:.55}
 @media print{.dock,.map,.hud,button{display:none!important}body{background:#fff}}
-#tane-hub{max-width:736px;margin:0 auto 160px;overflow-wrap:anywhere}#app:has(+ #dock){padding-bottom:20px}#tane-hub [hidden]{display:none!important}#tane-hub button{width:auto}#tane-hub .choices button{width:100%}.dock{padding-bottom:calc(8px + env(safe-area-inset-bottom))}@media print{#tane-hub{display:none}}</style>
+#tane-hub{max-width:736px;margin:0 auto 160px;overflow-wrap:anywhere}#app:has(+ #dock){padding-bottom:20px}#tane-hub [hidden]{display:none!important}#tane-hub button{width:auto}#tane-hub .choices button{width:100%}.dock{padding-bottom:calc(8px + env(safe-area-inset-bottom))}@media print{#tane-hub{display:none}}
+/* Collapsible bottom navigation: swipe the handle or tap it. */
+#dock{flex-direction:column;align-items:stretch;gap:4px;padding:4px max(12px,env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));border-radius:18px 18px 0 0;background:#fff;box-shadow:0 -4px 20px #17324a18;max-height:55vh;max-height:55dvh;overflow:auto}
+#dock .dock-handle{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:48px;border:0;background:transparent;color:var(--ink);font:inherit;font-size:15px;font-weight:700;cursor:pointer;touch-action:none;border-radius:10px;width:100%;padding:4px}
+#dock .dock-grip{height:4px;width:38px;background:#8999a8;border-radius:8px}
+#dock .dock-items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:100%;max-width:760px;margin:0 auto;padding:4px 0 8px}
+#dock .dock-items[hidden]{display:none!important}
+#dock .dock-items .btn{min-height:48px;width:100%;white-space:normal;overflow-wrap:anywhere;margin:0}
+#dock .dock-items:not([hidden]){animation:dock-enter .18s ease-out}
+@keyframes dock-enter{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){#dock .dock-items:not([hidden]){animation:none}}
+@media(min-width:680px){#dock .dock-items{grid-template-columns:repeat(3,minmax(0,1fr))}}
+#tane-hub{margin-bottom:calc(80px + env(safe-area-inset-bottom))}
+#dock .dock-handle:focus-visible{outline:3px solid #2468a0;outline-offset:-3px}
+</style>
 </head>
 <body>
 <div id="app"></div>
@@ -277,6 +291,22 @@ function reportHtml(){
   <div class="card"><h2>✉️ 問い合わせ文をつくる</h2><div class="row">${Object.entries(INQN).map(([k,l])=>`<button class="btn sm ${S.showInq===k?"main":""}" data-act="inq" data-k="${k}">${l}</button>`).join("")}</div>
   ${S.showInq?`<pre class="out" style="margin-top:10px" id="inqout">${esc(inqText(S.showInq))}</pre><button class="btn sm" data-act="copy" data-t="inq">コピー</button>`:'<p style="color:var(--sub)">送りたい相手を選んでください。</p>'}</div>`;
 }
+
+function setupDock(){
+ const handle=document.getElementById("dock-handle"),items=document.getElementById("dock-items"),caption=document.getElementById("dock-caption");
+ if(!handle||!items||!caption)return;
+ let startY=null,pointer=null,ignoreClick=false;
+ function setOpen(open){
+   if(!open&&items.contains(document.activeElement))handle.focus({preventScroll:true});
+   items.hidden=!open;handle.setAttribute("aria-expanded",String(open));caption.textContent=open?"▼ メニューを閉じる":"▲ メニューを開く";
+ }
+ handle.addEventListener("click",()=>{if(ignoreClick){ignoreClick=false;return;}setOpen(items.hidden);});
+ handle.addEventListener("pointerdown",e=>{if(!e.isPrimary||e.button!==0)return;startY=e.clientY;pointer=e.pointerId;ignoreClick=false;try{handle.setPointerCapture(pointer)}catch(_){}});
+ handle.addEventListener("pointerup",e=>{if(pointer!==e.pointerId||startY===null)return;const delta=e.clientY-startY;startY=null;pointer=null;if(Math.abs(delta)>=25){ignoreClick=true;setOpen(delta<0);setTimeout(()=>{ignoreClick=false},350);}});
+ handle.addEventListener("pointercancel",()=>{startY=null;pointer=null;ignoreClick=false;});
+ document.getElementById("dock").onkeydown=e=>{if(e.key==="Escape"&&!items.hidden){e.preventDefault();setOpen(false);handle.focus({preventScroll:true});}};
+}
+
 function render(){
   let h=hud();
   if(S.view==="title"){h=titleHtml();$("#dock").style.display="none"}
@@ -287,7 +317,8 @@ function render(){
   }
   const fk=document.activeElement?.dataset?.fk,key=S.view+":"+S.i+":"+!!S.react;
   $("#app").innerHTML=h;
-  $("#dock").innerHTML=`<button class="btn sm ghost" data-act="back">◀ もどる</button><button class="btn sm" data-act="search">🔍 さがす</button><button class="btn sm" data-act="quests">📜 クエスト ${openQ().length}</button><button class="btn sm" data-act="report">📋 計画書</button><button class="btn sm ghost" data-act="home">🏠 つづき</button><button class="btn sm ghost" data-act="mode">${S.mode==="easy"?"⌨ くわしく入力":"👆 かんたんに切りかえ"}</button>`;
+  $("#dock").innerHTML=`<button type="button" class="dock-handle" id="dock-handle" aria-expanded="false" aria-controls="dock-items"><span class="dock-grip" aria-hidden="true"></span><span id="dock-caption">▲ メニューを開く</span></button><nav class="dock-items" id="dock-items" aria-label="旅行支援メニュー" hidden><button class="btn sm ghost" data-act="back">◀ もどる</button><button class="btn sm" data-act="search">🔍 さがす</button><button class="btn sm" data-act="quests">📜 クエスト ${openQ().length}</button><button class="btn sm" data-act="report">📋 計画書</button><button class="btn sm ghost" data-act="home">🏠 つづき</button><button class="btn sm ghost" data-act="mode">${S.mode==="easy"?"⌨ くわしく入力":"👆 かんたんに切りかえ"}</button></nav>`;
+  setupDock();
   if(key!==lastKey){$("#focus")?.focus({preventScroll:true})}
   else if(fk){document.querySelector('[data-fk="'+fk+'"]')?.focus({preventScroll:true})}
   lastKey=key;
