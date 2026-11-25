@@ -261,7 +261,7 @@ function questHtml(){
    ${S.showInq?`<div class="card"><h2>問い合わせ文</h2><pre class="out" id="inqout">${esc(inqText(S.showInq))}</pre><button class="btn sm" data-act="copy" data-t="inq">コピー</button></div>`:""}`;
 }
 function titleHtml(){
-  return `<div class="card title">${AVATAR.replace('class="avatar"','style="width:130px"')}<h1>旅のクエスト</h1><p><a href="#tane-hub" class="btn">お土産の代理購入・観光施設の下見へ ↓</a></p><p>AI旅行コンシェルジュ（仮称）</p>
+  return `<div class="card title">${AVATAR.replace('class="avatar"','style="width:130px"')}<h1>旅のクエスト</h1><p><a href="#tane-hub" class="btn">観光施設の下見へ ↓</a></p><p>AI旅行コンシェルジュ（仮称）</p>
   <p>コンシェルジュの質問に答えていくと、<br>あなたの「個別旅行支援計画」ができあがります。<br>旅を予約するのではなく、旅を<b>実現可能</b>にするゲームです。</p>
   <div class="choices">${hasSave&&Object.keys(S.A).length?`<button class="btn xl main" data-act="cont">つづきから</button>`:""}
   <button class="btn xl ${hasSave&&Object.keys(S.A).length?"":"main"}" data-act="new" data-m="easy">👆 かんたんモードではじめる<br><small>ボタンをさわるだけ（おすすめ）</small></button>
@@ -541,25 +541,25 @@ function fb(t,done){const x=document.createElement("textarea");x.value=t;documen
 render();
 </script>
 <section class="card" id="tane-hub" aria-labelledby="tane-heading">
-<h2 id="tane-heading">🌱 お助けクエスト｜旅のタネ</h2>
-<p>買いたかったお土産、行きたい観光施設。地域の人に確認してほしいことを整理しよう。</p>
-<div class="alert amber">公開試作版：依頼の下書き専用です。スタッフへの送信・予約・購入・決済は行いません。地域の協力者との連携・受付体制は準備中です。</div>
-<div class="choices"><button class="btn xl" type="button" data-tane="お土産の代理購入・発送">🏺 お土産の代理購入・発送</button><button class="btn xl" type="button" data-tane="観光施設の下見">🔍 観光施設の下見</button></div>
-<div id="tane-editor" hidden><h3 id="tane-kind" tabindex="-1"></h3><form id="tane-form"><label for="tane-area">地域・店舗・観光施設名（任意）</label><input id="tane-area" maxlength="120" placeholder="例：読谷村"><label for="tane-detail">お願いしたい内容</label><textarea id="tane-detail" maxlength="1000" required rows="4" placeholder="商品名や希望する作業など。住所・電話・医療情報は入力しないでください。"></textarea><label for="tane-date">希望日（任意）</label><input id="tane-date" type="date"><p>料金・送料・対応可否は未定です。身体介助、医療行為、危険作業は対象外です。</p><label for="tane-photo">商品・施設などの写真（任意・端末内プレビューのみ）</label><input id="tane-photo" type="file" accept="image/jpeg,image/png,image/webp"><img id="tane-preview" alt="選択した写真" hidden style="max-width:100%;max-height:220px;object-fit:contain"><p>写真は保存・送信しません。人物や個人情報が写った写真は選ばないでください。</p><button class="btn main" type="submit">依頼の下書きを作成・端末に保存</button></form></div>
+<h2 id="tane-heading">🔍 観光施設の下見｜旅のタネ</h2>
+<p>行きたい観光施設について、地域の人に事前に確認してほしいことを整理しよう。</p>
+<div class="alert amber">公開試作版：依頼の下書き専用です。スタッフへの送信・下見の手配・決済は行いません。地域の協力者との連携・受付体制は準備中です。</div>
+<div class="choices"><button class="btn xl" type="button" data-tane="観光施設の下見">🔍 観光施設の下見</button></div>
+<div id="tane-editor" hidden><h3 id="tane-kind" tabindex="-1"></h3><form id="tane-form"><label for="tane-area">地域・観光施設名（任意）</label><input id="tane-area" maxlength="120" placeholder="例：読谷村"><label for="tane-detail">お願いしたい内容</label><textarea id="tane-detail" maxlength="1000" required rows="4" placeholder="例：入口の段差、通路幅、車椅子対応トイレ、駐車場。個人情報は入力しないでください。"></textarea><label for="tane-date">希望日（任意）</label><input id="tane-date" type="date"><p>下見の対応可否は未定です。身体介助、医療行為、危険作業は対象外です。</p><label for="tane-photo">施設などの写真（任意・端末内プレビューのみ）</label><input id="tane-photo" type="file" accept="image/jpeg,image/png,image/webp"><img id="tane-preview" alt="選択した写真" hidden style="max-width:100%;max-height:220px;object-fit:contain"><p>写真は保存・送信しません。人物や個人情報が写った写真は選ばないでください。</p><button class="btn main" type="submit">依頼の下書きを作成・端末に保存</button></form></div>
 <div id="tane-output" hidden><h3>保存した依頼の下書き（未送信）</h3><pre class="out" id="tane-text"></pre><div class="row"><button class="btn sm" id="tane-copy" type="button">コピー</button><button class="btn sm" id="tane-download" type="button">テキスト保存</button><button class="btn sm ghost" id="tane-delete" type="button">下書きを削除</button></div></div><p id="tane-status" role="status"></p>
-<details><summary>無料提供を支える仕組み（構想）</summary><p>企業協賛・地域商店の販売手数料・アフィリエイトによる運営を検討中です。現時点では広告契約・注文受付・決済はありません。</p></details>
+<details><summary>無料提供を支える仕組み（構想）</summary><p>企業協賛・広告・アフィリエイトによる運営を検討中です。現時点では広告契約・依頼受付・決済はありません。</p></details>
 </section><script>
 (function(){
 "use strict";
-const key="travel-quest-tane-help-v1",g=id=>document.getElementById(id);let kind="",photoUrl="",draft="";
+const key="travel-quest-tane-help-v1",g=id=>document.getElementById(id);let kind="観光施設の下見",photoUrl="",draft="";
 const status=t=>{g("tane-status").textContent=t};
-function show(){g("tane-output").hidden=!draft;const valid=/^種類：(お土産の代理購入・発送|観光施設の下見)$/m.test(draft);g("tane-text").textContent=valid?draft:"旧バージョンの下書きです。削除するか、新しい依頼を作成してください。";g("tane-copy").hidden=!valid;g("tane-download").hidden=!valid;}
+function show(){g("tane-output").hidden=!draft;const valid=/^種類：観光施設の下見$/m.test(draft);g("tane-text").textContent=valid?draft:"旧バージョンの下書きです。削除するか、新しい依頼を作成してください。";g("tane-copy").hidden=!valid;g("tane-download").hidden=!valid;}
 try{draft=(localStorage.getItem(key)||"").split("\n").filter(l=>!l.startsWith("活動支援額の目安：")&&!l.startsWith("希望時間：")).join("\n");}catch(e){}show();
-document.getElementById("tane-hub").addEventListener("click",e=>{const b=e.target.closest("[data-tane]");if(!b)return;kind=b.dataset.tane;g("tane-kind").textContent=kind;g("tane-editor").hidden=false;g("tane-detail").placeholder=kind==="観光施設の下見"?"例：入口の段差、通路幅、車椅子対応トイレ、駐車場。個人情報は入力しないでください。":"例：商品名、色、数量、購入・発送の希望。個人情報は入力しないでください。";g("tane-kind").focus();});
+document.getElementById("tane-hub").addEventListener("click",e=>{const b=e.target.closest("[data-tane]");if(!b)return;kind=b.dataset.tane;g("tane-kind").textContent=kind;g("tane-editor").hidden=false;g("tane-kind").focus();});
 g("tane-photo").addEventListener("change",()=>{if(photoUrl)URL.revokeObjectURL(photoUrl);photoUrl="";const f=g("tane-photo").files[0],im=g("tane-preview");im.hidden=true;im.removeAttribute("src");if(!f)return;if(!["image/jpeg","image/png","image/webp"].includes(f.type)||f.size>10000000){status("JPEG・PNG・WebPの10MB以下の画像を選んでください。");g("tane-photo").value="";return;}photoUrl=URL.createObjectURL(f);im.src=photoUrl;im.hidden=false;});
-g("tane-form").addEventListener("submit",e=>{e.preventDefault();if(!kind||!g("tane-detail").value.trim()){status("依頼内容を入力してください。");return;}draft=["【お助けクエスト｜未送信の下書き】","種類："+kind,"地域・店舗："+(g("tane-area").value||"未定"),"内容："+g("tane-detail").value.trim(),"希望日："+(g("tane-date").value||"未定"),"写真：別途本人が共有（自動送信なし）","※受付・手配・購入・決済は未実施。"].join("\n");try{localStorage.setItem(key,draft);status("端末に下書きを保存しました。依頼は送信されていません。");}catch(e){status("端末への保存ができません。コピーまたはテキスト保存をご利用ください。");}show();});
+g("tane-form").addEventListener("submit",e=>{e.preventDefault();if(!kind||!g("tane-detail").value.trim()){status("依頼内容を入力してください。");return;}draft=["【観光施設の下見｜未送信の下書き】","種類："+kind,"地域・施設："+(g("tane-area").value||"未定"),"内容："+g("tane-detail").value.trim(),"希望日："+(g("tane-date").value||"未定"),"写真：別途本人が共有（自動送信なし）","※受付・下見の手配・決済は未実施。"].join("\n");try{localStorage.setItem(key,draft);status("端末に下書きを保存しました。依頼は送信されていません。");}catch(e){status("端末への保存ができません。コピーまたはテキスト保存をご利用ください。");}show();});
 g("tane-copy").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(draft);status("下書きをコピーしました。");}catch(e){status("コピーできませんでした。テキスト保存をご利用ください。");}});
-g("tane-download").addEventListener("click",()=>{const u=URL.createObjectURL(new Blob([draft],{type:"text/plain;charset=utf-8"})),a=document.createElement("a");a.href=u;a.download="お助けクエスト-下書き.txt";a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);});
-g("tane-delete").addEventListener("click",()=>{if(!confirm("お助けクエストの下書きを削除しますか？"))return;try{localStorage.removeItem(key);}catch(e){status("保存データを削除できませんでした。ブラウザの設定から消去してください。");return;}draft="";show();g("tane-form").reset();if(photoUrl)URL.revokeObjectURL(photoUrl);photoUrl="";g("tane-preview").removeAttribute("src");g("tane-preview").hidden=true;status("下書きを削除しました。");});
+g("tane-download").addEventListener("click",()=>{const u=URL.createObjectURL(new Blob([draft],{type:"text/plain;charset=utf-8"})),a=document.createElement("a");a.href=u;a.download="観光施設の下見-下書き.txt";a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);});
+g("tane-delete").addEventListener("click",()=>{if(!confirm("観光施設の下見の下書きを削除しますか？"))return;try{localStorage.removeItem(key);}catch(e){status("保存データを削除できませんでした。ブラウザの設定から消去してください。");return;}draft="";show();g("tane-form").reset();if(photoUrl)URL.revokeObjectURL(photoUrl);photoUrl="";g("tane-preview").removeAttribute("src");g("tane-preview").hidden=true;status("下書きを削除しました。");});
 })();</script></body>
 </html>
