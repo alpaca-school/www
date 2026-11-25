@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>旅のクエスト＋お助けクエスト｜琉球のタネ 試作版</title>
+<style>
+:root{--ink:#1f2933;--sub:#5b6773;--blue:#3266a8;--blue2:#e8f0fc;--green:#28764d;--green2:#e2f3e9;--red:#b94a40;--red2:#fce8e6;--amber:#9a6b00;--amber2:#fff4d6;--purple:#8054aa;--line:#d7dde4}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font:18px/1.7 "Hiragino Sans","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;color:var(--ink);min-height:100vh;
+ background:linear-gradient(#dcebff 0,#f4f9ff 45%,#fdf6e8 100%)}
+#app{max-width:760px;margin:0 auto;padding:10px 12px 150px}
+.hud{display:flex;gap:8px;align-items:center;justify-content:space-between;background:#fff;border-radius:14px;padding:8px 12px;border:1px solid var(--line);flex-wrap:wrap}
+.hud b{font-size:16px}
+.chip{background:var(--blue2);color:var(--blue);border-radius:999px;padding:2px 12px;font-size:15px;white-space:nowrap}
+.chip.red{background:var(--red2);color:var(--red)}
+.bar{height:10px;background:#e3e8ee;border-radius:99px;overflow:hidden;flex:1;min-width:90px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#4f9bd9,#28a06b);transition:width .4s}
+.map{display:flex;gap:4px;overflow-x:auto;padding:10px 2px;margin:6px 0}
+.map button{flex:1 0 74px;border:2px solid var(--line);background:#fff;border-radius:14px;padding:6px 2px;font:inherit;font-size:13px;cursor:pointer;color:var(--ink);line-height:1.3}
+.map button .ic{display:block;font-size:24px}
+.map button.cur{border-color:var(--blue);background:var(--blue2);font-weight:700}
+.map button.done{border-color:var(--green);background:var(--green2)}
+.scene{display:flex;gap:10px;align-items:flex-start;margin:10px 0}
+.avatar{flex:0 0 78px}
+.bubble{position:relative;flex:1;background:#fff;border:2px solid var(--blue);border-radius:18px;padding:12px 16px;animation:pop .25s ease-out}
+.bubble:before{content:"";position:absolute;left:-12px;top:22px;border:8px solid transparent;border-right:12px solid var(--blue);border-left:0}
+.bubble small{display:block;color:var(--sub);font-size:14px}
+.bubble .q{font-weight:700}
+@keyframes pop{from{transform:scale(.95);opacity:0}to{transform:none;opacity:1}}
+@keyframes up{from{transform:translateY(0);opacity:1}to{transform:translateY(-30px);opacity:0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.choices{display:grid;gap:10px;margin-top:8px}
+.btn{min-height:54px;border:2px solid var(--blue);background:#fff;color:var(--blue);border-radius:14px;font:inherit;font-weight:700;padding:10px 14px;cursor:pointer;text-align:left}
+.btn:hover{background:var(--blue2)}
+.btn.main{background:var(--blue);color:#fff;text-align:center}
+.btn.ok{border-color:var(--green);color:var(--green)}
+.btn.warn{border-color:var(--amber);color:var(--amber)}
+.btn.sm{min-height:42px;padding:6px 12px;font-size:15px}
+.btn.ghost{border-color:var(--line);color:var(--sub)}
+:focus-visible{outline:4px solid #f2a900;outline-offset:2px}
+label{display:block;font-size:15px;color:var(--sub);margin:8px 0 2px}
+input,select,textarea{width:100%;font:inherit;padding:11px;border:2px solid #c5ccd4;border-radius:10px;background:#fff;color:var(--ink)}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;margin:10px 0}
+.card h2{margin:0 0 6px;font-size:20px}
+.alert{border-radius:12px;padding:10px 12px;margin:8px 0;font-size:16px}
+.alert.red{background:var(--red2);color:#7a2a22}.alert.amber{background:var(--amber2);color:#6b4a00}.alert.green{background:var(--green2);color:#1b5436}
+.pill{display:inline-block;border-radius:99px;padding:0 10px;font-size:14px}
+.p-ok{background:var(--green2);color:var(--green)}.p-todo{background:var(--red2);color:var(--red)}.p-ask{background:var(--amber2);color:var(--amber)}.p-na{background:#eceff2;color:var(--sub)}
+pre.out{white-space:pre-wrap;word-break:break-word;font:inherit;font-size:16px;background:#f3f5f8;border:1px solid var(--line);border-radius:12px;padding:12px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.title{text-align:center;padding:24px 8px}
+.title h1{font-size:30px;margin:8px 0}
+.title p{color:var(--sub)}
+.dock{flex-wrap:wrap;position:fixed;left:0;right:0;bottom:0;background:#fffe;border-top:1px solid var(--line);padding:8px;display:flex;gap:8px;justify-content:center;backdrop-filter:blur(6px);z-index:9}
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#ffd44d;color:#4a3800;font-weight:700;border-radius:99px;padding:6px 18px;animation:up 1s ease-out forwards;z-index:20}
+.big{font-size:44px;text-align:center}
+.btn.xl{min-height:84px;font-size:22px;padding:16px 20px;touch-action:manipulation;text-align:center}
+.btn.sel{background:var(--blue);color:#fff;border-color:#254b7d}
+.btn.xl.main{min-height:96px;font-size:26px}
+.xlgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.stepper{display:flex;gap:16px;align-items:center;justify-content:center;margin-top:10px}
+.stepper .btn{flex:0 0 96px;font-size:38px;text-align:center;padding:0}
+.stepper .count{flex:1;text-align:center;font-size:60px;font-weight:700;line-height:1}
+.stepper .count small{font-size:22px;margin-left:4px}
+.sum{text-align:center;font-weight:700;margin:14px 0 0;min-height:1.7em}
+a.btn{display:inline-block;text-decoration:none;text-align:center;line-height:1.4}
+.q-item{border-top:1px solid var(--line);padding:10px 0}
+.q-item:first-child{border-top:0}
+.done-q{opacity:.55}
+@media print{.dock,.map,.hud,button{display:none!important}body{background:#fff}}
+#tane-hub{max-width:736px;margin:0 auto 160px;overflow-wrap:anywhere}#app:has(+ #dock){padding-bottom:20px}#tane-hub [hidden]{display:none!important}#tane-hub button{width:auto}#tane-hub .choices button{width:100%}.dock{padding-bottom:calc(8px + env(safe-area-inset-bottom))}@media print{#tane-hub{display:none}}</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="dock" id="dock"></div>
+<script>
+"use strict";
+const KEY="travel-quest-tane-v2";
+const ST=[
+ {n:"はじめに",ic:"🎒",intro:"まずは旅のあらましを教えてね。ここから「個別旅行支援計画」を一緒に育てていくよ。"},
+ {n:"① 事前調査",ic:"🏨",intro:"ステージ①は計画と事前調査。宿・介助者・病院など、旅の土台を固めよう。"},
+ {n:"② 出発前",ic:"🧳",intro:"ステージ②は出発1〜2週間前。荷造りと、普段の生活支援を両立できるか見ていくよ。"},
+ {n:"③ 搭乗",ic:"✈️",intro:"ステージ③は出発と飛行機。自宅から到着先のホテルまでの流れを確認しよう。"},
+ {n:"④ 観光",ic:"🗺️",intro:"ステージ④は観光・イベント。移動経路とトイレ、介助者を押さえよう。"},
+ {n:"⑤ 夜間",ic:"🌙",intro:"ステージ⑤は宿泊と夜間の生活支援。ここが一番の山場になりやすいよ。"},
+ {n:"緊急時",ic:"🛟",intro:"もしものときの備えを作ろう。旅全体を守るステージだよ。"},
+ {n:"費用",ic:"💴",intro:"最後は費用。全体の見通しを立てよう。"}
+];
+const CHK=[["確認できた","ok"],["問い合わせ中・手配中","ask"],["まだ・これから","todo"],["今回は不要","na"]];
+const METH=[["公的制度で確保","ok"],["自費の事業者で確保","ok"],["友人・知人にお願いする","ok"],["家族にお願いする","ok"],["まだ決まっていない","todo"],["対応してもらえない","todo"]];
+const chk=(id,st,label,q,tip,inq,opts)=>({id,st,type:"choice",label,q,tip,inq,opts:opts||CHK,memo:true});
+const care=(id,st,label,q,tip,inq)=>({id,st,type:"choice",label,q,tip,inq,opts:METH,memo:true,care:true});
+const ALL=[
+ {id:"basic",st:0,type:"form",q:"どこへ、いつ行く？ 分かるところだけでだいじょうぶ！",fields:[
+  {k:"dest",l:"行きたい場所",ph:"例: 東京"},{k:"purpose",l:"目的・イベント",ph:"例: ライブ観覧"},
+  {k:"start",l:"出発日",t:"date"},{k:"end",l:"帰着日",t:"date"}],
+  after:D=>(D.start&&D.end&&D.end<D.start)?"帰着日が出発日より前になっているみたい。あとで直せるよ。":(D.dest?`${D.dest}への旅だね。さっそく進めよう！`:"OK、決まったところから進めよう！")},
+ {id:"who",st:0,type:"who",q:"だれと行く？ あてはまるものを押してね。まちがえても、もう一度押せば取り消せるよ。ゆっくりで大丈夫！"},
+ {id:"pass",st:1,type:"form",q:"まず「車椅子パスポート」をつくろう。一度登録すれば、問い合わせ文に何度でも使えるよ。",fields:[
+  {k:"wKind",l:"車椅子の種類",ph:"電動車椅子 / ティルト式 など"},{k:"wModel",l:"メーカー・型式"},{k:"wSize",l:"寸法（全長×全幅×全高 mm）",ph:"例: 1000×620×1100"},
+  {k:"wWeight",l:"重量（本体 / 搭乗時総重量 kg）"},{k:"wBat",l:"バッテリーの種類・容量",ph:"例: リチウムイオン 24V 12Ah"},
+  {k:"wBatRm",l:"バッテリーの取り外し",opts:["わからない","可","不可","要工具"]},{k:"wTrans",l:"移乗の方法",opts:["未入力","全介助","一部介助","リフト使用","自力"]},{k:"wNote",l:"その他の留意点",ph:"クッション、姿勢保持など"}],
+  after:D=>"登録できたよ。あとで問い合わせ文に自動で入るからね。"},
+ chk("hotel",1,"バリアフリー対応ホテル","泊まるホテルは、車椅子で使えるバリアフリー客室かどうか確認できた？","客室の仕様はホテルごとにまちまち。「旅の計画書」の問い合わせ文で一気に確認しよう。","hotel"),
+ chk("room",1,"浴室・トイレ・ベッドの仕様","浴室・トイレ・ベッドの段差、広さ、高さは確認できた？","ベッドの高さと周りの空間は移乗に直結するよ。問い合わせ文に確認項目を入れてあるよ。","hotel"),
+ care("helper",1,"旅行先での介助者の確保","旅行中の介助は、主にどうやって確保する？","旅行先は契約できる事業者が少なめ。友人や家族との分担も含めて、早めに候補を探そう。","helper"),
+ chk("hosp",1,"受診できる医療機関","旅行先で受診できる病院は調べた？","滞在先の近くで受診できる病院を1か所は押さえておくと安心。後の「緊急時」ステージで連絡先も登録するよ。",""),
+ chk("repair",1,"車椅子の修理業者","旅行先で電動車椅子が故障したとき、頼れる修理業者は調べた？","メーカーの出張対応や代替機の貸出があるか、出発前に聞いておこう。",""),
+ {id:"pack",st:2,type:"form",q:"荷造りに介助者の手を使うと、普段の食事や生活の支援が圧迫されちゃうんだ。数字で見てみよう！",fields:[
+  {k:"pDays",l:"準備に使える日数",t:"number",ph:"例: 14"},{k:"pHours",l:"1日に使えるヘルパー等の介助時間（時間）",t:"number",ph:"例: 6"},
+  {k:"pDaily",l:"そのうち、食事・排泄など日常生活に必要な時間",t:"number",ph:"例: 5"},{k:"pHelp",l:"荷造りで介助者の手が必要な時間（合計）",t:"number",ph:"例: 4"}],
+  after:D=>{const spare=(+D.pHours-+D.pDaily)*+D.pDays,need=+D.pHelp;
+   if([spare,need].some(isNaN)||D.pDays===""||D.pHours===""||D.pHelp==="") return "数字は分かる範囲でOK。あとから直せるよ。";
+   if(need>spare){setQ("pack","荷造りの介助時間が足りない","荷造りを数日に分ける、友人に手伝ってもらう、必要な品を減らすなどで調整しよう。",2,"");return `余力は ${spare.toFixed(1)} 時間、荷造りに ${need} 時間必要。日常の支援が圧迫されそう。クエストに追加したよ。`;}
+   clearQ("pack");return `余力 ${spare.toFixed(1)} 時間に対して、荷造りは ${need} 時間。日常の支援と両立できそう！`;}},
+ chk("hadj",2,"ヘルパーの利用時間調整","出発前後のヘルパー利用時間は、事業所と調整できた？","出発前後は利用時間が増えやすいよ。早めに事業所へ相談しよう。",""),
+ chk("meal",2,"食事など日常支援との両立","準備期間も、食事など日常の支援を今まで通り受けられそう？","旅行準備のせいで日常支援が減らないよう、誰がどの時間を担うか書き出してみよう。",""),
+ chk("batt",2,"電動車椅子の仕様・バッテリー確認","電動車椅子の仕様とバッテリー（種類・容量・取り外し）は確認できた？","航空機に載せるときの条件に直結するよ。取扱説明書かメーカーで容量を確認しよう。","air"),
+ chk("aird",2,"航空会社への事前申告","航空会社への事前申告は済んだ？","申告期限は会社ごとに違うよ。問い合わせ文で、預け入れ条件と移乗支援をまとめて確認しよう。","air"),
+ chk("g1",3,"自宅から空港までの移動","自宅から空港までの移動手段は決まった？","福祉タクシーや家族の送迎など、乗り換えの少ない手段が安心だよ。","taxi"),
+ chk("g2",3,"搭乗口までの車椅子利用","空港内で、搭乗口までの車椅子の使い方は確認できた？","自分の車椅子をどこまで使えるかは空港・航空会社で異なるよ。","air"),
+ chk("g3",3,"機内用車椅子・座席への移乗","機内用車椅子や座席への移乗の支援は手配できた？","移乗を誰が担当するか、航空会社に事前に聞いておこう。","air"),
+ chk("g4",3,"到着空港からホテルへの移動","到着した空港からホテルまでの移動は決まった？","車椅子のまま乗れる車両の予約が必要になることが多いよ。","taxi"),
+ chk("t1",4,"観光中の移動経路","徒歩・電車・車での移動経路は、段差やエレベーターまで確認できた？","目的地ごとに「段差のない経路」を調べておくと当日が楽になるよ。","venue"),
+ chk("t2",4,"福祉タクシーの確保","福祉タクシーは確保できた？","繁忙期は早めに埋まるよ。往復と待ち時間もあわせて相談しよう。","taxi"),
+ chk("t3",4,"車椅子対応トイレ","ライブ会場などの車椅子対応トイレは、場所と広さを確認できた？","電動車椅子で入れる広さか、会場へ問い合わせるのが確実だよ。","venue"),
+ care("t4",4,"観光中の介助者","観光やイベント中の介助は、どうやって確保する？","観光中の同行者の負担も大きいから、交代できる人がいると安心だよ。","helper"),
+ care("n1",5,"入浴介助","宿泊先での「入浴介助」は、どうする？","入浴介助は事業者によって対応が分かれるよ。友人・家族に頼むなら、ホテルの浴室仕様も要確認。","helper"),
+ care("n2",5,"ベッドへの移乗","「ベッドへの移乗」は、どうする？","ベッドの高さと周りの空間を確認して、移乗の担当者を決めておこう。","helper"),
+ care("n3",5,"就寝・起床時の介助","「就寝・起床時の介助」は、どうする？","朝晩の時間帯は、事業者の対応時間と合うか確認が必要だよ。","helper"),
+ care("n4",5,"夜間の排泄介助","一番大事な「夜間の排泄介助」は、どうする？","公的制度も自費も夜間は難しい事例があるよ。友人など別の手段を含めて、新しい供給手段の検討が必要。","helper"),
+ {id:"emer",st:6,type:"form",q:"もしものときの連絡先を登録しよう。空欄はクエストとして残るよ。",fields:[
+  {k:"eMed",l:"受診できる医療機関（名称）"},{k:"eMedTel",l:"電話番号",t:"tel"},
+  {k:"eRep",l:"車椅子の修理・代替機（業者名）"},{k:"eRepTel",l:"電話番号",t:"tel"},
+  {k:"eAlt",l:"介助者が来られなくなったときの代替（名前・事業者）"},{k:"eAltTel",l:"電話番号",t:"tel"}],
+  after:D=>{const L=[["med",D.eMed,"受診できる医療機関を登録する","受診可能な医療機関は、滞在先の近くで1か所は確保しよう。"],["rep",D.eRep,"車椅子の修理・代替機を確保する","故障時の出張修理や代替機の貸出を、出発前に確認しよう。"],["alt",D.eAlt,"代替の介助者を決める","介助者が来られなくなる事態に備えて、第2候補を決めておこう。"]];
+   let miss=0;L.forEach(([k,v,t,tip])=>{if(!String(v||"").trim()){miss++;setQ("em:"+k,t,tip,6,"")}else clearQ("em:"+k)});
+   return miss?`未登録が ${miss} 件あるよ。クエストに追加したから、決まったら戻ってきてね。`:"連絡先を記録しました。対応可否と電話番号を確認してください。";}},
+ {id:"cost",st:7,type:"form",q:"見込み費用を教えて。分かるところだけでOK！",fields:[
+  {k:"cHotel",l:"宿泊（円）",t:"number"},{k:"cTrans",l:"交通（円）",t:"number"},{k:"cCare",l:"介助（円）",t:"number"},{k:"cOther",l:"イベント・その他（円）",t:"number"},
+  {k:"cPayer",l:"主な負担者",opts:["未定","本人","友人・同行者","公的制度","その他"]}],
+  after:D=>{const t=["cHotel","cTrans","cCare","cOther"].reduce((a,k)=>a+(+D[k]||0),0);
+   if(D.cPayer==="未定"){setQ("cost","費用の負担者を決める","旅行費用の負担は制度・資金面の対策が必要になることがあるよ。自治体や事業者に個別に確認しよう。",7,"");}else clearQ("cost");
+   return `合計の見込みは ${yen(t)}。${D.cPayer==="未定"?"負担者が未定なのでクエストに追加したよ。":"ここまでお疲れさま！"}`;}}
+];
+const SRCH={e_move:"taxi",hosp:"hosp",repair:"repair",t2:"taxi",g1:"taxi",g4:"taxi","em:med":"hosp","em:rep":"repair"};
+/* ===== かんたんモード用の質問（さわるだけ）===== */
+const ECHK=[["できている・だいじょうぶ","ok"],["これから・手伝ってほしい","todo"],["今回は必要ない","na"]];
+const EMETH=[["公的制度のヘルパー","ok"],["自費の事業者","ok"],["家族・友人","ok"],["まだ・相談したい","todo"]];
+const E=(id,st,label,q,tip,extra)=>Object.assign({id,st,type:"choice",label,q,tip,inq:"",opts:ECHK,easyOnly:true},extra||{});
+const ins=(before,...ns)=>ALL.splice(ALL.findIndex(n=>n.id===before),0,...ns);
+ins("who",
+ E("e_where",0,"行き先","どこへ行きたい？","行き先が決まったら、「くわしく入力」で場所を書くと、探す機能が使いやすくなるよ。",{qt:"行き先を決める",opts:[["沖縄県内","ok",{dest:"沖縄県内"}],["九州・本州","ok",{dest:"九州・本州"}],["北海道","ok",{dest:"北海道"}],["海外","ok",{dest:"海外"}],["まだ決まっていない","todo"]]}),
+ E("e_when",0,"時期","いつごろ行きたい？","時期が決まると、予約や介助者の手配が進めやすくなるよ。",{qt:"時期を決める",opts:[["1か月以内","ok",{when:"1か月以内"}],["2〜3か月先","ok",{when:"2〜3か月先"}],["半年以上先","ok",{when:"半年以上先"}],["まだ決まっていない","todo"]]}));
+ins("hotel",E("e_chair",1,"車椅子の種類","いつも使っている車椅子は？","",{opts:[["電動車椅子","ok",{wKind:"電動車椅子"}],["手動車椅子","ok",{wKind:"手動車椅子"}],["ティルト・リクライニング式","ok",{wKind:"ティルト・リクライニング式の車椅子"}],["使っていない","ok",{wKind:"車椅子は使わない"}]]}));
+ins("hadj",E("e_pack",2,"荷造りの手伝い","荷造りは、だれかに手伝ってもらえそう？","荷造りに介助の時間を使うと、日常の支援が減ってしまうことがあるよ。早めに分担を決めよう。",{opts:[["家族・友人が手伝える","ok"],["ヘルパーにお願いする","ok"],["まだ・手伝ってほしい","todo"]]}));
+ins("g1",E("e_move",3,"行き帰りの移動","行き帰りの移動（空港・駅・福祉タクシー）は、手配できた？","車椅子のまま乗れる車両は、早めの予約が安心だよ。「さがす」で探せるよ。",{inq:"taxi"}));
+ins("n1",E("e_night",5,"夜間の介助（入浴・移乗・排泄）","夜の介助（お風呂・ベッド・トイレ）は、どうする？","公的制度も自費も夜間は難しい事例があるよ。友人など別の手段を含めて、新しい供給手段の検討が必要。",{opts:EMETH,care:true,inq:"helper"}));
+ins("emer",E("e_emer",6,"緊急時の連絡先","もしものときの連絡先（病院・車椅子の修理・代わりの介助者）は、決めてある？","病院・修理業者・代わりの介助者の3つを、出発前に決めておこう。「さがす」でも探せるよ。"));
+ins("cost",E("e_cost",7,"予算","予算のめやすは？","介助・宿泊・交通の費用を足して考えよう。だれが負担するかも一緒に決めると安心。",{qt:"予算を決める",opts:[["〜5万円","ok",{budget:"〜5万円"}],["〜10万円","ok",{budget:"〜10万円"}],["〜20万円","ok",{budget:"〜20万円"}],["20万円より多い","ok",{budget:"20万円より多い"}],["まだ決まっていない","todo"]]}));
+["who","hotel","helper","hosp","repair","t2","t3"].forEach(id=>{const n=ALL.find(x=>x.id===id);if(n)n.easy=true});
+ALL.forEach(n=>{if(SRCH[n.id])n.search=SRCH[n.id]});
+let NODES=ALL;
+const optsOf=n=>(S.mode==="easy"&&!n.easyOnly)?(n.care?EMETH:ECHK):n.opts;
+const CATS=[
+ {k:"repair",ic:"🔧",t:"義肢製作所・車椅子の修理",kws:["義肢装具 製作所","車椅子 修理","電動車椅子 修理 福祉用具"],
+  ask:["電動車椅子（型式・バッテリー）の修理や点検に対応しているか。義肢装具の事業所は、車椅子の修理が対象外のこともあります","出張修理・部品の取り寄せ・代替機の貸出ができるか","営業時間と、土日・夜間の緊急対応","旅行日程中に、すぐ見てもらえるか"]},
+ {k:"hosp",ic:"🏥",t:"受診できる病院",kws:["総合病院","救急外来 病院","整形外科 リハビリテーション"],
+  ask:["夜間・休日の救急を受け入れているか","車椅子のまま受診・入院の相談ができるか","紹介状や診療情報提供書が必要か（かかりつけ医に依頼）","旅行者として初診で受診できる診療科"]},
+ {k:"taxi",ic:"🚖",t:"介護タクシー・福祉車両",kws:["福祉タクシー 車椅子","介護タクシー 電動車椅子","福祉車両 レンタカー"],
+  ask:["電動車椅子の寸法・重量で乗れるか（リフト／スロープの仕様）","運賃と介助料、待機・往復の料金","予約の締切と、繁忙期の確保の見込み","乗降時の介助の範囲、キャンセル規定"]}
+];
+const catOf=k=>CATS.find(c=>c.k===k);
+
+/* ===== 状態 ===== */
+let S;
+const fresh=()=>({view:"title",i:0,A:{},D:{},Q:{},C:[],cleared:{},react:null,next:null,showInq:null});
+function load(){try{const r=localStorage.getItem(KEY);if(r){S=JSON.parse(r);S.react=null;S.C=S.C||[];return true}}catch(e){}S=fresh();return false}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const hasSave=load();
+if(!S.mode)S.mode=Object.keys(S.A).length?"full":"easy";
+function applyMode(){NODES=S.mode==="easy"?ALL.filter(n=>n.easy||n.easyOnly):ALL.filter(n=>!n.easyOnly);if(S.i>=NODES.length||S.i<0)S.i=0}
+applyMode();
+const $=s=>document.querySelector(s);
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const yen=n=>"¥"+Math.round(+n||0).toLocaleString("ja-JP");
+const nodesOf=st=>NODES.filter(n=>n.st===st);
+const setQ=(id,title,tip,st,inq)=>{const o=S.Q[id];S.Q[id]={title,tip,st,inq,done:false}};
+const clearQ=id=>{delete S.Q[id]};
+const stars=()=>Object.keys(S.A).length+Object.values(S.Q).filter(q=>q.done).length*3+Object.keys(S.cleared).length*5;
+const level=n=>n<10?"たびのたまご":n<25?"たびびと":n<45?"プランナー":"旅のマスター";
+const stDone=st=>nodesOf(st).every(n=>S.A[n.id]);
+const openQ=()=>Object.entries(S.Q).filter(([,q])=>!q.done);
+
+/* ===== アバター ===== */
+const AVATAR=`<svg class="avatar" viewBox="0 0 100 100" role="img" aria-label="コンシェルジュのソラ">
+<path d="M14 58 L2 44 L22 50Z" fill="#cfe0f7" stroke="#3266a8" stroke-width="3" stroke-linejoin="round"/><path d="M86 58 L98 44 L78 50Z" fill="#cfe0f7" stroke="#3266a8" stroke-width="3" stroke-linejoin="round"/>
+<ellipse cx="50" cy="58" rx="34" ry="32" fill="#fff" stroke="#3266a8" stroke-width="4"/>
+<path d="M26 36 Q50 8 74 36Z" fill="#3266a8"/><rect x="22" y="34" width="56" height="7" rx="3" fill="#254b7d"/>
+<circle cx="39" cy="58" r="5" fill="#1f2933"/><circle cx="61" cy="58" r="5" fill="#1f2933"/>
+<circle cx="31" cy="68" r="5" fill="#f7b4ae" opacity=".8"/><circle cx="69" cy="68" r="5" fill="#f7b4ae" opacity=".8"/>
+<path d="M41 72 Q50 81 59 72" fill="none" stroke="#1f2933" stroke-width="3.5" stroke-linecap="round"/></svg>`;
+
+/* ===== 描画 ===== */
+function hud(){
+  const total=NODES.length,done=NODES.filter(n=>S.A[n.id]).length,pct=Math.round(done/total*100),q=openQ().length;
+  return `<div class="hud"><b>旅のクエスト</b><span class="chip">⭐ ${stars()}｜${level(stars())}</span>
+  <div class="bar" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="進み具合"><i style="width:${pct}%"></i></div>
+  <span class="chip ${q?"red":""}">クエスト ${q}</span></div>`;
+}
+function mapHtml(){
+  const cur=S.view==="play"?NODES[S.i].st:-1;
+  return `<div class="map" role="navigation" aria-label="ステージ">${ST.map((s,i)=>`<button data-act="stage" data-st="${i}" class="${i===cur?"cur":""} ${stDone(i)?"done":""}" ${i===cur?'aria-current="step"':""}><span class="ic">${stDone(i)?"✅":s.ic}</span>${esc(s.n)}</button>`).join("")}</div>`;
+}
+function fieldHtml(f){
+  const v=S.D[f.k]??"";
+  if(f.opts) return `<label for="f-${f.k}">${esc(f.l)}</label><select id="f-${f.k}" data-k="${f.k}">${f.opts.map(o=>`<option${v===o||(!v&&o===f.opts[0])?" selected":""}>${esc(o)}</option>`).join("")}</select>`;
+  return `<label for="f-${f.k}">${esc(f.l)}</label><input id="f-${f.k}" data-k="${f.k}" type="${f.t||"text"}" ${f.t==="number"?'inputmode="decimal" step="any" min="0"':""} value="${esc(v)}" placeholder="${esc(f.ph||"")}">`;
+}
+function playHtml(){
+  const n=NODES[S.i],first=nodesOf(n.st)[0]===n;
+  let body="";
+  if(S.react){
+    body=`<div class="bubble" aria-live="polite" tabindex="-1" id="focus"><div class="q">${esc(S.react.text)}</div></div>`;
+    return `<div class="scene">${AVATAR}${body}</div><div class="choices"><button class="btn main" data-act="next">つぎへ ▶</button></div>`;
+  }
+  body=`<div class="bubble" aria-live="polite" tabindex="-1" id="focus">${first?`<small>${esc(ST[n.st].intro)}</small>`:""}<div class="q">${esc(n.q)}</div></div>`;
+  let ctl="";
+  if(n.type==="choice"){
+    const a=S.A[n.id];
+    const easy=S.mode==="easy",opts=optsOf(n);
+    ctl=`${easy?"":memoHtml(n,a)}
+    <div class="choices" style="margin-top:12px">${opts.map(([l,s],i)=>`<button class="btn xl ${s==="ok"?"ok":s==="todo"?"warn":""}" data-i="${i}" data-act="ans" data-l="${esc(l)}" data-s="${s}">${a&&a.label===l?"✔ ":""}${esc(l)}</button>`).join("")}</div>${n.search?`<div class="choices" style="margin-top:10px"><button class="btn sm" data-act="search" data-c="${n.search}">🔍 行き先の周辺で探してみる</button></div>`:""}${easy?`<div class="choices" style="margin-top:26px"><button type="button" class="btn ghost" data-act="mode" data-fk="dm">⌨ くわしく入力する（文字で入れられる方）</button></div>`:""}`;
+  }else if(n.type==="who"){
+    ctl=whoHtml();
+  }else{
+    ctl=`<div id="form" class="card">${n.fields.map(fieldHtml).join("")}<div class="choices" style="margin-top:14px"><button type="button" class="btn xl main" data-act="formok">決定！</button></div></div>`;
+  }
+  return `<div class="scene">${AVATAR}${body}</div>${ctl}`;
+}
+function clearHtml(){
+  const st=S.clearSt,list=nodesOf(st),A=S.A;
+  const ok=list.filter(n=>A[n.id]?.s==="ok").length,todo=list.filter(n=>["todo","ask"].includes(A[n.id]?.s)).length;
+  return `<div class="card title"><div class="big">🏅</div><h1>ステージクリア！</h1><p><b>${esc(ST[st].n)}</b></p>
+  <p>確認済み ${ok}／未解決（クエスト）${todo}<br>⭐ +5 ボーナス</p>
+  ${todo?`<div class="alert amber">未解決のクエストは「クエストボード」からいつでも見直せるよ。</div>`:`<div class="alert green">このステージの回答を記録しました。実際の手配状況は計画書で確認してください。</div>`}
+  <div class="choices"><button class="btn main" data-act="after-clear">つぎのステージへ ▶</button></div></div>`;
+}
+function questHtml(){
+  const ents=Object.entries(S.Q),open=ents.filter(([,q])=>!q.done),done=ents.filter(([,q])=>q.done);
+  const item=([id,q])=>`<div class="q-item ${q.done?"done-q":""}"><div class="row"><span class="pill ${q.done?"p-ok":"p-todo"}">${q.done?"解決済み":"未解決"}</span><b>${esc(q.title)}</b></div>
+   <div style="font-size:16px;color:var(--sub)">${esc(q.tip)}</div>
+   <div class="row" style="margin-top:6px">${q.done?"":`<button class="btn sm ok" data-act="solve" data-id="${esc(id)}">解決した！ ⭐+3</button>`}
+   ${NODES.some(n=>n.id===id||id.startsWith(n.id+":"))?`<button class="btn sm ghost" data-act="goto" data-id="${esc(id)}">この質問に戻る</button>`:""}
+   ${q.inq?`<button class="btn sm" data-act="inq" data-k="${q.inq}">問い合わせ文をつくる</button>`:""}
+   ${SRCH[id]?`<button class="btn sm" data-act="search" data-c="${SRCH[id]}">🔍 探してみる</button>`:""}</div></div>`;
+  return `<div class="card"><h2>📜 クエストボード</h2>${open.length?open.map(item).join(""):'<p>登録された未解決クエストはありません。未回答・手配状況も確認してください。</p>'}</div>
+   ${done.length?`<div class="card"><h2>解決したクエスト</h2>${done.map(item).join("")}</div>`:""}
+   ${S.showInq?`<div class="card"><h2>問い合わせ文</h2><pre class="out" id="inqout">${esc(inqText(S.showInq))}</pre><button class="btn sm" data-act="copy" data-t="inq">コピー</button></div>`:""}`;
+}
+function titleHtml(){
+  return `<div class="card title">${AVATAR.replace('class="avatar"','style="width:130px"')}<h1>旅のクエスト</h1><p>AI旅行コンシェルジュ（仮称）</p>
+  <p>コンシェルジュの質問に答えていくと、<br>あなたの「個別旅行支援計画」ができあがります。<br>旅を予約するのではなく、旅を<b>実現可能</b>にするゲームです。</p>
+  <div class="choices">${hasSave&&Object.keys(S.A).length?`<button class="btn xl main" data-act="cont">つづきから</button>`:""}
+  <button class="btn xl ${hasSave&&Object.keys(S.A).length?"":"main"}" data-act="new" data-m="easy">👆 かんたんモードではじめる<br><small>ボタンをさわるだけ（おすすめ）</small></button>
+  <button class="btn xl" data-act="new" data-m="full">⌨ くわしく入力モードではじめる<br><small>文字で細かく入れられる方向け</small></button></div>
+  <p style="font-size:15px">ご家族や支援者の方が、かわりに入力してもだいじょうぶです。<br><button class="btn sm ghost" data-act="erase">保存データを消去する</button><br>あとからモードは切りかえられます。</p>
+  <p style="font-size:14px">入力内容はブラウザ内に保存します。外部検索では行き先と検索語が検索サービスへ送られ、音声入力は端末・ブラウザにより外部サービスで処理される場合があります。共用端末では利用後に保存データを消去してください。</p></div>`;
+}
+function reportHtml(){
+  const q=openQ().length;
+  return `<div class="scene">${AVATAR}<div class="bubble" id="focus" tabindex="-1"><div class="q">旅行支援計画書が作成されました。${esc(readinessNotice())}</div></div></div>
+  <div class="card"><h2>📋 個別旅行支援計画</h2><pre class="out" id="repout">${esc(reportText())}</pre>
+  <div class="row"><button class="btn sm" data-act="copy" data-t="rep">コピー</button><button class="btn sm ghost" data-act="dl">テキストで保存</button><button class="btn sm ghost" data-act="print">印刷・PDF</button><button class="btn sm ghost" data-act="erase">保存データを消去する</button></div></div>
+  <div class="card"><h2>✉️ 問い合わせ文をつくる</h2><div class="row">${Object.entries(INQN).map(([k,l])=>`<button class="btn sm ${S.showInq===k?"main":""}" data-act="inq" data-k="${k}">${l}</button>`).join("")}</div>
+  ${S.showInq?`<pre class="out" style="margin-top:10px" id="inqout">${esc(inqText(S.showInq))}</pre><button class="btn sm" data-act="copy" data-t="inq">コピー</button>`:'<p style="color:var(--sub)">送りたい相手を選んでください。</p>'}</div>`;
+}
+function render(){
+  let h=hud();
+  if(S.view==="title"){h=titleHtml();$("#dock").style.display="none"}
+  else{
+    $("#dock").style.display="flex";
+    h+=mapHtml();
+    h+= S.view==="play"?playHtml(): S.view==="clear"?clearHtml(): S.view==="quests"?questHtml(): S.view==="search"?searchHtml(): reportHtml();
+  }
+  const fk=document.activeElement?.dataset?.fk,key=S.view+":"+S.i+":"+!!S.react;
+  $("#app").innerHTML=h;
+  $("#dock").innerHTML=`<button class="btn sm ghost" data-act="back">◀ もどる</button><button class="btn sm" data-act="search">🔍 さがす</button><button class="btn sm" data-act="quests">📜 クエスト ${openQ().length}</button><button class="btn sm" data-act="report">📋 計画書</button><button class="btn sm ghost" data-act="home">🏠 つづき</button><button class="btn sm ghost" data-act="mode">${S.mode==="easy"?"⌨ くわしく入力":"👆 かんたんに切りかえ"}</button>`;
+  if(key!==lastKey){$("#focus")?.focus({preventScroll:true})}
+  else if(fk){document.querySelector('[data-fk="'+fk+'"]')?.focus({preventScroll:true})}
+  lastKey=key;
+}
+
+/* ===== 計画書・問い合わせ文 ===== */
+const SL={ok:"✓ 確認済み",ask:"▲ 手配中",todo:"● 未解決",na:"－ 今回は不要"};
+function passText(){
+  const D=S.D,r=[["車椅子の種類","wKind"],["メーカー・型式","wModel"],["寸法","wSize"],["重量","wWeight"],["バッテリー","wBat"],["バッテリー取り外し","wBatRm"],["移乗方法","wTrans"],["留意点","wNote"]];
+  return r.filter(([,k])=>D[k]&&!["わからない","未入力"].includes(D[k])).map(([l,k])=>`・${l}：${D[k]}`).join("\n");
+}
+function readinessNotice(){
+ const relevant=NODES.filter(n=>n.care);
+ const missing=relevant.filter(n=>!S.A[n.id]||!["ok","na"].includes(S.A[n.id].s));
+ return (missing.length?"介助者は確保できていません（未確認・手配中を含む）："+missing.map(n=>n.label).join("、")+"。":"入力上の介助状況を記録しました。")+" 旅行の可否は本人・支援者が実際の条件を確認して判断してください。";
+}
+function reportText(){
+  const D=S.D,L=[];
+  L.push("【個別旅行支援計画】",readinessNotice());
+  L.push(`行き先：${D.dest||"未入力"}／目的：${D.purpose||"未入力"}`);
+  L.push(`日程：${(D.start||D.end)?(D.start||"未定")+" 〜 "+(D.end||"未定"):(D.when||"未定")}／同行：${D.people||"未入力"}`);
+  const p=passText();if(p){L.push("","■ 車椅子パスポート",p)}
+  ST.forEach((s,i)=>{
+    const ns=nodesOf(i).filter(n=>n.type==="choice");if(!ns.length)return;
+    L.push("","■ "+s.n);
+    ns.forEach(n=>{const a=S.A[n.id];if(!a){L.push(`・${n.label}：（未回答）`);return}
+      L.push(`・${n.label}：${n.care?a.label:SL[a.s]}${n.care&&a.s==="todo"?" ●":""}${a.note?`（${a.note}）`:""}`)});
+  });
+  if(S.D.pDays!==undefined&&S.D.pHelp!==undefined){const sp=(+D.pHours-+D.pDaily)*+D.pDays;L.push("","■ 荷造りと日常支援",`・荷造りに必要な介助 ${D.pHelp||0} 時間／準備期間の余力 ${isNaN(sp)?"—":sp.toFixed(1)} 時間`)}
+  const em=[["医療機関",D.eMed,D.eMedTel],["修理・代替機",D.eRep,D.eRepTel],["代替介助者",D.eAlt,D.eAltTel]].filter(x=>x[1]);
+  if(em.length){L.push("","■ 緊急時の連絡先",...em.map(([k,n,t])=>`・${k}：${n}${t?" "+t:""}`))}
+  const tot=["cHotel","cTrans","cCare","cOther"].reduce((a,k)=>a+(+D[k]||0),0);
+  if(D.cPayer){L.push("","■ 費用",`・宿泊 ${yen(D.cHotel)}／交通 ${yen(D.cTrans)}／介助 ${yen(D.cCare)}／その他 ${yen(D.cOther)}`,`・合計 ${yen(tot)}／主な負担者：${D.cPayer}`)}
+  if(D.budget)L.push("","■ 予算のめやす","・"+D.budget);
+  if(S.C.length){L.push("","■ 探した候補（キープ）",...S.C.map(c=>`・[${catOf(c.cat).t}] ${c.name}${c.tel?" "+c.tel:""}（${c.st}）${c.memo?" "+c.memo:""}`))}
+  const oq=openQ();
+  L.push("","■ 未解決事項（クエスト）",...(oq.length?oq.map(([,q])=>`● ${q.title}`):["なし"]));
+  return L.join("\n");
+}
+const INQN={hotel:"ホテル",air:"航空会社",taxi:"福祉タクシー",helper:"介助事業者",venue:"会場・観光施設"};
+function inqText(k){
+  const D=S.D,d=v=>v||"（未入力）",pass=passText()||"・（車椅子パスポート未入力）";
+  const head=`お世話になっております。\n${D.start?D.start+"〜"+(D.end||"未定"):(D.when||"日程未定")}に${d(D.dest)}への旅行を予定しております（${d(D.people)}）。\n`;
+  const foot="\n以上についてご確認のうえ、ご回答いただけますと幸いです。";
+  const b={
+   hotel:`バリアフリー客室についてお尋ねします。\n\n【確認したい点】\n1. 客室の出入口幅・段差\n2. 浴室の仕様（段差、シャワーチェア等の貸出）\n3. トイレの広さ・手すりの位置\n4. ベッドの高さ、周囲の可動スペース\n5. 介助者の同室・追加宿泊の可否と料金\n6. 夜間の緊急時の対応\n7. 電動車椅子の充電用コンセントの位置\n\n【車椅子の情報】\n${pass}`,
+   air:`車椅子で搭乗するため、事前申告をさせてください。\n\n【確認したい点】\n1. 電動車椅子の預け入れ条件（バッテリーの種類・容量・取り外し）\n2. 搭乗口までの車椅子利用、機内用車椅子・座席への移乗支援\n3. 事前申告の期限と手続き\n4. 座席の指定（通路側・肘掛けの可動など）\n5. 到着空港での車椅子の受け渡し\n\n【車椅子の情報】\n${pass}`,
+   taxi:`車椅子のまま乗車できる福祉車両についてお尋ねします。\n\n【確認したい点】\n1. 電動車椅子の乗車可否\n2. 空港・ホテル・会場間の送迎の可否と料金\n3. 乗降時の介助の範囲\n4. 予約方法とキャンセル規定\n\n【車椅子の情報】\n${pass}`,
+   helper:`旅行先での介助サービスについてご相談です。\n\n【確認したい点】\n1. 旅行先（${d(D.dest)}）でのサービス提供の可否\n2. 対応可能な時間帯（特に夜間の入浴・移乗・就寝起床・排泄介助）\n3. 費用（時間単価・交通費・宿泊費の扱い）\n4. 事前面談や情報提供の要否\n5. 当日来られなくなった場合の代替対応\n\n【利用者の情報】\n${pass}`,
+   venue:`${d(D.purpose)}への参加にあたり、車椅子対応についてお尋ねします。\n\n【確認したい点】\n1. 車椅子席の有無・申込方法・介助者の入場条件\n2. 車椅子対応トイレの場所・数・広さ\n3. 段差のない経路、エレベーターの有無\n4. 混雑時の動線・退場時の配慮\n\n【車椅子の情報】\n${pass}`
+  }[k];
+  return head+"\n"+b+"\n"+foot;
+}
+
+/* ===== メモ（さわって選ぶ・声で入れる）===== */
+const M=id=>{S.M=S.M||{};return S.M[id]=S.M[id]||{sel:[],txt:""}};
+const CH_DEF=["電話した","メールした","返事待ち","あとで確認する","友人に相談中","予約できた","費用を確認中"];
+function chipsFor(n){
+  if(n.care||n.inq==="helper")return ["電話した","返事待ち","見積もり待ち","友人に相談中","担当者名を聞いた","夜間は難しいと言われた","費用が高い","予約できた"];
+  if(n.inq==="taxi")return ["電動車椅子OKと言われた","リフト付き","スロープ式","料金を聞いた","予約できた","混む時期は早めに予約","返事待ち"];
+  if(n.inq==="air")return ["申告した","期限を確認した","バッテリー条件を確認中","移乗の支援OK","返事待ち","書類が必要"];
+  if(n.inq==="hotel")return ["バリアフリー室あり","浴室に段差あり","広さを確認中","写真を送ってもらう","介助者の同室OK","返事待ち","予約できた"];
+  if(n.inq==="venue")return ["車椅子席あり","トイレの広さを確認中","段差なしの経路OK","電話した","返事待ち"];
+  if(n.id==="hosp")return ["電話した","救急の受け入れOK","紹介状が必要","夜間は救急のみ","診療科を確認中","返事待ち"];
+  if(n.id==="repair")return ["出張修理OK","代替機あり","部品を取り寄せ","対応できないと言われた","電話した","返事待ち"];
+  return CH_DEF;
+}
+function getNote(n){const m=M(n.id),ta=document.getElementById("memo");if(ta)m.txt=ta.value.trim();return [...m.sel,m.txt].filter(Boolean).join("／")}
+function memoHtml(n,a){
+  const m=M(n.id);if(!m.init){m.init=1;if(a?.note&&!m.txt&&!m.sel.length)m.txt=a.note}
+  const sum=[...m.sel,m.txt].filter(Boolean).join("／");
+  if(S.memoOpen!==n.id)return `<div class="card" style="padding:12px"><button type="button" class="btn xl ghost" style="width:100%" data-act="memoopen" data-fk="mo">📝 メモをつける（えらぶだけ）</button>${sum?`<p class="sum">メモ：${esc(sum)}</p>`:""}</div>`;
+  return `<div class="card" style="padding:14px"><h3 style="margin:0 0 10px">📝 メモ（さわって えらぶだけ）</h3>
+   <div class="xlgrid">${chipsFor(n).map((c,i)=>`<button type="button" class="btn xl ${m.sel.includes(c)?"sel":""}" data-act="chip" data-t="${esc(c)}" data-fk="ch${i}" aria-pressed="${m.sel.includes(c)}">${m.sel.includes(c)?"✔ ":""}${esc(c)}</button>`).join("")}</div>
+   <div class="xlgrid" style="margin-top:16px"><button type="button" class="btn xl" data-act="mic" data-for="memo" data-fk="mic">🎤 声で入れる</button><button type="button" class="btn xl ghost" data-act="typeopen" data-fk="ty">⌨ 文字で書く</button></div>
+   ${S.memoType||m.txt?`<textarea id="memo" aria-label="メモ" style="margin-top:12px;font-size:20px;min-height:90px">${esc(m.txt)}</textarea>`:""}
+   ${sum?`<p class="sum">メモ：${esc(sum)}</p>`:""}
+   <div class="choices" style="margin-top:18px"><button type="button" class="btn xl main" data-act="memoclose" data-fk="mc">メモをとじる</button></div></div>`;
+}
+function saveTa(){const ta=document.getElementById("memo");if(ta&&NODES[S.i])M(NODES[S.i].id).txt=ta.value.trim()}
+function mic(id){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){toast("この画面では声の入力が使えません。えらぶだけでもOK");return}
+  if(!document.getElementById(id)&&id==="memo"){S.memoType=true;render()}
+  if(!document.getElementById(id))return;
+  try{
+    const r=new SR();r.lang="ja-JP";r.interimResults=false;r.maxAlternatives=1;
+    r.onresult=ev=>{const t=ev.results[0][0].transcript,e=document.getElementById(id);
+      if(e){e.value=(e.value?e.value+" ":"")+t;e.dispatchEvent(new Event("change",{bubbles:true}))}toast("入りました")};
+    r.onerror=()=>toast("聞き取れませんでした");
+    r.start();toast("🎤 話してください");
+  }catch(_){toast("声の入力が使えません")}
+}
+
+/* ===== 同行者（大きいボタンで選ぶ）===== */
+let lastKey="";
+const WHO=[["solo","🧑","本人ひとり"],["family","👨‍👩‍👧","家族"],["friend","🤝","友人・知人"],["helper","💁","ヘルパー・介助者"],["nurse","🩺","看護師・医療者"],["other","➕","ほかの人"]];
+function syncPeople(){
+  const set=S.D.whoSet=S.D.whoSet||[],others=set.filter(k=>k!=="solo");
+  if(!S.D.cManual)S.D.count=set.length?(set.includes("solo")?1:1+others.length):1;
+  const n=Math.max(1,Math.min(20,+S.D.count||1));S.D.count=n;
+  if(!set.length){S.D.people="";return}
+  S.D.people=set.includes("solo")?"本人のみ（1名）":`本人＋${others.map(k=>WHO.find(w=>w[0]===k)[2]).join("、")}（計${n}名）`;
+}
+function whoHtml(){
+  const set=S.D.whoSet||[],n=Math.max(1,+S.D.count||1);
+  return `<div class="card" style="padding:18px">
+   <div class="xlgrid">${WHO.map(([k,ic,l])=>`<button type="button" class="btn xl ${set.includes(k)?"sel":""}" data-act="who" data-k="${k}" data-fk="w-${k}" aria-pressed="${set.includes(k)}"><span aria-hidden="true">${ic}</span> ${set.includes(k)?"✔ ":""}${l}</button>`).join("")}</div>
+   <h2 style="margin-top:30px">人数（本人をふくめて）</h2>
+   <div class="stepper"><button type="button" class="btn xl" data-act="cnt" data-d="-1" data-fk="cm" aria-label="1人へらす">−</button>
+    <div class="count" aria-live="polite" role="status">${n}<small>人</small></div>
+    <button type="button" class="btn xl" data-act="cnt" data-d="1" data-fk="cp" aria-label="1人ふやす">＋</button></div>
+   <p class="sum" aria-live="polite">${esc(S.D.people||"まだ選んでいません")}</p>
+   <div class="choices" style="margin-top:30px"><button type="button" class="btn xl main" data-act="whook" data-fk="ok">これでOK</button></div>
+   <div class="choices" style="margin-top:46px"><button type="button" class="btn xl ghost" data-act="whoskip" data-fk="skip">まだ決まっていない</button></div></div>`;
+}
+function whoDone(text){
+  S.A.who={s:"ok"};toast("⭐ +1");S.react={text};save();render();window.scrollTo(0,0);
+}
+
+/* ===== 進行 ===== */
+let lock=false;
+function toast(t){const e=document.createElement("div");e.className="toast";e.textContent=t;document.body.appendChild(e);setTimeout(()=>e.remove(),1000)}
+function go(i){S.i=Math.max(0,Math.min(NODES.length-1,i));S.view="play";S.react=null;save();render();window.scrollTo(0,0)}
+function advance(){
+  const cur=NODES[S.i],ni=S.i+1;S.react=null;
+  const stEnd=ni>=NODES.length||NODES[ni].st!==cur.st;
+  if(stEnd&&!S.cleared[cur.st]&&stDone(cur.st)){S.cleared[cur.st]=true;S.clearSt=cur.st;S.view="clear";S.next=ni;toast("ステージクリア！");}
+  else if(ni>=NODES.length)S.view="report";
+  else{S.i=ni;S.view="play"}
+  save();render();window.scrollTo(0,0);
+}
+const REA=["いいね！","ばっちり！","さすがだね！"];
+function answer(label,s,set){
+  const n=NODES[S.i],note=getNote(n);
+  S.memoOpen=null;S.memoType=false;
+  S.A[n.id]={label,s,note};
+  if(set)Object.assign(S.D,set);
+ if(n.care && s==="ok"){ S.A[n.id].s="ask"; s="ask"; }
+  if(s==="todo"||s==="ask"||label==="対応してもらえない"){setQ(n.id,n.qt||n.label+"を解決する",n.tip,n.st,n.inq)}else clearQ(n.id);
+  toast("⭐ +1");
+  if(s==="todo"){const night=(n.id==="n4"||n.id==="e_night");S.react={text:`クエストに追加したよ。${n.tip}${night?" 夜間の介助は、このアプリでいちばん大切に見ていくポイントだよ。":""}`};save();render();}
+  else{lock=true;save();render();setTimeout(()=>{lock=false;advance()},S.mode==="easy"?900:(s==="ask"?500:400))}
+}
+function submitForm(){
+  const n=NODES[S.i];
+ if([...document.querySelectorAll('#form input[type="number"]')].some(el=>el.value!==""&&(!Number.isFinite(+el.value)||+el.value<0))){toast("0以上の数字を入力してください");return;}
+  document.querySelectorAll("#form [data-k]").forEach(el=>{S.D[el.dataset.k]=el.value});
+  S.A[n.id]={s:"ok"};
+  const msg=n.after?n.after(S.D):"";
+  toast("⭐ +1");
+  S.react={text:msg||"OK！"};save();render();window.scrollTo(0,0);
+}
+document.addEventListener("submit",e=>{
+  if(e.target.id==="form"){e.preventDefault();submitForm()}
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Enter"&&e.target.tagName==="INPUT"&&e.target.closest("#form")){e.preventDefault();submitForm()}
+});
+function addCand(){
+  const v=id=>(document.getElementById(id)?.value||"").trim();
+  if(!v("cname")){document.getElementById("cname")?.focus();return}
+  const c={id:"c"+Date.now(),cat:v("ccat"),name:v("cname"),tel:v("ctel"),memo:[...(S.cm||[]),v("cmemo")].filter(Boolean).join("／"),st:"候補"};
+  S.C.push(c);S.cf={};S.cm=[];keepEffects(c);toast("⭐ キープ！");save();render();
+}
+document.addEventListener("change",e=>{
+  const t=e.target;
+  if(t.id==="sdest"||t.id==="sarea"){S.D[t.id==="sdest"?"dest":"area"]=t.value.trim();save();render()}
+  if(t.id==="memo"&&NODES[S.i]){M(NODES[S.i].id).txt=t.value.trim();save()}
+  if(["ccat","cname","ctel","cmemo"].includes(t.id)){S.cf=S.cf||{};S.cf[t.id]=t.value}
+  if(t.dataset.cid){const c=S.C.find(x=>x.id===t.dataset.cid);if(c){c.st=t.value;save();render()}}
+});
+function keepEffects(c){
+  const m={hosp:"hosp",repair:"repair",taxi:"t2"}[c.cat];
+  if(c.cat==="hosp"&&!S.D.eMed){S.D.eMed=c.name;S.D.eMedTel=c.tel;setQ("em:med","医療機関の対応可否を確認する","候補の受診可否・電話番号を確認する。",6,"")}
+  if(c.cat==="repair"&&!S.D.eRep){S.D.eRep=c.name;S.D.eRepTel=c.tel;setQ("em:rep","修理業者の対応可否を確認する","候補の修理可否・電話番号を確認する。",6,"")}
+  const a=S.A[m];
+  if(!a||a.s==="todo"){S.A[m]={label:"問い合わせ中・手配中",s:"ask",note:c.name+(c.tel?" "+c.tel:"")};setQ(m,"候補の対応可否を確認する", "日時・条件・費用を確認してから解決する。",ALL.find(n=>n.id===m).st,"")}
+}
+const qs=kw=>encodeURIComponent([S.D.area,S.D.dest].filter(Boolean).join(" ")+" "+kw);
+const mapUrl=kw=>"https://www.google.com/maps/search/?api=1&query="+qs(kw);
+const webUrl=kw=>"https://www.google.com/search?q="+qs(kw);
+function searchHtml(){
+  const ready=!!(S.D.dest||S.D.area);
+  const cards=CATS.map(c=>`<div class="card" id="cat-${c.k}"><h2>${c.ic} ${esc(c.t)}</h2>
+   ${ready?c.kws.map(k=>`<div class="row" style="margin:6px 0"><span style="flex:1;min-width:150px">${esc(k)}</span>
+     <a class="btn sm" href="${mapUrl(k)}" target="_blank" rel="noopener noreferrer">地図で見る</a>
+     <a class="btn sm ghost" href="${webUrl(k)}" target="_blank" rel="noopener noreferrer">ウェブで探す</a></div>`).join(""):'<p style="color:var(--sub)">先に行き先を入力してね。</p>'}
+   <h3 style="font-size:16px;margin:10px 0 2px">電話で確認すること</h3><ul style="margin:0;padding-left:20px;font-size:16px">${c.ask.map(a=>`<li>${esc(a)}</li>`).join("")}</ul></div>`).join("");
+  const cands=S.C.length?S.C.map(c=>`<div class="q-item"><div class="row"><span class="pill p-ask">${esc(catOf(c.cat).t)}</span><b>${esc(c.name)}</b></div>
+    <div style="font-size:16px">${c.tel?`<a href="tel:${esc(c.tel)}">${esc(c.tel)}</a>　`:""}${esc(c.memo)}</div>
+    <div class="row" style="margin-top:6px"><select data-cid="${c.id}" style="width:auto" aria-label="状況">${["候補","連絡済み","対応OK","断られた"].map(s=>`<option${c.st===s?" selected":""}>${s}</option>`).join("")}</select>
+    <button class="btn sm ghost" data-act="delc" data-id="${c.id}">削除</button></div></div>`).join(""):'<p style="color:var(--sub)">見つけた候補をここにキープしよう。</p>';
+  return `<div class="scene">${AVATAR}<div class="bubble" id="focus" tabindex="-1"><div class="q">行き先の周辺で、頼れる場所を探そう。見つけたらキープして、電話で確認していこう！</div></div></div>
+  <div class="card"><h2>🔍 どのあたりで探す？</h2>
+   <label for="sdest">行き先</label><input id="sdest" value="${esc(S.D.dest||"")}" placeholder="例: 札幌">
+   <label for="sarea">駅・地区（任意）</label><input id="sarea" value="${esc(S.D.area||"")}" placeholder="例: 新千歳空港 / ホテルの最寄り駅">
+   <p style="font-size:14px;color:var(--sub);margin:8px 0 0">地図やウェブ検索の画面が別タブで開きます。ここには検索結果は表示されず、営業状況や対応可否は電話で確認が必要です。</p></div>
+  ${cards}
+  <div class="card"><h2>⭐ キープした候補</h2>${cands}
+   <div id="cform" style="margin-top:10px"><h3 style="font-size:16px;margin:0">候補を追加</h3>
+   <label for="ccat">種類</label><select id="ccat" name="cat" style="min-height:64px;font-size:20px">${CATS.map(c=>`<option value="${c.k}"${(S.cf?.ccat||S.sc)===c.k?" selected":""}>${esc(c.t)}</option>`).join("")}</select>
+   <label for="cname">名称</label><div class="row"><input id="cname" name="name" style="flex:1;min-height:64px;font-size:20px" value="${esc(S.cf?.cname||"")}"><button type="button" class="btn xl" data-act="mic" data-for="cname" data-fk="mn" aria-label="声で入れる">🎤</button></div>
+   <label for="ctel">電話番号</label><input id="ctel" name="tel" type="tel" style="min-height:64px;font-size:20px" value="${esc(S.cf?.ctel||"")}">
+   <label>メモ（えらぶだけでOK）</label>
+   <div class="xlgrid">${["電話した","返事待ち","対応OK","電動車椅子OK","夜間も対応","予約が必要","料金を聞いた"].map((c,i)=>`<button type="button" class="btn xl ${(S.cm||[]).includes(c)?"sel":""}" data-act="cchip" data-t="${c}" data-fk="cc${i}" aria-pressed="${(S.cm||[]).includes(c)}">${(S.cm||[]).includes(c)?"✔ ":""}${c}</button>`).join("")}</div>
+   <div class="row" style="margin-top:10px"><input id="cmemo" name="memo" placeholder="そのほか（声でもOK）" style="flex:1;min-height:64px;font-size:20px" value="${esc(S.cf?.cmemo||"")}"><button type="button" class="btn xl" data-act="mic" data-for="cmemo" data-fk="mm" aria-label="声で入れる">🎤</button></div>
+   <div class="choices" style="margin-top:10px"><button type="button" class="btn xl main" data-act="addc">キープする</button></div></div>
+   <p style="font-size:14px;color:var(--sub)">病院・修理業者をキープすると「緊急時」の連絡先にも自動で入り、関連するクエストが「手配中」になります。</p></div>`;
+}
+document.addEventListener("click",e=>{
+  const b=e.target.closest("button[data-act]");if(!b||lock)return;
+  const a=b.dataset.act;
+  if(a==="new"){const keep=!Object.keys(S.A).length||confirm("今までの内容を消して、はじめからにします。よろしいですか？");if(keep){S=fresh();S.mode=b.dataset.m||"easy";applyMode();S.view="play";save();render()}}
+  else if(a==="cont"){S.view="play";render()}
+  else if(a==="ans"){const o=optsOf(NODES[S.i])[+b.dataset.i];if(o)answer(o[0],o[1],o[2])}
+  else if(a==="mode"){const st=NODES[S.i]?.st??0;S.mode=S.mode==="easy"?"full":"easy";applyMode();const ns=nodesOf(st),t=ns.find(n=>!S.A[n.id])||ns[0]||NODES[0];go(NODES.indexOf(t))}
+  else if(a==="next")advance();
+  else if(a==="after-clear"){const ni=S.next;S.view="play";if(ni>=NODES.length){S.view="report";save();render()}else go(ni)}
+  else if(a==="stage"){const st=+b.dataset.st,ns=nodesOf(st),t=ns.find(n=>!S.A[n.id])||ns[0];go(NODES.indexOf(t))}
+  else if(a==="back"){if(S.view==="play"&&S.react){S.react=null;render()}else if(S.view==="play"){go(S.i-1)}else if(S.view==="report"){go(NODES.length-1)}else{S.view="play";render()}}
+  else if(a==="memoopen"){S.memoOpen=NODES[S.i].id;S.memoType=false;render()}
+  else if(a==="memoclose"){saveTa();S.memoOpen=null;save();render()}
+  else if(a==="chip"){saveTa();const m=M(NODES[S.i].id),t=b.dataset.t;m.sel=m.sel.includes(t)?m.sel.filter(x=>x!==t):[...m.sel,t];save();render()}
+  else if(a==="typeopen"){saveTa();S.memoType=!S.memoType;render()}
+  else if(a==="mic")mic(b.dataset.for);
+  else if(a==="cchip"){const t=b.dataset.t;S.cm=S.cm||[];S.cm=S.cm.includes(t)?S.cm.filter(x=>x!==t):[...S.cm,t];save();render()}
+  else if(a==="formok")submitForm();
+  else if(a==="addc")addCand();
+  else if(a==="who"){const k=b.dataset.k;let s=S.D.whoSet||[];
+    if(k==="solo")s=s.includes("solo")?[]:["solo"];else{s=s.filter(x=>x!=="solo");s=s.includes(k)?s.filter(x=>x!==k):[...s,k]}
+    S.D.whoSet=s;syncPeople();save();render()}
+  else if(a==="cnt"){S.D.cManual=true;S.D.count=(+S.D.count||1)+(+b.dataset.d);syncPeople();save();render()}
+  else if(a==="whook"){syncPeople();whoDone(S.D.people?`${S.D.people}で行くんだね！`:"同行者はあとで決めよう。")}
+  else if(a==="whoskip"){S.D.whoSet=[];S.D.cManual=false;syncPeople();whoDone("OK、同行者はあとで決めよう。")}
+  else if(a==="search"){S.view="search";S.sc=b.dataset.c||null;save();render();if(S.sc)document.getElementById("cat-"+S.sc)?.scrollIntoView();else window.scrollTo(0,0)}
+  else if(a==="delc"){S.C=S.C.filter(c=>c.id!==b.dataset.id);save();render()}
+  else if(a==="quests"){S.view="quests";render();window.scrollTo(0,0)}
+  else if(a==="report"){S.view="report";render();window.scrollTo(0,0)}
+  else if(a==="home"){const t=NODES.findIndex(n=>!S.A[n.id]);if(t<0){S.view="report";render()}else go(t)}
+  else if(a==="solve"){if(S.Q[b.dataset.id]&&confirm("実際の対応可否・日時・必要な条件を確認しましたか？")){S.Q[b.dataset.id].done=true;const A=S.A[b.dataset.id];if(A){A.s="ok"; A.label=ALL.find(n=>n.id===b.dataset.id)?.care?A.label+"（確保確認済み）":"確認済み";}save();toast("⭐ +3 クエスト解決！");render()}}
+  else if(a==="goto"){const id=b.dataset.id.split(":")[0],i=NODES.findIndex(n=>n.id===id);if(i>=0)go(i)}
+  else if(a==="inq"){S.showInq=b.dataset.k;render()}
+  else if(a==="copy"){const t=b.dataset.t==="inq"?inqText(S.showInq):reportText();const done=()=>{b.textContent="コピーしました"};
+    if(navigator.clipboard)navigator.clipboard.writeText(t).then(done,()=>fb(t,done));else fb(t,done)}
+  else if(a==="dl"){const u=URL.createObjectURL(new Blob([reportText()],{type:"text/plain;charset=utf-8"}));const x=document.createElement("a");x.href=u;x.download="個別旅行支援計画.txt";x.click();URL.revokeObjectURL(u)}
+  else if(a==="erase"){if(confirm("この端末に保存された旅行計画をすべて削除しますか？")){localStorage.removeItem(KEY);location.reload();}}
+ else if(a==="print")window.print();
+});
+function fb(t,done){const x=document.createElement("textarea");x.value=t;document.body.appendChild(x);x.select();try{document.execCommand("copy");done()}catch(_){}x.remove()}
+render();
+</script>
+<section class="card" id="tane-hub" aria-labelledby="tane-heading">
+<h2 id="tane-heading">🌱 お助けクエスト｜旅のタネ</h2>
+<p>旅先でも、暮らしの中でも。小さな困りごとを整理しよう。</p>
+<div class="alert amber">公開試作版：依頼の下書き専用です。スタッフへの送信・予約・購入・決済は行いません。ヤマタイモーお助け隊との提携は未確定です。</div>
+<div class="choices"><button class="btn xl" type="button" data-tane="草取り・庭の整理">🌱 草取り・庭の整理</button><button class="btn xl" type="button" data-tane="お土産の代理購入・発送">🏺 お土産の代理購入・発送</button><button class="btn xl" type="button" data-tane="食事の受け取り・お取り寄せ">🍱 食事の受け取り・お取り寄せ</button><button class="btn xl" type="button" data-tane="買い物・荷物の梱包">📦 買い物・荷物の梱包</button><button class="btn xl" type="button" data-tane="スマホ操作・写真整理">📱 スマホ操作・写真整理</button><button class="btn xl" type="button" data-tane="観光施設の下見">🔍 観光施設の下見</button></div>
+<div id="tane-editor" hidden><h3 id="tane-kind" tabindex="-1"></h3><form id="tane-form"><label for="tane-area">地域・店舗名（任意）</label><input id="tane-area" maxlength="120" placeholder="例：読谷村"><label for="tane-detail">お願いしたい内容</label><textarea id="tane-detail" maxlength="1000" required rows="4" placeholder="商品名や希望する作業など。住所・電話・医療情報は入力しないでください。"></textarea><label for="tane-date">希望日（任意）</label><input id="tane-date" type="date"><label for="tane-time">希望する作業時間</label><select id="tane-time"><option value="30">30分</option><option value="60">60分</option><option value="90">90分</option><option value="120">120分</option></select><p id="tane-est" aria-live="polite"></p><p>500円／30分は活動支援額の仮案で、利用料金・報酬・予約の確定ではありません。商品代・送料は別途。身体介助、医療行為、危険作業は対象外です。</p><label for="tane-photo">商品などの写真（任意・端末内プレビューのみ）</label><input id="tane-photo" type="file" accept="image/jpeg,image/png,image/webp"><img id="tane-preview" alt="選択した写真" hidden style="max-width:100%;max-height:220px;object-fit:contain"><p>写真は保存・送信しません。人物や個人情報が写った写真は選ばないでください。</p><button class="btn main" type="submit">依頼の下書きを作成・端末に保存</button></form></div>
+<div id="tane-output" hidden><h3>保存した依頼の下書き（未送信）</h3><pre class="out" id="tane-text"></pre><div class="row"><button class="btn sm" id="tane-copy" type="button">コピー</button><button class="btn sm" id="tane-download" type="button">テキスト保存</button><button class="btn sm ghost" id="tane-delete" type="button">下書きを削除</button></div></div><p id="tane-status" role="status"></p>
+<details><summary>無料提供を支える仕組み（構想）</summary><p>企業協賛・地域商店の販売手数料・アフィリエイトによる運営を検討中です。現時点では広告契約・注文受付・決済はありません。</p></details>
+</section><script>
+(function(){
+"use strict";
+const key="travel-quest-tane-help-v1",g=id=>document.getElementById(id);let kind="",photoUrl="",draft="";
+const status=t=>{g("tane-status").textContent=t};
+function estimate(){g("tane-est").textContent="活動支援額の目安："+(Number(g("tane-time").value)/30*500).toLocaleString("ja-JP")+"円（仮案）";}
+function show(){g("tane-output").hidden=!draft;g("tane-text").textContent=draft;}
+try{draft=localStorage.getItem(key)||"";}catch(e){}show();
+document.getElementById("tane-hub").addEventListener("click",e=>{const b=e.target.closest("[data-tane]");if(!b)return;kind=b.dataset.tane;g("tane-kind").textContent=kind;g("tane-editor").hidden=false;estimate();g("tane-kind").focus();});
+g("tane-time").addEventListener("change",estimate);
+g("tane-photo").addEventListener("change",()=>{if(photoUrl)URL.revokeObjectURL(photoUrl);photoUrl="";const f=g("tane-photo").files[0],im=g("tane-preview");im.hidden=true;im.removeAttribute("src");if(!f)return;if(!["image/jpeg","image/png","image/webp"].includes(f.type)||f.size>10000000){status("JPEG・PNG・WebPの10MB以下の画像を選んでください。");g("tane-photo").value="";return;}photoUrl=URL.createObjectURL(f);im.src=photoUrl;im.hidden=false;});
+g("tane-form").addEventListener("submit",e=>{e.preventDefault();if(!kind||!g("tane-detail").value.trim()){status("依頼内容を入力してください。");return;}draft=["【お助けクエスト｜未送信の下書き】","種類："+kind,"地域・店舗："+(g("tane-area").value||"未定"),"内容："+g("tane-detail").value.trim(),"希望日："+(g("tane-date").value||"未定"),"希望時間："+g("tane-time").value+"分",g("tane-est").textContent,"写真：別途本人が共有（自動送信なし）","※受付・手配・購入・決済は未実施。"].join("\n");try{localStorage.setItem(key,draft);status("端末に下書きを保存しました。依頼は送信されていません。");}catch(e){status("端末への保存ができません。コピーまたはテキスト保存をご利用ください。");}show();});
+g("tane-copy").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(draft);status("下書きをコピーしました。");}catch(e){status("コピーできませんでした。テキスト保存をご利用ください。");}});
+g("tane-download").addEventListener("click",()=>{const u=URL.createObjectURL(new Blob([draft],{type:"text/plain;charset=utf-8"})),a=document.createElement("a");a.href=u;a.download="お助けクエスト-下書き.txt";a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);});
+g("tane-delete").addEventListener("click",()=>{if(!confirm("お助けクエストの下書きを削除しますか？"))return;try{localStorage.removeItem(key);}catch(e){status("保存データを削除できませんでした。ブラウザの設定から消去してください。");return;}draft="";show();g("tane-form").reset();if(photoUrl)URL.revokeObjectURL(photoUrl);photoUrl="";g("tane-preview").removeAttribute("src");g("tane-preview").hidden=true;estimate();status("下書きを削除しました。");});
+})();</script></body>
+</html>
